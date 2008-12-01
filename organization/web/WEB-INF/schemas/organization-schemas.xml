@@ -1,0 +1,46 @@
+<schema name="organization.PartyType.view" type="module.organization.domain.PartyType" 
+	bundle="ORGANIZATION_RESOURCES">
+	<slot name="type" key="label.type" read-only="true" />
+	<slot name="name" key="label.name" read-only="true" layout="null-as-label" />
+</schema>
+
+<schema name="organization.PartyTypeBean" type="module.organization.domain.PartyType$PartyTypeBean" 
+	bundle="ORGANIZATION_RESOURCES">
+	<slot name="type" key="label.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+	<slot name="name" key="label.name" />
+</schema>
+
+<schema name="organization.AccountabilityType.view" type="module.organization.domain.AccountabilityType" 
+	bundle="ORGANIZATION_RESOURCES">
+	<slot name="type" key="label.type" read-only="true" />
+	<slot name="name" key="label.name" read-only="true" layout="null-as-label" />
+</schema>
+
+<schema name="organization.AccountabilityTypeBean" type="module.organization.domain.AccountabilityType$AccountabilityTypeBean" 
+	bundle="ORGANIZATION_RESOURCES">
+	<slot name="type" key="label.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+	<slot name="name" key="label.name" />
+</schema>
+
+<schema name="organization.ConnectionRule.view" type="module.organization.domain.ConnectionRule" 
+	bundle="ORGANIZATION_RESOURCES">
+	<slot name="allowedParent.type" key="label.connection.rule.allowed.parent.type" read-only="true" />
+	<slot name="allowedChild.type" key="label.connection.rule.allowed.child.type" read-only="true" />
+</schema>
+
+<schema name="organization.ConnectionRuleBean" type="module.organization.domain.ConnectionRule$ConnectionRuleBean" 
+	bundle="ORGANIZATION_RESOURCES">
+	<slot name="accountabilityType.type" key="label.accountability.type" read-only="true" />
+	<slot name="parent" layout="menu-select" key="label.connection.rule.allowed.parent.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="myorg.presentationTier.renderers.organization.PartyTypesProvider" />
+		<property name="choiceType" value="module.organization.domain.PartyType" />
+		<property name="format" value="${type}" />
+		<property name="sortBy" value="type" />
+	</slot>
+	<slot name="child" layout="menu-select" key="label.connection.rule.allowed.child.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="myorg.presentationTier.renderers.organization.PartyTypesProvider" />
+		<property name="choiceType" value="module.organization.domain.PartyType" />
+		<property name="format" value="${type}" />
+		<property name="sortBy" value="type" />
+	</slot>
+</schema>
