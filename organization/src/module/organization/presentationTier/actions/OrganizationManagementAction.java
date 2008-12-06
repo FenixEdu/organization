@@ -1,12 +1,19 @@
 package module.organization.presentationTier.actions;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.ConnectionRule;
 import module.organization.domain.ConnectionRuleAccountabilityType;
+import module.organization.domain.Party;
 import module.organization.domain.PartyType;
+import module.organization.domain.Unit;
+import module.organization.domain.UnitBean;
 import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
 import module.organization.domain.ConnectionRule.ConnectionRuleBean;
 import module.organization.domain.PartyType.PartyTypeBean;
@@ -32,7 +39,9 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 	@Forward(name = "create.accountability.type", path = "/createAccountabilityType.jsp"),
 	@Forward(name = "edit.accountability.type", path = "/editAccountabilityType.jsp"),
 	@Forward(name = "view.connection.rules", path = "/viewConnectionRules.jsp"),
-	@Forward(name = "create.connection.rule", path = "/createConnectionRule.jsp")
+	@Forward(name = "create.connection.rule", path = "/createConnectionRule.jsp"),
+	@Forward(name = "view.organization", path = "/viewOrganization.jsp"),
+	@Forward(name = "view.unit", path = "/unit/viewUnit.jsp"), @Forward(name = "create.unit", path = "/unit/createUnit.jsp")
 
 })
 public class OrganizationManagementAction extends ContextBaseAction {
@@ -211,6 +220,46 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
 	request.setAttribute("accountabilityTypeOid", accountabilityType.getOID());
 	return viewConnectionRules(mapping, form, request, response);
+    }
+
+    public final ActionForward viewOrganization(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	// TODO: move this to renderer ?
+	final List<Unit> topUnits = new ArrayList<Unit>(getMyOrg().getTopUnits());
+	Collections.sort(topUnits, Party.COMPARATOR_BY_NAME);
+	request.setAttribute("topUnits", topUnits);
+	return mapping.findForward("view.organization");
+    }
+
+    public final ActionForward viewUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final Unit unit = getDomainObject(request, "unitOid");
+	if (unit == null) {
+	    return viewOrganization(mapping, form, request, response);
+	}
+	request.setAttribute("unit", unit);
+	return mapping.findForward("view.unit");
+    }
+
+    public final ActionForward prepareCreateUnit(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	final UnitBean bean = new UnitBean();
+	bean.setParent((Unit) getDomainObject(request, "parentOid"));
+	request.setAttribute("unitBean", bean);
+	return mapping.findForward("create.unit");
+    }
+
+    public final ActionForward createUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final UnitBean bean = getRenderedObject("unitBean");
+	try {
+	    bean.createUnit();
+	} catch (final DomainException e) {
+	    addMessage(request, e.getKey(), e.getArgs());
+	    request.setAttribute("unitBean", bean);
+	    return mapping.findForward("create.unit");
+	}
+	return viewOrganization(mapping, form, request, response);
     }
 
 }
