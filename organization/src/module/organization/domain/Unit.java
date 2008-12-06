@@ -1,5 +1,7 @@
 package module.organization.domain;
 
+import java.util.Collection;
+
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import pt.ist.fenixWebFramework.services.Service;
@@ -16,6 +18,7 @@ public class Unit extends Unit_Base {
 	this();
 
 	check(partyType, name, acronym);
+	checkName(parent, name);
 	checkAcronym(parent, acronym);
 
 	setPartyType(partyType);
@@ -30,12 +33,31 @@ public class Unit extends Unit_Base {
 	}
     }
 
+    private void checkName(final Party parent, final MultiLanguageString name) {
+	checkName(parent != null ? parent.getChildren() : MyOrg.getInstance().getTopUnits(), name);
+    }
+
+    private void checkName(final Collection<? extends Party> parties, final MultiLanguageString name) {
+	for (final Party party : parties) {
+	    if (party.isUnit()) {
+		final Unit unit = (Unit) party;
+		if (unit.getPartyName().equalInAnyLanguage(name)) {
+		    throw new DomainException("error.Unit.found.child.with.same.name", name.getContent());
+		}
+	    }
+	}
+    }
+
     private void checkAcronym(final Party parent, final String acronym) {
-	for (final Party party : parent.getChildren()) {
+	checkAcronym(parent != null ? parent.getChildren() : MyOrg.getInstance().getTopUnits(), acronym);
+    }
+
+    private void checkAcronym(final Collection<? extends Party> parties, final String acronym) {
+	for (final Party party : parties) {
 	    if (party.isUnit()) {
 		final Unit unit = (Unit) party;
 		if (unit.getAcronym().equalsIgnoreCase(acronym)) {
-		    throw new DomainException("error.Unit.found.child.with.same.acronym");
+		    throw new DomainException("error.Unit.found.child.with.same.acronym", acronym);
 		}
 	    }
 	}
