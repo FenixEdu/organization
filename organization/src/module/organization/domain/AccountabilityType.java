@@ -64,6 +64,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     protected AccountabilityType() {
 	super();
 	setMyOrg(MyOrg.getInstance());
+	setOjbConcreteClass(getClass().getName());
     }
 
     protected AccountabilityType(final String type) {
@@ -127,11 +128,11 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     public AccountabilityTypeBean buildBean() {
 	return new AccountabilityTypeBean(this);
     }
-    
+
     public boolean isWithRules() {
 	return false;
     }
-    
+
     @Service
     static public AccountabilityType create(final AccountabilityTypeBean bean) {
 	return new AccountabilityType(bean.getType(), bean.getName());
