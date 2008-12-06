@@ -17,6 +17,7 @@ public class Accountability extends Accountability_Base {
     }
 
     protected Accountability(final Party parent, final Party child, final AccountabilityType type) {
+	this();
 	check(parent, "error.Accountability.invalid.parent");
 	check(child, "error.Accountability.invalid.child");
 	check(type, "error.Accountability.invalid.type");
