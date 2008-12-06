@@ -8,12 +8,13 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 public class UnitBean implements Serializable {
 
     private static final long serialVersionUID = -952861107508339516L;
-    private DomainReference<Unit> parent;
     private DomainReference<Unit> unit;
+
+    private DomainReference<Unit> parent;
     private MultiLanguageString name;
     private String acronym;
-    private PartyType partyType;
-    private AccountabilityType accountabilityType;
+    private DomainReference<PartyType> partyType;
+    private DomainReference<AccountabilityType> accountabilityType;
 
     public UnitBean() {
     }
@@ -62,23 +63,24 @@ public class UnitBean implements Serializable {
     }
 
     public PartyType getPartyType() {
-	return partyType;
+	return (this.partyType != null) ? this.partyType.getObject() : null;
     }
 
     public void setPartyType(PartyType partyType) {
-	this.partyType = partyType;
+	this.partyType = (partyType != null) ? new DomainReference<PartyType>(partyType) : null;
     }
 
     public AccountabilityType getAccountabilityType() {
-	return accountabilityType;
+	return (this.accountabilityType != null) ? this.accountabilityType.getObject() : null;
     }
 
     public void setAccountabilityType(AccountabilityType accountabilityType) {
-	this.accountabilityType = accountabilityType;
+	this.accountabilityType = (accountabilityType != null) ? new DomainReference<AccountabilityType>(accountabilityType)
+		: null;
     }
 
-    public Unit create() {
-	if (hasParent()) {
+    public Unit createUnit() {
+	if (!hasParent()) {
 	    return Unit.createRoot(getName(), getAcronym(), getPartyType());
 	} else {
 	    return Unit.create(getParent(), getName(), getAcronym(), getPartyType(), getAccountabilityType());
