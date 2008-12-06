@@ -1,6 +1,7 @@
 package module.organization.domain;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,6 +12,13 @@ import module.organization.domain.PartyPredicate.TruePartyPredicate;
 import myorg.domain.MyOrg;
 
 abstract public class Party extends Party_Base {
+
+    static public final Comparator<Party> COMPARATOR_BY_NAME = new Comparator<Party>() {
+	@Override
+	public int compare(Party o1, Party o2) {
+	    return o1.getPartyName().compareTo(o2.getPartyName());
+	}
+    };
 
     protected Party() {
 	super();
