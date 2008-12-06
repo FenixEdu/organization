@@ -17,8 +17,8 @@
 
 	<bean:message key="label.accountability.type" bundle="ORGANIZATION_RESOURCES" />
 	<html:select property="accountabilityTypeClassName">
-		<html:option value="myorg.domain.organization.AccountabilityType$AccountabilityTypeBean"><bean:message key="label.accountability.type" bundle="ORGANIZATION_RESOURCES" /></html:option>
-		<html:option value="myorg.domain.organization.ConnectionRuleAccountabilityType$ConnectionRuleAccountabilityTypeBean"><bean:message key="label.connection.rule.accountability.type" bundle="ORGANIZATION_RESOURCES" /></html:option>
+		<html:option value="module.organization.domain.AccountabilityType$AccountabilityTypeBean"><bean:message key="label.accountability.type" bundle="ORGANIZATION_RESOURCES" /></html:option>
+		<html:option value="module.organization.domain.ConnectionRuleAccountabilityType$ConnectionRuleAccountabilityTypeBean"><bean:message key="label.connection.rule.accountability.type" bundle="ORGANIZATION_RESOURCES" /></html:option>
 	</html:select>
 
 	<html:submit><bean:message key="label.continue" bundle="ORGANIZATION_RESOURCES" /></html:submit>
