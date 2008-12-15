@@ -44,26 +44,26 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	}
     }
 
-    public final ActionForward showOptions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+    public ActionForward showOptions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
 	return forward(request, "/showOptions.jsp");
     }
 
-    public final ActionForward viewPartyTypes(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public ActionForward viewPartyTypes(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
 	request.setAttribute("partyTypes", getMyOrg().getPartyTypes());
 	return forward(request, "/viewPartyTypes.jsp");
     }
 
-    public final ActionForward prepareCreatePartyType(final ActionMapping mapping, final ActionForm form,
+    public ActionForward prepareCreatePartyType(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
 	request.setAttribute("partyTypeBean", new PartyTypeBean());
 	return forward(request, "/createPartyType.jsp");
     }
 
-    public final ActionForward createPartyType(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public ActionForward createPartyType(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
 	final PartyTypeBean bean = getRenderedObject("partyTypeBean");
 	try {
 	    PartyType.create(bean);
@@ -75,14 +75,14 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	return viewPartyTypes(mapping, form, request, response);
     }
 
-    public final ActionForward prepareEditPartyType(final ActionMapping mapping, final ActionForm form,
+    public ActionForward prepareEditPartyType(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	request.setAttribute("partyTypeBean", new PartyTypeBean((PartyType) getDomainObject(request, "partyTypeOid")));
 	return forward(request, "/editPartyType.jsp");
     }
 
-    public final ActionForward editPartyType(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public ActionForward editPartyType(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
 	final PartyTypeBean bean = getRenderedObject("partyTypeBean");
 	try {
 	    bean.edit();
@@ -95,24 +95,24 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	return viewPartyTypes(mapping, form, request, response);
     }
 
-    public final ActionForward deletePartyType(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public ActionForward deletePartyType(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
 	((PartyType) getDomainObject(request, "partyTypeOid")).delete();
 	return viewPartyTypes(mapping, form, request, response);
     }
 
-    public final ActionForward viewAccountabilityTypes(final ActionMapping mapping, final ActionForm form,
+    public ActionForward viewAccountabilityTypes(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	request.setAttribute("accountabilityTypes", getMyOrg().getAccountabilityTypes());
 	return forward(request, "/viewAccountabilityTypes.jsp");
     }
 
-    public final ActionForward selectAccountabilityType(final ActionMapping mapping, final ActionForm form,
+    public ActionForward selectAccountabilityType(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	return forward(request, "/selectAccountabilityType.jsp");
     }
 
-    public final ActionForward prepareCreateAccountabilityType(final ActionMapping mapping, final ActionForm form,
+    public ActionForward prepareCreateAccountabilityType(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final OrganizationForm organizationForm = (OrganizationForm) form;
 	final Class<?> clazz = Class.forName(organizationForm.getAccountabilityTypeClassName());
@@ -120,7 +120,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	return forward(request, "/createAccountabilityType.jsp");
     }
 
-    public final ActionForward createAccountabilityType(final ActionMapping mapping, final ActionForm form,
+    public ActionForward createAccountabilityType(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final AccountabilityTypeBean bean = getRenderedObject("accountabilityTypeBean");
 	try {
@@ -133,14 +133,14 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	return viewAccountabilityTypes(mapping, form, request, response);
     }
 
-    public final ActionForward prepareEditAccountabilityType(final ActionMapping mapping, final ActionForm form,
+    public ActionForward prepareEditAccountabilityType(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final AccountabilityType type = getDomainObject(request, "accountabilityTypeOid");
 	request.setAttribute("accountabilityTypeBean", type.buildBean());
 	return forward(request, "/editAccountabilityType.jsp");
     }
 
-    public final ActionForward editAccountabilityType(final ActionMapping mapping, final ActionForm form,
+    public ActionForward editAccountabilityType(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final AccountabilityTypeBean bean = getRenderedObject("accountabilityTypeBean");
 	try {
@@ -154,13 +154,13 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	return viewAccountabilityTypes(mapping, form, request, response);
     }
 
-    public final ActionForward deleteAccountabilityType(final ActionMapping mapping, final ActionForm form,
+    public ActionForward deleteAccountabilityType(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	((AccountabilityType) getDomainObject(request, "accountabilityTypeOid")).delete();
 	return viewAccountabilityTypes(mapping, form, request, response);
     }
 
-    public final ActionForward viewConnectionRules(final ActionMapping mapping, final ActionForm form,
+    public ActionForward viewConnectionRules(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final ConnectionRuleAccountabilityType type = getDomainObject(request, "accountabilityTypeOid");
 	request.setAttribute("accountabilityType", type);
@@ -168,14 +168,14 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	return forward(request, "/viewConnectionRules.jsp");
     }
 
-    public final ActionForward prepareCreateConnectionRule(final ActionMapping mapping, final ActionForm form,
+    public ActionForward prepareCreateConnectionRule(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final ConnectionRuleAccountabilityType type = getDomainObject(request, "accountabilityTypeOid");
 	request.setAttribute("connectionRuleBean", new ConnectionRuleBean(type));
 	return forward(request, "/createConnectionRule.jsp");
     }
 
-    public final ActionForward createConnectionRule(final ActionMapping mapping, final ActionForm form,
+    public ActionForward createConnectionRule(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
 	final ConnectionRuleBean bean = getRenderedObject("connectionRuleBean");
@@ -191,7 +191,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	return viewConnectionRules(mapping, form, request, response);
     }
 
-    public final ActionForward deleteConnectionRule(final ActionMapping mapping, final ActionForm form,
+    public ActionForward deleteConnectionRule(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
 	final ConnectionRule connectionRule = getDomainObject(request, "connectionRuleOid");
@@ -206,8 +206,8 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	return viewConnectionRules(mapping, form, request, response);
     }
 
-    public final ActionForward viewOrganization(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public ActionForward viewOrganization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
 	// TODO: move this to renderer ?
 	final List<Unit> topUnits = new ArrayList<Unit>(getMyOrg().getTopUnits());
 	Collections.sort(topUnits, Party.COMPARATOR_BY_NAME);
@@ -215,35 +215,72 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	return forward(request, "/viewOrganization.jsp");
     }
 
-    public final ActionForward viewUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+    public ActionForward viewUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	final Unit unit = getDomainObject(request, "unitOid");
-	if (unit == null) {
-	    return viewOrganization(mapping, form, request, response);
-	}
-	request.setAttribute("unit", unit);
+	request.setAttribute("unit", getDomainObject(request, "unitOid"));
 	return forward(request, "/unit/viewUnit.jsp");
     }
 
-    public final ActionForward prepareCreateUnit(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public ActionForward prepareCreateUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
 	final UnitBean bean = new UnitBean();
 	bean.setParent((Unit) getDomainObject(request, "parentOid"));
 	request.setAttribute("unitBean", bean);
 	return forward(request, "/unit/createUnit.jsp");
     }
 
-    public final ActionForward createUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+    public ActionForward createUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
 	final UnitBean bean = getRenderedObject("unitBean");
+	Unit result = null;
 	try {
-	    bean.createUnit();
+	    result = bean.createUnit();
 	} catch (final DomainException e) {
 	    addMessage(request, e.getKey(), e.getArgs());
 	    request.setAttribute("unitBean", bean);
-	    return mapping.findForward("create.unit");
+	    return forward(request, "/unit/createUnit.jsp");
+	}
+
+	if (result.isTop()) {
+	    return viewOrganization(mapping, form, request, response);
+	} else {
+	    request.setAttribute("unit", bean.getParent());
+	    return forward(request, "/unit/viewUnit.jsp");
+	}
+    }
+
+    public ActionForward prepareEditUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final Unit unit = getDomainObject(request, "unitOid");
+	request.setAttribute("unitBean", new UnitBean(unit));
+	return forward(request, "/unit/editUnit.jsp");
+    }
+
+    public ActionForward editUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final UnitBean bean = getRenderedObject("unitBean");
+	try {
+	    bean.editUnit();
+	} catch (final DomainException e) {
+	    addMessage(request, e.getKey(), e.getArgs());
+	    request.setAttribute("unitBean", bean);
+	    return forward(request, "/unit/editUnit.jsp");
+	}
+
+	request.setAttribute("unit", bean.getUnit());
+	return forward(request, "/unit/viewUnit.jsp");
+    }
+
+    public ActionForward deleteUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final Unit unit = getDomainObject(request, "unitOid");
+	try {
+	    unit.delete();
+	} catch (final DomainException e) {
+	    addMessage(request, e.getKey(), e.getArgs());
+	    request.setAttribute("unit", unit);
+	    return forward(request, "/unit/viewUnit.jsp");
 	}
 	return viewOrganization(mapping, form, request, response);
     }
-
 }

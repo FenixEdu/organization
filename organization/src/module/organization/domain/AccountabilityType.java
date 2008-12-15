@@ -117,7 +117,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
 	return getType().compareTo(other.getType());
     }
 
-    public boolean canCreateAccountability(final Party parent, final Party child) {
+    public boolean canHaveAccountability(final Party parent, final Party child) {
 	return areValidPartyTypes(parent, child);
     }
 

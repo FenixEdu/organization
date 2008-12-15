@@ -14,10 +14,9 @@
 	<ul>
 	<logic:iterate id="unit" name="topUnits">
 		<bean:size id="children" name="unit" property="children"/>
-		<li><html:link action="/organization.do?method=viewUnit" paramId="unitOid" paramName="unit" paramProperty="OID"><bean:write name="unit" property="partyName.content" /></html:link> (<bean:write name="children" />) <html:link action="/organization.do?method=prepareCreateUnit" paramId="parentOid" paramName="unit" paramProperty="OID"><bean:message key="label.create" bundle="ORGANIZATION_RESOURCES" /></html:link> </li>
+		<li><html:link action="/organization.do?method=viewUnit" paramId="unitOid" paramName="unit" paramProperty="OID"><bean:write name="unit" property="partyName.content" /></html:link> (<bean:write name="children" />) </li>
 	</logic:iterate>
-	</ul>
-	
+	</ul>	
 </logic:notEmpty>
 
 <logic:empty name="topUnits">

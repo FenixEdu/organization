@@ -104,11 +104,8 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
 	if (hasAnyParties()) {
 	    throw new DomainException("error.PartyType.has.parties.cannot.delete");
 	}
-	if (hasAnyParentConnectionRules()) {
-	    throw new DomainException("error.PartyType.has.parent.connection.rules.cannot.delete");
-	}
-	if (hasAnyChildConnectionRules()) {
-	    throw new DomainException("error.PartyType.has.child.connection.rules.cannot.delete");
+	if (hasAnyParentConnectionRules() || hasAnyChildConnectionRules()) {
+	    throw new DomainException("error.PartyType.has.connection.rules.cannot.delete");
 	}
     }
 

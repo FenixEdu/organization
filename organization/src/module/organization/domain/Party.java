@@ -10,6 +10,9 @@ import module.organization.domain.PartyPredicate.PartyByClassType;
 import module.organization.domain.PartyPredicate.PartyByPartyType;
 import module.organization.domain.PartyPredicate.TruePartyPredicate;
 import myorg.domain.MyOrg;
+import myorg.domain.exceptions.DomainException;
+import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.pstm.Transaction;
 
 abstract public class Party extends Party_Base {
 
@@ -239,4 +242,24 @@ abstract public class Party extends Party_Base {
 	return false;
     }
 
+    @Service
+    public void delete() {
+	canDelete();
+	disconnect();
+	Transaction.deleteObject(this);
+    }
+
+    protected void canDelete() {
+	if (hasAnyChildAccountabilities()) {
+	    throw new DomainException("error.Party.delete.has.child.accountabilities");
+	}
+    }
+
+    protected void disconnect() {
+	while (hasAnyParentAccountabilities()) {
+	    getParentAccountabilities().get(0).delete();
+	}
+	removePartyType();
+	removeMyOrg();
+    }
 }

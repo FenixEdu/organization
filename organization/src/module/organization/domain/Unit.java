@@ -18,8 +18,7 @@ public class Unit extends Unit_Base {
 	this();
 
 	check(partyType, name, acronym);
-	checkName(parent, name);
-	checkAcronym(parent, acronym);
+	checkNameAndAcronym(parent, name, acronym);
 
 	setPartyType(partyType);
 	setPartyName(name);
@@ -33,33 +32,37 @@ public class Unit extends Unit_Base {
 	}
     }
 
-    private void checkName(final Party parent, final MultiLanguageString name) {
-	checkName(parent != null ? parent.getChildren() : MyOrg.getInstance().getTopUnits(), name);
+    private void checkNameAndAcronym(final Party parent, final MultiLanguageString name, final String acronym) {
+	if (parent != null) {
+	    checkNameAndAcronym(parent.getChildAccountabilities(), name, acronym);
+	} else {
+	    checkTopUnitsNameAndAcronym(name, acronym);
+	}
     }
 
-    private void checkName(final Collection<? extends Party> parties, final MultiLanguageString name) {
-	for (final Party party : parties) {
-	    if (party.isUnit()) {
-		final Unit unit = (Unit) party;
-		if (unit.getPartyName().equalInAnyLanguage(name)) {
-		    throw new DomainException("error.Unit.found.child.with.same.name", name.getContent());
-		}
+    private void checkNameAndAcronym(final Collection<Accountability> accountabilities, final MultiLanguageString name,
+	    final String acronym) {
+	for (final Accountability accountability : accountabilities) {
+	    if (accountability.getChild().isUnit() && !accountability.getChild().equals(this)) {
+		checkNameAndAcronym(name, acronym, (Unit) accountability.getChild());
 	    }
 	}
     }
 
-    private void checkAcronym(final Party parent, final String acronym) {
-	checkAcronym(parent != null ? parent.getChildren() : MyOrg.getInstance().getTopUnits(), acronym);
+    private void checkTopUnitsNameAndAcronym(final MultiLanguageString name, final String acronym) {
+	for (final Party party : MyOrg.getInstance().getTopUnits()) {
+	    if (party.isUnit() && !party.equals(this)) {
+		checkNameAndAcronym(name, acronym, (Unit) party);
+	    }
+	}
     }
 
-    private void checkAcronym(final Collection<? extends Party> parties, final String acronym) {
-	for (final Party party : parties) {
-	    if (party.isUnit()) {
-		final Unit unit = (Unit) party;
-		if (unit.getAcronym().equalsIgnoreCase(acronym)) {
-		    throw new DomainException("error.Unit.found.child.with.same.acronym", acronym);
-		}
-	    }
+    private void checkNameAndAcronym(final MultiLanguageString name, final String acronym, final Unit unit) {
+	if (unit.getPartyName().equalInAnyLanguage(name)) {
+	    throw new DomainException("error.Unit.found.child.with.same.name", name.getContent());
+	}
+	if (unit.getAcronym().equalsIgnoreCase(acronym)) {
+	    throw new DomainException("error.Unit.found.child.with.same.acronym", acronym);
 	}
     }
 
@@ -91,14 +94,49 @@ public class Unit extends Unit_Base {
     }
 
     @Service
-    static public Unit create(final Party parent, final MultiLanguageString name, final String acronym,
-	    final PartyType partyType, final AccountabilityType accountabilityType) {
-	return new Unit(parent, name, acronym, partyType, accountabilityType);
+    public void addParent(final Party parent, final AccountabilityType type) {
+	new Accountability(parent, this, type);
+    }
+
+    @Service
+    public Unit edit(final MultiLanguageString name, final String acronym, final PartyType partyType) {
+	check(partyType, name, acronym);
+	for (final Accountability accountability : getParentAccountabilities()) {
+	    checkNameAndAcronym(accountability.getParent(), name, acronym);
+	}
+
+	setPartyType(partyType);
+	setPartyName(name);
+	setAcronym(acronym);
+
+	// after setting party type, check if accountabilities continue valid
+	for (final Accountability accountability : getParentAccountabilities()) {
+	    if (!accountability.areParentAndChildValid()) {
+		throw new DomainException("error.Unit.accountability.doesnot.have.valid.parent.and.child");
+	    }
+	}
+
+	return this;
+    }
+
+    @Override
+    protected void disconnect() {
+	removeMyOrgFromTopUnit();
+	super.disconnect();
+    }
+
+    @Service
+    static public Unit create(final UnitBean bean) {
+	return new Unit(bean.getParent(), bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityType());
+    }
+
+    @Service
+    static public Unit createRoot(final UnitBean bean) {
+	return createRoot(bean.getName(), bean.getAcronym(), bean.getPartyType());
     }
 
     @Service
     static public Unit createRoot(final MultiLanguageString name, final String acronym, final PartyType partyType) {
-	return create(null, name, acronym, partyType, null);
+	return new Unit(null, name, acronym, partyType, null);
     }
-
 }

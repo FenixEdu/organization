@@ -40,9 +40,13 @@ public class Accountability extends Accountability_Base {
 	if (parent.ancestorsInclude(child, type)) {
 	    throw new DomainException("error.Accountability.parent.ancestors.include.child.with.type");
 	}
-	if (!type.canCreateAccountability(parent, child)) {
+	if (!type.canHaveAccountability(parent, child)) {
 	    throw new DomainException("error.Accountability.type.doesnot.allow.parent.child");
 	}
+    }
+
+    public boolean areParentAndChildValid() {
+	return hasParent() && hasChild() && getAccountabilityType().canHaveAccountability(getParent(), getChild());
     }
 
     @jvstm.cps.ConsistencyPredicate

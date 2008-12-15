@@ -12,7 +12,9 @@
 	<br />
 </html:messages>
 
-<fr:form action="/organization.do?">
+<bean:define id="actionUrl">/organization.do?<logic:present name="unitBean" property="parent">unitOid=<bean:write name="unitBean" property="parent.OID" /></logic:present></bean:define>
+
+<fr:form action="<%= actionUrl %>">
 	<html:hidden property="method" value="createUnit"/>
 	
 	<fr:edit id="unitBean" name="unitBean" visible="false" />
@@ -25,8 +27,10 @@
 				<fr:property name="classes" value="form thwidth150px" />
 				<fr:property name="columnClasses" value=",,tderror" />
 			</fr:layout>
-			<fr:destination name="cancel" path="/organization.do?method=viewOrganization" />
 		</fr:edit>
+		
+		<html:submit><bean:message key="label.create" bundle="ORGANIZATION_RESOURCES" /></html:submit>
+		<html:cancel onclick="this.form.method.value='viewUnit';return true;" ><bean:message key="label.cancel" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
 	</logic:present>
 
 	<%-- Create top unit --%>
@@ -38,9 +42,9 @@
 				<fr:property name="columnClasses" value=",,tderror" />
 			</fr:layout>
 		</fr:edit>
+		
+		<html:submit><bean:message key="label.create" bundle="ORGANIZATION_RESOURCES" /></html:submit>
+		<html:cancel onclick="this.form.method.value='viewOrganization';return true;" ><bean:message key="label.cancel" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
 	</logic:notPresent>
-	
-	<html:submit><bean:message key="label.create" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-	<html:cancel onclick="this.form.method.value='viewOrganization';return true;" ><bean:message key="label.cancel" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
 	
 </fr:form>
