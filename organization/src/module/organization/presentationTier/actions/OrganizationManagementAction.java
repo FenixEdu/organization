@@ -17,7 +17,10 @@ import module.organization.domain.UnitBean;
 import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
 import module.organization.domain.ConnectionRule.ConnectionRuleBean;
 import module.organization.domain.PartyType.PartyTypeBean;
+import myorg.domain.RoleType;
+import myorg.domain.contents.ActionNode;
 import myorg.domain.exceptions.DomainException;
+import myorg.domain.groups.Role;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.presentationTier.forms.BaseForm;
 
@@ -25,6 +28,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.fenixWebFramework.servlets.functionalities.CreateNodeAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/organization", formBeanClass = OrganizationManagementAction.OrganizationForm.class)
@@ -42,6 +46,13 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	public void setAccountabilityTypeClassName(String accountabilityTypeClassName) {
 	    this.accountabilityTypeClassName = accountabilityTypeClassName;
 	}
+    }
+
+    @CreateNodeAction( bundle="ORGANIZATION_RESOURCES", key="add.node.manage.organization", groupKey="label.module.organization" )
+    public final ActionForward createOrganizationNode(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	ActionNode.createActionNode("/organization", "showOptions", "resources.OrganizationResources", "label.manage.organization", Role.getRole(RoleType.MANAGER));
+	return showOptions(mapping, form, request, response);
     }
 
     public ActionForward showOptions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
