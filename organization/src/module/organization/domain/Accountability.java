@@ -80,7 +80,7 @@ public class Accountability extends Accountability_Base {
     }
 
     @Service
-    public void delete() {
+    void delete() {
 	removeParent();
 	removeChild();
 	removeAccountabilityType();

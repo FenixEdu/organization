@@ -11,8 +11,8 @@ public class UnitBean implements Serializable {
 
     private DomainReference<Unit> parent;
     private DomainReference<AccountabilityType> accountabilityType;
-    private DomainReference<Unit> unit;
 
+    private DomainReference<Unit> unit;
     private MultiLanguageString name;
     private String acronym;
     private DomainReference<PartyType> partyType;
@@ -45,6 +45,10 @@ public class UnitBean implements Serializable {
 
     public void setUnit(Unit unit) {
 	this.unit = (unit != null) ? new DomainReference<Unit>(unit) : null;
+    }
+
+    public boolean isTop() {
+	return getUnit().isTop();
     }
 
     public MultiLanguageString getName() {
@@ -88,8 +92,8 @@ public class UnitBean implements Serializable {
 	return getUnit().edit(getName(), getAcronym(), getPartyType());
     }
 
-    public boolean isTop() {
-	return getUnit().isTop();
+    public void addParent() {
+	getUnit().addParent(getParent(), getAccountabilityType());
     }
 
 }

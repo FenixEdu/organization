@@ -94,11 +94,6 @@ public class Unit extends Unit_Base {
     }
 
     @Service
-    public void addParent(final Party parent, final AccountabilityType type) {
-	new Accountability(parent, this, type);
-    }
-
-    @Service
     public Unit edit(final MultiLanguageString name, final String acronym, final PartyType partyType) {
 	check(partyType, name, acronym);
 	for (final Accountability accountability : getParentAccountabilities()) {
@@ -117,6 +112,11 @@ public class Unit extends Unit_Base {
 	}
 
 	return this;
+    }
+    
+    @Override
+    protected void canDelete() {
+        super.canDelete();
     }
 
     @Override

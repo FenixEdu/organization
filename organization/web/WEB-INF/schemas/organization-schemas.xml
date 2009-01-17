@@ -104,3 +104,17 @@
 	<slot name="child.partyType.type" key="label.unit.child.type" />
 	<slot name="accountabilityType.type" key="label.unit.accountability.type" />
 </schema>
+
+<schema name="organization.UnitBean.add.parent" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="parent" layout="menu-select" key="label.unit.parent" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.AllPartiesProvider" />
+		<property name="choiceType" value="module.organization.domain.Party" />
+		<property name="format" value="${partyName}" />
+	</slot>
+	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.AccountabilityTypesProvider" />
+		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
+		<property name="format" value="${type}" />
+		<property name="sortBy" value="type" />
+	</slot>
+</schema>

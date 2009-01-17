@@ -15,6 +15,11 @@
 	<logic:iterate id="unit" name="topUnits">
 		<bean:size id="children" name="unit" property="children"/>
 		<li><html:link action="/organization.do?method=viewUnit" paramId="unitOid" paramName="unit" paramProperty="OID"><bean:write name="unit" property="partyName.content" /></html:link> (<bean:write name="children" />) </li>
+		<ul>
+			<logic:iterate id="child" name="unit" property="children">
+				<li><html:link action="/organization.do?method=viewUnit" paramId="unitOid" paramName="child" paramProperty="OID"><bean:write name="child" property="partyName.content" /></html:link></li>
+			</logic:iterate>
+		</ul>
 	</logic:iterate>
 	</ul>	
 </logic:notEmpty>

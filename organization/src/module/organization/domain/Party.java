@@ -19,7 +19,8 @@ abstract public class Party extends Party_Base {
     static public final Comparator<Party> COMPARATOR_BY_NAME = new Comparator<Party>() {
 	@Override
 	public int compare(Party o1, Party o2) {
-	    return o1.getPartyName().compareTo(o2.getPartyName());
+	    int res = o1.getPartyName().compareTo(o2.getPartyName());
+	    return res != 0 ? res : (o1.getOID() < o2.getOID() ? -1 : (o1.getOID() == o2.getOID() ? 0 : 1));
 	}
     };
 
@@ -262,4 +263,20 @@ abstract public class Party extends Party_Base {
 	removePartyType();
 	removeMyOrg();
     }
+
+    @Service
+    public void addParent(final Party parent, final AccountabilityType type) {
+	new Accountability(parent, this, type);
+    }
+
+    @Service
+    public void removeParent(final Accountability accountability) {
+	if (hasParentAccountabilities(accountability)) {
+	    if (getParentAccountabilitiesCount() == 1) {
+		throw new DomainException("error.Party.cannot.remove.parent.accountability");
+	    }
+	    accountability.delete();
+	}
+    }
+
 }

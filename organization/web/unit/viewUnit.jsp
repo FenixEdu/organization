@@ -31,11 +31,18 @@
 
 <br/>
 <br/>
-<bean:message key="label.unit.parents" bundle="ORGANIZATION_RESOURCES" />: <html:link action="/organization.do?method=prepareAddParent" paramId="parentOid" paramName="unit" paramProperty="OID"><bean:message key="label.add.parent" bundle="ORGANIZATION_RESOURCES" /></html:link>
+<bean:message key="label.unit.parents" bundle="ORGANIZATION_RESOURCES" />: <html:link action="/organization.do?method=prepareAddParent" paramId="unitOid" paramName="unit" paramProperty="OID"><bean:message key="label.add.parent" bundle="ORGANIZATION_RESOURCES" /></html:link>
 <logic:notEmpty name="unit" property="parentAccountabilities">
 	<fr:view name="unit" property="parentAccountabilities" schema="organization.Unit.view.parent.accountability">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form thwidth150px" />
+
+			<fr:property name="linkFormat(removeParent)" value="/organization.do?method=removeParent&amp;accOid=${OID}" />
+			<fr:property name="key(removeParent)" value="label.remove"/>
+			<fr:property name="bundle(removeParent)" value="ORGANIZATION_RESOURCES"/>
+			<fr:property name="confirmationKey(removeParent)" value="label.remove.parent.confirmation.message" />
+			<fr:property name="confirmationBundle(removeParent)" value="ORGANIZATION_RESOURCES" />
+			<fr:property name="order(removeParent)" value="1"/>
 			
 			<fr:property name="sortBy" value="parent.partyName" />
 		</fr:layout>

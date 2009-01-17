@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.ConnectionRule;
 import module.organization.domain.ConnectionRuleAccountabilityType;
@@ -48,10 +49,11 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	}
     }
 
-    @CreateNodeAction( bundle="ORGANIZATION_RESOURCES", key="add.node.manage.organization", groupKey="label.module.organization" )
-    public final ActionForward createOrganizationNode(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws Exception {
-	ActionNode.createActionNode("/organization", "showOptions", "resources.OrganizationResources", "label.manage.organization", Role.getRole(RoleType.MANAGER));
+    @CreateNodeAction(bundle = "ORGANIZATION_RESOURCES", key = "add.node.manage.organization", groupKey = "label.module.organization")
+    public final ActionForward createOrganizationNode(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	ActionNode.createActionNode("/organization", "showOptions", "resources.OrganizationResources",
+		"label.manage.organization", Role.getRole(RoleType.MANAGER));
 	return showOptions(mapping, form, request, response);
     }
 
@@ -293,5 +295,40 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	    return forward(request, "/unit/viewUnit.jsp");
 	}
 	return viewOrganization(mapping, form, request, response);
+    }
+
+    public ActionForward prepareAddParent(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	request.setAttribute("unitBean", new UnitBean((Unit) getDomainObject(request, "unitOid")));
+	return forward(request, "/unit/addParent.jsp");
+    }
+
+    public ActionForward addParent(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+
+	final UnitBean bean = getRenderedObject("unitBean");
+	try {
+	    bean.addParent();
+	} catch (final DomainException e) {
+	    addMessage(request, e.getKey(), e.getArgs());
+	    request.setAttribute("unitBean", bean);
+	    return forward(request, "/unit/addParent.jsp");
+	}
+
+	request.setAttribute("unit", bean.getUnit());
+	return forward(request, "/unit/viewUnit.jsp");
+    }
+
+    public ActionForward removeParent(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final Accountability accountability = getDomainObject(request, "accOid");
+	try {
+	    accountability.getChild().removeParent(accountability);
+	} catch (final DomainException e) {
+	    addMessage(request, e.getKey(), e.getArgs());
+	}
+	request.setAttribute("unit", accountability.getChild());
+	return forward(request, "/unit/viewUnit.jsp");
+
     }
 }
