@@ -4,6 +4,9 @@ import java.util.Collection;
 
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
+
+import org.joda.time.LocalDate;
+
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -14,7 +17,7 @@ public class Unit extends Unit_Base {
     }
 
     protected Unit(final Party parent, final MultiLanguageString name, final String acronym, final PartyType partyType,
-	    final AccountabilityType accountabilityType) {
+	    final AccountabilityType accountabilityType, final LocalDate begin, final LocalDate end) {
 	this();
 
 	check(partyType, name, acronym);
@@ -26,7 +29,7 @@ public class Unit extends Unit_Base {
 
 	if (parent != null) {
 	    check(accountabilityType, "error.Unit.invalid.accountability.type");
-	    new Accountability(parent, this, accountabilityType);
+	    new Accountability(parent, this, accountabilityType, begin, end);
 	} else {
 	    setMyOrgFromTopUnit(MyOrg.getInstance());
 	}
@@ -113,10 +116,10 @@ public class Unit extends Unit_Base {
 
 	return this;
     }
-    
+
     @Override
     protected void canDelete() {
-        super.canDelete();
+	super.canDelete();
     }
 
     @Override
@@ -127,7 +130,8 @@ public class Unit extends Unit_Base {
 
     @Service
     static public Unit create(final UnitBean bean) {
-	return new Unit(bean.getParent(), bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityType());
+	return new Unit(bean.getParent(), bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityType(),
+		bean.getBegin(), bean.getEnd());
     }
 
     @Service
@@ -137,6 +141,6 @@ public class Unit extends Unit_Base {
 
     @Service
     static public Unit createRoot(final MultiLanguageString name, final String acronym, final PartyType partyType) {
-	return new Unit(null, name, acronym, partyType, null);
+	return new Unit(null, name, acronym, partyType, null, new LocalDate(), null);
     }
 }

@@ -26,6 +26,7 @@
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle2" />
 				<fr:property name="columnClasses" value=",,tderror" />
+				<fr:property name="requiredMarkShown" value="true" />
 			</fr:layout>
 		</fr:edit>
 		
@@ -40,6 +41,7 @@
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle2" />
 				<fr:property name="columnClasses" value=",,tderror" />
+				<fr:property name="requiredMarkShown" value="true" />
 			</fr:layout>
 		</fr:edit>
 		

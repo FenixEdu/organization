@@ -2,6 +2,8 @@ package module.organization.domain;
 
 import java.io.Serializable;
 
+import org.joda.time.LocalDate;
+
 import pt.ist.fenixWebFramework.util.DomainReference;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -11,6 +13,8 @@ public class UnitBean implements Serializable {
 
     private DomainReference<Unit> parent;
     private DomainReference<AccountabilityType> accountabilityType;
+    private LocalDate begin;
+    private LocalDate end;
 
     private DomainReference<Unit> unit;
     private MultiLanguageString name;
@@ -18,9 +22,12 @@ public class UnitBean implements Serializable {
     private DomainReference<PartyType> partyType;
 
     public UnitBean() {
+	setBegin(new LocalDate());
     }
 
     public UnitBean(final Unit unit) {
+	this();
+
 	setUnit(unit);
 	setName(unit.getPartyName());
 	setAcronym(unit.getAcronym());
@@ -84,6 +91,22 @@ public class UnitBean implements Serializable {
 		: null;
     }
 
+    public LocalDate getBegin() {
+	return begin;
+    }
+
+    public void setBegin(LocalDate begin) {
+	this.begin = begin;
+    }
+
+    public LocalDate getEnd() {
+	return end;
+    }
+
+    public void setEnd(LocalDate end) {
+	this.end = end;
+    }
+
     public Unit createUnit() {
 	return Unit.create(this);
     }
@@ -93,7 +116,7 @@ public class UnitBean implements Serializable {
     }
 
     public void addParent() {
-	getUnit().addParent(getParent(), getAccountabilityType());
+	getUnit().addParent(getParent(), getAccountabilityType(), getBegin(), getEnd());
     }
 
 }

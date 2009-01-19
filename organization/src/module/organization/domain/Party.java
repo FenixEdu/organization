@@ -11,6 +11,9 @@ import module.organization.domain.PartyPredicate.PartyByPartyType;
 import module.organization.domain.PartyPredicate.TruePartyPredicate;
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
+
+import org.joda.time.LocalDate;
+
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
 
@@ -265,8 +268,8 @@ abstract public class Party extends Party_Base {
     }
 
     @Service
-    public void addParent(final Party parent, final AccountabilityType type) {
-	new Accountability(parent, this, type);
+    public void addParent(final Party parent, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
+	Accountability.create(parent, this, type, begin, end);
     }
 
     @Service

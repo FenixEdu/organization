@@ -16,15 +16,28 @@ public class Accountability extends Accountability_Base {
 	setBeginDate(new LocalDate());
     }
 
-    protected Accountability(final Party parent, final Party child, final AccountabilityType type) {
+    protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
+	    final LocalDate end) {
 	this();
 	check(parent, "error.Accountability.invalid.parent");
 	check(child, "error.Accountability.invalid.child");
 	check(type, "error.Accountability.invalid.type");
+	check(begin, "error.Accountability.invalid.begin");
+	checkDates(begin, end);
+
 	canCreate(parent, child, type);
 	setParent(parent);
 	setChild(child);
 	setAccountabilityType(type);
+	setBeginDate(begin);
+	setEndDate(end);
+    }
+
+    private void checkDates(LocalDate begin, LocalDate end) {
+	if (begin != null && end != null && begin.isAfter(end)) {
+	    throw new DomainException("error.Accountability.begin.is.after.end");
+	}
+
     }
 
     private void check(final Object obj, final String message) {
@@ -88,8 +101,9 @@ public class Accountability extends Accountability_Base {
 	Transaction.deleteObject(this);
     }
 
-    static public Accountability create(final Party parent, final Party child, final AccountabilityType type) {
-	return new Accountability(parent, child, type);
+    static Accountability create(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
+	    final LocalDate end) {
+	return new Accountability(parent, child, type, begin, end);
     }
 
 }

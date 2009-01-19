@@ -31,6 +31,8 @@
 
 <br/>
 <br/>
+<br/>
+
 <bean:message key="label.unit.parents" bundle="ORGANIZATION_RESOURCES" />: <html:link action="/organization.do?method=prepareAddParent" paramId="unitOid" paramName="unit" paramProperty="OID"><bean:message key="label.add.parent" bundle="ORGANIZATION_RESOURCES" /></html:link>
 <logic:notEmpty name="unit" property="parentAccountabilities">
 	<fr:view name="unit" property="parentAccountabilities" schema="organization.Unit.view.parent.accountability">
@@ -54,8 +56,14 @@
 	</fr:view>
 </logic:notEmpty>
 
+<logic:empty name="unit" property="parentAccountabilities">
+	<br/>
+	<em><bean:message key="label.unit.no.parents" bundle="ORGANIZATION_RESOURCES" /></em>
+</logic:empty>
+
 <br/>
 <br/>
+
 <bean:message key="label.unit.children" bundle="ORGANIZATION_RESOURCES" />: <html:link action="/organization.do?method=prepareCreateUnit" paramId="parentOid" paramName="unit" paramProperty="OID"><bean:message key="label.create.child" bundle="ORGANIZATION_RESOURCES" /></html:link>
 <logic:notEmpty name="unit" property="childAccountabilities">
 	<fr:view name="unit" property="childAccountabilities" schema="organization.Unit.view.child.accountability">
@@ -72,8 +80,14 @@
 	</fr:view>
 </logic:notEmpty>
 
+<logic:empty name="unit" property="childAccountabilities">
+	<br/>
+	<em><bean:message key="label.unit.no.children" bundle="ORGANIZATION_RESOURCES" /></em>
+</logic:empty>
+
 <br/>
 <br/>
+
 <html:link action="/organization.do?method=viewOrganization">
 	<bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" />
 </html:link>

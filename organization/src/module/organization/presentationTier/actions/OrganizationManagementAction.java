@@ -322,12 +322,13 @@ public class OrganizationManagementAction extends ContextBaseAction {
     public ActionForward removeParent(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
 	final Accountability accountability = getDomainObject(request, "accOid");
+	final Party child = accountability.getChild();
 	try {
-	    accountability.getChild().removeParent(accountability);
+	    child.removeParent(accountability);
 	} catch (final DomainException e) {
 	    addMessage(request, e.getKey(), e.getArgs());
 	}
-	request.setAttribute("unit", accountability.getChild());
+	request.setAttribute("unit", child);
 	return forward(request, "/unit/viewUnit.jsp");
 
     }

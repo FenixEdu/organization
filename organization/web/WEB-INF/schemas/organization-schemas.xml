@@ -78,6 +78,8 @@
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
 	</slot>
+	<slot name="begin" key="label.begin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+	<slot name="end" key="label.end" />
 </schema>
 
 <schema name="organization.UnitBean.edit.unit" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
@@ -96,6 +98,8 @@
 	<slot name="parent.acronym" key="label.unit.parent.acronym" />
 	<slot name="parent.partyType.name" key="label.unit.parent.type" />
 	<slot name="accountabilityType.name" key="label.unit.accountability.type" />
+	<slot name="beginDate" key="label.begin" />
+	<slot name="endDate" key="label.end" layout="null-as-label" />
 </schema>
 
 <schema name="organization.Unit.view.child.accountability" type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
@@ -103,6 +107,8 @@
 	<slot name="child.acronym" key="label.unit.child.acronym" />
 	<slot name="child.partyType.name" key="label.unit.child.type" />
 	<slot name="accountabilityType.name" key="label.unit.accountability.type" />
+	<slot name="beginDate" key="label.begin" />
+	<slot name="endDate" key="label.end" layout="null-as-label" />
 </schema>
 
 <schema name="organization.UnitBean.add.parent" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
@@ -117,4 +123,6 @@
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
 	</slot>
+	<slot name="begin" key="label.begin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+	<slot name="end" key="label.end" />
 </schema>
