@@ -18,7 +18,7 @@
 <logic:notEmpty name="connectionRules">
 	<fr:view name="connectionRules" schema="organization.ConnectionRule.view">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="form thwidth150px"/>
+			<fr:property name="classes" value="tstyle2"/>
 
 			<fr:property name="linkFormat(deleteConnectionRule)" value="/organization.do?method=deleteConnectionRule&amp;connectionRuleOid=${OID}" />
 			<fr:property name="key(deleteConnectionRule)" value="label.delete"/>

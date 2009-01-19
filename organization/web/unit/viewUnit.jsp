@@ -15,7 +15,7 @@
 <bean:message key="label.unit.view" bundle="ORGANIZATION_RESOURCES" />
 <fr:view name="unit" schema="organization.Unit.view">
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="form thwidth150px" />
+		<fr:property name="classes" value="tstyle2" />
 		<fr:property name="columnClasses" value=",,tderror" />
 	</fr:layout>
 </fr:view>
@@ -35,14 +35,19 @@
 <logic:notEmpty name="unit" property="parentAccountabilities">
 	<fr:view name="unit" property="parentAccountabilities" schema="organization.Unit.view.parent.accountability">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="form thwidth150px" />
+			<fr:property name="classes" value="tstyle2" />
+			
+			<fr:property name="linkFormat(viewUnit)" value="/organization.do?method=viewUnit&amp;unitOid=${parent.OID}" />
+			<fr:property name="key(viewUnit)" value="label.view"/>
+			<fr:property name="bundle(viewUnit)" value="ORGANIZATION_RESOURCES"/>
+			<fr:property name="order(viewUnit)" value="1"/>
 
 			<fr:property name="linkFormat(removeParent)" value="/organization.do?method=removeParent&amp;accOid=${OID}" />
 			<fr:property name="key(removeParent)" value="label.remove"/>
 			<fr:property name="bundle(removeParent)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="confirmationKey(removeParent)" value="label.remove.parent.confirmation.message" />
 			<fr:property name="confirmationBundle(removeParent)" value="ORGANIZATION_RESOURCES" />
-			<fr:property name="order(removeParent)" value="1"/>
+			<fr:property name="order(removeParent)" value="2"/>
 			
 			<fr:property name="sortBy" value="parent.partyName" />
 		</fr:layout>
@@ -55,7 +60,12 @@
 <logic:notEmpty name="unit" property="childAccountabilities">
 	<fr:view name="unit" property="childAccountabilities" schema="organization.Unit.view.child.accountability">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="form thwidth150px" />
+			<fr:property name="classes" value="tstyle2" />
+			
+			<fr:property name="linkFormat(viewUnit)" value="/organization.do?method=viewUnit&amp;unitOid=${child.OID}" />
+			<fr:property name="key(viewUnit)" value="label.view"/>
+			<fr:property name="bundle(viewUnit)" value="ORGANIZATION_RESOURCES"/>
+			<fr:property name="order(viewUnit)" value="1"/>
 			
 			<fr:property name="sortBy" value="child.partyName" />
 		</fr:layout>

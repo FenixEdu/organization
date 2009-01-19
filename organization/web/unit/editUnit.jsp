@@ -21,7 +21,7 @@
 	<%-- edit unit --%>
 	<fr:edit id="unitBean.edit.unit" name="unitBean" schema="organization.UnitBean.edit.unit" >
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="form thwidth150px" />
+			<fr:property name="classes" value="tstyle2" />
 			<fr:property name="columnClasses" value=",,tderror" />
 		</fr:layout>
 	</fr:edit>

@@ -48,7 +48,7 @@
 <schema name="organization.Unit.view" type="module.organization.domain.Unit" bundle="ORGANIZATION_RESOURCES">
 	<slot name="partyName" key="label.unit.name" />
 	<slot name="acronym" key="label.unit.acronym" />
-	<slot name="partyType.type" key="label.unit.party.type" />
+	<slot name="partyType.name" key="label.unit.party.type" />
 </schema>
 
 <schema name="organization.UnitBean.create.top.unit" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
@@ -57,8 +57,8 @@
 	<slot name="partyType" layout="menu-select" key="label.unit.party.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.PartyTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.PartyType" />
-		<property name="format" value="${type}" />
-		<property name="sortBy" value="type" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
 	</slot>
 </schema>
 
@@ -69,14 +69,14 @@
 	<slot name="partyType" layout="menu-select" key="label.unit.party.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.PartyTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.PartyType" />
-		<property name="format" value="${type}" />
-		<property name="sortBy" value="type" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.AccountabilityTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
-		<property name="format" value="${type}" />
-		<property name="sortBy" value="type" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
 	</slot>
 </schema>
 
@@ -86,23 +86,23 @@
 	<slot name="partyType" layout="menu-select" key="label.unit.party.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.PartyTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.PartyType" />
-		<property name="format" value="${type}" />
-		<property name="sortBy" value="type" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
 	</slot>
 </schema>
 
 <schema name="organization.Unit.view.parent.accountability" type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
 	<slot name="parent.partyName" key="label.unit.parent" />
 	<slot name="parent.acronym" key="label.unit.parent.acronym" />
-	<slot name="parent.partyType.type" key="label.unit.parent.type" />
-	<slot name="accountabilityType.type" key="label.unit.accountability.type" />
+	<slot name="parent.partyType.name" key="label.unit.parent.type" />
+	<slot name="accountabilityType.name" key="label.unit.accountability.type" />
 </schema>
 
 <schema name="organization.Unit.view.child.accountability" type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
 	<slot name="child.partyName" key="label.unit.child" />
 	<slot name="child.acronym" key="label.unit.child.acronym" />
-	<slot name="child.partyType.type" key="label.unit.child.type" />
-	<slot name="accountabilityType.type" key="label.unit.accountability.type" />
+	<slot name="child.partyType.name" key="label.unit.child.type" />
+	<slot name="accountabilityType.name" key="label.unit.accountability.type" />
 </schema>
 
 <schema name="organization.UnitBean.add.parent" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
@@ -114,7 +114,7 @@
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.AccountabilityTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
-		<property name="format" value="${type}" />
-		<property name="sortBy" value="type" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
 	</slot>
 </schema>

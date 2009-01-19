@@ -24,7 +24,7 @@
 		<bean:message key="label.create.unit" bundle="ORGANIZATION_RESOURCES" />
 		<fr:edit id="unitBean.create.unit" name="unitBean" schema="organization.UnitBean.create.unit" >
 			<fr:layout name="tabular">
-				<fr:property name="classes" value="form thwidth150px" />
+				<fr:property name="classes" value="tstyle2" />
 				<fr:property name="columnClasses" value=",,tderror" />
 			</fr:layout>
 		</fr:edit>
@@ -38,7 +38,7 @@
 		<bean:message key="label.create.top.unit" bundle="ORGANIZATION_RESOURCES" />
 		<fr:edit id="unitBean.create.top.unit" name="unitBean" schema="organization.UnitBean.create.top.unit">
 			<fr:layout name="tabular">
-				<fr:property name="classes" value="form thwidth150px" />
+				<fr:property name="classes" value="tstyle2" />
 				<fr:property name="columnClasses" value=",,tderror" />
 			</fr:layout>
 		</fr:edit>

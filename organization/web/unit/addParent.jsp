@@ -21,7 +21,7 @@
 	<bean:message key="label.add.parent" bundle="ORGANIZATION_RESOURCES" />
 	<fr:edit id="unitBean.add.parent" name="unitBean" schema="organization.UnitBean.add.parent">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="form thwidth150px" />
+			<fr:property name="classes" value="tstyle2" />
 			<fr:property name="columnClasses" value=",,tderror" />
 		</fr:layout>
 	</fr:edit>

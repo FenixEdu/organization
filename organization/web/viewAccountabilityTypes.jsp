@@ -13,7 +13,7 @@
 <logic:notEmpty name="accountabilityTypes">
 	<fr:view name="accountabilityTypes" schema="organization.AccountabilityType.view">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="form thwidth150px"/>
+			<fr:property name="classes" value="tstyle2"/>
 
 			<fr:property name="linkFormat(editAccountabilityType)" value="/organization.do?method=prepareEditAccountabilityType&amp;accountabilityTypeOid=${OID}" />
 			<fr:property name="key(editAccountabilityType)" value="label.edit"/>
