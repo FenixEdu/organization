@@ -27,6 +27,11 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
 	    setAccountabilityType(accountabilityType);
 	}
 
+	public AccountabilityTypeBean(String type, MultiLanguageString name) {
+	    setType(type);
+	    setName(name);
+	}
+
 	public String getType() {
 	    return type;
 	}
