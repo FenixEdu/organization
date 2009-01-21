@@ -61,7 +61,6 @@ public class Unit extends Unit_Base {
     }
 
     private void checkNameAndAcronym(final MultiLanguageString name, final String acronym, final Unit unit) {
-	if (true) return ;
 	if (unit.getPartyName().equalInAnyLanguage(name)) {
 	    throw new DomainException("error.Unit.found.child.with.same.name", name.getContent());
 	}
