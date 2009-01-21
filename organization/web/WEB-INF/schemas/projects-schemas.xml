@@ -1,5 +1,0 @@
-<schema name="projects.view" type="module.projectsVisualization.domain.ProjectProxy" 
-	bundle="PROJECTS_RESOURCES">
-	<slot name="projectCode" key="label.projectCode" read-only="true" />
-	<slot name="title" key="label.title" read-only="true" layout="null-as-label" />
-</schema>
