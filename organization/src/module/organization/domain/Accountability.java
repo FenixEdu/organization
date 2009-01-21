@@ -101,7 +101,6 @@ public class Accountability extends Accountability_Base {
 	Transaction.deleteObject(this);
     }
 
-    @Service
     static Accountability create(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
 	    final LocalDate end) {
 	return new Accountability(parent, child, type, begin, end);
