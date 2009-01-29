@@ -1,6 +1,7 @@
 package module.organization.domain;
 
 import java.util.Collection;
+import java.util.Comparator;
 
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
@@ -11,6 +12,14 @@ import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class Unit extends Unit_Base {
+
+    public static final Comparator<Unit> COMPARATOR_BY_PRESENTATION_NAME = new Comparator<Unit>() {
+
+	public int compare(final Unit unit1, Unit unit2) {
+	    return unit1.getPresentationName().compareTo(unit2.getPresentationName());
+	}
+
+    };
 
     protected Unit() {
 	super();
@@ -144,4 +153,9 @@ public class Unit extends Unit_Base {
     static public Unit createRoot(final MultiLanguageString name, final String acronym, final PartyType partyType) {
 	return new Unit(null, name, acronym, partyType, null, new LocalDate(), null);
     }
+
+    public String getPresentationName() {
+	return getPartyName() + "(" + getAcronym() + ")";
+    }
+
 }
