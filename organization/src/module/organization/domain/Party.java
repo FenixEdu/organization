@@ -245,6 +245,10 @@ abstract public class Party extends Party_Base {
     public boolean isUnit() {
 	return false;
     }
+    
+    public boolean isPerson() {
+	return false;
+    }
 
     @Service
     public void delete() {

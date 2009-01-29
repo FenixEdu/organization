@@ -24,7 +24,6 @@ public class Person extends Person_Base {
 	return partyType;
     }
 
-
     public Person(MultiLanguageString partyName, PartyType partyType) {
 	super();
 	setPartyName(partyName);
@@ -47,4 +46,8 @@ public class Person extends Person_Base {
 	return new Person(partyName, partyType);
     }
 
+    @Override
+    final public boolean isPerson() {
+	return true;
+    }
 }
