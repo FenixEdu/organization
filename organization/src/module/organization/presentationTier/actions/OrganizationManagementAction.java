@@ -19,7 +19,9 @@ import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
 import module.organization.domain.ConnectionRule.ConnectionRuleBean;
 import module.organization.domain.PartyType.PartyTypeBean;
 import myorg.domain.RoleType;
+import myorg.domain.VirtualHost;
 import myorg.domain.contents.ActionNode;
+import myorg.domain.contents.Node;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.Role;
 import myorg.presentationTier.actions.ContextBaseAction;
@@ -52,9 +54,11 @@ public class OrganizationManagementAction extends ContextBaseAction {
     @CreateNodeAction(bundle = "ORGANIZATION_RESOURCES", key = "add.node.manage.organization", groupKey = "label.module.organization")
     public final ActionForward createOrganizationNode(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-	ActionNode.createActionNode("/organization", "showOptions", "resources.OrganizationResources",
+	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
+	final Node node = getDomainObject(request, "parentOfNodesToManageId");
+	ActionNode.createActionNode(virtualHost, node, "/organization", "showOptions", "resources.OrganizationResources",
 		"label.manage.organization", Role.getRole(RoleType.MANAGER));
-	return showOptions(mapping, form, request, response);
+	return forwardToMuneConfiguration(request, virtualHost, node);
     }
 
     public ActionForward showOptions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
