@@ -1,0 +1,37 @@
+
+                Organization Module for the MyOrg web application infrastructure
+ 
+
+  What is it? 
+  -----------
+  
+  This module allows the representation of any organizational structure, and
+  provides interfaces for creating, viewing and managing the structure.
+
+
+  The Latest Version
+  ------------------
+
+  Details of the latest version can be found on the fenix-ashes project web
+  site <https://fenix-ashes.ist.utl.pt>
+
+
+  Documentation
+  -------------
+
+  We personally feel that the best documentation of any application is its
+  source code. That being said, you can probably find some stuff on the 
+  projects web site <https://fenix-ashes.ist.utl.pt>
+
+
+  Licensing
+  ---------
+
+  This software is licensed under the terms you may find in the file 
+  named "LICENSE" in this directory.
+  
+
+
+  Thanks for using the Organization Module.
+
+                                         <https://fenix-ashes.ist.utl.pt>
