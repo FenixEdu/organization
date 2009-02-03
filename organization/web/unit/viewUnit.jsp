@@ -22,11 +22,14 @@
 
 <html:link action="/organization.do?method=prepareEditUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
 	<bean:message key="label.edit" bundle="ORGANIZATION_RESOURCES" />
-</html:link>,
+</html:link>, 
 <bean:define id="unitName" name="unit" property="partyName.content" />
 <bean:define id="message">return confirm('<bean:message key="label.unit.delete.confirm.message" bundle="ORGANIZATION_RESOURCES" arg0="<%= unitName.toString() %>" />')</bean:define>
 <html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="OID" onclick="<%= message %>">
 	<bean:message key="label.delete" bundle="ORGANIZATION_RESOURCES" />
+</html:link>, 
+<html:link action="/organization.do?method=prepareEditPartyPartyTypes" paramId="unitOid" paramName="unit" paramProperty="OID">
+	<bean:message key="label.unit.partyTypes" bundle="ORGANIZATION_RESOURCES" />
 </html:link>
 
 <br/>
@@ -47,7 +50,7 @@
 			<fr:property name="linkFormat(removeParent)" value="/organization.do?method=removeParent&amp;accOid=${OID}" />
 			<fr:property name="key(removeParent)" value="label.remove"/>
 			<fr:property name="bundle(removeParent)" value="ORGANIZATION_RESOURCES"/>
-			<fr:property name="confirmationKey(removeParent)" value="label.remove.parent.confirmation.message" />
+			<fr:property name="confirmationKey(removeParent)" value="label.remove.confirmation.message" />
 			<fr:property name="confirmationBundle(removeParent)" value="ORGANIZATION_RESOURCES" />
 			<fr:property name="order(removeParent)" value="2"/>
 			

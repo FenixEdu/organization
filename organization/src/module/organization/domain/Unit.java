@@ -24,6 +24,7 @@
 
 package module.organization.domain;
 
+
 import java.util.Collection;
 import java.util.Comparator;
 
@@ -53,10 +54,10 @@ public class Unit extends Unit_Base {
 	    final AccountabilityType accountabilityType, final LocalDate begin, final LocalDate end) {
 	this();
 
-	check(partyType, name, acronym);
-	checkNameAndAcronym(parent, name, acronym);
+	check(partyType, "error.Unit.invalid.party.type");
+	check(name, acronym);
 
-	setPartyType(partyType);
+	addPartyTypes(partyType);
 	setPartyName(name);
 	setAcronym(acronym);
 
@@ -68,50 +69,7 @@ public class Unit extends Unit_Base {
 	}
     }
 
-    private void checkNameAndAcronym(final Party parent, final MultiLanguageString name, final String acronym) {
-	if (parent != null) {
-	    checkNameAndAcronym(parent.getChildAccountabilities(), name, acronym);
-	} else {
-	    checkTopUnitsNameAndAcronym(name, acronym);
-	}
-    }
-
-    private void checkNameAndAcronym(final Collection<Accountability> accountabilities, final MultiLanguageString name,
-	    final String acronym) {
-	for (final Accountability accountability : accountabilities) {
-	    if (accountability.getChild().isUnit() && !accountability.getChild().equals(this)) {
-		checkNameAndAcronym(name, acronym, (Unit) accountability.getChild());
-	    }
-	}
-    }
-
-    private void checkTopUnitsNameAndAcronym(final MultiLanguageString name, final String acronym) {
-	for (final Party party : MyOrg.getInstance().getTopUnits()) {
-	    if (party.isUnit() && !party.equals(this)) {
-		checkNameAndAcronym(name, acronym, (Unit) party);
-	    }
-	}
-    }
-
-    private void checkNameAndAcronym(final MultiLanguageString name, final String acronym, final Unit unit) {
-	if (true) return ;	
-	if (unit.getPartyName().equalInAnyLanguage(name)) {
-	    throw new DomainException("error.Unit.found.child.with.same.name", name.getContent());
-	}
-	if (unit.getAcronym().equalsIgnoreCase(acronym)) {
-	    throw new DomainException("error.Unit.found.child.with.same.acronym", acronym);
-	}
-    }
-
-    private void check(final Object obj, final String message) {
-	if (obj == null) {
-	    throw new DomainException(message);
-	}
-    }
-
-    private void check(final PartyType partyType, final MultiLanguageString name, final String acronym) {
-	check(partyType, "error.Unit.invalid.party.type");
-
+    private void check(final MultiLanguageString name, final String acronym) {
 	if (name == null || name.isEmpty()) {
 	    throw new DomainException("error.Unit.invalid.name");
 	}
@@ -131,29 +89,16 @@ public class Unit extends Unit_Base {
     }
 
     @Service
-    public Unit edit(final MultiLanguageString name, final String acronym, final PartyType partyType) {
-	check(partyType, name, acronym);
-	for (final Accountability accountability : getParentAccountabilities()) {
-	    checkNameAndAcronym(accountability.getParent(), name, acronym);
-	}
-
-	setPartyType(partyType);
+    public Unit edit(final MultiLanguageString name, final String acronym) {
+	check(name, acronym);
 	setPartyName(name);
 	setAcronym(acronym);
-
-	// after setting party type, check if accountabilities continue valid
-	for (final Accountability accountability : getParentAccountabilities()) {
-	    if (!accountability.areParentAndChildValid()) {
-		throw new DomainException("error.Unit.accountability.doesnot.have.valid.parent.and.child");
-	    }
+	
+	if (!accountabilitiesStillValid()) {
+	    throw new DomainException("error.Unit.invalid.accountabilities.cannot.edit.information");
 	}
-
+	
 	return this;
-    }
-
-    @Override
-    protected void canDelete() {
-	super.canDelete();
     }
 
     @Override

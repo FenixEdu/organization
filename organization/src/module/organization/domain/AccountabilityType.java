@@ -25,6 +25,7 @@
 package module.organization.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
@@ -93,7 +94,6 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     protected AccountabilityType() {
 	super();
 	setMyOrg(MyOrg.getInstance());
-	setOjbConcreteClass(getClass().getName());
     }
 
     protected AccountabilityType(final String type) {
@@ -131,7 +131,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     @Service
     public void delete() {
 	canDelete();
-	removeMyOrg();
+	disconnect();
 	Transaction.deleteObject(this);
     }
 
@@ -141,25 +141,24 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
 	}
     }
 
+    private void disconnect() {
+	getConnectionRules().clear();
+	removeMyOrg();
+    }
+
     @Override
     public int compareTo(AccountabilityType other) {
-	return getType().compareTo(other.getType());
+	int res = getType().compareTo(other.getType());
+	return res != 0 ? res : (getOID() < other.getOID() ? -1 : (getOID() == other.getOID() ? 0 : 1));
     }
 
-    public boolean canHaveAccountability(final Party parent, final Party child) {
-	return areValidPartyTypes(parent, child);
-    }
-
-    protected boolean areValidPartyTypes(final Party parent, final Party child) {
+    public boolean isValid(final Party parent, final Party child) {
+	for (final ConnectionRule rule : getConnectionRules()) {
+	    if (!rule.isValid(this, parent, child)) {
+		return false;
+	    }
+	}
 	return true;
-    }
-
-    public AccountabilityTypeBean buildBean() {
-	return new AccountabilityTypeBean(this);
-    }
-
-    public boolean isWithRules() {
-	return false;
     }
 
     @Service
@@ -177,6 +176,12 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
 	    }
 	}
 	return null;
+    }
+
+    @Service
+    public void associateConnectionRules(final List<ConnectionRule> connectionRules) {
+	getConnectionRules().retainAll(connectionRules);
+	getConnectionRules().addAll(connectionRules);
     }
 
 }

@@ -56,6 +56,12 @@ abstract public class Party extends Party_Base {
 	setMyOrg(MyOrg.getInstance());
     }
 
+    protected void check(final Object obj, final String message) {
+	if (obj == null) {
+	    throw new DomainException(message);
+	}
+    }
+
     public Collection<Party> getParents() {
 	return getParents(new TruePartyPredicate());
     }
@@ -291,7 +297,7 @@ abstract public class Party extends Party_Base {
 	while (hasAnyParentAccountabilities()) {
 	    getParentAccountabilities().get(0).delete();
 	}
-	removePartyType();
+	getPartyTypes().clear();
 	removeMyOrg();
     }
 
@@ -308,6 +314,29 @@ abstract public class Party extends Party_Base {
 	    }
 	    accountability.delete();
 	}
+    }
+
+    @Service
+    public void editPartyTypes(final List<PartyType> partyTypes) {
+	getPartyTypes().retainAll(partyTypes);
+	getPartyTypes().addAll(partyTypes);
+
+	if (getPartyTypesSet().isEmpty()) {
+	    throw new DomainException("error.Party.must.have.at.least.one.party.type");
+	}
+	if (!accountabilitiesStillValid()) {
+	    throw new DomainException("error.Party.invalid.party.types.accountability.rules.are.not.correct");
+	}
+
+    }
+
+    protected boolean accountabilitiesStillValid() {
+	for (final Accountability accountability : getParentAccountabilitiesSet()) {
+	    if (!accountability.isValid()) {
+		return false;
+	    }
+	}
+	return true;
     }
 
 }

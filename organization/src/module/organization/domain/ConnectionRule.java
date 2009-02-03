@@ -26,56 +26,23 @@ package module.organization.domain;
 
 import java.io.Serializable;
 
+import myorg.domain.MyOrg;
+import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.util.DomainReference;
 import pt.ist.fenixframework.pstm.Transaction;
-import myorg.domain.MyOrg;
-import myorg.domain.exceptions.DomainException;
 
-public class ConnectionRule extends ConnectionRule_Base {
+abstract public class ConnectionRule extends ConnectionRule_Base {
 
-    static public class ConnectionRuleBean implements Serializable {
+    static abstract public class ConnectionRuleBean implements Serializable {
 
 	private static final long serialVersionUID = -5549142750086201478L;
-
-	private DomainReference<ConnectionRuleAccountabilityType> accountabilityType;
-	private DomainReference<PartyType> parent;
-	private DomainReference<PartyType> child;
 	private DomainReference<ConnectionRule> connectionRule;
 
-	public ConnectionRuleBean(final ConnectionRuleAccountabilityType accountabilityType) {
-	    setAccountabilityType(accountabilityType);
+	protected ConnectionRuleBean() {
 	}
 
-	public ConnectionRuleBean(final ConnectionRule connectionRule) {
-	    setAccountabilityType(connectionRule.getAccountabilityType());
-	    setParent(connectionRule.getAllowedParent());
-	    setChild(connectionRule.getAllowedChild());
+	protected ConnectionRuleBean(final ConnectionRule connectionRule) {
 	    setConnectionRule(connectionRule);
-	}
-
-	public ConnectionRuleAccountabilityType getAccountabilityType() {
-	    return accountabilityType != null ? accountabilityType.getObject() : null;
-	}
-
-	public void setAccountabilityType(final ConnectionRuleAccountabilityType accountabilityType) {
-	    this.accountabilityType = (accountabilityType != null ? new DomainReference<ConnectionRuleAccountabilityType>(
-		    accountabilityType) : null);
-	}
-
-	public PartyType getParent() {
-	    return parent != null ? parent.getObject() : null;
-	}
-
-	public void setParent(final PartyType parent) {
-	    this.parent = (parent != null ? new DomainReference<PartyType>(parent) : null);
-	}
-
-	public PartyType getChild() {
-	    return child != null ? child.getObject() : null;
-	}
-
-	public void setChild(final PartyType child) {
-	    this.child = (child != null ? new DomainReference<PartyType>(child) : null);
 	}
 
 	public ConnectionRule getConnectionRule() {
@@ -86,52 +53,28 @@ public class ConnectionRule extends ConnectionRule_Base {
 	    this.connectionRule = (connectionRule != null ? new DomainReference<ConnectionRule>(connectionRule) : null);
 	}
 
-	public void create() {
-	    getAccountabilityType().addConnectionRule(getParent(), getChild());
-	}
+	abstract public ConnectionRule create();
     }
 
-    private ConnectionRule() {
+    protected ConnectionRule() {
 	super();
 	setMyOrg(MyOrg.getInstance());
     }
 
-    ConnectionRule(final PartyType allowedParent, final PartyType allowedChild) {
-	this();
-	check(allowedParent, "error.ConnectionRule.invalid.parent.type");
-	check(allowedChild, "error.ConnectionRule.invalid.child.type");
-	setAllowedParent(allowedParent);
-	setAllowedChild(allowedChild);
-    }
-
-    private void check(final Object obj, final String message) {
-	if (obj == null) {
-	    throw new DomainException(message);
-	}
-    }
-
-    void delete() {
-	removeAllowedParent();
-	removeAllowedChild();
-	removeAccountabilityType();
-	removeMyOrg();
+    @Service
+    public void delete() {
+	disconnect();
 	Transaction.deleteObject(this);
     }
 
-    boolean has(final PartyType parent, final PartyType child) {
-	return hasAllowedParent(parent) && hasAllowedChild(child);
+    protected void disconnect() {
+	getAccountabilityTypes().clear();
+	removeMyOrg();
     }
 
-    boolean hasAllowedParent(final PartyType parent) {
-	return getAllowedParent().equals(parent);
-    }
+    abstract public ConnectionRuleBean buildBean();
 
-    boolean hasAllowedChild(final PartyType child) {
-	return getAllowedChild().equals(child);
-    }
-
-    public boolean isValid(final Party parent, final Party child) {
-	return has(parent.getPartyType(), child.getPartyType());
-    }
-
+    abstract public boolean isValid(final AccountabilityType accountabilityType, final Party parent, final Party child);
+    
+    abstract public String getDescription();
 }

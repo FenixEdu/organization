@@ -51,7 +51,7 @@ public class Person extends Person_Base {
     public Person(MultiLanguageString partyName, PartyType partyType) {
 	super();
 	setPartyName(partyName);
-	setPartyType(partyType);
+	addPartyTypes(partyType);
     }
 
     public static Person readByPartyName(MultiLanguageString partyName) {

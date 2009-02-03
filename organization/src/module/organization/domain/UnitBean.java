@@ -41,9 +41,10 @@ public class UnitBean implements Serializable {
     private LocalDate end;
 
     private DomainReference<Unit> unit;
+    private DomainReference<PartyType> partyType;
+
     private MultiLanguageString name;
     private String acronym;
-    private DomainReference<PartyType> partyType;
 
     public UnitBean() {
 	setBegin(new LocalDate());
@@ -55,7 +56,6 @@ public class UnitBean implements Serializable {
 	setUnit(unit);
 	setName(unit.getPartyName());
 	setAcronym(unit.getAcronym());
-	setPartyType(unit.getPartyType());
     }
 
     public Unit getParent() {
@@ -136,7 +136,7 @@ public class UnitBean implements Serializable {
     }
 
     public Unit editUnit() {
-	return getUnit().edit(getName(), getAcronym(), getPartyType());
+	return getUnit().edit(getName(), getAcronym());
     }
 
     public void addParent() {

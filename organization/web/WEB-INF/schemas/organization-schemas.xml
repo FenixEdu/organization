@@ -1,13 +1,16 @@
-<schema name="organization.PartyType.view" type="module.organization.domain.PartyType" 
-	bundle="ORGANIZATION_RESOURCES">
+<schema name="organization.PartyType.view" type="module.organization.domain.PartyType" bundle="ORGANIZATION_RESOURCES">
 	<slot name="type" key="label.type" read-only="true" />
-	<slot name="name" key="label.name" read-only="true" layout="null-as-label" />
+	<slot name="name" key="label.name" read-only="true" />
+</schema>
+
+<schema name="organization.PartyType.view.name" type="module.organization.domain.PartyType" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="label.name" read-only="true" />
 </schema>
 
 <schema name="organization.PartyTypeBean" type="module.organization.domain.PartyType$PartyTypeBean" 
 	bundle="ORGANIZATION_RESOURCES">
 	<slot name="type" key="label.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
-	<slot name="name" key="label.name" />
+	<slot name="name" key="label.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 </schema>
 
 <schema name="organization.AccountabilityType.view" type="module.organization.domain.AccountabilityType" 
@@ -22,33 +25,36 @@
 	<slot name="name" key="label.name" />
 </schema>
 
-<schema name="organization.ConnectionRule.view" type="module.organization.domain.ConnectionRule" 
-	bundle="ORGANIZATION_RESOURCES">
-	<slot name="allowedParent.type" key="label.connection.rule.allowed.parent.type" read-only="true" />
-	<slot name="allowedChild.type" key="label.connection.rule.allowed.child.type" read-only="true" />
+<schema name="organization.ConnectionRule.view" type="module.organization.domain.ConnectionRule" bundle="ORGANIZATION_RESOURCES">
+	<slot name="description" key="label.connection.rule.description" read-only="true" />
 </schema>
 
-<schema name="organization.ConnectionRuleBean" type="module.organization.domain.ConnectionRule$ConnectionRuleBean" 
-	bundle="ORGANIZATION_RESOURCES">
-	<slot name="accountabilityType.type" key="label.accountability.type" read-only="true" />
-	<slot name="parent" layout="menu-select" key="label.connection.rule.allowed.parent.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+<schema name="organization.PartyTypeConnectionRuleBean" type="module.organization.domain.PartyTypeConnectionRule$PartyTypeConnectionRuleBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="parent" layout="menu-select" key="label.PartyTypeConnectionRule.allowed.parent.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.PartyTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.PartyType" />
-		<property name="format" value="${type}" />
-		<property name="sortBy" value="type" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
 	</slot>
-	<slot name="child" layout="menu-select" key="label.connection.rule.allowed.child.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="child" layout="menu-select" key="label.PartyTypeConnectionRule.allowed.child.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.PartyTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.PartyType" />
-		<property name="format" value="${type}" />
-		<property name="sortBy" value="type" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
 	</slot>
+</schema>
+
+<schema name="organization.UniqueNameAndAcronymConnectionRuleBean" type="module.organization.domain.UniqueNameAndAcronymConnectionRule$UniqueNameAndAcronymConnectionRuleBean" bundle="ORGANIZATION_RESOURCES">
 </schema>
 
 <schema name="organization.Unit.view" type="module.organization.domain.Unit" bundle="ORGANIZATION_RESOURCES">
 	<slot name="partyName" key="label.unit.name" />
 	<slot name="acronym" key="label.unit.acronym" />
-	<slot name="partyType.name" key="label.unit.party.type" />
+	<slot name="partyTypes" key="label.unit.party.type">
+		<property name="eachLayout" value="values-comma" />
+		<property name="eachSchema" value="organization.PartyType.view.name" />
+		<property name="classes" value="nobullet liinline"/>
+	</slot>
 </schema>
 
 <schema name="organization.UnitBean.create.top.unit" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
@@ -85,18 +91,11 @@
 <schema name="organization.UnitBean.edit.unit" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
 	<slot name="name" key="label.unit.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 	<slot name="acronym" key="label.unit.acronym" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
-	<slot name="partyType" layout="menu-select" key="label.unit.party.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="providerClass" value="module.organization.presentationTier.renderers.PartyTypesProvider" />
-		<property name="choiceType" value="module.organization.domain.PartyType" />
-		<property name="format" value="${name}" />
-		<property name="sortBy" value="name" />
-	</slot>
 </schema>
 
 <schema name="organization.Unit.view.parent.accountability" type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
 	<slot name="parent.partyName" key="label.unit.parent" />
 	<slot name="parent.acronym" key="label.unit.parent.acronym" />
-	<slot name="parent.partyType.name" key="label.unit.parent.type" />
 	<slot name="accountabilityType.name" key="label.unit.accountability.type" />
 	<slot name="beginDate" key="label.begin" />
 	<slot name="endDate" key="label.end" layout="null-as-label" />
@@ -105,7 +104,6 @@
 <schema name="organization.Unit.view.child.accountability" type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
 	<slot name="child.partyName" key="label.unit.child" />
 	<slot name="child.acronym" key="label.unit.child.acronym" />
-	<slot name="child.partyType.name" key="label.unit.child.type" />
 	<slot name="accountabilityType.name" key="label.unit.accountability.type" />
 	<slot name="beginDate" key="label.begin" />
 	<slot name="endDate" key="label.end" layout="null-as-label" />

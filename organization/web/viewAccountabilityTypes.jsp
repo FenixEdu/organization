@@ -8,7 +8,7 @@
 <h2><bean:message key="label.accountability.types" bundle="ORGANIZATION_RESOURCES" /></h2>
 
 <br/>
-<html:link action="/organization.do?method=selectAccountabilityType"><bean:message key="label.create.new" bundle="ORGANIZATION_RESOURCES"/></html:link>
+<html:link action="/organization.do?method=prepareCreateAccountabilityType"><bean:message key="label.create.new" bundle="ORGANIZATION_RESOURCES"/></html:link>
 
 <logic:notEmpty name="accountabilityTypes">
 	<fr:view name="accountabilityTypes" schema="organization.AccountabilityType.view">
@@ -26,13 +26,12 @@
 			<fr:property name="confirmationKey(deleteAccountabilityType)" value="label.delete.confirmation.message"/>
 			<fr:property name="confirmationBundle(deleteAccountabilityType)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="order(deleteAccountabilityType)" value="2"/>
-
-			<fr:property name="linkFormat(viewConnectionRule)" value="/organization.do?method=viewConnectionRules&amp;accountabilityTypeOid=${OID}" />
-			<fr:property name="key(viewConnectionRule)" value="label.connection.rules"/>
-			<fr:property name="bundle(viewConnectionRule)" value="ORGANIZATION_RESOURCES"/>
-			<fr:property name="order(viewConnectionRule)" value="3"/>
-			<fr:property name="visibleIf(viewConnectionRule)" value="withRules"/>
 			
+			<fr:property name="linkFormat(editAccountabilityType)" value="/organization.do?method=prepareAssociateConnectionRules&amp;accountabilityTypeOid=${OID}" />
+			<fr:property name="key(editAccountabilityType)" value="label.associate.connection.rules"/>
+			<fr:property name="bundle(editAccountabilityType)" value="ORGANIZATION_RESOURCES"/>
+			<fr:property name="order(editAccountabilityType)" value="3"/>
+		
 			<fr:property name="sortBy" value="type" />
 		</fr:layout>
 	</fr:view>
@@ -41,3 +40,8 @@
 <logic:empty name="accountabilityTypes">
 	<em><bean:message key="label.no.accountability.types" bundle="ORGANIZATION_RESOURCES" /></em>
 </logic:empty>
+
+<br/>
+<html:form action="/organization.do?method=showOptions">
+	<html:submit><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:submit>
+</html:form>

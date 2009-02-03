@@ -35,13 +35,9 @@ enum module.organization.domain.person.Gender as Gender;
 enum module.organization.domain.person.MaritalStatus as MaritalStatus;
 
 class module.organization.domain.AccountabilityType {
-	String ojbConcreteClass;
 	String type;
 	MultiLanguageString name;
 }
-
-	class module.organization.domain.ConnectionRuleAccountabilityType extends module.organization.domain.AccountabilityType {
-	}
 
 class module.organization.domain.Accountability {
 	LocalDate beginDate;
@@ -88,7 +84,14 @@ class module.organization.domain.Party {
 	}
 
 class module.organization.domain.ConnectionRule {
+	String ojbConcreteClass;
 }
+
+	class module.organization.domain.PartyTypeConnectionRule extends module.organization.domain.ConnectionRule {
+	}
+	
+	class module.organization.domain.UniqueNameAndAcronymConnectionRule extends module.organization.domain.ConnectionRule {
+	}
 
 /** Relations **/
 
@@ -140,7 +143,9 @@ relation MyOrgTopUnit {
 }
 
 relation PartyTypeParty {
-	module.organization.domain.PartyType playsRole partyType;
+	module.organization.domain.PartyType playsRole partyTypes {
+		multiplicity *;
+	}
 	module.organization.domain.Party playsRole parties {
 		multiplicity *;
 	}
@@ -160,30 +165,32 @@ relation PartyChildAccountabilities {
 	}
 }
 
-relation ConnectionRuleParentPartyType {
-	module.organization.domain.PartyType playsRole allowedParent;
-	module.organization.domain.ConnectionRule playsRole childConnectionRules {
-		multiplicity *;
-	}
-}
-
-relation ConnectionRuleChildPartyType {
-	module.organization.domain.PartyType playsRole allowedChild;
-	module.organization.domain.ConnectionRule playsRole parentConnectionRules {
-		multiplicity *;
-	}
-}
-
-relation ConnectionRuleConnectionRuleAccountabilityType {
-	module.organization.domain.ConnectionRuleAccountabilityType playsRole accountabilityType;
-	module.organization.domain.ConnectionRule playsRole connectionRules {
-		multiplicity *;
-	}
-}
-
 relation MyOrgConnectionRule {
 	myorg.domain.MyOrg playsRole myOrg;
 	module.organization.domain.ConnectionRule playsRole connectionRules {
+		multiplicity *;
+	}
+}
+
+relation ConnectionRuleAccountabilityType {
+	module.organization.domain.ConnectionRule playsRole connectionRules {
+		multiplicity *;
+	}
+	module.organization.domain.AccountabilityType playsRole accountabilityTypes {
+		multiplicity *;
+	}
+}
+
+relation PartyTypeConnectionRuleParentPartyType {
+	module.organization.domain.PartyType playsRole allowedParent;
+	module.organization.domain.PartyTypeConnectionRule playsRole childConnectionRules {
+		multiplicity *;
+	}
+}
+
+relation PartyTypeConnectionRuleChildPartyType {
+	module.organization.domain.PartyType playsRole allowedChild;
+	module.organization.domain.PartyTypeConnectionRule playsRole parentConnectionRules {
 		multiplicity *;
 	}
 }

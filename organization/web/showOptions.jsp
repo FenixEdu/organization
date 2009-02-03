@@ -5,5 +5,6 @@
 <ul>
 	<li><html:link action="/organization.do?method=viewPartyTypes"><bean:message key="label.party.type" bundle="ORGANIZATION_RESOURCES"/></html:link></li>
 	<li><html:link action="/organization.do?method=viewAccountabilityTypes"><bean:message key="label.accountability.type" bundle="ORGANIZATION_RESOURCES"/></html:link></li>
+	<li><html:link action="/organization.do?method=viewConnectionRules"><bean:message key="label.connection.rules" bundle="ORGANIZATION_RESOURCES"/></html:link></li>
 	<li><html:link action="/organization.do?method=viewOrganization"><bean:message key="label.organization" bundle="ORGANIZATION_RESOURCES"/></html:link></li>
 </ul>

@@ -50,6 +50,7 @@ public class Accountability extends Accountability_Base {
 	checkDates(begin, end);
 
 	canCreate(parent, child, type);
+	
 	setParent(parent);
 	setChild(child);
 	setAccountabilityType(type);
@@ -61,7 +62,6 @@ public class Accountability extends Accountability_Base {
 	if (begin != null && end != null && begin.isAfter(end)) {
 	    throw new DomainException("error.Accountability.begin.is.after.end");
 	}
-
     }
 
     private void check(final Object obj, final String message) {
@@ -77,13 +77,13 @@ public class Accountability extends Accountability_Base {
 	if (parent.ancestorsInclude(child, type)) {
 	    throw new DomainException("error.Accountability.parent.ancestors.include.child.with.type");
 	}
-	if (!type.canHaveAccountability(parent, child)) {
+	if (!type.isValid(parent, child)) {
 	    throw new DomainException("error.Accountability.type.doesnot.allow.parent.child");
 	}
     }
 
-    public boolean areParentAndChildValid() {
-	return hasParent() && hasChild() && getAccountabilityType().canHaveAccountability(getParent(), getChild());
+    public boolean isValid() {
+	return hasParent() && hasChild() && getAccountabilityType().isValid(getParent(), getChild());
     }
 
     @jvstm.cps.ConsistencyPredicate
