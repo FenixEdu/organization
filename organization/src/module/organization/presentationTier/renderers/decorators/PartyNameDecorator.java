@@ -26,21 +26,14 @@
 package module.organization.presentationTier.renderers.decorators;
 
 import module.organization.domain.Party;
-import pt.ist.fenixWebFramework.renderers.components.Face;
+import module.organization.presentationTier.renderers.layouts.OrganizationLayout;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 import pt.ist.fenixWebFramework.renderers.components.HtmlText;
 
 public class PartyNameDecorator implements PartyDecorator {
 
     @Override
-    public HtmlComponent decorate(final Party party, int level) {
-	final HtmlText text = new HtmlText(party.getPartyName().getContent());
-	text.setFace(getFace(level));
-	return text;
+    public HtmlComponent decorate(final Party party, OrganizationLayout layout) {
+	return new HtmlText(party.getPartyName().getContent());
     }
-
-    private Face getFace(int level) {
-	return level == 1 ? Face.H3 : Face.STRONG;
-    }
-
 }

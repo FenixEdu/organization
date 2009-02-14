@@ -26,8 +26,9 @@
 package module.organization.presentationTier.renderers.decorators;
 
 import module.organization.domain.Party;
+import module.organization.presentationTier.renderers.layouts.OrganizationLayout;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 
 public interface PartyDecorator {
-    public HtmlComponent decorate(final Party party, int level);
+    public HtmlComponent decorate(final Party party, OrganizationLayout layout);
 }

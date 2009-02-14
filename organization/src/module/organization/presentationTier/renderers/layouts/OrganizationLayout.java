@@ -25,114 +25,161 @@
 
 package module.organization.presentationTier.renderers.layouts;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import module.organization.domain.Accountability;
 import module.organization.domain.Party;
+import module.organization.domain.PartyPredicate;
 import module.organization.domain.Unit;
 import module.organization.presentationTier.renderers.OrganizationRenderer;
 import myorg.domain.MyOrg;
+import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
+import pt.ist.fenixWebFramework.renderers.components.HtmlImage;
+import pt.ist.fenixWebFramework.renderers.components.HtmlLink;
 import pt.ist.fenixWebFramework.renderers.components.HtmlList;
 import pt.ist.fenixWebFramework.renderers.components.HtmlListItem;
-import pt.ist.fenixWebFramework.renderers.components.HtmlText;
+import pt.ist.fenixWebFramework.renderers.components.HtmlScript;
 import pt.ist.fenixWebFramework.renderers.layouts.Layout;
 
 public class OrganizationLayout extends Layout {
 
     private OrganizationRenderer renderer;
+    private PartyPredicate predicate;
+    private Comparator<Party> comparator;
 
     public OrganizationLayout(final OrganizationRenderer renderer) {
 	this.renderer = renderer;
+	this.predicate = renderer.getPartyPredicate();
+	this.comparator = renderer.getSortBy();
     }
 
     @Override
     public HtmlComponent createComponent(final Object object, final Class type) {
+	final HtmlBlockContainer container = new HtmlBlockContainer();
+	container.addChild(generateScript());
+
 	if (object instanceof MyOrg) {
-	    return drawOrganization((MyOrg) object);
-
-	} else if (object instanceof Party && canRender((Party) object)) {
-	    return drawOrganization((Party) object);
-
+	    container.addChild(drawOrganization((MyOrg) object));
+	} else if (object instanceof Party) {
+	    container.addChild(drawOrganization((Party) object));
 	} else {
-	    // TODO: add message
-	    return new HtmlText(object.getClass().getName());
+	    throw new IllegalArgumentException();
 	}
+
+	return container;
+    }
+
+    private HtmlScript generateScript() {
+	final HtmlScript script = new HtmlScript();
+	script.setContentType("text/javascript");
+	script.setConditional(true);
+
+	final HtmlLink minusLink = new HtmlLink();
+	minusLink.setModuleRelative(false);
+	minusLink.setUrl(this.renderer.getMinusImage());
+
+	final HtmlLink plusLink = new HtmlLink();
+	plusLink.setModuleRelative(false);
+	plusLink.setUrl(this.renderer.getPlusImage());
+
+	script.setScript("\n" + " function change(parentId, subId) {\n" + "   var v = document.getElementById(parentId);\n"
+		+ "   var e = document.getElementById(subId);\n" + "   if (e.style.display == \"none\") {\n"
+		+ "     e.style.display = \"\";\n" + "     v.src = \"" + minusLink.calculateUrl() + "\";\n" + "   } else {\n"
+		+ "     e.style.display = \"none\";\n" + "     v.src = \"" + plusLink.calculateUrl() + "\";\n" + "   }\n"
+		+ " }\n\n");
+	return script;
     }
 
     private HtmlComponent drawOrganization(final MyOrg myOrg) {
 	final HtmlList list = new HtmlList();
-	list.setClasses(renderer.getClasses());
+	list.setClasses(renderer.getRootClasses());
 
-	for (final Unit unit : myOrg.getTopUnitsSet()) {
-	    if (canRender(unit)) {
-		createItem(list, unit, 1);
-	    }
+	final List<Unit> topUnits = new ArrayList<Unit>(myOrg.getTopUnits());
+	Collections.sort(topUnits, this.comparator);
+
+	for (final Unit unit : topUnits) {
+	    drawParty(list, unit);
 	}
 
 	return list;
-    }
-
-    protected boolean canRender(final Party party) {
-	return true;
     }
 
     private HtmlComponent drawOrganization(final Party party) {
 	final HtmlList list = new HtmlList();
-	list.setClasses(renderer.getClasses());
-	createItem(list, party, 1);
+	list.setClasses(renderer.getRootClasses());
+
+	drawParty(list, party);
 	return list;
     }
 
-    private void createItem(final HtmlList list, final Party party, int level) {
-	final HtmlListItem item = createItem(list, getPartyClasses(party, level), getDecorator(party, level));
-	final HtmlList childHtmlList = createChildHtmlList(level);
+    private void drawParty(final HtmlList list, final Party party) {
+	final HtmlImage image = new HtmlImage();
+	final HtmlListItem item = createItem(list, image, party);
 
-	drawChildInformation(childHtmlList, party, level);
+	final HtmlList childHtmlList = createChildHtmlList(party);
+	drawPartyChildren(childHtmlList, party);
 
 	if (!childHtmlList.getChildren().isEmpty()) {
 	    item.addChild(childHtmlList);
+	    calculateImageUrl(image, this.renderer.getPlusImage());
+	    generateImageOid(party, image);
+	    generateImageOnClick(party, image, childHtmlList);
+	} else {
+	    calculateImageUrl(image, this.renderer.getBlankImage());
 	}
     }
 
-    protected void drawChildInformation(final HtmlList childHtmlList, final Party parent, int level) {
-	// TODO: add predicate here?
-	// TODO: sort by ....?
-	for (final Accountability accountability : parent.getChildAccountabilitiesSet()) {
-	    createItem(childHtmlList, accountability.getChild(), level + 1);
-	}
+    private void calculateImageUrl(final HtmlImage image, final String imagePath) {
+	final HtmlLink link = new HtmlLink();
+	link.setModuleRelative(false);
+	link.setUrl(imagePath);
+	image.setSource(link.calculateUrl());
     }
 
-    private HtmlList createChildHtmlList(int level) {
+    private void generateImageOid(final Party party, final HtmlImage image) {
+	image.setId(party.getClass().getSimpleName() + party.getIdInternal().toString());
+    }
+
+    private void generateImageOnClick(final Party party, final HtmlImage image, final HtmlList childHtmlList) {
+	image.setOnClick(String.format("change('%s', '%s');return false;", party.getClass().getSimpleName()
+		+ party.getIdInternal().toString(), childHtmlList.getId()));
+    }
+
+    private HtmlList createChildHtmlList(final Party parent) {
 	final HtmlList list = new HtmlList();
-	if (renderer.hasLevelClasses()) {
-	    list.setClasses(renderer.getLevelClasses() + level);
-	}
+	list.setId(parent.getClass().getSimpleName() + parent.getIdInternal().toString() + "chd");
+	list.setStyle(this.renderer.getChildListStyle());
 	return list;
     }
 
-    private HtmlListItem createItem(final HtmlList list, final String classes, final HtmlComponent component) {
+    private HtmlListItem createItem(final HtmlList list, final HtmlImage image, final Party party) {
 	final HtmlListItem item = list.createItem();
-	item.setClasses(classes);
-	if (component != null) {
-	    item.addChild(component);
-	}
+	item.addChild(image);
+	item.addChild(getDecorator(party));
 	return item;
     }
 
-    private String getPartyClasses(final Party party, int level) {
-	return level == 1 ? renderer.getRootClasses() : getPartyClasses(party);
+    private HtmlComponent getDecorator(final Party party) {
+	return renderer.getDecorator().decorate(party, this);
     }
 
-    private String getPartyClasses(final Party party) {
-	if (party.isUnit()) {
-	    return renderer.getUnitClasses();
-	} else if (party.isPerson()) {
-	    return renderer.getPersonClasses();
-	} else {
-	    return null;
+    protected void drawPartyChildren(final HtmlList childHtmlList, final Party parent) {
+	final List<Party> children = new ArrayList<Party>(parent.getChildAccountabilitiesCount());
+
+	for (final Accountability accountability : parent.getChildAccountabilitiesSet()) {
+	    if (this.predicate.eval(accountability.getChild(), accountability)) {
+		children.add(accountability.getChild());
+	    }
 	}
-    }
 
-    private HtmlComponent getDecorator(final Party party, int level) {
-	return renderer.getDecorator().decorate(party, level);
+	Collections.sort(children, this.comparator);
+	for (final Party party : children) {
+	    drawParty(childHtmlList, party);
+	}
     }
 }

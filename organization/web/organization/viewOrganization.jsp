@@ -5,9 +5,17 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 
-<style>
+<style type="text/css">
 
-ul.ostructure li.osrootunit h3 { margin: 0; }
+ul ul { margin-top: 0; margin-bottom: 0; }
+.tree li { list-style: none; }
+
+ul li span {
+font-weight: bold;
+}
+ul ul li span {
+font-weight: normal;
+}
 
 </style>
 

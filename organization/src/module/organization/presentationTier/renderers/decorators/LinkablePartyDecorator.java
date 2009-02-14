@@ -26,19 +26,20 @@
 package module.organization.presentationTier.renderers.decorators;
 
 import module.organization.domain.Party;
+import module.organization.presentationTier.renderers.layouts.OrganizationLayout;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 import pt.ist.fenixWebFramework.renderers.components.HtmlLink;
 
 public class LinkablePartyDecorator implements PartyDecorator {
 
     @Override
-    public HtmlComponent decorate(final Party party, int level) {
+    public HtmlComponent decorate(final Party party, OrganizationLayout layout) {
 	final HtmlLink link = new HtmlLink();
 	// TODO: refactor url to be added by renderer and unitOid to partyOid
 	link.setUrl(String.format("/organization.do?method=viewUnit&amp;unitOid=%s", party.getOID()));
 	link.setModuleRelative(false);
 	link.setIndented(false);
-	link.setBody(new PartyNameDecorator().decorate(party, level));
+	link.setBody(new PartyNameDecorator().decorate(party, null));
 	return link;
     }
 

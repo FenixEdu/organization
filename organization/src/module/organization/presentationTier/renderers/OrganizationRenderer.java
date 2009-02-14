@@ -25,6 +25,10 @@
 
 package module.organization.presentationTier.renderers;
 
+import java.util.Comparator;
+
+import module.organization.domain.Party;
+import module.organization.domain.PartyPredicate;
 import module.organization.presentationTier.renderers.decorators.LinkablePartyDecorator;
 import module.organization.presentationTier.renderers.decorators.PartyDecorator;
 import module.organization.presentationTier.renderers.layouts.OrganizationLayout;
@@ -33,16 +37,12 @@ import pt.ist.fenixWebFramework.renderers.layouts.Layout;
 
 public class OrganizationRenderer extends OutputRenderer {
 
-    private String rootClasses;
-    private String unitClasses;
-    private String personClasses;
-    private String levelClasses;
+    private String rootClasses = "tree";
+    private String childListStyle = "display:none";
 
-    @Override
-    protected Layout getLayout(final Object object, final Class clazz) {
-	// TODO: refactor to have any layout?
-	return new OrganizationLayout(this);
-    }
+    private String blankImage = "/organization/images/blank.gif";
+    private String minusImage = "/organization/images/minus.gif";
+    private String plusImage = "/organization/images/plus.gif";
 
     public String getRootClasses() {
 	return rootClasses;
@@ -52,32 +52,42 @@ public class OrganizationRenderer extends OutputRenderer {
 	this.rootClasses = rootClasses;
     }
 
-    public String getUnitClasses() {
-	return unitClasses;
+    public String getChildListStyle() {
+	return childListStyle;
     }
 
-    public void setUnitClasses(String unitClasses) {
-	this.unitClasses = unitClasses;
+    public void setChildListStyle(String childListStyle) {
+	this.childListStyle = childListStyle;
     }
 
-    public String getPersonClasses() {
-	return personClasses;
+    public String getBlankImage() {
+	return blankImage;
     }
 
-    public void setPersonClasses(String personClasses) {
-	this.personClasses = personClasses;
+    public void setBlankImage(String blankImage) {
+	this.blankImage = blankImage;
     }
 
-    public String getLevelClasses() {
-	return levelClasses;
+    public String getMinusImage() {
+	return minusImage;
     }
 
-    public void setLevelClasses(String levelClasses) {
-	this.levelClasses = levelClasses;
+    public void setMinusImage(String minusImage) {
+	this.minusImage = minusImage;
     }
 
-    public boolean hasLevelClasses() {
-	return getLevelClasses() != null;
+    public String getPlusImage() {
+	return plusImage;
+    }
+
+    public void setPlusImage(String plusImage) {
+	this.plusImage = plusImage;
+    }
+
+    @Override
+    protected Layout getLayout(final Object object, final Class clazz) {
+	// TODO: refactor to have any layout?
+	return new OrganizationLayout(this);
     }
 
     public PartyDecorator getDecorator() {
@@ -85,4 +95,13 @@ public class OrganizationRenderer extends OutputRenderer {
 	return new LinkablePartyDecorator();
     }
 
+    public PartyPredicate getPartyPredicate() {
+	// TODO: make this configurable
+	return new PartyPredicate.TruePartyPredicate();
+    }
+
+    public Comparator<Party> getSortBy() {
+	// TODO: make this configurable
+	return Party.COMPARATOR_BY_NAME;
+    }
 }
