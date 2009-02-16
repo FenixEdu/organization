@@ -1,5 +1,5 @@
 /*
- * @(#)OrganizationManagementAction.java
+ * @(#)OrganizationView.java
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes

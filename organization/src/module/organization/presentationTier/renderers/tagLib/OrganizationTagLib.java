@@ -1,5 +1,5 @@
 /*
- * @(#)OrganizationManagementAction.java
+ * @(#)OrganizationTagLib.java
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
@@ -64,7 +64,7 @@ public class OrganizationTagLib extends TagSupport implements OrganizationView {
     }
 
     private void drawOrganization() throws IOException {
-	final Layout layout = (Layout) getConfig().getLayout().setView(this);
+	final Layout layout = (Layout) getConfig().getLayout().saveView(this);
 	layout.createComponent(pageContext.findAttribute(this.organization), null).draw(pageContext);
     }
 

@@ -1,5 +1,5 @@
 /*
- * @(#)OrganizationManagementAction.java
+ * @(#)OrganizationLayout.java
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
@@ -29,5 +29,5 @@ import module.organization.presentationTier.renderers.OrganizationView;
 
 public interface OrganizationLayout {
 
-    public OrganizationLayout setView(final OrganizationView view);
+    public OrganizationLayout saveView(final OrganizationView view);
 }

@@ -1,5 +1,5 @@
 /*
- * @(#)OrganizationManagementAction.java
+ * @(#)OrganizationRenderer.java
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
@@ -88,7 +88,7 @@ public class OrganizationRenderer extends OutputRenderer implements Organization
 
     @Override
     protected Layout getLayout(Object object, Class type) {
-	return (Layout) getConfig().getLayout().setView(this);
+	return (Layout) getConfig().getLayout().saveView(this);
     }
 
     public Comparator<Party> getSortBy() {

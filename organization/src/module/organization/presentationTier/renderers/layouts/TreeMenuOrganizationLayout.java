@@ -1,5 +1,5 @@
 /*
- * @(#)OrganizationManagementAction.java
+ * @(#)TreeMenuOrganizationLayout.java
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
@@ -51,7 +51,7 @@ public class TreeMenuOrganizationLayout extends Layout implements OrganizationLa
     }
 
     @Override
-    public TreeMenuOrganizationLayout setView(final OrganizationView view) {
+    public TreeMenuOrganizationLayout saveView(final OrganizationView view) {
 	this.view = view;
 	return this;
     }
