@@ -51,7 +51,7 @@ public class Accountability extends Accountability_Base {
 	checkDates(begin, end);
 
 	canCreate(parent, child, type);
-	
+
 	setParent(parent);
 	setChild(child);
 	setAccountabilityType(type);

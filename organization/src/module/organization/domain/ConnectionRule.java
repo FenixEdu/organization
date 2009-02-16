@@ -76,6 +76,6 @@ abstract public class ConnectionRule extends ConnectionRule_Base {
     abstract public ConnectionRuleBean buildBean();
 
     abstract public boolean isValid(final AccountabilityType accountabilityType, final Party parent, final Party child);
-    
+
     abstract public String getDescription();
 }

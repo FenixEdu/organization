@@ -25,7 +25,6 @@
 
 package module.organization.domain;
 
-
 import java.util.Comparator;
 
 import myorg.domain.MyOrg;
@@ -93,11 +92,11 @@ public class Unit extends Unit_Base {
 	check(name, acronym);
 	setPartyName(name);
 	setAcronym(acronym);
-	
+
 	if (!accountabilitiesStillValid()) {
 	    throw new DomainException("error.Unit.invalid.accountabilities.cannot.edit.information");
 	}
-	
+
 	return this;
     }
 

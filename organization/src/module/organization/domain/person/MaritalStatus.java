@@ -40,7 +40,7 @@ public enum MaritalStatus {
     CIVIL_UNION,
 
     UNKNOWN;
-    
+
     public String getName() {
 	return name();
     }
