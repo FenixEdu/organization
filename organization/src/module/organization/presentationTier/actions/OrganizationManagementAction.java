@@ -48,6 +48,7 @@ import myorg.domain.contents.ActionNode;
 import myorg.domain.contents.Node;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.Role;
+import myorg.presentationTier.LayoutContext;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.presentationTier.forms.BaseForm;
 
@@ -93,6 +94,14 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	}
     }
 
+    @Override
+    public ActionForward execute(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final ActionForward forward = super.execute(mapping, form, request, response);
+	((LayoutContext) getContext(request)).setHead("/organization/layoutContext/head.jsp");
+	return forward;
+    }
+
     @CreateNodeAction(bundle = "ORGANIZATION_RESOURCES", key = "add.node.manage.organization", groupKey = "label.module.organization")
     public final ActionForward createOrganizationNode(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
@@ -113,7 +122,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 		"resources.OrganizationResources", "label.connection.rules", Role.getRole(RoleType.MANAGER));
 
 	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewOrganization",
-		"resources.OrganizationResources", "label.organization", Role.getRole(RoleType.MANAGER));
+		"resources.OrganizationResources", "label.organizational.structure", Role.getRole(RoleType.MANAGER));
 
 	return forwardToMuneConfiguration(request, virtualHost, topActionNode);
     }

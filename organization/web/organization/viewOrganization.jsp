@@ -6,20 +6,6 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr" %>
 <%@ taglib uri="/WEB-INF/organization.tld" prefix="vo" %>
 
-<style type="text/css">
-
-ul ul { margin-top: 0; margin-bottom: 0; }
-.tree li { list-style: none; }
-
-ul li span {
-font-weight: bold;
-}
-ul ul li span {
-font-weight: normal;
-}
-
-</style>
-
 <h2><bean:message key="label.organization" bundle="ORGANIZATION_RESOURCES" /></h2>
 
 <br/>
