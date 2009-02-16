@@ -276,7 +276,7 @@ abstract public class Party extends Party_Base {
     public boolean isUnit() {
 	return false;
     }
-    
+
     public boolean isPerson() {
 	return false;
     }
@@ -305,6 +305,11 @@ abstract public class Party extends Party_Base {
     @Service
     public void addParent(final Party parent, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
 	Accountability.create(parent, this, type, begin, end);
+    }
+
+    @Service
+    public void addChild(final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
+	Accountability.create(this, child, type, begin, end);
     }
 
     @Service
