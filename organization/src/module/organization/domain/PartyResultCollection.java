@@ -26,6 +26,7 @@
 package module.organization.domain;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 
 public class PartyResultCollection {
@@ -56,6 +57,6 @@ public class PartyResultCollection {
 
     @SuppressWarnings("unchecked")
     public <T extends Party> Collection<T> getResult() {
-	return (Collection<T>) result;
+	return Collections.unmodifiableCollection((Collection<T>) result);
     }
 }
