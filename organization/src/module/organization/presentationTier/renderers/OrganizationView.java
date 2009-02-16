@@ -1,5 +1,5 @@
 /*
- * @(#)PartyTypesProvider.java
+ * @(#)OrganizationManagementAction.java
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
@@ -25,24 +25,27 @@
 
 package module.organization.presentationTier.renderers;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 
-import module.organization.domain.PartyType;
-import myorg.domain.MyOrg;
-import pt.ist.fenixWebFramework.rendererExtensions.converters.DomainObjectKeyConverter;
-import pt.ist.fenixWebFramework.renderers.DataProvider;
-import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
+import module.organization.domain.Party;
+import module.organization.domain.PartyPredicate;
+import module.organization.presentationTier.renderers.decorators.PartyDecorator;
 
-public class PartyTypesProvider implements DataProvider {
+public interface OrganizationView {
 
-    @Override
-    public Converter getConverter() {
-	return new DomainObjectKeyConverter();
-    }
+    public String getRootClasses();
 
-    @Override
-    public Object provide(Object source, Object currentValue) {
-	return new ArrayList<PartyType>(MyOrg.getInstance().getPartyTypes());
-    }
+    public String getChildListStyle();
 
+    public String getBlankImage();
+
+    public String getMinusImage();
+
+    public String getPlusImage();
+
+    public Comparator<Party> getSortBy();
+
+    public PartyDecorator getDecorator();
+
+    public PartyPredicate getPredicate();
 }

@@ -1,5 +1,5 @@
 /*
- * @(#)OrganizationManagementAction.java
+ * @(#)AllPartiesProvider.java
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
@@ -23,12 +23,35 @@
  * 
  */
 
-package module.organization.presentationTier.renderers.decorators;
+package module.organization.presentationTier.renderers.providers;
+
+import java.util.Set;
+import java.util.TreeSet;
 
 import module.organization.domain.Party;
-import module.organization.presentationTier.renderers.layouts.TreeMenuOrganizationLayout;
-import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
+import myorg.domain.MyOrg;
+import pt.ist.fenixWebFramework.rendererExtensions.converters.DomainObjectKeyConverter;
+import pt.ist.fenixWebFramework.renderers.DataProvider;
+import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 
-public interface PartyDecorator {
-    public HtmlComponent decorate(final Party party, TreeMenuOrganizationLayout layout);
+public class AllPartiesProvider implements DataProvider {
+
+    @Override
+    public Converter getConverter() {
+	return new DomainObjectKeyConverter();
+    }
+
+    @Override
+    public Object provide(Object source, Object currentValue) {
+
+	// TODO: check method performance
+
+	final Set<Party> result = new TreeSet<Party>(Party.COMPARATOR_BY_NAME);
+	for (final Party party : MyOrg.getInstance().getTopUnitsSet()) {
+	    result.add(party);
+	    result.addAll(party.getDescendents());
+	}
+	return result;
+    }
+
 }

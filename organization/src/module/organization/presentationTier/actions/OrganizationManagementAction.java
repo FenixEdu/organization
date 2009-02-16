@@ -26,7 +26,6 @@
 package module.organization.presentationTier.actions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +41,7 @@ import module.organization.domain.UnitBean;
 import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
 import module.organization.domain.ConnectionRule.ConnectionRuleBean;
 import module.organization.domain.PartyType.PartyTypeBean;
+import module.organization.presentationTier.renderers.OrganizationViewConfiguration;
 import myorg.domain.RoleType;
 import myorg.domain.VirtualHost;
 import myorg.domain.contents.ActionNode;
@@ -97,15 +97,30 @@ public class OrganizationManagementAction extends ContextBaseAction {
     public final ActionForward createOrganizationNode(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
-	final Node node = getDomainObject(request, "parentOfNodesToManageId");
-	ActionNode.createActionNode(virtualHost, node, "/organization", "showOptions", "resources.OrganizationResources",
-		"label.manage.organization", Role.getRole(RoleType.MANAGER));
-	return forwardToMuneConfiguration(request, virtualHost, node);
+
+	final Node parentOfNodes = getDomainObject(request, "parentOfNodesToManageId");
+
+	final ActionNode topActionNode = ActionNode.createActionNode(virtualHost, parentOfNodes, "/organization", "intro",
+		"resources.OrganizationResources", "label.manage.organization", Role.getRole(RoleType.MANAGER));
+
+	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewPartyTypes",
+		"resources.OrganizationResources", "label.party.type", Role.getRole(RoleType.MANAGER));
+
+	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewAccountabilityTypes",
+		"resources.OrganizationResources", "label.accountability.type", Role.getRole(RoleType.MANAGER));
+
+	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewConnectionRules",
+		"resources.OrganizationResources", "label.connection.rules", Role.getRole(RoleType.MANAGER));
+
+	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewOrganization",
+		"resources.OrganizationResources", "label.organization", Role.getRole(RoleType.MANAGER));
+
+	return forwardToMuneConfiguration(request, virtualHost, topActionNode);
     }
 
-    public ActionForward showOptions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+    public ActionForward intro(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	return forward(request, "/organization/showOptions.jsp");
+	return forward(request, "/organization/intro.jsp");
     }
 
     public ActionForward viewPartyTypes(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -325,11 +340,9 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
     public ActionForward viewOrganization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	// TODO: move this to renderer ?
-	final List<Unit> topUnits = new ArrayList<Unit>(getMyOrg().getTopUnits());
-	Collections.sort(topUnits, Party.COMPARATOR_BY_NAME);
-	request.setAttribute("topUnits", topUnits);
+	request.setAttribute("topUnits", getMyOrg().getTopUnits());
 	request.setAttribute("myorg", getMyOrg());
+	request.setAttribute("config", OrganizationViewConfiguration.defaultConfiguration());
 	return forward(request, "/organization/viewOrganization.jsp");
     }
 

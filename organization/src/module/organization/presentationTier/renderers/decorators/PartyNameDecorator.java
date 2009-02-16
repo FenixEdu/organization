@@ -26,14 +26,14 @@
 package module.organization.presentationTier.renderers.decorators;
 
 import module.organization.domain.Party;
-import module.organization.presentationTier.renderers.layouts.OrganizationLayout;
+import module.organization.presentationTier.renderers.layouts.TreeMenuOrganizationLayout;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 import pt.ist.fenixWebFramework.renderers.components.HtmlText;
 
 public class PartyNameDecorator implements PartyDecorator {
 
     @Override
-    public HtmlComponent decorate(final Party party, OrganizationLayout layout) {
+    public HtmlComponent decorate(final Party party, TreeMenuOrganizationLayout layout) {
 	return new HtmlText(party.getPartyName().getContent());
     }
 }

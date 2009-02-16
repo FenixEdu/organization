@@ -35,8 +35,3 @@
 <logic:empty name="partyTypes">
 	<em><bean:message key="label.no.party.types" bundle="ORGANIZATION_RESOURCES" /></em>
 </logic:empty>
-
-<br/>
-<html:form action="/organization.do?method=showOptions">
-	<html:submit><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-</html:form>

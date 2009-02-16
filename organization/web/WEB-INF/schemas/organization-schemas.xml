@@ -31,13 +31,13 @@
 
 <schema name="organization.PartyTypeConnectionRuleBean" type="module.organization.domain.PartyTypeConnectionRule$PartyTypeConnectionRuleBean" bundle="ORGANIZATION_RESOURCES">
 	<slot name="parent" layout="menu-select" key="label.PartyTypeConnectionRule.allowed.parent.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="providerClass" value="module.organization.presentationTier.renderers.PartyTypesProvider" />
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.PartyType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
 	</slot>
 	<slot name="child" layout="menu-select" key="label.PartyTypeConnectionRule.allowed.child.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="providerClass" value="module.organization.presentationTier.renderers.PartyTypesProvider" />
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.PartyType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
@@ -61,7 +61,7 @@
 	<slot name="name" key="label.unit.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 	<slot name="acronym" key="label.unit.acronym" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 	<slot name="partyType" layout="menu-select" key="label.unit.party.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="providerClass" value="module.organization.presentationTier.renderers.PartyTypesProvider" />
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.PartyType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
@@ -73,13 +73,13 @@
 	<slot name="name" key="label.unit.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 	<slot name="acronym" key="label.unit.acronym" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 	<slot name="partyType" layout="menu-select" key="label.unit.party.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="providerClass" value="module.organization.presentationTier.renderers.PartyTypesProvider" />
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.PartyType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="providerClass" value="module.organization.presentationTier.renderers.AccountabilityTypesProvider" />
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
@@ -111,12 +111,12 @@
 
 <schema name="organization.UnitBean.add.parent" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
 	<slot name="parent" layout="menu-select" key="label.unit.parent" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="providerClass" value="module.organization.presentationTier.renderers.AllPartiesProvider" />
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AllPartiesProvider" />
 		<property name="choiceType" value="module.organization.domain.Party" />
 		<property name="format" value="${partyName}" />
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="providerClass" value="module.organization.presentationTier.renderers.AccountabilityTypesProvider" />
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />

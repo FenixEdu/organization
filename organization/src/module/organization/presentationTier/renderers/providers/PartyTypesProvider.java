@@ -1,5 +1,5 @@
 /*
- * @(#)AccountabilityTypesProvider.java
+ * @(#)PartyTypesProvider.java
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
@@ -23,17 +23,17 @@
  * 
  */
 
-package module.organization.presentationTier.renderers;
+package module.organization.presentationTier.renderers.providers;
 
 import java.util.ArrayList;
 
-import module.organization.domain.AccountabilityType;
+import module.organization.domain.PartyType;
 import myorg.domain.MyOrg;
 import pt.ist.fenixWebFramework.rendererExtensions.converters.DomainObjectKeyConverter;
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 
-public class AccountabilityTypesProvider implements DataProvider {
+public class PartyTypesProvider implements DataProvider {
 
     @Override
     public Converter getConverter() {
@@ -42,7 +42,7 @@ public class AccountabilityTypesProvider implements DataProvider {
 
     @Override
     public Object provide(Object source, Object currentValue) {
-	return new ArrayList<AccountabilityType>(MyOrg.getInstance().getAccountabilityTypes());
+	return new ArrayList<PartyType>(MyOrg.getInstance().getPartyTypes());
     }
 
 }

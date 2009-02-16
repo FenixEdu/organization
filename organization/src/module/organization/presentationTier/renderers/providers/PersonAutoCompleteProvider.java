@@ -1,5 +1,5 @@
 /*
- * @(#)UnitAutoCompleteProvider.java
+ * @(#)PersonAutoCompleteProvider.java
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
@@ -23,7 +23,7 @@
  * 
  */
 
-package module.organization.presentationTier.renderers;
+package module.organization.presentationTier.renderers.providers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,38 +32,33 @@ import java.util.List;
 import java.util.Map;
 
 import module.organization.domain.Party;
-import module.organization.domain.Unit;
+import module.organization.domain.Person;
 import myorg.domain.MyOrg;
 import myorg.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
-public class UnitAutoCompleteProvider implements AutoCompleteProvider {
+public class PersonAutoCompleteProvider implements AutoCompleteProvider {
 
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
-	final List<Unit> units = new ArrayList<Unit>();
+	final List<Person> persons = new ArrayList<Person>();
 
 	final String trimmedValue = value.trim();
 	final String[] input = trimmedValue.split(" ");
 	StringNormalizer.normalize(input);
 
 	for (final Party party : MyOrg.getInstance().getPartiesSet()) {
-	    if (party.isUnit()) {
-		final Unit unit = (Unit) party;
-		final String unitName = StringNormalizer.normalize(unit.getPartyName().getContent());
+	    if (party.isPerson()) {
+		final Person person = (Person) party;
+		final String unitName = StringNormalizer.normalize(person.getPartyName().getContent());
 		if (hasMatch(input, unitName)) {
-		    units.add(unit);
-		} else {
-		    final String unitAcronym = StringNormalizer.normalize(unit.getAcronym());
-		    if (hasMatch(input, unitAcronym)) {
-			units.add(unit);
-		    }
+		    persons.add(person);
 		}
 	    }
 	}
 
-	Collections.sort(units, Unit.COMPARATOR_BY_PRESENTATION_NAME);
+	Collections.sort(persons, Party.COMPARATOR_BY_NAME);
 
-	return units;
+	return persons;
     }
 
     private boolean hasMatch(final String[] input, final String unitNameParts) {
