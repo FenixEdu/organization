@@ -30,4 +30,6 @@ import module.organization.presentationTier.renderers.OrganizationView;
 public interface OrganizationLayout {
 
     public OrganizationLayout saveView(final OrganizationView view);
+
+    public String getViewPartyUrl();
 }

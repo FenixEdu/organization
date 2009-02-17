@@ -43,6 +43,8 @@ public interface OrganizationView {
 
     public String getPlusImage();
 
+    public String getViewPartyUrl();
+
     public Comparator<Party> getSortBy();
 
     public PartyDecorator getDecorator();

@@ -181,4 +181,8 @@ public class TreeMenuOrganizationLayout extends Layout implements OrganizationLa
 	}
     }
 
+    @Override
+    public String getViewPartyUrl() {
+	return this.view.getViewPartyUrl();
+    }
 }

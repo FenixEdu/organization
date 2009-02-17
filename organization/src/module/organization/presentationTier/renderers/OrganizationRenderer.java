@@ -42,6 +42,9 @@ public class OrganizationRenderer extends OutputRenderer implements Organization
     private String minusImage = "/organization/images/minus.gif";
     private String plusImage = "/organization/images/plus.gif";
 
+    //TODO: refactor method to viewParty,partyOid
+    private String viewPartyUrl = "/organization.do?method=viewUnit&amp;unitOid=%s";
+
     public String getRootClasses() {
 	return rootClasses;
     }
@@ -80,6 +83,14 @@ public class OrganizationRenderer extends OutputRenderer implements Organization
 
     public void setPlusImage(String plusImage) {
 	this.plusImage = plusImage;
+    }
+
+    public String getViewPartyUrl() {
+	return viewPartyUrl;
+    }
+
+    public void setViewPartyUrl(String viewPartyUrl) {
+	this.viewPartyUrl = viewPartyUrl;
     }
 
     protected OrganizationViewConfiguration getConfig() {
