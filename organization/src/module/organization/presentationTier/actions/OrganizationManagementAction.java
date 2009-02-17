@@ -351,7 +351,6 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
     public ActionForward viewOrganization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	request.setAttribute("topUnits", getMyOrg().getTopUnits());
 	request.setAttribute("myorg", getMyOrg());
 	request.setAttribute("config", OrganizationViewConfiguration.defaultConfiguration());
 	return forward(request, "/organization/viewOrganization.jsp");

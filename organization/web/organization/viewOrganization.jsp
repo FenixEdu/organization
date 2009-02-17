@@ -10,7 +10,7 @@
 
 <br/>
 <html:link action="/organization.do?method=prepareCreateUnit"><bean:message key="label.create.top.unit" bundle="ORGANIZATION_RESOURCES"/></html:link>
-<logic:empty name="topUnits">
+<logic:empty name="myorg" property="topUnits">
 	<em><bean:message key="label.no.top.units" bundle="ORGANIZATION_RESOURCES" /></em>
 </logic:empty>
 
