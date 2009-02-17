@@ -44,11 +44,12 @@ public class Accountability extends Accountability_Base {
     protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
 	    final LocalDate end) {
 	this();
+
 	check(parent, "error.Accountability.invalid.parent");
 	check(child, "error.Accountability.invalid.child");
 	check(type, "error.Accountability.invalid.type");
 	check(begin, "error.Accountability.invalid.begin");
-	checkDates(begin, end);
+	checkDates(parent, begin, end);
 
 	canCreate(parent, child, type);
 
@@ -59,9 +60,24 @@ public class Accountability extends Accountability_Base {
 	setEndDate(end);
     }
 
-    private void checkDates(LocalDate begin, LocalDate end) {
+    private void checkDates(final Party parent, final LocalDate begin, final LocalDate end) {
 	if (begin != null && end != null && begin.isAfter(end)) {
 	    throw new DomainException("error.Accountability.begin.is.after.end");
+	}
+	checkBeginFromOldestParentAccountability(parent, begin);
+    }
+
+    private void checkBeginFromOldestParentAccountability(final Party parent, final LocalDate begin) throws DomainException {
+	Accountability oldest = null;
+	for (final Accountability accountability : parent.getParentAccountabilitiesSet()) {
+	    if (oldest == null || accountability.getBeginDate().isBefore(oldest.getBeginDate())) {
+		oldest = accountability;
+	    }
+	}
+
+	if (oldest != null && begin.isBefore(oldest.getBeginDate())) {
+	    throw new DomainException("error.Accountability.begin.starts.before.oldest.parent.begin", oldest.getChild()
+		    .getPartyName().getContent(), oldest.getBeginDate().toString("dd/MM/yyyy"));
 	}
     }
 
