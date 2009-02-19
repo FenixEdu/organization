@@ -20,15 +20,15 @@
 	</fr:layout>
 </fr:view>
 
-<html:link action="/organization.do?method=prepareEditUnit" paramId="unitOid" paramName="unit" paramProperty="OID">
+<html:link action="/organization.do?method=prepareEditUnit" paramId="partyOid" paramName="unit" paramProperty="OID">
 	<bean:message key="label.edit" bundle="ORGANIZATION_RESOURCES" />
 </html:link>, 
 <bean:define id="unitName" name="unit" property="partyName.content" />
 <bean:define id="message">return confirm('<bean:message key="label.unit.delete.confirm.message" bundle="ORGANIZATION_RESOURCES" arg0="<%= unitName.toString() %>" />')</bean:define>
-<html:link action="/organization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="OID" onclick="<%= message %>">
+<html:link action="/organization.do?method=deleteUnit" paramId="partyOid" paramName="unit" paramProperty="OID" onclick="<%= message %>">
 	<bean:message key="label.delete" bundle="ORGANIZATION_RESOURCES" />
 </html:link>, 
-<html:link action="/organization.do?method=prepareEditPartyPartyTypes" paramId="unitOid" paramName="unit" paramProperty="OID">
+<html:link action="/organization.do?method=prepareEditPartyPartyTypes" paramId="partyOid" paramName="unit" paramProperty="OID">
 	<bean:message key="label.unit.partyTypes" bundle="ORGANIZATION_RESOURCES" />
 </html:link>
 
@@ -36,16 +36,16 @@
 <br/>
 <br/>
 
-<bean:message key="label.unit.parents" bundle="ORGANIZATION_RESOURCES" />: <html:link action="/organization.do?method=prepareAddParent" paramId="unitOid" paramName="unit" paramProperty="OID"><bean:message key="label.add.parent" bundle="ORGANIZATION_RESOURCES" /></html:link>
+<bean:message key="label.unit.parents" bundle="ORGANIZATION_RESOURCES" />: <html:link action="/organization.do?method=prepareAddParent" paramId="partyOid" paramName="unit" paramProperty="OID"><bean:message key="label.add.parent" bundle="ORGANIZATION_RESOURCES" /></html:link>
 <logic:notEmpty name="unit" property="parentAccountabilities">
 	<fr:view name="unit" property="parentAccountabilities" schema="organization.Unit.view.parent.accountability">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2" />
 			
-			<fr:property name="linkFormat(viewUnit)" value="/organization.do?method=viewUnit&amp;unitOid=${parent.OID}" />
-			<fr:property name="key(viewUnit)" value="label.view"/>
-			<fr:property name="bundle(viewUnit)" value="ORGANIZATION_RESOURCES"/>
-			<fr:property name="order(viewUnit)" value="1"/>
+			<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=${parent.OID}" />
+			<fr:property name="key(viewParty)" value="label.view"/>
+			<fr:property name="bundle(viewParty)" value="ORGANIZATION_RESOURCES"/>
+			<fr:property name="order(viewParty)" value="1"/>
 
 			<fr:property name="linkFormat(removeParent)" value="/organization.do?method=removeParent&amp;accOid=${OID}" />
 			<fr:property name="key(removeParent)" value="label.remove"/>
@@ -73,10 +73,10 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2" />
 			
-			<fr:property name="linkFormat(viewUnit)" value="/organization.do?method=viewUnit&amp;unitOid=${child.OID}" />
-			<fr:property name="key(viewUnit)" value="label.view"/>
-			<fr:property name="bundle(viewUnit)" value="ORGANIZATION_RESOURCES"/>
-			<fr:property name="order(viewUnit)" value="1"/>
+			<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=${child.OID}" />
+			<fr:property name="key(viewParty)" value="label.view"/>
+			<fr:property name="bundle(viewParty)" value="ORGANIZATION_RESOURCES"/>
+			<fr:property name="order(viewParty)" value="1"/>
 			
 			<fr:property name="sortBy" value="child.partyName" />
 		</fr:layout>

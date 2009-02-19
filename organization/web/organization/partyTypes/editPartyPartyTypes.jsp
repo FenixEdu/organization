@@ -13,8 +13,8 @@
 	<br />
 </html:messages>
 
-<bean:define id="unitOid" name="unit" property="OID" />
-<fr:form action='<%= "/organization.do?unitOid=" + unitOid.toString() %>'>
+<bean:define id="partyOid" name="unit" property="OID" />
+<fr:form action='<%= "/organization.do?partyOid=" + partyOid.toString() %>'>
 	<html:hidden property="method" value="editPartyPartyTypes"/>
 	
 	<table class="tstyle2">
@@ -33,6 +33,6 @@
 	</table>
 	
 	<html:submit><bean:message key="label.save" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-	<html:cancel onclick="this.form.method.value='viewUnit';return true;" ><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
+	<html:cancel onclick="this.form.method.value='viewParty';return true;" ><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
 	
 </fr:form>

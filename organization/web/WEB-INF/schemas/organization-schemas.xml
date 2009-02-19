@@ -48,7 +48,9 @@
 </schema>
 
 <schema name="organization.Unit.view" type="module.organization.domain.Unit" bundle="ORGANIZATION_RESOURCES">
-	<slot name="partyName" key="label.unit.name" />
+	<slot name="partyName" key="label.unit.name">
+		<property name="classes" value="bold"/>
+	</slot>
 	<slot name="acronym" key="label.unit.acronym" />
 	<slot name="partyTypes" key="label.unit.party.type">
 		<property name="eachLayout" value="values-comma" />

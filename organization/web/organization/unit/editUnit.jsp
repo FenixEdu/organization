@@ -12,8 +12,8 @@
 	<br />
 </html:messages>
 
-<bean:define id="unitOid" name="unitBean" property="unit.OID" />
-<fr:form action='<%= "/organization.do?unitOid=" + unitOid.toString() %>'>
+<bean:define id="partyOid" name="unitBean" property="unit.OID" />
+<fr:form action='<%= "/organization.do?partyOid=" + partyOid.toString() %>'>
 	<html:hidden property="method" value="editUnit"/>
 	
 	<fr:edit id="unitBean" name="unitBean" visible="false" />
@@ -27,6 +27,6 @@
 	</fr:edit>
 	
 	<html:submit><bean:message key="label.edit" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-	<html:cancel onclick="this.form.method.value='viewUnit';return true;" ><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
+	<html:cancel onclick="this.form.method.value='viewParty';return true;" ><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
 	
 </fr:form>

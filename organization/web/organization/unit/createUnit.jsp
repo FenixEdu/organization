@@ -12,7 +12,7 @@
 	<br />
 </html:messages>
 
-<bean:define id="actionUrl">/organization.do?<logic:present name="unitBean" property="parent">unitOid=<bean:write name="unitBean" property="parent.OID" /></logic:present></bean:define>
+<bean:define id="actionUrl">/organization.do?<logic:present name="unitBean" property="parent">partyOid=<bean:write name="unitBean" property="parent.OID" /></logic:present></bean:define>
 
 <fr:form action="<%= actionUrl %>">
 	<html:hidden property="method" value="createUnit"/>
@@ -31,7 +31,7 @@
 		</fr:edit>
 		
 		<html:submit><bean:message key="label.create" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-		<html:cancel onclick="this.form.method.value='viewUnit';return true;" ><bean:message key="label.cancel" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
+		<html:cancel onclick="this.form.method.value='viewParty';return true;" ><bean:message key="label.cancel" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
 	</logic:present>
 
 	<%-- Create top unit --%>

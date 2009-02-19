@@ -49,8 +49,7 @@ public class OrganizationTagLib extends TagSupport implements OrganizationView {
     private String minusImage = "/organization/images/minus.gif";
     private String plusImage = "/organization/images/plus.gif";
 
-    // TODO: refactor method to viewParty,partyOid
-    private String viewPartyUrl = "/organization.do?method=viewUnit&amp;unitOid=%s";
+    private String viewPartyUrl = "/organization.do?method=viewParty&amp;partyOid=%s";
 
     private String organization;
     private String configuration;

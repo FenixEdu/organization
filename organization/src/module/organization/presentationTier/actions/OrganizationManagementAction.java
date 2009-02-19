@@ -36,6 +36,7 @@ import module.organization.domain.AccountabilityType;
 import module.organization.domain.ConnectionRule;
 import module.organization.domain.Party;
 import module.organization.domain.PartyType;
+import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import module.organization.domain.UnitBean;
 import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
@@ -356,10 +357,28 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	return forward(request, "/organization/viewOrganization.jsp");
     }
 
-    public ActionForward viewUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+    public ActionForward viewParty(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	request.setAttribute("unit", getDomainObject(request, "unitOid"));
+	final Party party = getDomainObject(request, "partyOid");
+	if (party.isUnit()) {
+	    return viewUnit(mapping, form, request, response, (Unit) party);
+	} else if (party.isPerson()) {
+	    return viewPerson(mapping, form, request, response, (Person) party);
+	} else {
+	    throw new IllegalArgumentException();
+	}
+    }
+
+    private ActionForward viewUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response, final Unit unit) throws Exception {
+	request.setAttribute("unit", unit);
 	return forward(request, "/organization/unit/viewUnit.jsp");
+    }
+
+    private ActionForward viewPerson(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	    HttpServletResponse response, Person party) {
+	// TODO NOT IMPLEMENTED YET
+	return null;
     }
 
     public ActionForward prepareCreateUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -392,7 +411,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
     public ActionForward prepareEditUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	final Unit unit = getDomainObject(request, "unitOid");
+	final Unit unit = getDomainObject(request, "partyOid");
 	request.setAttribute("unitBean", new UnitBean(unit));
 	return forward(request, "/organization/unit/editUnit.jsp");
     }
@@ -414,7 +433,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
     public ActionForward deleteUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	final Unit unit = getDomainObject(request, "unitOid");
+	final Unit unit = getDomainObject(request, "partyOid");
 	try {
 	    unit.delete();
 	} catch (final DomainException e) {
@@ -427,7 +446,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
     public ActionForward prepareAddParent(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	request.setAttribute("unitBean", new UnitBean((Unit) getDomainObject(request, "unitOid")));
+	request.setAttribute("unitBean", new UnitBean((Unit) getDomainObject(request, "partyOid")));
 	return forward(request, "/organization/unit/addParent.jsp");
     }
 
@@ -463,7 +482,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
     public ActionForward prepareEditPartyPartyTypes(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
-	final Unit unit = getDomainObject(request, "unitOid");
+	final Unit unit = getDomainObject(request, "partyOid");
 	buildPartyTypeOids(unit, (OrganizationForm) form);
 
 	request.setAttribute("unit", unit);
@@ -483,7 +502,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
     public ActionForward editPartyPartyTypes(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
-	final Unit unit = getDomainObject(request, "unitOid");
+	final Unit unit = getDomainObject(request, "partyOid");
 	request.setAttribute("unit", unit);
 
 	try {
