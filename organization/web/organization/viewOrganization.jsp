@@ -15,4 +15,7 @@
 </logic:empty>
 
 <%-- <fr:view name="myorg" layout="organization" /> --%>
-<vo:viewOrganization organization="myorg" configuration="config" />
+<vo:viewOrganization organization="myorg" configuration="config">
+	<vo:property name="rootClasses" value="tree" />
+	<vo:property name="viewPartyUrl" value="/organization.do?method=viewParty&amp;partyOid=%s" />
+</vo:viewOrganization>

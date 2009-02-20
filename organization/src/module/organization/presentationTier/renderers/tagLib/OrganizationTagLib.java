@@ -27,6 +27,8 @@ package module.organization.presentationTier.renderers.tagLib;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -42,103 +44,128 @@ public class OrganizationTagLib extends TagSupport implements OrganizationView {
 
     static private final long serialVersionUID = 2726718182435118282L;
 
-    private String rootClasses = "tree";
-    private String childListStyle = "display:none";
-
-    private String blankImage = "/organization/images/blank.gif";
-    private String minusImage = "/organization/images/minus.gif";
-    private String plusImage = "/organization/images/plus.gif";
-
-    private String viewPartyUrl = "/organization.do?method=viewParty&amp;partyOid=%s";
-
-    private String organization;
-    private String configuration;
-
+    private Map<String, String> values = new HashMap<String, String>();
     private OrganizationViewConfiguration config;
 
+    public OrganizationTagLib() {
+	initDefaultConfig();
+    }
+
+    private void initDefaultConfig() {
+	values.put("rootClasses", "tree");
+	values.put("childListStyle", "display:none");
+
+	values.put("blankImage", "/organization/images/blank.gif");
+	values.put("minusImage", "/organization/images/minus.gif");
+	values.put("plusImage", "/organization/images/plus.gif");
+
+	values.put("viewPartyUrl", "/organization.do?method=viewParty&amp;partyOid=%s");
+
+	values.put("organization", null);
+	values.put("configuration", null);
+
+    }
+
+    @Override
     public int doStartTag() throws JspException {
+	return EVAL_BODY_INCLUDE;
+    }
+
+    @Override
+    public int doEndTag() throws JspException {
 	try {
 	    drawOrganization();
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
-	return SKIP_BODY;
+	release(); // force release
+	return EVAL_PAGE;
+    }
+
+    @Override
+    public void release() {
+	super.release();
+	values.clear();
     }
 
     private void drawOrganization() throws IOException {
 	final Layout layout = (Layout) getConfig().getLayout().saveView(this);
-	layout.createComponent(pageContext.findAttribute(this.organization), null).draw(pageContext);
+	final Object object = pageContext.findAttribute(values.get("organization"));
+	if (object == null) {
+	    throw new IllegalArgumentException("invalid.organization.value");
+	}
+	layout.createComponent(object, null).draw(pageContext);
     }
 
     public String getRootClasses() {
-	return rootClasses;
+	return values.get("rootClasses");
     }
 
     public void setRootClasses(String rootClasses) {
-	this.rootClasses = rootClasses;
+	values.put("rootClasses", rootClasses);
     }
 
     public String getChildListStyle() {
-	return childListStyle;
+	return values.get("childListStyle");
     }
 
     public void setChildListStyle(String childListStyle) {
-	this.childListStyle = childListStyle;
+	values.put("childListStyle", childListStyle);
     }
 
     public String getBlankImage() {
-	return blankImage;
+	return values.get("blankImage");
     }
 
     public void setBlankImage(String blankImage) {
-	this.blankImage = blankImage;
+	values.put("blankImage", blankImage);
     }
 
     public String getMinusImage() {
-	return minusImage;
+	return values.get("minusImage");
     }
 
     public void setMinusImage(String minusImage) {
-	this.minusImage = minusImage;
+	values.put("minusImage", minusImage);
     }
 
     public String getPlusImage() {
-	return plusImage;
+	return values.get("plusImage");
     }
 
     public void setPlusImage(String plusImage) {
-	this.plusImage = plusImage;
+	values.put("plusImage", plusImage);
     }
 
     public String getViewPartyUrl() {
-	return viewPartyUrl;
+	return values.get("viewPartyUrl");
     }
 
     public void setViewPartyUrl(String viewPartyUrl) {
-	this.viewPartyUrl = viewPartyUrl;
+	values.put("viewPartyUrl", viewPartyUrl);
     }
 
     public String getOrganization() {
-	return organization;
+	return values.get("organization");
     }
 
     public void setOrganization(String organization) {
-	this.organization = organization;
+	values.put("organization", organization);
     }
 
     public String getConfiguration() {
-	return configuration;
+	return values.get("configuration");
     }
 
     public void setConfiguration(String configuration) {
-	this.configuration = configuration;
+	values.put("configuration", configuration);
     }
 
     private OrganizationViewConfiguration getConfig() {
 	if (this.config == null) {
-	    this.config = (OrganizationViewConfiguration) pageContext.findAttribute(this.configuration);
+	    this.config = (OrganizationViewConfiguration) pageContext.findAttribute(values.get("configuration"));
 	}
-	return this.config;
+	return (OrganizationViewConfiguration) this.config;
     }
 
     @Override
@@ -156,4 +183,8 @@ public class OrganizationTagLib extends TagSupport implements OrganizationView {
 	return getConfig().getSortBy();
     }
 
+    @Override
+    public void setProperty(final String name, final Object value) {
+	values.put(name, (String) value);
+    }
 }

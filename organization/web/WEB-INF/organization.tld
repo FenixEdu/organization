@@ -6,33 +6,61 @@
 
 <taglib>
 
-	<!-- ========== Tag Library Description Elements ========================= -->
+	<!--
+		========== Tag Library Description Elements =========================
+	-->
 	<tlib-version>1.0</tlib-version>
 	<jsp-version>1.2</jsp-version>
-	
+
 	<short-name>organization</short-name>
 	<uri>http://fenix-ashes.ist.utl.pt</uri>
 	<description>
 		Organization View
 	</description>
- 
+
 	<tag>
-	   <name>viewOrganization</name>
-	   <tag-class>module.organization.presentationTier.renderers.tagLib.OrganizationTagLib</tag-class>
-	   <body-content>empty</body-content>
-	   <description>
-	   	  Renders organization view
+		<name>viewOrganization</name>
+		<tag-class>module.organization.presentationTier.renderers.tagLib.OrganizationTagLib</tag-class>
+		<body-content>JSP</body-content>
+		<description>
+			Renders organization view
 	   </description>
-	   <attribute>
-	 	  	<name>organization</name>
-	  	 	<required>true</required>
-	  	 	<rtexprvalue>true</rtexprvalue>
-	   </attribute>
-	   <attribute>
-	  	 	<name>configuration</name>
-	  	 	<required>true</required>
-	   		<rtexprvalue>true</rtexprvalue>
-	   </attribute>
+		<attribute>
+			<name>organization</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>configuration</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>property</name>
+		<tag-class>module.organization.presentationTier.renderers.tagLib.OrganizationPropertyTag</tag-class>
+		<body-content>JSP</body-content>
+		<description>
+			Sets a specific property of the organization view.
+	    </description>
+		<attribute>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+				The name of the property.
+	      </description>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+				The value of the property. If this property is specified the body of
+				the tag is ignored.
+    	  </description>
+		</attribute>
 	</tag>
 
 </taglib>  

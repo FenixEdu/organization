@@ -112,4 +112,9 @@ public class OrganizationRenderer extends OutputRenderer implements Organization
     public PartyPredicate getPredicate() {
 	return getConfig().getPredicate();
     }
+
+    @Override
+    public void setProperty(String name, Object value) {
+	throw new RuntimeException("do.not.use.this.method");
+    }
 }
