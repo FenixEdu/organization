@@ -126,3 +126,19 @@
 	<slot name="begin" key="label.begin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 	<slot name="end" key="label.end" />
 </schema>
+
+<schema name="organization.UnitBean.add.child" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="unit" layout="menu-select" key="label.child.party" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AllPartiesProvider" />
+		<property name="choiceType" value="module.organization.domain.Party" />
+		<property name="format" value="${partyName}" />
+	</slot>
+	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
+		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
+	</slot>
+	<slot name="begin" key="label.begin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+	<slot name="end" key="label.end" />
+</schema>

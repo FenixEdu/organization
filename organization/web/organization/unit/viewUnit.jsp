@@ -67,7 +67,7 @@
 <br/>
 <br/>
 
-<bean:message key="label.unit.children" bundle="ORGANIZATION_RESOURCES" />: <html:link action="/organization.do?method=prepareCreateUnit" paramId="parentOid" paramName="unit" paramProperty="OID"><bean:message key="label.create.child" bundle="ORGANIZATION_RESOURCES" /></html:link>
+<bean:message key="label.unit.children" bundle="ORGANIZATION_RESOURCES" />: <html:link action="/organization.do?method=prepareAddChild" paramId="partyOid" paramName="unit" paramProperty="OID"><bean:message key="label.add.child" bundle="ORGANIZATION_RESOURCES" /></html:link>, <html:link action="/organization.do?method=prepareCreateUnit" paramId="partyOid" paramName="unit" paramProperty="OID"><bean:message key="label.create.child" bundle="ORGANIZATION_RESOURCES" /></html:link>
 <logic:notEmpty name="unit" property="childAccountabilities">
 	<fr:view name="unit" property="childAccountabilities" schema="organization.Unit.view.child.accountability">
 		<fr:layout name="tabular">

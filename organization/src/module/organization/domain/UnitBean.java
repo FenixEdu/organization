@@ -144,4 +144,8 @@ public class UnitBean implements Serializable {
 	getUnit().addParent(getParent(), getAccountabilityType(), getBegin(), getEnd());
     }
 
+    public void addChild() {
+	getParent().addChild(getUnit(), getAccountabilityType(), getBegin(), getEnd());
+    }
+
 }

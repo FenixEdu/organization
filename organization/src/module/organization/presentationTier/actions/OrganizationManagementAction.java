@@ -384,7 +384,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
     public ActionForward prepareCreateUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
 	final UnitBean bean = new UnitBean();
-	bean.setParent((Unit) getDomainObject(request, "parentOid"));
+	bean.setParent((Unit) getDomainObject(request, "partyOid"));
 	request.setAttribute("unitBean", bean);
 	return forward(request, "/organization/unit/createUnit.jsp");
     }
@@ -463,6 +463,29 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	}
 
 	request.setAttribute("unit", bean.getUnit());
+	return forward(request, "/organization/unit/viewUnit.jsp");
+    }
+
+    public ActionForward prepareAddChild(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final UnitBean bean = new UnitBean();
+	bean.setParent((Unit) getDomainObject(request, "partyOid"));
+	request.setAttribute("unitBean", bean);
+	return forward(request, "/organization/unit/addChild.jsp");
+    }
+
+    public ActionForward addChild(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final UnitBean bean = getRenderedObject("unitBean");
+	try {
+	    bean.addChild();
+	} catch (final DomainException e) {
+	    addMessage(request, e.getKey(), e.getArgs());
+	    request.setAttribute("unitBean", bean);
+	    return forward(request, "/organization/unit/addChild.jsp");
+	}
+
+	request.setAttribute("unit", bean.getParent());
 	return forward(request, "/organization/unit/viewUnit.jsp");
     }
 

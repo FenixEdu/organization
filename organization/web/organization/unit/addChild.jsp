@@ -5,20 +5,20 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 
-<h2><bean:write name="unitBean" property="unit.partyName"/>: <bean:message key="label.add.parent" bundle="ORGANIZATION_RESOURCES" /></h2>
+<h2><bean:write name="unitBean" property="parent.partyName"/>: <bean:message key="label.add.child" bundle="ORGANIZATION_RESOURCES" /></h2>
 
 <html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">
 	<span class="error0"> <bean:write name="message" /> </span>
 	<br />
 </html:messages>
 
-<bean:define id="partyOid" name="unitBean" property="unit.OID" />
+<bean:define id="partyOid" name="unitBean" property="parent.OID" />
 <fr:form action='<%= "/organization.do?partyOid=" + partyOid.toString() %>'>
-	<html:hidden property="method" value="addParent"/>
+	<html:hidden property="method" value="addChild"/>
 	
 	<fr:edit id="unitBean" name="unitBean" visible="false" />
 
-	<fr:edit id="unitBean.add.parent" name="unitBean" schema="organization.UnitBean.add.parent">
+	<fr:edit id="unitBean.add.child" name="unitBean" schema="organization.UnitBean.add.child">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2" />
 			<fr:property name="columnClasses" value=",,tderror" />
