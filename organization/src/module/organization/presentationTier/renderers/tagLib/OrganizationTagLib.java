@@ -63,7 +63,6 @@ public class OrganizationTagLib extends TagSupport implements OrganizationView {
 
 	values.put("organization", null);
 	values.put("configuration", null);
-
     }
 
     @Override
@@ -78,7 +77,6 @@ public class OrganizationTagLib extends TagSupport implements OrganizationView {
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
-	release(); // force release
 	return EVAL_PAGE;
     }
 
