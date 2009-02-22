@@ -4,5 +4,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/myorg"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/myorg"/>
-	<classpathentry kind="output" path="src"/>
+	<classpathentry kind="output" path="output"/>
 </classpath>
