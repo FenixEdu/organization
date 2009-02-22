@@ -25,3 +25,37 @@
  * 
  */
 
+enum module.personalinformation.domain.IDDocumentType as IDDocumentType;
+enum module.personalinformation.domain.Gender as Gender;
+enum module.personalinformation.domain.MaritalStatus as MaritalStatus;
+
+class module.personalinformation.domain.PersonalInformation {
+	String documentIdNumber;
+	IDDocumentType idDocumentType;
+	LocalDate emissionDateOfDocumentId;
+	LocalDate expirationDateOfDocumentId;
+	String emissionLocationOfDocumentId;
+
+	String fiscalCode;
+			
+	Gender gender;
+	MaritalStatus maritalStatus;
+
+	LocalDate birthDate;
+	// Make units
+	String birthDistrict;
+	String birthDistrictSubdivision;
+	String birthParish;
+	
+	String fathersName;
+	String mothersName;
+	
+	// Add to relation
+	//private DomainReference<Country> nationality;
+	//private DomainReference<Country> countryOfBirth;
+}
+
+relation PersonPersonalInformation {
+	module.organization.domain.Person playsRole person;
+	module.personalinformation.domain.PersonalInformation playsRole personalInformation;
+}
