@@ -23,7 +23,12 @@
  * 
  */
 
-package module.organization.domain;
+package module.organization.domain.predicates;
+
+import module.organization.domain.Accountability;
+import module.organization.domain.AccountabilityType;
+import module.organization.domain.Party;
+import module.organization.domain.PartyType;
 
 abstract public class PartyPredicate {
 
@@ -51,7 +56,7 @@ abstract public class PartyPredicate {
     static public class PartyByClassType extends PartyPredicate {
 	protected Class<? extends Party> clazz;
 
-	PartyByClassType(final Class<? extends Party> clazz) {
+	public PartyByClassType(final Class<? extends Party> clazz) {
 	    this.clazz = clazz;
 	}
 
@@ -64,15 +69,15 @@ abstract public class PartyPredicate {
     static public class PartyByPartyType extends PartyByClassType {
 	private PartyType type;
 
-	PartyByPartyType(final PartyType type) {
+	public PartyByPartyType(final PartyType type) {
 	    this(null, type);
 	}
 
-	PartyByPartyType(final Class<? extends Party> clazz) {
+	public PartyByPartyType(final Class<? extends Party> clazz) {
 	    this(clazz, null);
 	}
 
-	PartyByPartyType(final Class<? extends Party> clazz, final PartyType type) {
+	public PartyByPartyType(final Class<? extends Party> clazz, final PartyType type) {
 	    super(clazz);
 	    this.type = type;
 	}
@@ -86,15 +91,15 @@ abstract public class PartyPredicate {
     static public class PartyByAccountabilityType extends PartyByClassType {
 	private AccountabilityType type;
 
-	PartyByAccountabilityType(final AccountabilityType type) {
+	public PartyByAccountabilityType(final AccountabilityType type) {
 	    this(null, type);
 	}
 
-	PartyByAccountabilityType(final Class<? extends Party> clazz) {
+	public PartyByAccountabilityType(final Class<? extends Party> clazz) {
 	    this(clazz, null);
 	}
 
-	PartyByAccountabilityType(final Class<? extends Party> clazz, final AccountabilityType type) {
+	public PartyByAccountabilityType(final Class<? extends Party> clazz, final AccountabilityType type) {
 	    super(clazz);
 	    this.type = type;
 	}

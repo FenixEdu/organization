@@ -28,7 +28,7 @@ package module.organization.presentationTier.renderers;
 import java.util.Comparator;
 
 import module.organization.domain.Party;
-import module.organization.domain.PartyPredicate;
+import module.organization.domain.predicates.PartyPredicate;
 import module.organization.presentationTier.renderers.decorators.PartyDecorator;
 
 public interface OrganizationView {

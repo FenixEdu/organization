@@ -30,10 +30,12 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import module.organization.domain.PartyPredicate.PartyByAccountabilityType;
-import module.organization.domain.PartyPredicate.PartyByClassType;
-import module.organization.domain.PartyPredicate.PartyByPartyType;
-import module.organization.domain.PartyPredicate.TruePartyPredicate;
+import module.organization.domain.predicates.PartyPredicate;
+import module.organization.domain.predicates.PartyResultCollection;
+import module.organization.domain.predicates.PartyPredicate.PartyByAccountabilityType;
+import module.organization.domain.predicates.PartyPredicate.PartyByClassType;
+import module.organization.domain.predicates.PartyPredicate.PartyByPartyType;
+import module.organization.domain.predicates.PartyPredicate.TruePartyPredicate;
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 

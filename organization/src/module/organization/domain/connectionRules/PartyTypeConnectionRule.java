@@ -23,10 +23,14 @@
  * 
  */
 
-package module.organization.domain;
+package module.organization.domain.connectionRules;
 
 import java.text.MessageFormat;
 
+import module.organization.domain.AccountabilityType;
+import module.organization.domain.ConnectionRule;
+import module.organization.domain.Party;
+import module.organization.domain.PartyType;
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import myorg.util.BundleUtil;

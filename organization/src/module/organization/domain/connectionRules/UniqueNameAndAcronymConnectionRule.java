@@ -23,10 +23,15 @@
  * 
  */
 
-package module.organization.domain;
+package module.organization.domain.connectionRules;
 
 import java.util.Collection;
 
+import module.organization.domain.Accountability;
+import module.organization.domain.AccountabilityType;
+import module.organization.domain.ConnectionRule;
+import module.organization.domain.Party;
+import module.organization.domain.Unit;
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import myorg.util.BundleUtil;

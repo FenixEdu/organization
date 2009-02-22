@@ -23,21 +23,24 @@
  * 
  */
 
-package module.organization.domain;
+package module.organization.domain.predicates;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
+import module.organization.domain.Accountability;
+import module.organization.domain.Party;
+
 public class PartyResultCollection {
     private PartyPredicate predicate;
     private Collection<Party> result;
 
-    PartyResultCollection(final PartyPredicate predicate) {
+    public PartyResultCollection(final PartyPredicate predicate) {
 	this(new HashSet<Party>(), predicate);
     }
 
-    PartyResultCollection(final Collection<Party> result, final PartyPredicate predicate) {
+    public PartyResultCollection(final Collection<Party> result, final PartyPredicate predicate) {
 	this.predicate = predicate;
 	this.result = result;
     }

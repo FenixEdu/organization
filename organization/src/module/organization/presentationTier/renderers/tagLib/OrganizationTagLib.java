@@ -34,7 +34,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import module.organization.domain.Party;
-import module.organization.domain.PartyPredicate;
+import module.organization.domain.predicates.PartyPredicate;
 import module.organization.presentationTier.renderers.OrganizationView;
 import module.organization.presentationTier.renderers.OrganizationViewConfiguration;
 import module.organization.presentationTier.renderers.decorators.PartyDecorator;
