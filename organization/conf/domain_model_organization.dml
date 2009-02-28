@@ -117,6 +117,13 @@ relation MyOrgTopUnit {
 	}
 }
 
+relation MyOrgWithPersons {
+	myorg.domain.MyOrg playsRole myOrgFromPerson;
+	module.organization.domain.Person playsRole persons {
+		multiplicity *;
+	}
+}
+
 relation PartyTypeParty {
 	module.organization.domain.PartyType playsRole partyTypes {
 		multiplicity *;
