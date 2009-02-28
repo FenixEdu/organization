@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import module.organization.domain.predicates.PartyPredicate;
 import module.organization.domain.predicates.PartyResultCollection;
@@ -43,6 +44,7 @@ import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.Transaction;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 abstract public class Party extends Party_Base {
 
@@ -51,6 +53,14 @@ abstract public class Party extends Party_Base {
 	public int compare(Party o1, Party o2) {
 	    int res = o1.getPartyName().compareTo(o2.getPartyName());
 	    return res != 0 ? res : (o1.getOID() < o2.getOID() ? -1 : (o1.getOID() == o2.getOID() ? 0 : 1));
+	}
+    };
+
+    static public final Comparator<Party> COMPARATOR_BY_TYPE_AND_NAME = new Comparator<Party>() {
+	@Override
+	public int compare(Party o1, Party o2) {
+	    int result = o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName());
+	    return result == 0 ? COMPARATOR_BY_NAME.compare(o1, o2) : result;
 	}
     };
 
@@ -317,7 +327,7 @@ abstract public class Party extends Party_Base {
     @Service
     public void removeParent(final Accountability accountability) {
 	if (hasParentAccountabilities(accountability)) {
-	    if (getParentAccountabilitiesCount() == 1) {
+	    if (isUnit() && getParentAccountabilitiesCount() == 1) {
 		throw new DomainException("error.Party.cannot.remove.parent.accountability");
 	    }
 	    accountability.delete();
@@ -347,4 +357,9 @@ abstract public class Party extends Party_Base {
 	return true;
     }
 
+    public String getPartyNameWithSuffixType() {
+	return ResourceBundle.getBundle("resources.OrganizationResources", Language.getLocale()).getString(
+		"label." + getClass().getSimpleName().toLowerCase())
+		+ " - " + getPartyName().getContent();
+    }
 }

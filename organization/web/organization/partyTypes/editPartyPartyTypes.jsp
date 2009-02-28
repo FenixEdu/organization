@@ -6,14 +6,14 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 
 <h2><bean:message key="label.unit.partyTypes" bundle="ORGANIZATION_RESOURCES" /></h2>
-<h3><fr:view name="unit" property="partyName" /></h3>
+<h3><fr:view name="party" property="partyName" /></h3>
 
 <html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">
 	<span class="error0"> <bean:write name="message" /> </span>
 	<br />
 </html:messages>
 
-<bean:define id="partyOid" name="unit" property="OID" />
+<bean:define id="partyOid" name="party" property="OID" />
 <fr:form action='<%= "/organization.do?partyOid=" + partyOid.toString() %>'>
 	<html:hidden property="method" value="editPartyPartyTypes"/>
 	

@@ -37,6 +37,7 @@ public class UnitBean implements Serializable {
     private static final long serialVersionUID = -952861107508339516L;
 
     private DomainReference<Unit> parent;
+    private DomainReference<Party> child;
     private DomainReference<AccountabilityType> accountabilityType;
     private LocalDate begin;
     private LocalDate end;
@@ -69,6 +70,14 @@ public class UnitBean implements Serializable {
 
     public boolean hasParent() {
 	return getParent() != null;
+    }
+    
+    public Party getChild() {
+	return (this.child != null) ? this.child.getObject() : null;
+    }
+
+    public void setChild(Party party) {
+	this.child = (party != null) ? new DomainReference<Party>(party) : null;
     }
 
     public Unit getUnit() {
@@ -145,7 +154,7 @@ public class UnitBean implements Serializable {
     }
 
     public void addChild() {
-	getParent().addChild(getUnit(), getAccountabilityType(), getBegin(), getEnd());
+	getParent().addChild(getChild(), getAccountabilityType(), getBegin(), getEnd());
     }
 
 }

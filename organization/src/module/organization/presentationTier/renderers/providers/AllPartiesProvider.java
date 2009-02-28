@@ -46,8 +46,8 @@ public class AllPartiesProvider implements DataProvider {
 
 	// TODO: check method performance
 
-	final Set<Party> result = new TreeSet<Party>(Party.COMPARATOR_BY_NAME);
-	for (final Party party : MyOrg.getInstance().getTopUnitsSet()) {
+	final Set<Party> result = new TreeSet<Party>(Party.COMPARATOR_BY_TYPE_AND_NAME);
+	for (final Party party : MyOrg.getInstance().getPartiesSet()) {
 	    result.add(party);
 	    result.addAll(party.getDescendents());
 	}

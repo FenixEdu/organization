@@ -105,7 +105,6 @@
 
 <schema name="organization.Unit.view.child.accountability" type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
 	<slot name="child.partyName" key="label.unit.child" />
-	<slot name="child.acronym" key="label.unit.child.acronym" />
 	<slot name="accountabilityType.name" key="label.unit.accountability.type" />
 	<slot name="beginDate" key="label.begin" />
 	<slot name="endDate" key="label.end" layout="null-as-label" />
@@ -115,7 +114,7 @@
 	<slot name="parent" layout="menu-select" key="label.unit.parent" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AllPartiesProvider" />
 		<property name="choiceType" value="module.organization.domain.Party" />
-		<property name="format" value="${partyName}" />
+		<property name="format" value="${partyNameWithSuffixType}" />
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
@@ -128,10 +127,10 @@
 </schema>
 
 <schema name="organization.UnitBean.add.child" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
-	<slot name="unit" layout="menu-select" key="label.child.party" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="child" layout="menu-select" key="label.child.party" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AllPartiesProvider" />
 		<property name="choiceType" value="module.organization.domain.Party" />
-		<property name="format" value="${partyName}" />
+		<property name="format" value="${partyNameWithSuffixType}" />
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
@@ -141,4 +140,23 @@
 	</slot>
 	<slot name="begin" key="label.begin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 	<slot name="end" key="label.end" />
+</schema>
+
+<schema name="organization.domain.Person.view" type="module.organization.domain.Person" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="label.name">
+		<property name="classes" value="bold"/>
+	</slot>
+	<slot name="partyTypes" key="label.party.type">
+		<property name="eachLayout" value="values-comma" />
+		<property name="eachSchema" value="organization.PartyType.view.name" />
+		<property name="classes" value="nobullet liinline"/>
+	</slot>
+</schema>
+
+<schema name="organization.domain.Person.view.short" type="module.organization.domain.Person" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="label.name" />
+</schema>
+
+<schema name="organization.PersonBean.create" type="module.organization.domain.Person$PersonBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="label.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 </schema>

@@ -77,6 +77,15 @@
 			<fr:property name="key(viewParty)" value="label.view"/>
 			<fr:property name="bundle(viewParty)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="order(viewParty)" value="1"/>
+			<fr:property name="visibleIf(viewParty)" value="child.unit"/>
+			
+			<fr:property name="linkFormat(removeChild)" value="/organization.do?method=removeChild&amp;accOid=${OID}" />
+			<fr:property name="key(removeChild)" value="label.remove"/>
+			<fr:property name="bundle(removeChild)" value="ORGANIZATION_RESOURCES"/>
+			<fr:property name="confirmationKey(removeChild)" value="label.remove.confirmation.message" />
+			<fr:property name="confirmationBundle(removeChild)" value="ORGANIZATION_RESOURCES" />
+			<fr:property name="order(removeChild)" value="2"/>
+			<fr:property name="visibleIf(removeChild)" value="child.person"/>
 			
 			<fr:property name="sortBy" value="child.partyName" />
 		</fr:layout>

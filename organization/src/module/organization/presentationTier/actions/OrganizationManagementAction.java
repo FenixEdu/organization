@@ -26,6 +26,7 @@
 package module.organization.presentationTier.actions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +43,9 @@ import module.organization.domain.UnitBean;
 import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
 import module.organization.domain.ConnectionRule.ConnectionRuleBean;
 import module.organization.domain.PartyType.PartyTypeBean;
+import module.organization.domain.Person.PersonBean;
 import module.organization.presentationTier.renderers.OrganizationViewConfiguration;
+import myorg.domain.MyOrg;
 import myorg.domain.RoleType;
 import myorg.domain.VirtualHost;
 import myorg.domain.contents.ActionNode;
@@ -60,6 +63,7 @@ import org.apache.struts.action.ActionMapping;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.servlets.functionalities.CreateNodeAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 @Mapping(path = "/organization", formBeanClass = OrganizationManagementAction.OrganizationForm.class)
 public class OrganizationManagementAction extends ContextBaseAction {
@@ -67,8 +71,17 @@ public class OrganizationManagementAction extends ContextBaseAction {
     static public class OrganizationForm extends BaseForm {
 	private static final long serialVersionUID = 4469811183847905665L;
 
+	private String name;
 	private String connectionRuleClassName;
 	private Long[] oids;
+
+	public String getName() {
+	    return name;
+	}
+
+	public void setName(String name) {
+	    this.name = name;
+	}
 
 	public String getConnectionRuleClassName() {
 	    return connectionRuleClassName;
@@ -92,6 +105,10 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
 	public boolean hasOids() {
 	    return getOids() != null;
+	}
+
+	public boolean hasName() {
+	    return getName() != null && !getName().isEmpty();
 	}
     }
 
@@ -126,6 +143,9 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
 	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewOrganization",
 		"resources.OrganizationResources", "label.organizational.structure", Role.getRole(RoleType.MANAGER));
+
+	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "managePersons",
+		"resources.OrganizationResources", "label.persons.manage", Role.getRole(RoleType.MANAGER));
 
 	return forwardToMuneConfiguration(request, virtualHost, topActionNode);
     }
@@ -375,12 +395,6 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	return forward(request, "/organization/unit/viewUnit.jsp");
     }
 
-    private ActionForward viewPerson(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-	    HttpServletResponse response, Person party) {
-	// TODO NOT IMPLEMENTED YET
-	return null;
-    }
-
     public ActionForward prepareCreateUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
 	final UnitBean bean = new UnitBean();
@@ -501,22 +515,36 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	request.setAttribute("unit", child);
 	return forward(request, "/organization/unit/viewUnit.jsp");
     }
+    
+    public ActionForward removeChild(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final Accountability accountability = getDomainObject(request, "accOid");
+	final Party parent = accountability.getParent();
+	final Party child = accountability.getChild();
+	try {
+	    child.removeParent(accountability);
+	} catch (final DomainException e) {
+	    addMessage(request, e.getKey(), e.getArgs());
+	}
+	request.setAttribute("unit", parent);
+	return forward(request, "/organization/unit/viewUnit.jsp");
+    }
 
     public ActionForward prepareEditPartyPartyTypes(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
-	final Unit unit = getDomainObject(request, "partyOid");
-	buildPartyTypeOids(unit, (OrganizationForm) form);
+	final Party party = getDomainObject(request, "partyOid");
+	buildPartyTypeOids(party, (OrganizationForm) form);
 
-	request.setAttribute("unit", unit);
+	request.setAttribute("party", party);
 	request.setAttribute("partyTypes", getMyOrg().getPartyTypes());
 	return forward(request, "/organization/partyTypes/editPartyPartyTypes.jsp");
     }
 
-    private void buildPartyTypeOids(final Unit unit, final OrganizationForm organizationForm) {
+    private void buildPartyTypeOids(final Party party, final OrganizationForm organizationForm) {
 	int index = 0;
-	final Long[] oids = new Long[unit.getPartyTypesCount()];
-	for (final PartyType partyType : unit.getPartyTypesSet()) {
+	final Long[] oids = new Long[party.getPartyTypesCount()];
+	for (final PartyType partyType : party.getPartyTypesSet()) {
 	    oids[index++] = partyType.getOID();
 	}
 	organizationForm.setOids(oids);
@@ -525,17 +553,17 @@ public class OrganizationManagementAction extends ContextBaseAction {
     public ActionForward editPartyPartyTypes(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
-	final Unit unit = getDomainObject(request, "partyOid");
-	request.setAttribute("unit", unit);
-
+	final Party party = getDomainObject(request, "partyOid");
 	try {
-	    unit.editPartyTypes(buildPartyTypes((OrganizationForm) form));
+	    party.editPartyTypes(buildPartyTypes((OrganizationForm) form));
 	} catch (final DomainException e) {
 	    addMessage(request, e.getKey(), e.getArgs());
+	    request.setAttribute("party", party);
 	    request.setAttribute("partyTypes", getMyOrg().getPartyTypes());
 	    return forward(request, "/organization/partyTypes/editPartyPartyTypes.jsp");
 	}
-	return forward(request, "/organization/unit/viewUnit.jsp");
+
+	return viewParty(mapping, form, request, response);
     }
 
     private List<PartyType> buildPartyTypes(final OrganizationForm form) {
@@ -546,5 +574,114 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	    }
 	}
 	return result;
+    }
+
+    public ActionForward managePersons(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	return forward(request, "/organization/person/managePersons.jsp");
+    }
+
+    public ActionForward searchPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	searchPerson(request, (OrganizationForm) form);
+	return forward(request, "/organization/person/managePersons.jsp");
+    }
+
+    // TODO: refactor this code?
+    private void searchPerson(final HttpServletRequest request, final OrganizationForm form) {
+	if (!form.hasName()) {
+	    addMessage(request, "label.must.introduce.name");
+	    return;
+	}
+
+	final List<Person> persons = new ArrayList<Person>();
+
+	final String trimmedValue = form.getName().trim();
+	final String[] input = trimmedValue.split(" ");
+	StringNormalizer.normalize(input);
+
+	for (final Party party : MyOrg.getInstance().getPersonsSet()) {
+	    if (party.isPerson()) {
+		final Person person = (Person) party;
+		final String unitName = StringNormalizer.normalize(person.getPartyName().getContent());
+		if (hasMatch(input, unitName)) {
+		    persons.add(person);
+		}
+	    }
+	}
+
+	Collections.sort(persons, Party.COMPARATOR_BY_NAME);
+	request.setAttribute("persons", persons);
+    }
+
+    private boolean hasMatch(final String[] input, final String unitNameParts) {
+	for (final String namePart : input) {
+	    if (unitNameParts.indexOf(namePart) == -1) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public ActionForward prepareCreatePerson(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+	request.setAttribute("personBean", new PersonBean());
+	return forward(request, "/organization/person/createPerson.jsp");
+    }
+
+    public ActionForward createPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+
+	final PersonBean bean = getRenderedObject("personBean");
+	Person person = null;
+	try {
+	    person = Person.create(bean);
+	} catch (final DomainException e) {
+	    addMessage(request, e.getKey(), e.getArgs());
+	    request.setAttribute("personBean", new PersonBean());
+	    return forward(request, "/organization/person/createPerson.jsp");
+	}
+
+	return viewPerson(mapping, form, request, response, person);
+    }
+
+    private ActionForward viewPerson(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	    HttpServletResponse response, Person person) {
+	request.setAttribute("person", person);
+	return forward(request, "/organization/person/viewPerson.jsp");
+    }
+
+    public ActionForward prepareEditPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	request.setAttribute("personBean", new PersonBean((Person) getDomainObject(request, "partyOid")));
+	return forward(request, "/organization/person/editPerson.jsp");
+    }
+
+    public ActionForward editPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+
+	final PersonBean bean = getRenderedObject("personBean");
+	try {
+	    bean.edit();
+	} catch (final DomainException e) {
+	    addMessage(request, e.getKey(), e.getArgs());
+	    request.setAttribute("personBean", bean);
+	    return forward(request, "/organization/person/editPerson.jsp");
+	}
+
+	return viewPerson(mapping, form, request, response, bean.getPerson());
+    }
+
+    public ActionForward deletePerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final Person person = getDomainObject(request, "partyOid");
+	try {
+	    person.delete();
+	} catch (final DomainException e) {
+	    addMessage(request, e.getKey(), e.getArgs());
+	    request.setAttribute("person", person);
+	    return forward(request, "/organization/person/viewPerson.jsp");
+	}
+	return managePersons(mapping, form, request, response);
     }
 }
