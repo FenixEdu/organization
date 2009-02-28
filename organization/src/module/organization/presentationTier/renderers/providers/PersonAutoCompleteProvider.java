@@ -46,6 +46,7 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider {
 	final String[] input = trimmedValue.split(" ");
 	StringNormalizer.normalize(input);
 
+	//TODO: refactor to use MyOrg.getInstance().getPersonsSet()
 	for (final Party party : MyOrg.getInstance().getPartiesSet()) {
 	    if (party.isPerson()) {
 		final Person person = (Person) party;
