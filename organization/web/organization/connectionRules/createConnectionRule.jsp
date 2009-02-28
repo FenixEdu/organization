@@ -13,8 +13,8 @@
 	<bean:message key="label.connection.rule" bundle="ORGANIZATION_RESOURCES" />
 	<html:select name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="connectionRuleClassName" onchange="this.form.submit();">
 		<html:option value=""><bean:message key="label.organization.choose.an.option" bundle="ORGANIZATION_RESOURCES" /></html:option>
-		<html:option value="module.organization.domain.PartyTypeConnectionRule$PartyTypeConnectionRuleBean"><bean:message key="label.PartyTypeConnectionRule" bundle="ORGANIZATION_RESOURCES" /></html:option>
-		<html:option value="module.organization.domain.UniqueNameAndAcronymConnectionRule$UniqueNameAndAcronymConnectionRuleBean"><bean:message key="label.UniqueNameAndAcronymConnectionRule" bundle="ORGANIZATION_RESOURCES" /></html:option>
+		<html:option value="module.organization.domain.connectionRules.PartyTypeConnectionRule$PartyTypeConnectionRuleBean"><bean:message key="label.PartyTypeConnectionRule" bundle="ORGANIZATION_RESOURCES" /></html:option>
+		<html:option value="module.organization.domain.connectionRules.UniqueNameAndAcronymConnectionRule$UniqueNameAndAcronymConnectionRuleBean"><bean:message key="label.UniqueNameAndAcronymConnectionRule" bundle="ORGANIZATION_RESOURCES" /></html:option>
 	</html:select>
 </fr:form>
 
