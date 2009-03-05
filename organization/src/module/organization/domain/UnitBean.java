@@ -25,24 +25,17 @@
 
 package module.organization.domain;
 
-import java.io.Serializable;
-
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.util.DomainReference;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
-public class UnitBean implements Serializable {
+public class UnitBean extends PartyBean {
 
-    private static final long serialVersionUID = -952861107508339516L;
-
-    private DomainReference<Unit> parent;
-    private DomainReference<Party> child;
-    private DomainReference<AccountabilityType> accountabilityType;
-    private LocalDate begin;
-    private LocalDate end;
-
+    private static final long serialVersionUID = 2418079845917474575L;
+    
     private DomainReference<Unit> unit;
+    private DomainReference<Party> child;
     private DomainReference<PartyType> partyType;
 
     private MultiLanguageString name;
@@ -60,18 +53,6 @@ public class UnitBean implements Serializable {
 	setAcronym(unit.getAcronym());
     }
 
-    public Unit getParent() {
-	return (this.parent != null) ? this.parent.getObject() : null;
-    }
-
-    public void setParent(Unit parent) {
-	this.parent = (parent != null) ? new DomainReference<Unit>(parent) : null;
-    }
-
-    public boolean hasParent() {
-	return getParent() != null;
-    }
-    
     public Party getChild() {
 	return (this.child != null) ? this.child.getObject() : null;
     }
@@ -90,6 +71,11 @@ public class UnitBean implements Serializable {
 
     public boolean isTop() {
 	return getUnit().isTop();
+    }
+    
+    @Override
+    public Party getParty() {
+	return getUnit();
     }
 
     public MultiLanguageString getName() {
@@ -116,31 +102,6 @@ public class UnitBean implements Serializable {
 	this.partyType = (partyType != null) ? new DomainReference<PartyType>(partyType) : null;
     }
 
-    public AccountabilityType getAccountabilityType() {
-	return (this.accountabilityType != null) ? this.accountabilityType.getObject() : null;
-    }
-
-    public void setAccountabilityType(AccountabilityType accountabilityType) {
-	this.accountabilityType = (accountabilityType != null) ? new DomainReference<AccountabilityType>(accountabilityType)
-		: null;
-    }
-
-    public LocalDate getBegin() {
-	return begin;
-    }
-
-    public void setBegin(LocalDate begin) {
-	this.begin = begin;
-    }
-
-    public LocalDate getEnd() {
-	return end;
-    }
-
-    public void setEnd(LocalDate end) {
-	this.end = end;
-    }
-
     public Unit createUnit() {
 	return Unit.create(this);
     }
@@ -149,6 +110,7 @@ public class UnitBean implements Serializable {
 	return getUnit().edit(getName(), getAcronym());
     }
 
+    @Override
     public void addParent() {
 	getUnit().addParent(getParent(), getAccountabilityType(), getBegin(), getEnd());
     }

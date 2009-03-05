@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 
-<h2><bean:message key="label.unit.partyTypes" bundle="ORGANIZATION_RESOURCES" /></h2>
+<h2><bean:message key="label.party.partyTypes" bundle="ORGANIZATION_RESOURCES" /></h2>
 <h3><fr:view name="party" property="partyName" /></h3>
 
 <html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">

@@ -25,26 +25,30 @@
 
 package module.organization.domain;
 
-import java.io.Serializable;
-
 import module.organization.domain.PartyType.PartyTypeBean;
 import myorg.domain.MyOrg;
+
+import org.joda.time.LocalDate;
+
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.util.DomainReference;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class Person extends Person_Base {
 
-    static public class PersonBean implements Serializable {
+    static public class PersonBean extends PartyBean {
 	private static final long serialVersionUID = -7516282978280402225L;
 
 	private DomainReference<Person> person;
 	private String name;
 
 	public PersonBean() {
+	    setBegin(new LocalDate());
 	}
 
 	public PersonBean(final Person person) {
+	    this();
+	    
 	    setPerson(person);
 	    setName(person.getName());
 	}
@@ -65,9 +69,20 @@ public class Person extends Person_Base {
 	    this.person = (person != null) ? new DomainReference<Person>(person) : null;
 	}
 
+	@Override
+	public Party getParty() {
+	    return getPerson();
+	}
+	
 	public void edit() {
 	    getPerson().edit(this);
 	}
+
+	@Override
+	public void addParent() {
+	    getPerson().addParent(getParent(), getAccountabilityType(), getBegin(), getEnd());
+	}
+
     }
 
     public Person(MultiLanguageString partyName, PartyType partyType) {

@@ -110,7 +110,7 @@
 	<slot name="endDate" key="label.end" layout="null-as-label" />
 </schema>
 
-<schema name="organization.UnitBean.add.parent" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
+<schema name="organization.PartyBean.add.parent" type="module.organization.domain.PartyBean" bundle="ORGANIZATION_RESOURCES">
 	<slot name="parent" layout="menu-select" key="label.unit.parent" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AllPartiesProvider" />
 		<property name="choiceType" value="module.organization.domain.Party" />
@@ -157,6 +157,9 @@
 	<slot name="name" key="label.name" />
 </schema>
 
-<schema name="organization.PersonBean.create" type="module.organization.domain.Person$PersonBean" bundle="ORGANIZATION_RESOURCES">
-	<slot name="name" key="label.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+<schema name="organization.PersonBean.manage" type="module.organization.domain.Person$PersonBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="label.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="80" />
+		<property name="maxLength" value="250" />
+	</slot>
 </schema>

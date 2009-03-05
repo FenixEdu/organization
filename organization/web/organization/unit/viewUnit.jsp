@@ -29,7 +29,7 @@
 	<bean:message key="label.delete" bundle="ORGANIZATION_RESOURCES" />
 </html:link>, 
 <html:link action="/organization.do?method=prepareEditPartyPartyTypes" paramId="partyOid" paramName="unit" paramProperty="OID">
-	<bean:message key="label.unit.partyTypes" bundle="ORGANIZATION_RESOURCES" />
+	<bean:message key="label.party.partyTypes" bundle="ORGANIZATION_RESOURCES" />
 </html:link>
 
 <br/>

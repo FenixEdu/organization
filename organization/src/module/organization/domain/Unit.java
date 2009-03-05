@@ -38,11 +38,9 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 public class Unit extends Unit_Base {
 
     public static final Comparator<Unit> COMPARATOR_BY_PRESENTATION_NAME = new Comparator<Unit>() {
-
 	public int compare(final Unit unit1, Unit unit2) {
 	    return unit1.getPresentationName().compareTo(unit2.getPresentationName());
 	}
-
     };
 
     protected Unit() {

@@ -36,6 +36,7 @@ import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.ConnectionRule;
 import module.organization.domain.Party;
+import module.organization.domain.PartyBean;
 import module.organization.domain.PartyType;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
@@ -460,24 +461,35 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
     public ActionForward prepareAddParent(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	request.setAttribute("unitBean", new UnitBean((Unit) getDomainObject(request, "partyOid")));
-	return forward(request, "/organization/unit/addParent.jsp");
+	request.setAttribute("partyBean", createPartyBean(request));
+	return forward(request, "/organization/addParent.jsp");
+    }
+
+    private PartyBean createPartyBean(final HttpServletRequest request) {
+	final Party party = getDomainObject(request, "partyOid");
+	if (party.isUnit()) {
+	    return new UnitBean((Unit) party);
+	} else if (party.isPerson()) {
+	    return new PersonBean((Person) party);
+	} else {
+	    throw new IllegalArgumentException();
+	}
     }
 
     public ActionForward addParent(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
 
-	final UnitBean bean = getRenderedObject("unitBean");
+	final PartyBean bean = getRenderedObject("partyBean");
 	try {
 	    bean.addParent();
 	} catch (final DomainException e) {
 	    addMessage(request, e.getKey(), e.getArgs());
-	    request.setAttribute("unitBean", bean);
-	    return forward(request, "/organization/unit/addParent.jsp");
+	    request.setAttribute("partyBean", bean);
+	    return forward(request, "/organization/addParent.jsp");
 	}
 
-	request.setAttribute("unit", bean.getUnit());
-	return forward(request, "/organization/unit/viewUnit.jsp");
+	request.setAttribute("partyOid", bean.getParty().getOID());
+	return viewParty(mapping, form, request, response);
     }
 
     public ActionForward prepareAddChild(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -512,10 +524,11 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	} catch (final DomainException e) {
 	    addMessage(request, e.getKey(), e.getArgs());
 	}
-	request.setAttribute("unit", child);
-	return forward(request, "/organization/unit/viewUnit.jsp");
+
+	request.setAttribute("partyOid", child.getOID());
+	return viewParty(mapping, form, request, response);
     }
-    
+
     public ActionForward removeChild(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
 	final Accountability accountability = getDomainObject(request, "accOid");
