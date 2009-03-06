@@ -26,10 +26,14 @@
  */
 
 
-valueType org.joda.time.DateTime as DateTime;
-valueType org.joda.time.LocalDate as LocalDate;
+valueType pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString as MultiLanguageString {
+    externalizeWith {
+        String exportAsString();
+    }
 
-valueType pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString as MultiLanguageString;
+    internalizeWith importFromString();
+}
+
 
 class module.organization.domain.AccountabilityType {
 	String type;
