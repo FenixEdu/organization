@@ -6,7 +6,7 @@
  * 
  *      https://fenix-ashes.ist.utl.pt/
  * 
- *   This file is part of the Organization Module for the MyOrg web application.
+ *   This file is part of the PersonalInformation Module for the MyOrg web application.
  *
  *   The Organization Module is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Lesser General Public License as published

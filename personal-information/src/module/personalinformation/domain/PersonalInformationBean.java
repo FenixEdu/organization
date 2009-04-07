@@ -1,5 +1,5 @@
 /*
- * @(#)Gender.java
+ * @(#)PersonalInformationBean.java
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
@@ -25,13 +25,10 @@
 
 package module.personalinformation.domain;
 
-public enum Gender {
+import java.io.Serializable;
 
-    MALE,
+public class PersonalInformationBean implements Serializable {
 
-    FEMALE;
+    static private final long serialVersionUID = 2376572629997785605L;
 
-    public String getName() {
-	return name();
-    }
 }
