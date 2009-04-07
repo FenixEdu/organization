@@ -32,32 +32,58 @@ enum module.personalinformation.domain.MaritalStatus as MaritalStatus;
 
 
 class module.personalinformation.domain.PersonalInformation {
-	String documentIdNumber;
-	IDDocumentType idDocumentType;
-	LocalDate emissionDateOfDocumentId;
-	LocalDate expirationDateOfDocumentId;
-	String emissionLocationOfDocumentId;
-
-	String fiscalCode;
-			
-	Gender gender;
-	MaritalStatus maritalStatus;
 
 	LocalDate birthDate;
+	Gender gender;
+	MaritalStatus maritalStatus;
+	String fiscalCode;
+			
+	String fathersName;
+	String mothersName;
+	
 	// Make units
 	String birthDistrict;
 	String birthDistrictSubdivision;
 	String birthParish;
-	
-	String fathersName;
-	String mothersName;
-	
 	// Add to relation
 	//private DomainReference<Country> nationality;
 	//private DomainReference<Country> countryOfBirth;
 }
 
+class module.personalinformation.domain.IdentificationDocument {
+	String ojbConcreteClass;
+	IDDocumentType type;
+	String number;
+}
+
+	class module.personalinformation.domain.IdentityCard extends module.personalinformation.domain.IdentificationDocument {
+		LocalDate emissionDate;
+		LocalDate expirationDate;
+		String emissionLocation;
+	}
+
+/** Relations **/
+
+relation MyOrgPersonalInformation {
+	myorg.domain.MyOrg playsRole myOrg;
+	module.personalinformation.domain.PersonalInformation playsRole personalInformations {
+		multiplicity *;
+	}
+}
+
+relation MyOrgIdentificationDocument {
+	myorg.domain.MyOrg playsRole myOrg;
+	module.personalinformation.domain.IdentificationDocument playsRole identificationDocuments {
+		multiplicity *;
+	}
+}
+
 relation PersonPersonalInformation {
 	module.organization.domain.Person playsRole person;
 	module.personalinformation.domain.PersonalInformation playsRole personalInformation;
+}
+
+relation PersonalInformationIdentificationDocument {
+	module.personalinformation.domain.PersonalInformation playsRole personalInformation;
+	module.personalinformation.domain.IdentificationDocument playsRole idDocument;
 }
