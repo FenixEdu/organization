@@ -147,4 +147,11 @@ public class Accountability extends Accountability_Base {
 	return new Accountability(parent, child, type, begin, end);
     }
 
+    @Service
+    public void editDates(final LocalDate begin, final LocalDate end) {
+	check(begin, "error.Accountability.invalid.begin");
+	checkDates(getParent(), begin, end);
+	setBeginDate(begin);
+	setEndDate(end);
+    }
 }
