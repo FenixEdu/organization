@@ -106,8 +106,14 @@ public class Unit extends Unit_Base {
 
     @Service
     static public Unit create(final UnitBean bean) {
-	return new Unit(bean.getParent(), bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityType(),
+	return create(bean.getParent(), bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityType(),
 		bean.getBegin(), bean.getEnd());
+    }
+
+    @Service
+    public static Unit create(Party parent, MultiLanguageString name, String acronym, PartyType partyType,
+	    AccountabilityType accountabilityType, LocalDate begin, LocalDate end) {
+	return new Unit(parent, name, acronym, partyType, accountabilityType, begin, end);
     }
 
     @Service
@@ -123,5 +129,4 @@ public class Unit extends Unit_Base {
     public String getPresentationName() {
 	return getPartyName() + "(" + getAcronym() + ")";
     }
-
 }
