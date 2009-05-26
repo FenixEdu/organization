@@ -1,0 +1,83 @@
+/** package module.geography.domain; **/
+
+/*
+ * @(#)domain_model_geography.dml
+ *
+ * Copyright 2009 Instituto Superior Tecnico
+ * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
+ * 
+ *      https://fenix-ashes.ist.utl.pt/
+ * 
+ *   This file is part of the Geography Module for the MyOrg web application.
+ *
+ *   The Geography Module is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published
+ *   by the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.*
+ *
+ *   The Geography Module is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with the Geography Module. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ */
+
+class module.geography.domain.GeographicLocation {
+	String ojbConcreteClass;
+	DateTime lastReview;
+}
+
+class module.geography.domain.Universe extends module.geography.domain.GeographicLocation;
+
+class module.geography.domain.Galaxy extends module.geography.domain.GeographicLocation;
+
+class module.geography.domain.Planet extends module.geography.domain.GeographicLocation;
+
+class module.geography.domain.Country extends module.geography.domain.GeographicLocation {
+	String iso3166alpha2Code;
+	String iso3166alpha3Code;
+	Integer iso3166numericCode;
+	MultiLanguageString nationality;
+}
+
+class module.geography.domain.CountrySubdivisionLevelName {
+	Integer level (REQUIRED);
+	MultiLanguageString name (REQUIRED);
+}
+
+class module.geography.domain.CountrySubdivision extends module.geography.domain.GeographicLocation {
+	Integer level (REQUIRED);
+	String code (REQUIRED);
+}
+
+class module.geography.domain.PostalExtension extends module.geography.domain.CountrySubdivision {
+	String streetName;
+	String postalCode;
+	String postalBranch;
+}
+
+class module.geography.domain.task.CountryCodesImport extends myorg.domain.scheduler.Task {
+	DateTime isoFileLastModified;
+}
+
+relation MyOrgCountries {
+	myorg.domain.MyOrg playsRole myOrg;
+	module.geography.domain.Country playsRole countries {
+		multiplicity *;
+	}
+}
+
+relation GeographicLocationUnit {
+	module.geography.domain.GeographicLocation playsRole geographicLocation;
+	module.organization.domain.Unit playsRole unit;
+}
+
+relation CountrySubdivisionLevelNames {
+	module.geography.domain.Country playsRole country;
+	module.geography.domain.CountrySubdivisionLevelName playsRole levelName {
+		multiplicity *;
+	}
+}
