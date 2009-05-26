@@ -52,6 +52,8 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 public class CountryCodesImport extends CountryCodesImport_Base {
 
     private static final String ISO3166_FILE = "/iso-3166.csv";
+    private int touches = 0;
+    private int additions = 0;
 
     @Override
     public void executeTask() {
@@ -81,7 +83,12 @@ public class CountryCodesImport extends CountryCodesImport_Base {
 		    }
 		}
 		// TODO: cleanup
+		logInfo("File last modification was: " + lastReview);
+		logInfo(additions + " countries added.");
+		logInfo(touches + " countries unmodified.");
 		setLastModified(lastReview);
+	    } else {
+		logInfo("File unmodified, nothing imported.");
 	    }
 	} catch (FileNotFoundException e) {
 	    e.printStackTrace();
@@ -107,12 +114,14 @@ public class CountryCodesImport extends CountryCodesImport_Base {
 	    MultiLanguageString countryName, MultiLanguageString nationality, DateTime lastReview) {
 	Country country = new Country(parent, shortCode, longCode, numericCode, countryName, nationality);
 	country.setLastReview(lastReview);
+	additions++;
 	return country;
     }
 
     @Service
     private void touchCountry(Country country, DateTime lastReview) {
 	country.setLastReview(lastReview);
+	touches++;
     }
 
     @Override
