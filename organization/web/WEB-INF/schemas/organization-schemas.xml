@@ -163,3 +163,19 @@
 		<property name="maxLength" value="250" />
 	</slot>
 </schema>
+
+<schema name="module.organization.domain.dto.PartyBean.search" type="module.organization.domain.dto.PartyBean"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="party" layout="autoComplete" key="label.unit" bundle="ORGANIZATION_RESOURCES">
+        <property name="labelField" value="partyName.content"/>
+		<property name="format" value="${partyName.content}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.UnitAutoCompleteProvider"/>
+		<property name="size" value="20"/>
+		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+			<property name="message" value="label.pleaseSelectOne.unit"/>
+			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
+			<property name="key" value="true"/>
+		</validator>
+	</slot>
+</schema>
