@@ -25,6 +25,7 @@
 
 package module.organization.domain;
 
+import java.text.Collator;
 import java.util.Comparator;
 
 import myorg.domain.MyOrg;
@@ -39,7 +40,9 @@ public class Unit extends Unit_Base {
 
     public static final Comparator<Unit> COMPARATOR_BY_PRESENTATION_NAME = new Comparator<Unit>() {
 	public int compare(final Unit unit1, Unit unit2) {
-	    return unit1.getPresentationName().compareTo(unit2.getPresentationName());
+	    final String name1 = unit1.getPresentationName();
+	    final String name2 = unit2.getPresentationName();
+	    return Collator.getInstance().compare(name1, name2);
 	}
     };
 

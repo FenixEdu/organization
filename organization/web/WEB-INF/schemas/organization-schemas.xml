@@ -164,7 +164,7 @@
 	</slot>
 </schema>
 
-<schema name="module.organization.domain.dto.PartyBean.search" type="module.organization.domain.dto.PartyBean"
+<schema name="module.organization.domain.search.PartySearchBean" type="module.organization.domain.search.PartySearchBean"
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="party" layout="autoComplete" key="label.unit" bundle="ORGANIZATION_RESOURCES">
         <property name="labelField" value="partyName.content"/>
@@ -177,5 +177,8 @@
 			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
 			<property name="key" value="true"/>
 		</validator>
+	</slot>
+	<slot name="partySearchType" layout="radio" key="label.search.where" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="classes" value="liinline nobullet"/>
 	</slot>
 </schema>
