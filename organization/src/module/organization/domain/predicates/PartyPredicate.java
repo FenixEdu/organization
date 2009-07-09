@@ -25,6 +25,10 @@
 
 package module.organization.domain.predicates;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Party;
@@ -89,24 +93,42 @@ abstract public class PartyPredicate {
     }
 
     static public class PartyByAccountabilityType extends PartyByClassType {
-	private AccountabilityType type;
+	private Set<AccountabilityType> types = new HashSet<AccountabilityType>();
 
 	public PartyByAccountabilityType(final AccountabilityType type) {
 	    this(null, type);
 	}
 
+	public PartyByAccountabilityType(final Collection<AccountabilityType> types) {
+	    this(null, types);
+	}
+
 	public PartyByAccountabilityType(final Class<? extends Party> clazz) {
-	    this(clazz, null);
+	    this(clazz, (AccountabilityType) null);
 	}
 
 	public PartyByAccountabilityType(final Class<? extends Party> clazz, final AccountabilityType type) {
 	    super(clazz);
-	    this.type = type;
+	    types.add(type);
+	}
+
+	public PartyByAccountabilityType(final Class<? extends Party> clazz, final Collection<AccountabilityType> types) {
+	    super(clazz);
+	    this.types.addAll(types);
 	}
 
 	@Override
 	public boolean eval(Party party, Accountability accountability) {
-	    return hasClass(clazz, party) && hasAccountabilityType(type, accountability);
+	    return hasClass(clazz, party) && hasMatchingAccountabilityType(accountability);
+	}
+
+	protected boolean hasMatchingAccountabilityType(final Accountability accountability) {
+	    for (final AccountabilityType type : types) {
+		if (hasAccountabilityType(type, accountability)) {
+		    return true;
+		}
+	    }
+	    return false;
 	}
     }
 }

@@ -118,6 +118,10 @@ abstract public class Party extends Party_Base {
 	return getChildren(new PartyByAccountabilityType(type));
     }
 
+    public Collection<Party> getChildren(final Collection<AccountabilityType> types) {
+	return getChildren(new PartyByAccountabilityType(types));
+    }
+
     public Collection<Party> getChildren(final PartyType type) {
 	return getChildren(new PartyByPartyType(type));
     }

@@ -85,6 +85,7 @@
 		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
+		<property name="saveOptions" value="true"/>
 	</slot>
 	<slot name="begin" key="label.begin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 	<slot name="end" key="label.end" />
@@ -121,6 +122,7 @@
 		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
+		<property name="saveOptions" value="true"/>
 	</slot>
 	<slot name="begin" key="label.begin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 	<slot name="end" key="label.end" />
@@ -137,6 +139,7 @@
 		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
+		<property name="saveOptions" value="true"/>
 	</slot>
 	<slot name="begin" key="label.begin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 	<slot name="end" key="label.end" />
@@ -171,7 +174,7 @@
 		<property name="format" value="${partyName.content}"/>
 		<property name="minChars" value="3"/>		
 		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.UnitAutoCompleteProvider"/>
-		<property name="size" value="20"/>
+		<property name="size" value="60"/>
 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="message" value="label.pleaseSelectOne.unit"/>
 			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
@@ -181,4 +184,8 @@
 	<slot name="partySearchType" layout="radio" key="label.search.where" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="classes" value="liinline nobullet"/>
 	</slot>
+</schema>
+
+<schema name="module.organization.domain.AccountabilityType.name" type="module.organization.domain.AccountabilityType">
+	<slot name="name"/>
 </schema>
