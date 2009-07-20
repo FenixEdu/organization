@@ -26,6 +26,7 @@
 package module.organization.domain;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
 
 import myorg.domain.MyOrg;
@@ -36,6 +37,16 @@ import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class AccountabilityType extends AccountabilityType_Base implements Comparable<AccountabilityType> {
+
+    public static final Comparator<AccountabilityType> COMPARATORY_BY_NAME = new Comparator<AccountabilityType>() {
+
+	@Override
+	public int compare(final AccountabilityType o1, final AccountabilityType o2) {
+	    int c = o1.getName().compareTo(o2.getName());
+	    return c == 0 ? o2.hashCode() - o1.hashCode() : c;
+	}
+	
+    };
 
     static public class AccountabilityTypeBean implements Serializable {
 

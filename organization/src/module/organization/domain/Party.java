@@ -30,6 +30,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TreeSet;
 
 import module.organization.domain.predicates.PartyPredicate;
 import module.organization.domain.predicates.PartyResultCollection;
@@ -366,4 +368,24 @@ abstract public class Party extends Party_Base {
 		"label." + getClass().getSimpleName().toLowerCase())
 		+ " - " + getPartyName().getContent();
     }
+
+    public Set<OrganizationalModel> getAllOrganizationModels() {
+	final Set<OrganizationalModel> organizationModels = new TreeSet<OrganizationalModel>(OrganizationalModel.COMPARATORY_BY_NAME);
+	addAllOrganizationModels(organizationModels);
+	return organizationModels;
+    }
+
+    public void addAllOrganizationModels(final Set<OrganizationalModel> organizationModels) {
+	organizationModels.addAll(getOrganizationalModelsSet());
+	for (final Accountability accountability : getParentAccountabilitiesSet()) {
+	    final Party party = accountability.getParent();
+	    party.addAllOrganizationModels(organizationModels);
+	}
+    }
+
+    public void setPartyTypes(final List<PartyType> partyTypes) {
+	getPartyTypesSet().clear();
+	getPartyTypesSet().addAll(partyTypes);
+    }
+
 }

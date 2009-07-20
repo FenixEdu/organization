@@ -24,3 +24,45 @@ ul ul li span {
 font-weight: normal;
 }
 /* end */
+
+
+.orgTBox {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	-moz-border-radius-bottomleft:6px;
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
+	width: 100px;
+	height: 50px;
+	margin: 0px 5px 0px 5px;
+	padding:6px 10px; 
+
+	overflow: hidden;
+	text-align: center;
+}
+.orgTBoxLight {
+	background:#F0F0F0 none repeat scroll 0 0;
+	border:1px solid #CCCCCC;
+}
+.orgTBoxDark {
+	background:#FAFAFA none repeat scroll 0 0;
+	border:1px solid #555555;
+}
+.orgTBoxPhoto {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	-moz-border-radius-bottomleft:6px;
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
+	width: 100px;
+	height: 106px;
+	margin: 0px 5px 0px 5px;
+	padding:0px 10px 6px 10px; 
+
+	overflow: hidden;
+	text-align: center;
+}

@@ -72,6 +72,11 @@ class module.organization.domain.ConnectionRule {
 	class module.organization.domain.connectionRules.UniqueNameAndAcronymConnectionRule extends module.organization.domain.ConnectionRule {
 	}
 
+class module.organization.domain.OrganizationalModel {
+	MultiLanguageString name;
+}
+
+
 /** Relations **/
 
 relation UserPerson {
@@ -180,3 +185,29 @@ relation PartyTypeConnectionRuleChildPartyType {
 		multiplicity *;
 	}
 }
+
+relation MyOrgOrganizationalModel {
+	myorg.domain.MyOrg playsRole myOrg;
+	module.organization.domain.OrganizationalModel playsRole organizationalModels {
+		multiplicity *;
+	}
+}
+
+relation OrganizationalModelParty {
+	module.organization.domain.OrganizationalModel playsRole organizationalModels {
+		multiplicity *;
+	}
+	module.organization.domain.Party playsRole parties {
+		multiplicity *;
+	}
+}
+
+relation OrganizationalModelAccountabilityType {
+	module.organization.domain.OrganizationalModel playsRole organizationalModels {
+		multiplicity *;
+	}
+	module.organization.domain.AccountabilityType playsRole accountabilityTypes {
+		multiplicity *;
+	}
+}
+

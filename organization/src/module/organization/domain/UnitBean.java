@@ -37,6 +37,7 @@ public class UnitBean extends PartyBean {
     private DomainReference<Unit> unit;
     private DomainReference<Party> child;
     private DomainReference<PartyType> partyType;
+    private DomainReference<OrganizationalModel> organizationalModel;
 
     private MultiLanguageString name;
     private String acronym;
@@ -117,6 +118,14 @@ public class UnitBean extends PartyBean {
 
     public void addChild() {
 	getParent().addChild(getChild(), getAccountabilityType(), getBegin(), getEnd());
+    }
+
+    public OrganizationalModel getOrganizationalModel() {
+        return organizationalModel == null ? null : organizationalModel.getObject();
+    }
+
+    public void setOrganizationalModel(final OrganizationalModel organizationalModel) {
+        this.organizationalModel = organizationalModel == null ? null : new DomainReference<OrganizationalModel>(organizationalModel);
     }
 
 }

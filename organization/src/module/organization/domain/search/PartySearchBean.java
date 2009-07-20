@@ -5,7 +5,7 @@ import module.organization.domain.dto.PartyBean;
 
 public class PartySearchBean extends PartyBean {
 
-    private PartySearchType partySearchType = PartySearchType.ASCENDETS_AND_DESCENDENTS;
+    private PartySearchType partySearchType = PartySearchType.LOCAL_TREE;
 
     public PartySearchBean(final Party party) {
 	super(party);

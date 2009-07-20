@@ -53,6 +53,7 @@ import myorg.domain.contents.ActionNode;
 import myorg.domain.contents.Node;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.Role;
+import myorg.domain.groups.UserGroup;
 import myorg.presentationTier.LayoutContext;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.presentationTier.forms.BaseForm;
@@ -130,8 +131,11 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
 	final Node parentOfNodes = getDomainObject(request, "parentOfNodesToManageId");
 
-	final ActionNode topActionNode = ActionNode.createActionNode(virtualHost, parentOfNodes, "/organization", "intro",
-		"resources.OrganizationResources", "label.manage.organization", Role.getRole(RoleType.MANAGER));
+//	final ActionNode topActionNode = ActionNode.createActionNode(virtualHost, parentOfNodes, "/organization", "intro",
+//		"resources.OrganizationResources", "label.manage.organization", Role.getRole(RoleType.MANAGER));
+
+	final ActionNode topActionNode = ActionNode.createActionNode(virtualHost, parentOfNodes, "/organizationModel", "viewModels",
+		"resources.OrganizationResources", "label.manage.organization", UserGroup.getInstance());
 
 	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewPartyTypes",
 		"resources.OrganizationResources", "label.party.type", Role.getRole(RoleType.MANAGER));
@@ -147,6 +151,9 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
 	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "managePersons",
 		"resources.OrganizationResources", "label.persons.manage", Role.getRole(RoleType.MANAGER));
+
+//	ActionNode.createActionNode(virtualHost, topActionNode, "/organizationModel", "viewModels",
+//		"resources.OrganizationResources", "label.models", UserGroup.getInstance());
 
 	return forwardToMuneConfiguration(request, virtualHost, topActionNode);
     }
@@ -697,4 +704,5 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	}
 	return managePersons(mapping, form, request, response);
     }
+
 }

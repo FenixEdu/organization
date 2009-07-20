@@ -51,7 +51,7 @@ public class Unit extends Unit_Base {
     }
 
     protected Unit(final Party parent, final MultiLanguageString name, final String acronym, final PartyType partyType,
-	    final AccountabilityType accountabilityType, final LocalDate begin, final LocalDate end) {
+	    final AccountabilityType accountabilityType, final LocalDate begin, final LocalDate end, final OrganizationalModel organizationalModel) {
 	this();
 
 	check(partyType, "error.Unit.invalid.party.type");
@@ -66,6 +66,10 @@ public class Unit extends Unit_Base {
 	    new Accountability(parent, this, accountabilityType, begin, end);
 	} else {
 	    setMyOrgFromTopUnit(MyOrg.getInstance());
+	}
+
+	if (organizationalModel != null) {
+	    addOrganizationalModels(organizationalModel);
 	}
     }
 
@@ -110,13 +114,18 @@ public class Unit extends Unit_Base {
     @Service
     static public Unit create(final UnitBean bean) {
 	return create(bean.getParent(), bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityType(),
-		bean.getBegin(), bean.getEnd());
+		bean.getBegin(), bean.getEnd(), bean.getOrganizationalModel());
+    }
+
+    public static Unit create(Party parent, MultiLanguageString name, String acronym, PartyType partyType,
+	    AccountabilityType accountabilityType, LocalDate begin, LocalDate end) {
+	return create(parent, name, acronym, partyType, accountabilityType, begin, end, null);
     }
 
     @Service
     public static Unit create(Party parent, MultiLanguageString name, String acronym, PartyType partyType,
-	    AccountabilityType accountabilityType, LocalDate begin, LocalDate end) {
-	return new Unit(parent, name, acronym, partyType, accountabilityType, begin, end);
+	    AccountabilityType accountabilityType, LocalDate begin, LocalDate end, OrganizationalModel organizationalModel) {
+	return new Unit(parent, name, acronym, partyType, accountabilityType, begin, end, organizationalModel);
     }
 
     @Service
@@ -126,7 +135,7 @@ public class Unit extends Unit_Base {
 
     @Service
     static public Unit createRoot(final MultiLanguageString name, final String acronym, final PartyType partyType) {
-	return new Unit(null, name, acronym, partyType, null, new LocalDate(), null);
+	return new Unit(null, name, acronym, partyType, null, new LocalDate(), null, null);
     }
 
     public String getPresentationName() {
