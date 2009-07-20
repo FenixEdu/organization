@@ -47,3 +47,8 @@
 		</tr>
 	</table>
 </div>
+
+<html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">
+	<span class="error0"> <bean:write name="message" /> </span>
+	<br />
+</html:messages>

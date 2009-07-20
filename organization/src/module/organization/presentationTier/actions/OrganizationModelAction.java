@@ -98,6 +98,28 @@ public class OrganizationModelAction extends ContextBaseAction {
 	}
     }
 
+    private static class PartyChartView extends PartyViewHook {
+
+	@Override
+	public String getViewName() {
+	    return "default";
+	}
+
+	@Override
+	public String hook(final HttpServletRequest request, final Party party) {
+	    final PartyChart partyChart = new PartyChart(party);
+	    request.setAttribute("partyChart", partyChart);
+	    return "/organization/model/partyChart.jsp";
+	}
+
+    }
+
+    private static final PartyViewHookManager partyViewHookManager = new PartyViewHookManager();
+
+    static {
+	partyViewHookManager.register(new PartyChartView());
+    }
+
     @Override
     public ActionForward execute(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
@@ -134,8 +156,13 @@ public class OrganizationModelAction extends ContextBaseAction {
 	}
 	request.setAttribute("partySearchBean", partySearchBean);
 
-	final PartyChart partyChart = party == null ? new PartyChart(organizationalModel.getPartiesSet()) : new PartyChart(party);
-	request.setAttribute("partyChart", partyChart);
+	if (party == null) {
+	    final PartyChart partyChart = party == null ? new PartyChart(organizationalModel.getPartiesSet()) : new PartyChart(party);
+	    request.setAttribute("partiesChart", partyChart);
+	} else {
+	    request.setAttribute("party", party);
+	    partyViewHookManager.hook(request, party);
+	}
 
 	return forward(request, "/organization/model/viewModel.jsp");
     }
@@ -305,7 +332,7 @@ public class OrganizationModelAction extends ContextBaseAction {
 	    request.setAttribute("partySearchBean", partySearchBean);
 
 	    final PartyChart partyChart = new PartyChart(organizationalModel.getPartiesSet());
-	    request.setAttribute("partyChart", partyChart);
+	    request.setAttribute("partiesChart", partyChart);
 
 	    return forward(request, "/organization/model/viewModel.jsp");
 	} catch (final DomainException e) {

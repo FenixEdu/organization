@@ -58,113 +58,29 @@
 	</fr:form>
 </div>
 
-<bean:define id="partyChart" name="partyChart" type="module.organization.presentationTier.actions.OrganizationModelAction.PartyChart"/>
-<logic:notEmpty name="partyChart">
-
-	<logic:present name="partyChart" property="unit">
-		<html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">
-			<span class="error0"> <bean:write name="message" /> </span>
-			<br />
-		</html:messages>
-
-		<bean:define id="unit" name="partyChart" property="unit"/>
-		<div class="infoop2">
-			<table>
-				<tr>
-					<th>
-						<bean:message key="label.unit" bundle="ORGANIZATION_RESOURCES"/>:
-					</th>
-					<td>
-						<bean:write name="unit" property="partyName.content"/>
-						(<bean:write name="unit" property="acronym"/>)
-					</td>
-				</tr>
-				<tr>
-					<th>
-						<bean:message key="label.unit.party.types" bundle="ORGANIZATION_RESOURCES"/>:
-					</th>
-					<td>
-						<logic:iterate indexId="i" id="partyType" name="unit" property="partyTypes">
-							<% if (i > 0) { %>
-								,
-							<% } %>
-							<bean:write name="partyType" property="name.content"/>
-						</logic:iterate>
-					</td>
-				</tr>
-				<tr>
-					<th>
-						<bean:message key="label.models.short" bundle="ORGANIZATION_RESOURCES"/>:
-					</th>
-					<td>
-						<logic:iterate indexId="i" id="model" name="unit" property="allOrganizationModels">
-							<% if (i > 0) { %>
-								,
-							<% } %>
-							<html:link action="/organizationModel.do?method=viewModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="OID">
-								<bean:write name="model" property="name.content"/>
-							</html:link>
-						</logic:iterate>
-					</td>
-				</tr>
-			</table>
-		</div>
-
-		<logic:present role="myorg.domain.RoleType.MANAGER">
-		<bean:define id="url">/organizationModel.do?method=prepareEditUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/></bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="OID">
-			<bean:message key="label.unit.edit" bundle="ORGANIZATION_RESOURCES"/>
-		</html:link>
-		|
-		<bean:define id="url">/organizationModel.do?method=managePartyPartyTypes&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/></bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="OID">
-			<bean:message key="label.unit.partyTypes.manage" bundle="ORGANIZATION_RESOURCES"/>
-		</html:link>
-		|
-		<bean:define id="url">/organizationModel.do?method=prepareAddUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/></bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="OID">
-			<bean:message key="label.unit.child.add" bundle="ORGANIZATION_RESOURCES"/>
-		</html:link>
-		|
-		<bean:define id="url">/organizationModel.do?method=prepareCreateUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/></bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="OID">
-			<bean:message key="label.unit.child.create" bundle="ORGANIZATION_RESOURCES"/>
-		</html:link>
-		|
-		<bean:define id="url">/organizationModel.do?method=deleteUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/></bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="OID">
-			<bean:message key="label.unit.delete" bundle="ORGANIZATION_RESOURCES"/>
-		</html:link>
-		</logic:present>
-	</logic:present>
-
+<logic:present name="partiesChart">
 	<table width="100%" align="center">
 		<tr>
 			<td align="center">
-				<chart:orgChart id="party" name="partyChart" type="java.lang.Object">
-					<%
-						if (partyChart.getElement() == party) {
-					%>
-							<div class="orgTBox orgTBoxLight">
-								<bean:write name="party" property="partyName"/>
-							</div>
-					<%
-						} else {
-					%>
-							<div class="orgTBox orgTBoxLight">
-								<bean:define id="url">/organizationModel.do?method=viewModel&amp;partyOid=<bean:write name="party" property="OID"/></bean:define>
-								<html:link action="<%= url %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="OID">
-									<bean:write name="party" property="partyName"/>
-								</html:link>
-							</div>
-					<%
-						}
-					%>
+				<chart:orgChart id="party" name="partiesChart" type="java.lang.Object">
+					<div class="orgTBox orgTBoxLight">
+						<bean:define id="url">/organizationModel.do?method=viewModel&amp;partyOid=<bean:write name="party" property="OID"/>&amp;viewName=default</bean:define>
+						<html:link action="<%= url %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="OID">
+							<bean:write name="party" property="partyName"/>
+						</html:link>
+					</div>
 				</chart:orgChart>
 			</td>
 		</tr>
 	</table>
-</logic:notEmpty>
+</logic:present>
+
+<logic:present name="party" scope="request">
+	<jsp:include page="viewPartyDetails.jsp"/>
+	<logic:present name="viewPage">
+		<jsp:include page='<%= (String) request.getAttribute("viewPage") %>'/>
+	</logic:present>
+</logic:present>
 
 <h4>
 <bean:message key="label.model.accountabilityTypes" bundle="ORGANIZATION_RESOURCES"/>:
