@@ -77,6 +77,16 @@
 
 <logic:present name="party" scope="request">
 	<jsp:include page="viewPartyDetails.jsp"/>
+	<logic:notEmpty name="hooks">
+		<ul>
+			<logic:iterate id="hook" name="hooks">
+				<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/>&amp;partyOid=<bean:write name="party" property="OID"/></bean:define>
+				<html:link action="<%= url %>" paramId="viewName" paramName="hook" paramProperty="viewName">
+					<bean:write name="party" property="partyName"/>
+				</html:link>
+			</logic:iterate>
+		</ul>
+	</logic:notEmpty>
 	<logic:present name="viewPage">
 		<jsp:include page='<%= (String) request.getAttribute("viewPage") %>'/>
 	</logic:present>

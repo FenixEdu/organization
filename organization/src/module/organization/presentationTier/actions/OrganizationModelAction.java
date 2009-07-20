@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -98,7 +99,7 @@ public class OrganizationModelAction extends ContextBaseAction {
 	}
     }
 
-    private static class PartyChartView extends PartyViewHook {
+    public static class PartyChartView extends PartyViewHook {
 
 	@Override
 	public String getViewName() {
@@ -162,6 +163,11 @@ public class OrganizationModelAction extends ContextBaseAction {
 	} else {
 	    request.setAttribute("party", party);
 	    partyViewHookManager.hook(request, party);
+
+	    final SortedSet<PartyViewHook> hooks = partyViewHookManager.getSortedHooks(party);
+	    if (hooks.size() > 1) {
+		request.setAttribute("hooks", hooks);
+	    }
 	}
 
 	return forward(request, "/organization/model/viewModel.jsp");
