@@ -96,7 +96,7 @@
         <property name="labelField" value="partyName.content"/>
 		<property name="format" value="${partyName.content}"/>
 		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.UnitAutoCompleteProvider"/>
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider"/>
 		<property name="size" value="60"/>
 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="message" value="label.pleaseSelectOne.unit"/>
@@ -136,14 +136,15 @@
 </schema>
 
 <schema name="organization.PartyBean.add.parent" type="module.organization.domain.PartyBean" bundle="ORGANIZATION_RESOURCES">
-	<slot name="parent" layout="menu-select" key="label.unit.parent" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AllPartiesProvider" />
-		<property name="choiceType" value="module.organization.domain.Party" />
+	<slot name="parent" layout="autoComplete" key="label.unit.parent" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="format" value="${partyNameWithSuffixType}" />
+		<property name="labelField" value="partyNameWithSuffixType" />
+		<property name="minChars" value="3" />
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider" />
+		<property name="size" value="40"/>
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
-		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
 		<property name="saveOptions" value="true"/>
@@ -153,14 +154,15 @@
 </schema>
 
 <schema name="organization.UnitBean.add.child" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
-	<slot name="child" layout="menu-select" key="label.child.party" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AllPartiesProvider" />
-		<property name="choiceType" value="module.organization.domain.Party" />
+	<slot name="child" layout="autoComplete" key="label.child.party" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="format" value="${partyNameWithSuffixType}" />
+		<property name="labelField" value="partyNameWithSuffixType" />
+		<property name="minChars" value="3" />
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider" />
+		<property name="size" value="40"/>
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
-		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
 		<property name="saveOptions" value="true"/>
@@ -222,6 +224,10 @@
 	<slot name="name"/>
 </schema>
 
+<schema name="module.organization.domain.OrganizationalModel.name" type="module.organization.domain.OrganizationalModel" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name"/>
+</schema>
+
 <schema name="module.organization.domain.OrganizationalModel.accountabilityTypes" type="module.organization.domain.OrganizationalModel" bundle="ORGANIZATION_RESOURCES">
 	<slot name="accountabilityTypes" layout="option-select" key="label.unit.accountability.type">
 		<property name="choiceType" value="module.organization.domain.AccountabilityType"/>
@@ -229,7 +235,12 @@
         <property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
         <property name="classes" value="nobullet noindent"/>
         <property name="sortBy" value="name"/>
+        <property name="saveOptions" value="true"/>
     </slot>
+</schema>
+
+<schema name="module.organization.domain.AccountabilityType.name" type="module.organization.domain.AccountabilityType" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name"/>
 </schema>
 
 <schema name="module.organization.domain.Party.partyTypes" type="module.organization.domain.Party" bundle="ORGANIZATION_RESOURCES">

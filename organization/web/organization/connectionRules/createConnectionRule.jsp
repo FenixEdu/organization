@@ -38,7 +38,7 @@
 		</fr:edit>
 	</logic:present>
 
-	<html:submit><bean:message key="label.create" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-	<html:cancel onclick="this.form.method.value='viewConnectionRules';return true;" ><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
+	<html:submit styleClass="inputbutton"><bean:message key="label.create" bundle="ORGANIZATION_RESOURCES" /></html:submit>
+	<html:cancel styleClass="inputbutton" onclick="this.form.method.value='viewConnectionRules';return true;" ><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
 
 </fr:form>

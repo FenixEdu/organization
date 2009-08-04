@@ -14,20 +14,21 @@
 
 <html:form action="/organization.do?method=searchPerson">
 	<bean:message key="label.name" bundle="ORGANIZATION_RESOURCES" />: <html:text property="name" />
-	<html:submit><bean:message key="label.search" bundle="ORGANIZATION_RESOURCES" /></html:submit>
+	<html:submit styleClass="inputbutton"><bean:message key="label.search" bundle="ORGANIZATION_RESOURCES" /></html:submit>
 </html:form>
-<br />
-<br />
 
-<html:link action="/organization.do?method=prepareCreatePerson">
-	<bean:message key="label.create.person" bundle="ORGANIZATION_RESOURCES" />
-</html:link>
-
+<ul>
+	<li>
+		<html:link action="/organization.do?method=prepareCreatePerson">
+			<bean:message key="label.create.person" bundle="ORGANIZATION_RESOURCES" />
+		</html:link>
+	</li>
+</ul>
 <logic:present name="persons">
 	<logic:notEmpty name="persons">
 		<fr:view name="persons" schema="organization.domain.Person.view.short">
 			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle2" />
+				<fr:property name="classes" value="table" />
 				<fr:property name="columnClasses" value=",,tderror" />
 				
 				<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=${OID}" />

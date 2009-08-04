@@ -6,15 +6,11 @@
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/chart.tld" prefix="chart" %>
 
-<div class="infoop2">
+<div class="dataBox">
 	<table>
 		<tr>
-			<th>
-				<bean:message key="label.unit" bundle="ORGANIZATION_RESOURCES"/>:
-			</th>
-			<td>
-				<bean:write name="party" property="partyName.content"/>
-				(<bean:write name="party" property="acronym"/>)
+			<td colspan="2">
+				<strong><fr:view name="party" property="partyName"/></strong>
 			</td>
 		</tr>
 		<tr>
@@ -22,12 +18,13 @@
 				<bean:message key="label.unit.party.types" bundle="ORGANIZATION_RESOURCES"/>:
 			</th>
 			<td>
-				<logic:iterate indexId="i" id="partyType" name="party" property="partyTypes">
-					<% if (i > 0) { %>
-						,
-					<% } %>
-					<bean:write name="partyType" property="name.content"/>
-				</logic:iterate>
+				<fr:view name="party" property="partyTypes">
+					<fr:layout name="separator-list">
+						<fr:property name="eachLayout" value="values"/>
+						<fr:property name="eachSchema" value="organization.PartyType.view.name"/>
+						<fr:property name="separator" value=","/>
+					</fr:layout>
+				</fr:view>
 			</td>
 		</tr>
 		<tr>
@@ -35,14 +32,15 @@
 				<bean:message key="label.models.short" bundle="ORGANIZATION_RESOURCES"/>:
 			</th>
 			<td>
-				<logic:iterate indexId="i" id="model" name="party" property="allOrganizationModels">
-					<% if (i > 0) { %>
-						,
-					<% } %>
-					<html:link action="/organizationModel.do?method=viewModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="OID">
-						<bean:write name="model" property="name.content"/>
-					</html:link>
-				</logic:iterate>
+				<fr:view name="party" property="allOrganizationModels">
+					<fr:layout name="separator-list">
+						<fr:property name="eachLayout" value="values"/>
+						<fr:property name="eachSchema" value="module.organization.domain.OrganizationalModel.edit"/>
+						<fr:property name="separator" value=","/>
+						<fr:property name="link" value="/organizationModel.do?method=viewModel"/>
+						<fr:property name="param" value="externalId/organizationalModelOid"/>
+					</fr:layout>
+				</fr:view>	
 			</td>
 		</tr>
 	</table>

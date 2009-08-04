@@ -1,7 +1,9 @@
 package module.organization.domain;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -21,8 +23,8 @@ public class OrganizationalModel extends OrganizationalModel_Base {
     };
 
     public OrganizationalModel() {
-        super();
-        setMyOrg(MyOrg.getInstance());
+	super();
+	setMyOrg(MyOrg.getInstance());
     }
 
     public OrganizationalModel(final MultiLanguageString name) {
@@ -31,7 +33,8 @@ public class OrganizationalModel extends OrganizationalModel_Base {
     }
 
     public SortedSet<AccountabilityType> getSortedAccountabilityTypes() {
-	final SortedSet<AccountabilityType> accountabilityTypes = new TreeSet<AccountabilityType>(AccountabilityType.COMPARATORY_BY_NAME);
+	final SortedSet<AccountabilityType> accountabilityTypes = new TreeSet<AccountabilityType>(
+		AccountabilityType.COMPARATORY_BY_NAME);
 	accountabilityTypes.addAll(getAccountabilityTypesSet());
 	return accountabilityTypes;
     }
@@ -59,4 +62,14 @@ public class OrganizationalModel extends OrganizationalModel_Base {
 	getAccountabilityTypesSet().addAll(accountabilityTypes);
     }
 
+    public Set<Unit> getAllUnits() {
+	Set<Unit> units = new HashSet<Unit>();
+	for (Party party : getParties()) {
+	    if (party.isUnit()) {
+		units.add((Unit) party);
+		units.addAll(party.getDescendentUnits());
+	    }
+	}
+	return units;
+    }
 }

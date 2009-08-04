@@ -16,7 +16,7 @@
 	<html:hidden property="method" value="createPerson"/>
 	
 	<%-- Create person --%>
-	<fr:edit id="personBean" name="personBean" schema="organization.PersonBean.create">
+	<fr:edit id="personBean" name="personBean" schema="organization.PersonBean.manage">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2" />
 			<fr:property name="columnClasses" value=",,tderror" />

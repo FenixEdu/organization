@@ -27,6 +27,8 @@ package module.organization.domain;
 
 import module.organization.domain.PartyType.PartyTypeBean;
 import myorg.domain.MyOrg;
+import myorg.domain.User;
+import myorg.domain.User.UserPresentationStrategy;
 
 import org.joda.time.LocalDate;
 
@@ -35,6 +37,24 @@ import pt.ist.fenixWebFramework.util.DomainReference;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class Person extends Person_Base {
+
+    static {
+	User.registerUserPresentationStrategy(new UserPresentationStrategy() {
+
+	    @Override
+	    public String present(User user) {
+		return user.getPerson() != null ? user.getPerson().getName() + " (" + user.getUsername() + ")" : user
+			.getUsername();
+	    }
+
+	    @Override
+	    public String shortPresent(User user) {
+		return user.getPerson() != null ? user.getPerson().getFirstAndLastName() + " (" + user.getUsername() + ")" : user
+			.getUsername();
+	    }
+
+	});
+    }
 
     static public class PersonBean extends PartyBean {
 	private static final long serialVersionUID = -7516282978280402225L;
@@ -48,7 +68,7 @@ public class Person extends Person_Base {
 
 	public PersonBean(final Person person) {
 	    this();
-	    
+
 	    setPerson(person);
 	    setName(person.getName());
 	}
@@ -73,7 +93,7 @@ public class Person extends Person_Base {
 	public Party getParty() {
 	    return getPerson();
 	}
-	
+
 	public void edit() {
 	    getPerson().edit(this);
 	}
@@ -112,6 +132,13 @@ public class Person extends Person_Base {
 
     public String getName() {
 	return getPartyName().getContent();
+    }
+
+    public String getFirstAndLastName() {
+	String name = getName();
+	int s1 = name.indexOf(' ');
+	int s2 = name.lastIndexOf(' ');
+	return s1 < 0 || s1 == s2 ? name : name.subSequence(0, s1) + name.substring(s2);
     }
 
     @Service

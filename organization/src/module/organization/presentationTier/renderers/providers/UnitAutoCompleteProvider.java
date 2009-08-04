@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
@@ -46,7 +47,7 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
 	final String[] input = trimmedValue.split(" ");
 	StringNormalizer.normalize(input);
 
-	for (final Party party : MyOrg.getInstance().getPartiesSet()) {
+	for (final Party party : getParties(argsMap, value)) {
 	    if (party.isUnit()) {
 		final Unit unit = (Unit) party;
 		final String unitName = StringNormalizer.normalize(unit.getPartyName().getContent());
@@ -75,4 +76,7 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
 	return true;
     }
 
+    protected Set<Party> getParties(Map<String, String> argsMap, String value) {
+	return MyOrg.getInstance().getPartiesSet();
+    }
 }
