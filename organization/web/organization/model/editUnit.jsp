@@ -26,7 +26,7 @@
 </html:messages>
 
 
-<bean:define id="actionUrl">/organizationModel.do?organizationalModelOid=<bean:write name="organizationalModel" property="OID"/>&amp;partyOid=<bean:write name="party" property="OID"/>&amp;viewName=default</bean:define>
+<bean:define id="actionUrl">/organizationModel.do?organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewName=default</bean:define>
 <fr:form action='<%= actionUrl %>'>
 	<html:hidden property="method" value="editUnit"/>
 	

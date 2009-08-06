@@ -15,30 +15,30 @@
 </h2>
 
 <logic:present role="myorg.domain.RoleType.MANAGER">
-	<html:link action="/organizationModel.do?method=editModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="OID">
+	<html:link action="/organizationModel.do?method=editModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 		<bean:message key="label.model.edit" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
 	|
-	<html:link action="/organizationModel.do?method=manageModelAccountabilityTypes" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="OID">
+	<html:link action="/organizationModel.do?method=manageModelAccountabilityTypes" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 		<bean:message key="label.model.accountabilityTypes.manage" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
 	|
-	<html:link action="/organizationModel.do?method=prepareAddUnitToModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="OID">
+	<html:link action="/organizationModel.do?method=prepareAddUnitToModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 		<bean:message key="label.model.add.unit" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
 	|
-	<html:link action="/organizationModel.do?method=prepareCreateUnit" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="OID">
+	<html:link action="/organizationModel.do?method=prepareCreateUnit" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 		<bean:message key="label.model.create.unit" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
 	|
-	<html:link action="/organizationModel.do?method=deleteModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="OID">
+	<html:link action="/organizationModel.do?method=deleteModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 		<bean:message key="label.model.delete" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
 	<br/>
 </logic:present>
 
 <div class="dinline">
-	<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/></bean:define>
+	<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/></bean:define>
 	<fr:form action="<%= url %>">
 		<table>
 			<tr>
@@ -64,8 +64,8 @@
 			<td align="center">
 				<chart:orgChart id="party" name="partiesChart" type="java.lang.Object">
 					<div class="orgTBox orgTBoxLight">
-						<bean:define id="url">/organizationModel.do?method=viewModel&amp;partyOid=<bean:write name="party" property="OID"/>&amp;viewName=default</bean:define>
-						<html:link action="<%= url %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="OID">
+						<bean:define id="url">/organizationModel.do?method=viewModel&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewName=default</bean:define>
+						<html:link action="<%= url %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 							<bean:write name="party" property="partyName"/>
 						</html:link>
 					</div>
@@ -80,7 +80,7 @@
 	<logic:notEmpty name="hooks">
 		<ul>
 			<logic:iterate id="hook" name="hooks">
-				<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/>&amp;partyOid=<bean:write name="party" property="OID"/></bean:define>
+				<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/></bean:define>
 				<html:link action="<%= url %>" paramId="viewName" paramName="hook" paramProperty="viewName">
 					<bean:write name="party" property="partyName"/>
 				</html:link>

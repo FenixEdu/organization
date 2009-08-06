@@ -13,8 +13,8 @@
 	<br />
 </html:messages>
 
-<bean:define id="accountabilityTypeOid" name="accountabilityType" property="OID" />
-<fr:form action='<%= "/organization.do?accountabilityTypeOid=" + accountabilityTypeOid.toString() %>'>
+<bean:define id="accountabilityTypeOid" name="accountabilityType" property="externalId"  type="java.lang.String"/>
+<fr:form action='<%= "/organization.do?accountabilityTypeOid=" + accountabilityTypeOid %>'>
 	<html:hidden property="method" value="associateConnectionRules"/>
 	
 	<logic:notEmpty name="connectionRules">
@@ -39,7 +39,7 @@
 				<tr>
 					<td>
 						<html:multibox name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="oids">
-							<bean:write name="connectionRule" property="OID"/>
+							<bean:write name="connectionRule" property="externalId"/>
 						</html:multibox>
 					</td>
 					<td>

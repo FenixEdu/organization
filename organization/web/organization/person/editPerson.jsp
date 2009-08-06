@@ -12,7 +12,7 @@
 	<br />
 </html:messages>
 
-<bean:define id="partyOid" name="personBean" property="person.OID" />
+<bean:define id="partyOid" name="personBean" property="person.externalId"  type="java.lang.String"/>
 <fr:form action='<%= "/organization.do?partyOid=" + partyOid %>'>
 	<html:hidden property="method" value="editPerson"/>
 	

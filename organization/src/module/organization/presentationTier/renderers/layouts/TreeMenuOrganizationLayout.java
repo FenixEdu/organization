@@ -45,6 +45,7 @@ import pt.ist.fenixWebFramework.renderers.layouts.Layout;
 
 public class TreeMenuOrganizationLayout extends Layout implements OrganizationLayout {
 
+    private static final String IMG_PREFIX = "img";
     private OrganizationView view;
 
     public TreeMenuOrganizationLayout() {
@@ -140,17 +141,17 @@ public class TreeMenuOrganizationLayout extends Layout implements OrganizationLa
     }
 
     private void generateImageOid(final Party party, final HtmlImage image) {
-	image.setId(party.getClass().getSimpleName() + party.getIdInternal().toString());
+	image.setId(IMG_PREFIX + party.getExternalId());
     }
 
     private void generateImageOnClick(final Party party, final HtmlImage image, final HtmlList childHtmlList) {
-	image.setOnClick(String.format("change('%s', '%s');return false;", party.getClass().getSimpleName()
-		+ party.getIdInternal().toString(), childHtmlList.getId()));
+	image.setOnClick(String.format("change('%s', '%s');return false;", IMG_PREFIX + party.getExternalId(), childHtmlList
+		.getId()));
     }
 
     private HtmlList createChildHtmlList(final Party parent) {
 	final HtmlList list = new HtmlList();
-	list.setId(parent.getClass().getSimpleName() + parent.getIdInternal().toString() + "chd");
+	list.setId(IMG_PREFIX + parent.getExternalId() + "chd");
 	list.setStyle(this.view.getChildListStyle());
 	return list;
     }

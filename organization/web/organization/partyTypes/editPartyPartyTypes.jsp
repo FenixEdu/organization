@@ -13,8 +13,8 @@
 	<br />
 </html:messages>
 
-<bean:define id="partyOid" name="party" property="OID" />
-<fr:form action='<%= "/organization.do?partyOid=" + partyOid.toString() %>'>
+<bean:define id="partyOid" name="party" property="externalId"  type="java.lang.String"/>
+<fr:form action='<%= "/organization.do?partyOid=" + partyOid %>'>
 	<html:hidden property="method" value="editPartyPartyTypes"/>
 	
 	<table class="tstyle2">
@@ -22,7 +22,7 @@
 			<tr>
 				<td>
 					<html:multibox name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="oids">
-						<bean:write name="partyType" property="OID"/>
+						<bean:write name="partyType" property="externalId"/>
 					</html:multibox>
 				</td>
 				<td>

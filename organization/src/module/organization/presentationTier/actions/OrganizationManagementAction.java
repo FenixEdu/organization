@@ -75,7 +75,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
 	private String name;
 	private String connectionRuleClassName;
-	private Long[] oids;
+	private String[] oids;
 
 	public String getName() {
 	    return name;
@@ -97,11 +97,11 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	    return connectionRuleClassName != null && !connectionRuleClassName.isEmpty();
 	}
 
-	public Long[] getOids() {
+	public String[] getOids() {
 	    return oids;
 	}
 
-	public void setOids(Long[] oids) {
+	public void setOids(String[] oids) {
 	    this.oids = oids;
 	}
 
@@ -131,11 +131,14 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
 	final Node parentOfNodes = getDomainObject(request, "parentOfNodesToManageId");
 
-//	final ActionNode topActionNode = ActionNode.createActionNode(virtualHost, parentOfNodes, "/organization", "intro",
-//		"resources.OrganizationResources", "label.manage.organization", Role.getRole(RoleType.MANAGER));
+	// final ActionNode topActionNode =
+	// ActionNode.createActionNode(virtualHost, parentOfNodes,
+	// "/organization", "intro",
+	// "resources.OrganizationResources", "label.manage.organization",
+	// Role.getRole(RoleType.MANAGER));
 
-	final ActionNode topActionNode = ActionNode.createActionNode(virtualHost, parentOfNodes, "/organizationModel", "viewModels",
-		"resources.OrganizationResources", "label.manage.organization", UserGroup.getInstance());
+	final ActionNode topActionNode = ActionNode.createActionNode(virtualHost, parentOfNodes, "/organizationModel",
+		"viewModels", "resources.OrganizationResources", "label.manage.organization", UserGroup.getInstance());
 
 	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewPartyTypes",
 		"resources.OrganizationResources", "label.party.type", Role.getRole(RoleType.MANAGER));
@@ -152,8 +155,10 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "managePersons",
 		"resources.OrganizationResources", "label.persons.manage", Role.getRole(RoleType.MANAGER));
 
-//	ActionNode.createActionNode(virtualHost, topActionNode, "/organizationModel", "viewModels",
-//		"resources.OrganizationResources", "label.models", UserGroup.getInstance());
+	// ActionNode.createActionNode(virtualHost, topActionNode,
+	// "/organizationModel", "viewModels",
+	// "resources.OrganizationResources", "label.models",
+	// UserGroup.getInstance());
 
 	return forwardToMuneConfiguration(request, virtualHost, topActionNode);
     }
@@ -283,9 +288,9 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
     private void buildConnectionRuleOids(final AccountabilityType type, final OrganizationForm organizationForm) {
 	int index = 0;
-	final Long[] oids = new Long[type.getConnectionRulesCount()];
+	final String[] oids = new String[type.getConnectionRulesCount()];
 	for (final ConnectionRule connectionRule : type.getConnectionRulesSet()) {
-	    oids[index++] = connectionRule.getOID();
+	    oids[index++] = connectionRule.getExternalId();
 	}
 	organizationForm.setOids(oids);
     }
@@ -310,7 +315,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
     private List<ConnectionRule> buildConnectionRules(final OrganizationForm form) {
 	final List<ConnectionRule> result = new ArrayList<ConnectionRule>();
 	if (form.hasOids()) {
-	    for (final Long oid : form.getOids()) {
+	    for (final String oid : form.getOids()) {
 		result.add((ConnectionRule) getDomainObject(oid));
 	    }
 	}
@@ -495,7 +500,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	    return forward(request, "/organization/addParent.jsp");
 	}
 
-	request.setAttribute("partyOid", bean.getParty().getOID());
+	request.setAttribute("partyOid", bean.getParty().getExternalId());
 	return viewParty(mapping, form, request, response);
     }
 
@@ -532,7 +537,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	    addMessage(request, e.getKey(), e.getArgs());
 	}
 
-	request.setAttribute("partyOid", child.getOID());
+	request.setAttribute("partyOid", child.getExternalId());
 	return viewParty(mapping, form, request, response);
     }
 
@@ -563,9 +568,9 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
     private void buildPartyTypeOids(final Party party, final OrganizationForm organizationForm) {
 	int index = 0;
-	final Long[] oids = new Long[party.getPartyTypesCount()];
+	final String[] oids = new String[party.getPartyTypesCount()];
 	for (final PartyType partyType : party.getPartyTypesSet()) {
-	    oids[index++] = partyType.getOID();
+	    oids[index++] = partyType.getExternalId();
 	}
 	organizationForm.setOids(oids);
     }
@@ -589,7 +594,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
     private List<PartyType> buildPartyTypes(final OrganizationForm form) {
 	final List<PartyType> result = new ArrayList<PartyType>();
 	if (form.hasOids()) {
-	    for (final Long oid : form.getOids()) {
+	    for (final String oid : form.getOids()) {
 		result.add((PartyType) getDomainObject(oid));
 	    }
 	}

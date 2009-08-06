@@ -27,7 +27,7 @@
 	<br />
 </html:messages>
 
-<bean:define id="actionUrl">/organizationModel.do?organizationalModelOid=<bean:write name="organizationalModel" property="OID"/>&amp;<logic:present name="unitBean" property="parent">partyOid=<bean:write name="unitBean" property="parent.OID" />&amp;viewName=default</logic:present></bean:define>
+<bean:define id="actionUrl">/organizationModel.do?organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;<logic:present name="unitBean" property="parent">partyOid=<bean:write name="unitBean" property="parent.externalId" />&amp;viewName=default</logic:present></bean:define>
 <fr:form action="<%= actionUrl %>">
 	<html:hidden property="method" value="addUnit"/>
 	

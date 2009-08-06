@@ -14,28 +14,28 @@
 		<bean:define id="unit" name="partyChart" property="unit"/>
 
 		<logic:present role="myorg.domain.RoleType.MANAGER">
-		<bean:define id="url">/organizationModel.do?method=prepareEditUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/>&amp;viewName=default</bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="OID">
+		<bean:define id="url">/organizationModel.do?method=prepareEditUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.unit.edit" bundle="ORGANIZATION_RESOURCES"/>
 		</html:link>
 		|
-		<bean:define id="url">/organizationModel.do?method=managePartyPartyTypes&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/>&amp;viewName=default</bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="OID">
+		<bean:define id="url">/organizationModel.do?method=managePartyPartyTypes&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.unit.partyTypes.manage" bundle="ORGANIZATION_RESOURCES"/>
 		</html:link>
 		|
-		<bean:define id="url">/organizationModel.do?method=prepareAddUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/>&amp;viewName=default</bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="OID">
+		<bean:define id="url">/organizationModel.do?method=prepareAddUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.unit.child.add" bundle="ORGANIZATION_RESOURCES"/>
 		</html:link>
 		|
-		<bean:define id="url">/organizationModel.do?method=prepareCreateUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/>&amp;viewName=default</bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="OID">
+		<bean:define id="url">/organizationModel.do?method=prepareCreateUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.unit.child.create" bundle="ORGANIZATION_RESOURCES"/>
 		</html:link>
 		|
-		<bean:define id="url">/organizationModel.do?method=deleteUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/>&amp;viewName=default</bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="OID">
+		<bean:define id="url">/organizationModel.do?method=deleteUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.unit.delete" bundle="ORGANIZATION_RESOURCES"/>
 		</html:link>
 		</logic:present>
@@ -55,8 +55,8 @@
 						} else {
 					%>
 							<div class="orgTBox orgTBoxLight">
-								<bean:define id="url">/organizationModel.do?method=viewModel&amp;viewName=default&amp;partyOid=<bean:write name="party" property="OID"/></bean:define>
-								<html:link action="<%= url %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="OID">
+								<bean:define id="url">/organizationModel.do?method=viewModel&amp;viewName=default&amp;partyOid=<bean:write name="party" property="externalId"/></bean:define>
+								<html:link action="<%= url %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 									<bean:write name="party" property="partyName"/>
 								</html:link>
 							</div>

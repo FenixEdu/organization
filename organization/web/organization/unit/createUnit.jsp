@@ -12,7 +12,7 @@
 	<br />
 </html:messages>
 
-<bean:define id="actionUrl">/organization.do?<logic:present name="unitBean" property="parent">partyOid=<bean:write name="unitBean" property="parent.OID" /></logic:present></bean:define>
+<bean:define id="actionUrl">/organization.do?<logic:present name="unitBean" property="parent">partyOid=<bean:write name="unitBean" property="parent.externalId" /></logic:present></bean:define>
 
 <fr:form action="<%= actionUrl %>">
 	<html:hidden property="method" value="createUnit"/>

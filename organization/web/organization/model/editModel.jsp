@@ -20,7 +20,7 @@
 	<br />
 </html:messages>
 
-<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/></bean:define>
+<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/></bean:define>
 <fr:edit id="organizationalModel" name="organizationalModel" schema="module.organization.domain.OrganizationalModel.edit"
 	action="<%= url %>">
 	<fr:layout name="tabular">

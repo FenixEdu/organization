@@ -137,7 +137,7 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
     @Override
     public int compareTo(PartyType other) {
 	int res = getType().compareTo(other.getType());
-	return res != 0 ? res : (getOID() < other.getOID() ? -1 : (getOID() == other.getOID() ? 0 : 1));
+	return res != 0 ? res : getExternalId().compareTo(other.getExternalId());
     }
 
     @Service

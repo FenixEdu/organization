@@ -12,8 +12,8 @@
 	<br />
 </html:messages>
 
-<bean:define id="partyOid" name="unitBean" property="unit.OID" />
-<fr:form action='<%= "/organization.do?partyOid=" + partyOid.toString() %>'>
+<bean:define id="partyOid" name="unitBean" property="unit.externalId"  type="java.lang.String"/>
+<fr:form action='<%= "/organization.do?partyOid=" + partyOid %>'>
 	<html:hidden property="method" value="editUnit"/>
 	
 	<fr:edit id="unitBean" name="unitBean" visible="false" />

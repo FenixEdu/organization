@@ -25,7 +25,7 @@
 	<br />
 </html:messages>
 
-<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/>&amp;partyOid=<bean:write name="party" property="OID"/>&amp;viewName=default</bean:define>
+<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewName=default</bean:define>
 <fr:edit id="party" name="party" schema="module.organization.domain.Party.partyTypes"
 	action="<%= url %>">
 	<fr:layout name="tabular">

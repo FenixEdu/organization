@@ -18,7 +18,7 @@
 	<bean:message key="label.model.add.unit" bundle="ORGANIZATION_RESOURCES"/>
 </h3>
 
-<bean:define id="url">/organizationModel.do?method=addUnitToModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="OID"/></bean:define>
+<bean:define id="url">/organizationModel.do?method=addUnitToModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/></bean:define>
 <fr:form action="<%= url %>">
 	<table>
 		<tr>

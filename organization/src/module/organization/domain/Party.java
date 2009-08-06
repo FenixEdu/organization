@@ -54,7 +54,7 @@ abstract public class Party extends Party_Base {
 	@Override
 	public int compare(Party o1, Party o2) {
 	    int res = o1.getPartyName().compareTo(o2.getPartyName());
-	    return res != 0 ? res : (o1.getOID() < o2.getOID() ? -1 : (o1.getOID() == o2.getOID() ? 0 : 1));
+	    return res != 0 ? res : o1.getExternalId().compareTo(o2.getExternalId());
 	}
     };
 
@@ -370,7 +370,8 @@ abstract public class Party extends Party_Base {
     }
 
     public Set<OrganizationalModel> getAllOrganizationModels() {
-	final Set<OrganizationalModel> organizationModels = new TreeSet<OrganizationalModel>(OrganizationalModel.COMPARATORY_BY_NAME);
+	final Set<OrganizationalModel> organizationModels = new TreeSet<OrganizationalModel>(
+		OrganizationalModel.COMPARATORY_BY_NAME);
 	addAllOrganizationModels(organizationModels);
 	return organizationModels;
     }

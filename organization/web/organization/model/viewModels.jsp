@@ -24,7 +24,7 @@
 <logic:notEmpty name="organizationalModels">
 	<chart:orgChart id="organizationalModel" name="organizationalModelChart" type="java.lang.Object">
 		<div class="orgTBox orgTBoxLight">
-			<html:link action="/organizationModel.do?method=viewModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="OID">
+			<html:link action="/organizationModel.do?method=viewModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 				<bean:write name="organizationalModel" property="name.content"/>
 			</html:link>
 		</div>

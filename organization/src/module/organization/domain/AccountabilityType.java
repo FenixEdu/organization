@@ -45,7 +45,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
 	    int c = o1.getName().compareTo(o2.getName());
 	    return c == 0 ? o2.hashCode() - o1.hashCode() : c;
 	}
-	
+
     };
 
     static public class AccountabilityTypeBean implements Serializable {
@@ -161,7 +161,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     @Override
     public int compareTo(AccountabilityType other) {
 	int res = getType().compareTo(other.getType());
-	return res != 0 ? res : (getOID() < other.getOID() ? -1 : (getOID() == other.getOID() ? 0 : 1));
+	return res != 0 ? res : getExternalId().compareTo(other.getExternalId());
     }
 
     public boolean isValid(final Party parent, final Party child) {
