@@ -8,7 +8,10 @@
 <%@page import="myorg.presentationTier.component.OrganizationChart"%>
 <%@page import="module.organization.domain.Unit"%>
 
-<bean:define id="partyChart" name="partyChart" type="module.organization.presentationTier.actions.OrganizationModelAction.PartyChart"/>
+
+<%@page import="module.organization.domain.Accountability"%>
+<%@page import="module.organization.domain.Party"%>
+<%@page import="module.organization.domain.UnconfirmedAccountability"%><bean:define id="partyChart" name="partyChart" type="module.organization.presentationTier.actions.OrganizationModelAction.PartyChart"/>
 <logic:notEmpty name="partyChart">
 	<logic:present name="partyChart" property="unit">
 		<bean:define id="unit" name="partyChart" property="unit"/>
@@ -42,23 +45,38 @@
 		</logic:present>
 	</logic:present>
 
+	<% boolean passedElement = false; %>
 	<table width="100%" align="center">
 		<tr>
 			<td align="center">
-				<chart:orgChart id="party" name="partyChart" type="java.lang.Object">
+				<chart:orgChart id="object" name="partyChart" type="java.lang.Object">
 					<%
-						if (partyChart.getElement() == party) {
+						if (partyChart.getElement() == object) {
+						    passedElement = true;
 					%>
 							<div class="orgTBox orgTBoxLight">
-								<bean:write name="party" property="partyName"/>
+								<bean:write name="object" property="partyName"/>
 							</div>
 					<%
 						} else {
+						    Party party = null;
+						    String styleCass = "orgTBox orgTBoxLight";
+						    String title = null;
+						    if (object instanceof Accountability) {
+								final Accountability accountability = (Accountability) object;
+								party = passedElement ? accountability.getChild() : accountability.getParent();
+								if (object instanceof UnconfirmedAccountability) {
+								    styleCass = "orgTBox orgTBoxRed";
+								}
+								title = accountability.getDetailsString();
+						    } else {
+								party = (Party) object;
+						    }
 					%>
-							<div class="orgTBox orgTBoxLight">
-								<bean:define id="url">/organizationModel.do?method=viewModel&amp;viewName=default&amp;partyOid=<bean:write name="party" property="externalId"/></bean:define>
+							<div class="<%= styleCass %>" <% if (title != null) { %>title="<%= title %>"<% } %>>
+								<bean:define id="url">/organizationModel.do?method=viewModel&amp;viewName=default&amp;partyOid=<%= party.getExternalId() %></bean:define>
 								<html:link action="<%= url %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
-									<bean:write name="party" property="partyName"/>
+									<%= party.getPartyName().getContent() %>
 								</html:link>
 							</div>
 					<%

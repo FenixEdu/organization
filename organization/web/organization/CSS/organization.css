@@ -50,6 +50,10 @@ font-weight: normal;
 	background:#FAFAFA none repeat scroll 0 0;
 	border:1px solid #555555;
 }
+.orgTBoxRed {
+	background:#FBFB77 none repeat scroll 0 0;
+	border:1px solid #AA0000;
+}
 .orgTBoxPhoto {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;

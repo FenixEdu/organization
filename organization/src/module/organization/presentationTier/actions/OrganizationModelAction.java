@@ -37,6 +37,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
@@ -75,14 +76,14 @@ public class OrganizationModelAction extends ContextBaseAction {
 
     }
 
-    public static class PartyChart extends OrganizationChart<Party> {
+    public static class PartyChart extends OrganizationChart<Object> {
 
 	public PartyChart(final Collection<Party> parties) {
 	    super(sortCollection(parties), 2);
 	}
 
 	public PartyChart(final Set<AccountabilityType> accountabilityTypes, final Party party) {
-	    super(party, sortCollection(party.getParents(accountabilityTypes)), sortCollection(party.getChildren(accountabilityTypes)), 2);
+	    super(party, sortCollectionByParents(party.getParentAccountabilities(accountabilityTypes)), sortCollectionByChildren(party.getChildrenAccountabilities(accountabilityTypes)), 2);
 	}
 
 	private static Collection sortCollection(final Collection<Party> parties) {
@@ -91,15 +92,33 @@ public class OrganizationModelAction extends ContextBaseAction {
 	    return result;
 	}
 
+	private static Collection sortCollectionByParents(final Collection<Accountability> accountabilities) {
+	    final List<Accountability> result = new ArrayList<Accountability>(accountabilities);
+	    Collections.sort(result, Accountability.COMPARATOR_BY_PARENT_PARTY_NAMES);
+	    return result;
+	}
+
+	private static Collection sortCollectionByChildren(final Collection<Accountability> accountabilities) {
+	    final List<Accountability> result = new ArrayList<Accountability>(accountabilities);
+	    Collections.sort(result, Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
+	    return result;
+	}
+
 	public Person getPerson() {
-	    final Party party = getElement();
-	    return party instanceof Person ? ((Person) party) : null;
+	    final Object object = getElement();
+	    return object != null && object instanceof Person ? ((Person) object) : null;
 	}
 
 	public Unit getUnit() {
-	    final Party party = getElement();
-	    return party instanceof Unit ? ((Unit) party) : null;
+	    final Object object = getElement();
+	    return object instanceof Unit ? ((Unit) object) : null;
 	}
+
+	public Accountability getAccountability() {
+	    final Object object = getElement();
+	    return object != null && object instanceof Accountability ? ((Accountability) object) : null;
+	}
+
     }
 
     public static class PartyChartView extends PartyViewHook {

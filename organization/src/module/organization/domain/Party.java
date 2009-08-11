@@ -119,6 +119,21 @@ abstract public class Party extends Party_Base {
 	return (List<T>) result;
     }
 
+    public Collection<Accountability> getParentAccountabilities(final Collection<AccountabilityType> types) {
+	return getParentAccountabilities(new PartyByAccountabilityType(types));
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T extends Accountability> Collection<T> getParentAccountabilities(final PartyPredicate predicate) {
+	final Collection<Accountability> result = new LinkedList<Accountability>();
+	for (final Accountability accountability : getParentAccountabilities()) {
+	    if (predicate.eval(accountability.getParent(), accountability)) {
+		result.add(accountability);
+	    }
+	}
+	return (List<T>) result;
+    }
+
     public Collection<Party> getChildren() {
 	return getChildren(new TruePartyPredicate());
     }
@@ -165,6 +180,21 @@ abstract public class Party extends Party_Base {
 	for (final Accountability accountability : getChildAccountabilities()) {
 	    if (predicate.eval(accountability.getChild(), accountability)) {
 		result.add(accountability.getChild());
+	    }
+	}
+	return (List<T>) result;
+    }
+
+    public Collection<Accountability> getChildrenAccountabilities(final Collection<AccountabilityType> types) {
+	return getChildrenAccountabilities(new PartyByAccountabilityType(types));
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T extends Accountability> Collection<T> getChildrenAccountabilities(final PartyPredicate predicate) {
+	final Collection<Accountability> result = new LinkedList<Accountability>();
+	for (final Accountability accountability : getChildAccountabilities()) {
+	    if (predicate.eval(accountability.getChild(), accountability)) {
+		result.add(accountability);
 	    }
 	}
 	return (List<T>) result;

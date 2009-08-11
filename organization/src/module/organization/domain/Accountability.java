@@ -25,6 +25,8 @@
 
 package module.organization.domain;
 
+import java.util.Comparator;
+
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 
@@ -35,6 +37,28 @@ import pt.ist.fenixframework.pstm.Transaction;
 
 public class Accountability extends Accountability_Base {
 
+    protected static final String LOCAL_DATE_FORMAT = "yyyy-MM-dd";
+
+    public static final Comparator<Accountability> COMPARATOR_BY_PARENT_PARTY_NAMES = new Comparator<Accountability>() {
+
+	@Override
+	public int compare(final Accountability o1, final Accountability o2) {
+	    final int c = Party.COMPARATOR_BY_NAME.compare(o1.getParent(), o2.getParent());
+	    return c == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : c;
+	}
+
+    };
+
+    public static final Comparator<Accountability> COMPARATOR_BY_CHILD_PARTY_NAMES = new Comparator<Accountability>() {
+
+	@Override
+	public int compare(final Accountability o1, final Accountability o2) {
+	    final int c = Party.COMPARATOR_BY_NAME.compare(o1.getChild(), o2.getChild());
+	    return c == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : c;
+	}
+
+    };
+	
     protected Accountability() {
 	super();
 	setMyOrg(MyOrg.getInstance());
@@ -133,6 +157,20 @@ public class Accountability extends Accountability_Base {
 	return getAccountabilityType().equals(type);
     }
 
+    public String getDetailsString() {
+	final StringBuilder stringBuilder = new StringBuilder();
+	stringBuilder.append(getAccountabilityType().getName().getContent());
+	stringBuilder.append(": ");
+	if (getBeginDate() != null) {
+	    stringBuilder.append(getBeginDate().toString(LOCAL_DATE_FORMAT));
+	}
+	stringBuilder.append(" - ");
+	if (getEndDate() != null) {
+	    stringBuilder.append(getEndDate().toString(LOCAL_DATE_FORMAT));
+	}
+	return stringBuilder.toString();
+    }
+
     @Service
     void delete() {
 	removeParent();
@@ -155,4 +193,5 @@ public class Accountability extends Accountability_Base {
 	setBeginDate(begin);
 	setEndDate(end);
     }
+
 }

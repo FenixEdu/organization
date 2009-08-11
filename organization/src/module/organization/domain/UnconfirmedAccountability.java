@@ -52,4 +52,19 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
 	return AccountabilityType.create(accountabilityTypeBean);
     }
 
+    @Override
+    public String getDetailsString() {
+	final StringBuilder stringBuilder = new StringBuilder();
+	stringBuilder.append(getUnconfirmedAccountabilityType().getName().getContent());
+	stringBuilder.append(": ");
+	if (getBeginDate() != null) {
+	    stringBuilder.append(getBeginDate().toString(LOCAL_DATE_FORMAT));
+	}
+	stringBuilder.append(" - ");
+	if (getEndDate() != null) {
+	    stringBuilder.append(getEndDate().toString(LOCAL_DATE_FORMAT));
+	}
+	return stringBuilder.toString();
+    }
+
 }
