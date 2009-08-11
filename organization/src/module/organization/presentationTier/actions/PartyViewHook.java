@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 import javax.servlet.http.HttpServletRequest;
 
+import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 
 public abstract class PartyViewHook {
@@ -20,7 +21,7 @@ public abstract class PartyViewHook {
 
     public abstract String getViewName();
 
-    public abstract String hook(final HttpServletRequest request, final Party party);
+    public abstract String hook(final HttpServletRequest request, final OrganizationalModel organizationalModel, final Party party);
 
     public int ordinal() {
 	return 0;

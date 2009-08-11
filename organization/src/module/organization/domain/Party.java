@@ -39,7 +39,10 @@ import module.organization.domain.predicates.PartyPredicate.PartyByAccountabilit
 import module.organization.domain.predicates.PartyPredicate.PartyByClassType;
 import module.organization.domain.predicates.PartyPredicate.PartyByPartyType;
 import module.organization.domain.predicates.PartyPredicate.TruePartyPredicate;
+import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
+import myorg.domain.RoleType;
+import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
@@ -83,6 +86,10 @@ abstract public class Party extends Party_Base {
 
     public Collection<Party> getParents(final AccountabilityType type) {
 	return getParents(new PartyByAccountabilityType(type));
+    }
+
+    public Collection<Party> getParents(final Collection<AccountabilityType> types) {
+	return getParents(new PartyByAccountabilityType(types));
     }
 
     public Collection<Party> getParents(final PartyType type) {
@@ -387,6 +394,11 @@ abstract public class Party extends Party_Base {
     public void setPartyTypes(final List<PartyType> partyTypes) {
 	getPartyTypesSet().clear();
 	getPartyTypesSet().addAll(partyTypes);
+    }
+
+    public boolean isAuthorizedToManage() {
+	final User user = UserView.getCurrentUser();
+	return user.hasRoleType(RoleType.MANAGER);
     }
 
 }

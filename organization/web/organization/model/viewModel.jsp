@@ -82,7 +82,7 @@
 			<logic:iterate id="hook" name="hooks">
 				<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/></bean:define>
 				<html:link action="<%= url %>" paramId="viewName" paramName="hook" paramProperty="viewName">
-					<bean:write name="party" property="partyName"/>
+					<bean:write name="hook" property="viewName"/>
 				</html:link>
 			</logic:iterate>
 		</ul>

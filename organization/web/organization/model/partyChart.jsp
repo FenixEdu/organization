@@ -12,18 +12,18 @@
 <logic:notEmpty name="partyChart">
 	<logic:present name="partyChart" property="unit">
 		<bean:define id="unit" name="partyChart" property="unit"/>
-
 		<logic:present role="myorg.domain.RoleType.MANAGER">
-		<bean:define id="url">/organizationModel.do?method=prepareEditUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
-			<bean:message key="label.unit.edit" bundle="ORGANIZATION_RESOURCES"/>
-		</html:link>
-		|
-		<bean:define id="url">/organizationModel.do?method=managePartyPartyTypes&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
-			<bean:message key="label.unit.partyTypes.manage" bundle="ORGANIZATION_RESOURCES"/>
-		</html:link>
-		|
+			<bean:define id="url">/organizationModel.do?method=prepareEditUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+			<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
+				<bean:message key="label.unit.edit" bundle="ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+			<bean:define id="url">/organizationModel.do?method=managePartyPartyTypes&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+			<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
+				<bean:message key="label.unit.partyTypes.manage" bundle="ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
+		</logic:present>
 		<bean:define id="url">/organizationModel.do?method=prepareAddUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
 		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.unit.child.add" bundle="ORGANIZATION_RESOURCES"/>
@@ -33,11 +33,12 @@
 		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.unit.child.create" bundle="ORGANIZATION_RESOURCES"/>
 		</html:link>
-		|
-		<bean:define id="url">/organizationModel.do?method=deleteUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
-		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
-			<bean:message key="label.unit.delete" bundle="ORGANIZATION_RESOURCES"/>
-		</html:link>
+		<logic:present role="myorg.domain.RoleType.MANAGER">
+			|
+			<bean:define id="url">/organizationModel.do?method=deleteUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+			<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
+				<bean:message key="label.unit.delete" bundle="ORGANIZATION_RESOURCES"/>
+			</html:link>
 		</logic:present>
 	</logic:present>
 

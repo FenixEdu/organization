@@ -60,7 +60,7 @@ public class Accountability extends Accountability_Base {
 	setEndDate(end);
     }
 
-    private void checkDates(final Party parent, final LocalDate begin, final LocalDate end) {
+    protected void checkDates(final Party parent, final LocalDate begin, final LocalDate end) {
 	if (begin != null && end != null && begin.isAfter(end)) {
 	    throw new DomainException("error.Accountability.begin.is.after.end");
 	}
@@ -81,7 +81,7 @@ public class Accountability extends Accountability_Base {
 	}
     }
 
-    private void check(final Object obj, final String message) {
+    protected void check(final Object obj, final String message) {
 	if (obj == null) {
 	    throw new DomainException(message);
 	}
@@ -144,7 +144,8 @@ public class Accountability extends Accountability_Base {
 
     static Accountability create(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
 	    final LocalDate end) {
-	return new Accountability(parent, child, type, begin, end);
+	return parent.isAuthorizedToManage() ? new Accountability(parent, child, type, begin, end) :
+	    new UnconfirmedAccountability(parent, child, type, begin, end);
     }
 
     @Service

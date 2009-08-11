@@ -63,7 +63,7 @@ public class Unit extends Unit_Base {
 
 	if (parent != null) {
 	    check(accountabilityType, "error.Unit.invalid.accountability.type");
-	    new Accountability(parent, this, accountabilityType, begin, end);
+	    Accountability.create(parent, this, accountabilityType, begin, end);
 	} else {
 	    setMyOrgFromTopUnit(MyOrg.getInstance());
 	}

@@ -28,6 +28,7 @@ package module.organization.presentationTier.actions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -36,9 +37,11 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
+import module.organization.domain.UnconfirmedAccountability;
 import module.organization.domain.Unit;
 import module.organization.domain.UnitBean;
 import module.organization.domain.dto.OrganizationalModelBean;
@@ -78,8 +81,8 @@ public class OrganizationModelAction extends ContextBaseAction {
 	    super(sortCollection(parties), 2);
 	}
 
-	public PartyChart(final Party party) {
-	    super(party, sortCollection(party.getParents()), sortCollection(party.getChildren()), 2);
+	public PartyChart(final Set<AccountabilityType> accountabilityTypes, final Party party) {
+	    super(party, sortCollection(party.getParents(accountabilityTypes)), sortCollection(party.getChildren(accountabilityTypes)), 2);
 	}
 
 	private static Collection sortCollection(final Collection<Party> parties) {
@@ -106,9 +109,17 @@ public class OrganizationModelAction extends ContextBaseAction {
 	    return "default";
 	}
 
+	protected Set<AccountabilityType> getAccountabilityTypes(final OrganizationalModel organizationalModel) {
+	    final Set<AccountabilityType> accountabilityTypes = new HashSet<AccountabilityType>();
+	    accountabilityTypes.addAll(organizationalModel.getAccountabilityTypesSet());
+	    accountabilityTypes.add(UnconfirmedAccountability.readAccountabilityType());
+	    return accountabilityTypes;
+	}
+
+
 	@Override
-	public String hook(final HttpServletRequest request, final Party party) {
-	    final PartyChart partyChart = new PartyChart(party);
+	public String hook(final HttpServletRequest request, final OrganizationalModel organizationalModel, final Party party) {
+	    final PartyChart partyChart = new PartyChart(getAccountabilityTypes(organizationalModel), party);
 	    request.setAttribute("partyChart", partyChart);
 	    return "/organization/model/partyChart.jsp";
 	}
@@ -162,11 +173,11 @@ public class OrganizationModelAction extends ContextBaseAction {
 	request.setAttribute("partySearchBean", partySearchBean);
 
 	if (party == null) {
-	    final PartyChart partyChart = party == null ? new PartyChart(organizationalModel.getPartiesSet()) : new PartyChart(party);
+	    final PartyChart partyChart = party == null ? new PartyChart(organizationalModel.getPartiesSet()) : new PartyChart(organizationalModel.getAccountabilityTypesSet(), party);
 	    request.setAttribute("partiesChart", partyChart);
 	} else {
 	    request.setAttribute("party", party);
-	    partyViewHookManager.hook(request, party);
+	    partyViewHookManager.hook(request, organizationalModel, party);
 
 	    final SortedSet<PartyViewHook> hooks = partyViewHookManager.getSortedHooks(party);
 	    if (hooks.size() > 1) {

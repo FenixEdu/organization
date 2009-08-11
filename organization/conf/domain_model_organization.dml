@@ -45,6 +45,9 @@ class module.organization.domain.Accountability {
 	LocalDate endDate;
 }
 
+	class module.organization.domain.UnconfirmedAccountability extends module.organization.domain.Accountability {
+	}
+
 class module.organization.domain.PartyType {
 	String type;
 	MultiLanguageString name;
@@ -110,6 +113,13 @@ relation AccountabilityAccountabilityType {
 		multiplicity *;
 	}
 	module.organization.domain.AccountabilityType playsRole accountabilityType;
+}
+
+relation UnconfirmedAccountabilityAccountabilityType {
+	module.organization.domain.UnconfirmedAccountability playsRole unconfirmedAccountabilities {
+		multiplicity *;
+	}
+	module.organization.domain.AccountabilityType playsRole unconfirmedAccountabilityType;
 }
 
 relation MyOrgParty {

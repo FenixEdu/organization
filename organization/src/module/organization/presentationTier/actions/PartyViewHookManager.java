@@ -7,6 +7,7 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 
 public class PartyViewHookManager {
@@ -18,12 +19,12 @@ public class PartyViewHookManager {
 	hookMap.put(viewName, partyViewHook);
     }
 
-    public String hook(final HttpServletRequest request, final Party party) {
+    public String hook(final HttpServletRequest request, final OrganizationalModel organizationalModel, final Party party) {
 	final String viewName = getViewName(request);
 	if (viewName != null) {
 	    final PartyViewHook partyViewHook = hookMap.get(viewName);
 	    if (partyViewHook != null) {
-		final String viewPage = partyViewHook.hook(request, party);
+		final String viewPage = partyViewHook.hook(request, organizationalModel, party);
 		request.setAttribute("viewPage", viewPage);
 	    }
 	}
