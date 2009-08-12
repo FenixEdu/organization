@@ -48,6 +48,7 @@
 
 	<%
 		boolean passedElement = false;
+		boolean hasUnconfirmed = false;
 	%>
 	<bean:define id="sortedAccountabilityTypes" type="java.util.SortedSet" name="organizationalModel" property="sortedAccountabilityTypes"/>
 	<table width="100%" align="center">
@@ -75,6 +76,7 @@
 								    UnconfirmedAccountability unconfirmedAccountability = (UnconfirmedAccountability) accountability;
 								    styleCass = "orgTBox orgTBoxRed";
 								    accountabilityType = unconfirmedAccountability.getUnconfirmedAccountabilityType();
+								    hasUnconfirmed = true;
 								} else {
 								    accountabilityType = accountability.getAccountabilityType();
 								}
@@ -104,6 +106,16 @@
 					%>
 				</chart:orgChart>
 			</td>
+			<td>
+				<% if (hasUnconfirmed) { %>
+					<div class="postit">
+						<div class="tipBox">
+							Existem alterações à estrutura a confirmar.
+							Clique <a href="">aqui</a> para rever as alterações.
+						</div>
+					</div>
+				<% } %>
+			<td/>
 		</tr>
 	</table>
 </logic:notEmpty>

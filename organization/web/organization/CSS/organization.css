@@ -26,14 +26,6 @@ font-weight: normal;
 /* end */
 
 
-.orgTBoxEmpty {
-}
-.orgTBoxLabel {
-	position: absolute;
-	bottom: -15px;
-	color: #999999;
-	font-size: 8px;
-}
 .orgTBox {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
@@ -77,4 +69,18 @@ font-weight: normal;
 
 	overflow: hidden;
 	text-align: center;
+}
+
+.postit {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	background:transparent url(postit.png) no-repeat scroll 0 0;
+}
+
+.tipBox {
+	width: 175px;
+	height: 250px;
+	margin: 0px 5px 0px 5px;
+	padding:50px 30px 30px 30px;	
 }
