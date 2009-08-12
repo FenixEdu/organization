@@ -99,11 +99,11 @@
 	<bean:message key="label.model.accountabilityTypes.none" bundle="ORGANIZATION_RESOURCES"/>
 </logic:empty>
 <logic:notEmpty name="organizationalModel" property="accountabilityTypes">
-	<ul>
-		<logic:iterate id="accountabilityType" name="organizationalModel" property="sortedAccountabilityTypes">
+	<ol>
+		<logic:iterate id="accountabilityType" indexId="i" name="organizationalModel" property="sortedAccountabilityTypes">
 			<li>
 				<bean:write name="accountabilityType" property="name.content"/>
 			</li>
 		</logic:iterate>
-	</ul>
+	</ol>
 </logic:notEmpty>

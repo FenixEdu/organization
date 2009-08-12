@@ -7,11 +7,12 @@
 <%@ taglib uri="/WEB-INF/chart.tld" prefix="chart" %>
 <%@page import="myorg.presentationTier.component.OrganizationChart"%>
 <%@page import="module.organization.domain.Unit"%>
-
-
 <%@page import="module.organization.domain.Accountability"%>
 <%@page import="module.organization.domain.Party"%>
-<%@page import="module.organization.domain.UnconfirmedAccountability"%><bean:define id="partyChart" name="partyChart" type="module.organization.presentationTier.actions.OrganizationModelAction.PartyChart"/>
+<%@page import="module.organization.domain.UnconfirmedAccountability"%>
+
+
+<%@page import="module.organization.domain.AccountabilityType"%><bean:define id="partyChart" name="partyChart" type="module.organization.presentationTier.actions.OrganizationModelAction.PartyChart"/>
 <logic:notEmpty name="partyChart">
 	<logic:present name="partyChart" property="unit">
 		<bean:define id="unit" name="partyChart" property="unit"/>
@@ -45,7 +46,10 @@
 		</logic:present>
 	</logic:present>
 
-	<% boolean passedElement = false; %>
+	<%
+		boolean passedElement = false;
+	%>
+	<bean:define id="sortedAccountabilityTypes" type="java.util.SortedSet" name="organizationalModel" property="sortedAccountabilityTypes"/>
 	<table width="100%" align="center">
 		<tr>
 			<td align="center">
@@ -62,18 +66,34 @@
 						    Party party = null;
 						    String styleCass = "orgTBox orgTBoxLight";
 						    String title = null;
+						    AccountabilityType accountabilityType = null;
+						    int accountabilityTypeIndex = 0;
 						    if (object instanceof Accountability) {
 								final Accountability accountability = (Accountability) object;
 								party = passedElement ? accountability.getChild() : accountability.getParent();
 								if (object instanceof UnconfirmedAccountability) {
+								    UnconfirmedAccountability unconfirmedAccountability = (UnconfirmedAccountability) accountability;
 								    styleCass = "orgTBox orgTBoxRed";
+								    accountabilityType = unconfirmedAccountability.getUnconfirmedAccountabilityType();
+								} else {
+								    accountabilityType = accountability.getAccountabilityType();
 								}
 								title = accountability.getDetailsString();
+								
+								for (final Object at : sortedAccountabilityTypes) {
+								    accountabilityTypeIndex++;
+								    if (at == accountabilityType) {
+										break;
+								    }
+								}
 						    } else {
 								party = (Party) object;
 						    }
 					%>
-							<div class="<%= styleCass %>" <% if (title != null) { %>title="<%= title %>"<% } %>>
+							<div style="position: relative;" class="<%= styleCass %>" <% if (title != null) { %>title="<%= title %>"<% } %>>
+								<% if (accountabilityTypeIndex > 0) { %>
+									<span style="position: absolute; top: -4px; right: 3px; color: #999999; font-size: 8px;"><%= accountabilityTypeIndex %></span>
+								<% } %>
 								<bean:define id="url">/organizationModel.do?method=viewModel&amp;viewName=default&amp;partyOid=<%= party.getExternalId() %></bean:define>
 								<html:link action="<%= url %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 									<%= party.getPartyName().getContent() %>

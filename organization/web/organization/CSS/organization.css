@@ -26,6 +26,14 @@ font-weight: normal;
 /* end */
 
 
+.orgTBoxEmpty {
+}
+.orgTBoxLabel {
+	position: absolute;
+	bottom: -15px;
+	color: #999999;
+	font-size: 8px;
+}
 .orgTBox {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
