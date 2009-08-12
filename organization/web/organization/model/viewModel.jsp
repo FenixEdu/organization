@@ -100,7 +100,7 @@
 </logic:empty>
 <logic:notEmpty name="organizationalModel" property="accountabilityTypes">
 	<ol>
-		<logic:iterate id="accountabilityType" indexId="i" name="organizationalModel" property="sortedAccountabilityTypes">
+		<logic:iterate id="accountabilityType" name="organizationalModel" property="sortedAccountabilityTypes">
 			<li>
 				<bean:write name="accountabilityType" property="name.content"/>
 			</li>
