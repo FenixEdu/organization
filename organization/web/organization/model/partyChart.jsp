@@ -53,7 +53,7 @@
 	<bean:define id="sortedAccountabilityTypes" type="java.util.SortedSet" name="organizationalModel" property="sortedAccountabilityTypes"/>
 	<table width="100%" align="center">
 		<tr>
-			<td align="center">
+			<td align="center" width="70%">
 				<chart:orgChart id="object" name="partyChart" type="java.lang.Object">
 					<%
 						if (partyChart.getElement() == object) {
