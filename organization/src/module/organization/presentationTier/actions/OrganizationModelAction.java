@@ -381,4 +381,51 @@ public class OrganizationModelAction extends ContextBaseAction {
 	return viewModel(mapping, form, request, response);
     }
 
+    public ActionForward reviewUnconfirmedAccountabilities(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
+	request.setAttribute("organizationalModel", organizationalModel);
+	final Party party = getDomainObject(request, "partyOid");
+	request.setAttribute("party", party);
+
+	final Set<AccountabilityType> accountabilityTypes = new HashSet<AccountabilityType>();
+	accountabilityTypes.addAll(organizationalModel.getAccountabilityTypesSet());
+	accountabilityTypes.add(UnconfirmedAccountability.readAccountabilityType());
+	final Collection<Accountability> accountabilities = party.getChildrenAccountabilities(accountabilityTypes);
+
+	final List<Accountability> unconfirmedAccountabilities = new ArrayList<Accountability>();
+	for (final Accountability accountability : accountabilities) {
+	    if (accountability instanceof UnconfirmedAccountability) {
+		unconfirmedAccountabilities.add(accountability);
+	    }
+	}
+
+	if (unconfirmedAccountabilities.isEmpty()) {
+	    return viewModel(mapping, form, request, response);
+	}
+
+	Collections.sort(unconfirmedAccountabilities, Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
+	request.setAttribute("unconfirmedAccountabilities", unconfirmedAccountabilities);
+
+	return forward(request, "/organization/model/reviewUnconfirmedAccountabilities.jsp");
+    }
+
+    public ActionForward confirmAccountability(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final UnconfirmedAccountability unconfirmedAccountability = getDomainObject(request, "unconfirmedAccountabilityOid");
+	if (unconfirmedAccountability != null) {
+	    unconfirmedAccountability.confirm();
+	}
+	return reviewUnconfirmedAccountabilities(mapping, form, request, response);
+    }
+
+    public ActionForward rejectAccountability(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final UnconfirmedAccountability unconfirmedAccountability = getDomainObject(request, "unconfirmedAccountabilityOid");
+	if (unconfirmedAccountability != null) {
+	    unconfirmedAccountability.reject();
+	}
+	return reviewUnconfirmedAccountabilities(mapping, form, request, response);
+    }
+
 }

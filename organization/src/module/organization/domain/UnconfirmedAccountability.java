@@ -1,8 +1,11 @@
 package module.organization.domain;
 
 import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
 import myorg.util.BundleUtil;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
@@ -16,6 +19,9 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
 
     protected UnconfirmedAccountability() {
         super();
+        setSubmited(new DateTime());
+        final User user = UserView.getCurrentUser();
+        setUser(user);
     }
 
     protected UnconfirmedAccountability(Party parent, Party child, AccountabilityType type, LocalDate begin, LocalDate end) {
@@ -65,6 +71,27 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
 	    stringBuilder.append(getEndDate().toString(LOCAL_DATE_FORMAT));
 	}
 	return stringBuilder.toString();
+    }
+
+    @Override
+    void delete() {
+	final Party child = getChild();
+	removeUnconfirmedAccountabilityType();
+	super.delete();
+	if (child.getParentAccountabilitiesCount() == 0) {
+	    child.delete();
+	}
+    }
+
+    @Service
+    public void confirm() {
+	Accountability.create(getParent(), getChild(), getUnconfirmedAccountabilityType(), getBeginDate(), getEndDate());
+	delete();
+    }
+
+    @Service
+    public void reject() {
+	delete();
     }
 
 }

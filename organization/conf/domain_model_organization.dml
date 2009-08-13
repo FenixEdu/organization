@@ -46,6 +46,7 @@ class module.organization.domain.Accountability {
 }
 
 	class module.organization.domain.UnconfirmedAccountability extends module.organization.domain.Accountability {
+		DateTime submited;
 	}
 
 class module.organization.domain.PartyType {
@@ -217,6 +218,13 @@ relation OrganizationalModelAccountabilityType {
 		multiplicity *;
 	}
 	module.organization.domain.AccountabilityType playsRole accountabilityTypes {
+		multiplicity *;
+	}
+}
+
+relation UserUnconfirmedAccountability {
+	myorg.domain.User playsRole user;
+	module.organization.domain.UnconfirmedAccountability playsRole unconfirmedAccountabilities {
 		multiplicity *;
 	}
 }
