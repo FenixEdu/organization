@@ -107,21 +107,23 @@
 				</chart:orgChart>
 			</td>
 			<td>
-				<logic:equal name="unit" property="authorizedToManage" value="true">
-				<% if (hasUnconfirmed) { %>
-					<div class="postit">
-						<div class="tipBox">
-							<bean:message key="label.unit.has.unconfirmed.accountabilities" bundle="ORGANIZATION_RESOURCES"/>
-							<bean:message key="label.unit.has.unconfirmed.accountabilities.click.prefix" bundle="ORGANIZATION_RESOURCES"/>
-							<bean:define id="url">/organizationModel.do?method=reviewUnconfirmedAccountabilities&amp;viewName=default&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/></bean:define>
-							<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
-								<bean:message key="label.unit.has.unconfirmed.accountabilities.click.infix" bundle="ORGANIZATION_RESOURCES"/>
-							</html:link>
-							<bean:message key="label.unit.has.unconfirmed.accountabilities.click.suffix" bundle="ORGANIZATION_RESOURCES"/>
-						</div>
-					</div>
-				<% } %>
-				</logic:equal>
+				<logic:present name="partyChart" property="unit">
+					<logic:equal name="unit" property="authorizedToManage" value="true">
+						<% if (hasUnconfirmed) { %>
+							<div class="postit">
+								<div class="tipBox">
+									<bean:message key="label.unit.has.unconfirmed.accountabilities" bundle="ORGANIZATION_RESOURCES"/>
+									<bean:message key="label.unit.has.unconfirmed.accountabilities.click.prefix" bundle="ORGANIZATION_RESOURCES"/>
+									<bean:define id="url">/organizationModel.do?method=reviewUnconfirmedAccountabilities&amp;viewName=default&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/></bean:define>
+									<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
+										<bean:message key="label.unit.has.unconfirmed.accountabilities.click.infix" bundle="ORGANIZATION_RESOURCES"/>
+									</html:link>
+									<bean:message key="label.unit.has.unconfirmed.accountabilities.click.suffix" bundle="ORGANIZATION_RESOURCES"/>
+								</div>
+							</div>
+						<% } %>
+					</logic:equal>
+				</logic:present>
 			<td/>
 		</tr>
 	</table>
