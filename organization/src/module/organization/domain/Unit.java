@@ -139,6 +139,6 @@ public class Unit extends Unit_Base {
     }
 
     public String getPresentationName() {
-	return getPartyName() + "(" + getAcronym() + ")";
+	return getPartyName() + " (" + getAcronym() + ")";
     }
 }
