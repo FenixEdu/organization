@@ -358,13 +358,13 @@ abstract public class Party extends Party_Base {
     }
 
     @Service
-    public void addParent(final Party parent, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
-	Accountability.create(parent, this, type, begin, end);
+    public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
+	return Accountability.create(parent, this, type, begin, end);
     }
 
     @Service
-    public void addChild(final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
-	Accountability.create(this, child, type, begin, end);
+    public Accountability addChild(final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
+	return Accountability.create(this, child, type, begin, end);
     }
 
     @Service
