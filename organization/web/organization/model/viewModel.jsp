@@ -77,19 +77,27 @@
 
 <logic:present name="party" scope="request">
 	<jsp:include page="viewPartyDetails.jsp"/>
-	<logic:notEmpty name="hooks">
-		<ul>
-			<logic:iterate id="hook" name="hooks">
-				<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/></bean:define>
-				<html:link action="<%= url %>" paramId="viewName" paramName="hook" paramProperty="viewName">
-					<bean:write name="hook" property="viewName"/>
-				</html:link>
-			</logic:iterate>
-		</ul>
-	</logic:notEmpty>
-	<logic:present name="viewPage">
-		<jsp:include page='<%= (String) request.getAttribute("viewPage") %>'/>
-	</logic:present>
+	<div class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+		<logic:notEmpty name="hooks">
+			<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+				<logic:iterate id="hook" type="module.organization.presentationTier.actions.PartyViewHook" name="hooks">
+					<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/></bean:define>
+					<% final String cssClasses = hook.getViewName().equals(request.getAttribute("viewName")) || hook.getViewName().equals(request.getParameter("viewName")) ?
+							"ui-corner-top ui-tabs-selected ui-state-active ui-state-focus" : "ui-corner-top ui-state-default"; %>
+					<li class="<%= cssClasses %>">
+						<html:link action="<%= url %>" paramId="viewName" paramName="hook" paramProperty="viewName">
+							<bean:write name="hook" property="viewName"/>
+						</html:link>
+					</li>
+				</logic:iterate>
+			</ul>
+		</logic:notEmpty>
+		<logic:present name="viewPage">
+			<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+				<jsp:include page='<%= (String) request.getAttribute("viewPage") %>'/>
+			</div>
+		</logic:present>
+	</div>
 </logic:present>
 
 <h4>
