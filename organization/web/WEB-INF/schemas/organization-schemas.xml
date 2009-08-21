@@ -257,10 +257,4 @@
 	<slot name="unconfirmedAccountabilityType.name" key="label.unconfirmed.accountability.type"/>
 	<slot name="beginDate" key="label.begin"/>
 	<slot name="endDate" key="label.end" />
-	<slot name="child.partyName" key="label.unit.child"/>
-	<slot name="child.partyTypes" key="label.party.type">
-		<property name="eachLayout" value="values-comma" />
-		<property name="eachSchema" value="organization.PartyType.view.name" />
-		<property name="classes" value="nobullet liinline"/>
-	</slot>
 </schema>

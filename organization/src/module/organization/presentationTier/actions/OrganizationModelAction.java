@@ -28,6 +28,7 @@ package module.organization.presentationTier.actions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -58,6 +59,7 @@ import org.apache.struts.action.ActionMapping;
 
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.utl.ist.fenix.tools.util.Pair;
 
 @Mapping(path = "/organizationModel")
 public class OrganizationModelAction extends ContextBaseAction {
@@ -84,6 +86,16 @@ public class OrganizationModelAction extends ContextBaseAction {
 
 	public PartyChart(final Set<AccountabilityType> accountabilityTypes, final Party party) {
 	    super(party, sortCollectionByParents(party.getParentAccountabilities(accountabilityTypes)), sortCollectionByChildren(party.getChildrenAccountabilities(accountabilityTypes)), 2);
+	}
+
+	public PartyChart(final Accountability accountability) {
+	    super(accountability.getChild(), collect(accountability), Collections.emptyList(), 2);
+	}
+
+	private static Collection collect(final Object object) {
+	    final List<Object> result = new ArrayList<Object>(1);
+	    result.add(object);
+	    return result;
 	}
 
 	private static Collection sortCollection(final Collection<Party> parties) {
@@ -391,12 +403,22 @@ public class OrganizationModelAction extends ContextBaseAction {
 	final Set<AccountabilityType> accountabilityTypes = new HashSet<AccountabilityType>();
 	accountabilityTypes.addAll(organizationalModel.getAccountabilityTypesSet());
 	accountabilityTypes.add(UnconfirmedAccountability.readAccountabilityType());
-	final Collection<Accountability> accountabilities = party.getChildrenAccountabilities(accountabilityTypes);
+	final Collection<Accountability> childAccountabilities = party.getChildrenAccountabilities(accountabilityTypes);
+	final Collection<Accountability> parentAccountabilities = party.getParentAccountabilities(accountabilityTypes);
 
-	final List<Accountability> unconfirmedAccountabilities = new ArrayList<Accountability>();
-	for (final Accountability accountability : accountabilities) {
+	final List<Pair<Accountability, PartyChart>> unconfirmedAccountabilities = new ArrayList<Pair<Accountability, PartyChart>>();
+	for (final Accountability accountability : childAccountabilities) {
 	    if (accountability instanceof UnconfirmedAccountability) {
-		unconfirmedAccountabilities.add(accountability);
+		final PartyChart partyChart = new PartyChart(accountability);
+		final Pair<Accountability, PartyChart> pair = new Pair<Accountability, PartyChart>(accountability, partyChart);
+		unconfirmedAccountabilities.add(pair);
+	    }
+	}
+	for (final Accountability accountability : parentAccountabilities) {
+	    if (accountability instanceof UnconfirmedAccountability) {
+		final PartyChart partyChart = new PartyChart(accountability);
+		final Pair<Accountability, PartyChart> pair = new Pair<Accountability, PartyChart>(accountability, partyChart);
+		unconfirmedAccountabilities.add(pair);
 	    }
 	}
 
@@ -404,7 +426,14 @@ public class OrganizationModelAction extends ContextBaseAction {
 	    return viewModel(mapping, form, request, response);
 	}
 
-	Collections.sort(unconfirmedAccountabilities, Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
+	Collections.sort(unconfirmedAccountabilities, new Comparator<Pair<Accountability, PartyChart>>() {
+	    @Override
+	    public int compare(final Pair<Accountability, PartyChart> pair1, final Pair<Accountability, PartyChart> pair2) {
+		final Accountability accountability1 = pair1.getKey();
+		final Accountability accountability2 = pair2.getKey();
+		return Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES.compare(accountability1, accountability2);
+	    }
+	});
 	request.setAttribute("unconfirmedAccountabilities", unconfirmedAccountabilities);
 
 	return forward(request, "/organization/model/reviewUnconfirmedAccountabilities.jsp");
