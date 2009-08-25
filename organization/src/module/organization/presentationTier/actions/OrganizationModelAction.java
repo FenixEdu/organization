@@ -84,6 +84,10 @@ public class OrganizationModelAction extends ContextBaseAction {
 	    super(sortCollection(parties), 2);
 	}
 
+	public PartyChart(final Collection<Party> parties, final int size) {
+	    super(sortCollection(parties), size);
+	}
+
 	public PartyChart(final Set<AccountabilityType> accountabilityTypes, final Party party) {
 	    super(party, sortCollectionByParents(party.getParentAccountabilities(accountabilityTypes)),
 		    sortCollectionByChildren(party.getChildrenAccountabilities(accountabilityTypes)), 2);
@@ -93,13 +97,21 @@ public class OrganizationModelAction extends ContextBaseAction {
 	    super(accountability.getChild(), collect(accountability), Collections.emptyList(), 2);
 	}
 
+	public PartyChart(final Party party, final Collection partentParties, final Collection childParties) {
+	    super(party, (Collection) partentParties, (Collection) childParties, 2);
+	}
+
+	public PartyChart(final Party party, final Collection partentParties, final Collection childParties, final int size) {
+	    super(party, (Collection) partentParties, (Collection) childParties, size);
+	}
+
 	private static Collection collect(final Object object) {
 	    final List<Object> result = new ArrayList<Object>(1);
 	    result.add(object);
 	    return result;
 	}
 
-	private static Collection sortCollection(final Collection<Party> parties) {
+	public static Collection sortCollection(final Collection<Party> parties) {
 	    final List<Party> result = new ArrayList<Party>(parties);
 	    Collections.sort(result, Party.COMPARATOR_BY_NAME);
 	    return result;
