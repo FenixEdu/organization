@@ -239,10 +239,6 @@
     </slot>
 </schema>
 
-<schema name="module.organization.domain.AccountabilityType.name" type="module.organization.domain.AccountabilityType" bundle="ORGANIZATION_RESOURCES">
-	<slot name="name"/>
-</schema>
-
 <schema name="module.organization.domain.Party.partyTypes" type="module.organization.domain.Party" bundle="ORGANIZATION_RESOURCES">
 	<slot name="partyTypes" layout="option-select" key="label.unit.party.type">
 		<property name="choiceType" value="module.organization.domain.PartyType"/>
