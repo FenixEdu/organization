@@ -85,7 +85,8 @@ public class OrganizationModelAction extends ContextBaseAction {
 	}
 
 	public PartyChart(final Set<AccountabilityType> accountabilityTypes, final Party party) {
-	    super(party, sortCollectionByParents(party.getParentAccountabilities(accountabilityTypes)), sortCollectionByChildren(party.getChildrenAccountabilities(accountabilityTypes)), 2);
+	    super(party, sortCollectionByParents(party.getParentAccountabilities(accountabilityTypes)),
+		    sortCollectionByChildren(party.getChildrenAccountabilities(accountabilityTypes)), 2);
 	}
 
 	public PartyChart(final Accountability accountability) {
@@ -147,7 +148,6 @@ public class OrganizationModelAction extends ContextBaseAction {
 	    return accountabilityTypes;
 	}
 
-
 	@Override
 	public String hook(final HttpServletRequest request, final OrganizationalModel organizationalModel, final Party party) {
 	    final PartyChart partyChart = new PartyChart(getAccountabilityTypes(organizationalModel), party);
@@ -168,14 +168,14 @@ public class OrganizationModelAction extends ContextBaseAction {
 	    final HttpServletResponse response) throws Exception {
 	final ActionForward forward = super.execute(mapping, form, request, response);
 	final LayoutContext layoutContext = (LayoutContext) getContext(request);
-	request.setAttribute("previousLayoutContextHead", layoutContext.getHead());
-	layoutContext.setHead("/organization/layoutContext/head.jsp");
+	layoutContext.addHead("/organization/layoutContext/head.jsp");
 	return forward;
     }
 
     public ActionForward viewModels(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	final Set<OrganizationalModel> organizationalModels = new TreeSet<OrganizationalModel>(OrganizationalModel.COMPARATORY_BY_NAME);
+	final Set<OrganizationalModel> organizationalModels = new TreeSet<OrganizationalModel>(
+		OrganizationalModel.COMPARATORY_BY_NAME);
 	organizationalModels.addAll(getMyOrg().getOrganizationalModelsSet());
 	request.setAttribute("organizationalModels", organizationalModels);
 	final OrganizationalModelChart organizationalModelChart = new OrganizationalModelChart(organizationalModels);
@@ -204,7 +204,8 @@ public class OrganizationModelAction extends ContextBaseAction {
 	request.setAttribute("partySearchBean", partySearchBean);
 
 	if (party == null) {
-	    final PartyChart partyChart = party == null ? new PartyChart(organizationalModel.getPartiesSet()) : new PartyChart(organizationalModel.getAccountabilityTypesSet(), party);
+	    final PartyChart partyChart = party == null ? new PartyChart(organizationalModel.getPartiesSet()) : new PartyChart(
+		    organizationalModel.getAccountabilityTypesSet(), party);
 	    request.setAttribute("partiesChart", partyChart);
 	} else {
 	    request.setAttribute("party", party);
@@ -247,11 +248,11 @@ public class OrganizationModelAction extends ContextBaseAction {
 	return viewModels(mapping, form, request, response);
     }
 
-    public ActionForward prepareAddUnitToModel(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws Exception {
+    public ActionForward prepareAddUnitToModel(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
 	request.setAttribute("organizationalModel", organizationalModel);
-	final PartySearchBean partySearchBean = new PartySearchBean(null); 
+	final PartySearchBean partySearchBean = new PartySearchBean(null);
 	request.setAttribute("partySearchBean", partySearchBean);
 	return forward(request, "/organization/model/addUnitToModel.jsp");
     }
@@ -265,15 +266,15 @@ public class OrganizationModelAction extends ContextBaseAction {
 	return viewModel(mapping, form, request, response);
     }
 
-    public ActionForward manageModelAccountabilityTypes(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws Exception {
+    public ActionForward manageModelAccountabilityTypes(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
 	request.setAttribute("organizationalModel", organizationalModel);
 	return forward(request, "/organization/model/manageModelAccountabilityTypes.jsp");
     }
 
     public ActionForward prepareCreateUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-            final HttpServletResponse response) {
+	    final HttpServletResponse response) {
 	final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
 	request.setAttribute("organizationalModel", organizationalModel);
 	final Party party = getDomainObject(request, "partyOid");
@@ -283,7 +284,7 @@ public class OrganizationModelAction extends ContextBaseAction {
 	    unitBean.setParent((Unit) party);
 	}
 	request.setAttribute("unitBean", unitBean);
-        return forward(request, "/organization/model/createUnit.jsp");
+	return forward(request, "/organization/model/createUnit.jsp");
     }
 
     public ActionForward createUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -333,8 +334,8 @@ public class OrganizationModelAction extends ContextBaseAction {
 	}
     }
 
-    public ActionForward managePartyPartyTypes(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws Exception {
+    public ActionForward managePartyPartyTypes(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
 	request.setAttribute("organizationalModel", organizationalModel);
 	final Party party = getDomainObject(request, "partyOid");
@@ -393,8 +394,8 @@ public class OrganizationModelAction extends ContextBaseAction {
 	return viewModel(mapping, form, request, response);
     }
 
-    public ActionForward reviewUnconfirmedAccountabilities(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws Exception {
+    public ActionForward reviewUnconfirmedAccountabilities(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
 	request.setAttribute("organizationalModel", organizationalModel);
 	final Party party = getDomainObject(request, "partyOid");
@@ -439,8 +440,8 @@ public class OrganizationModelAction extends ContextBaseAction {
 	return forward(request, "/organization/model/reviewUnconfirmedAccountabilities.jsp");
     }
 
-    public ActionForward confirmAccountability(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws Exception {
+    public ActionForward confirmAccountability(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final UnconfirmedAccountability unconfirmedAccountability = getDomainObject(request, "unconfirmedAccountabilityOid");
 	if (unconfirmedAccountability != null) {
 	    unconfirmedAccountability.confirm();
@@ -448,8 +449,8 @@ public class OrganizationModelAction extends ContextBaseAction {
 	return reviewUnconfirmedAccountabilities(mapping, form, request, response);
     }
 
-    public ActionForward rejectAccountability(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws Exception {
+    public ActionForward rejectAccountability(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 	final UnconfirmedAccountability unconfirmedAccountability = getDomainObject(request, "unconfirmedAccountabilityOid");
 	if (unconfirmedAccountability != null) {
 	    unconfirmedAccountability.reject();

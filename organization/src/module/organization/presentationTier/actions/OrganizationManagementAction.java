@@ -119,8 +119,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	    final HttpServletResponse response) throws Exception {
 	final ActionForward forward = super.execute(mapping, form, request, response);
 	final LayoutContext layoutContext = (LayoutContext) getContext(request);
-	request.setAttribute("previousLayoutContextHead", layoutContext.getHead());
-	layoutContext.setHead("/organization/layoutContext/head.jsp");
+	layoutContext.addHead("/organization/layoutContext/head.jsp");
 	return forward;
     }
 
