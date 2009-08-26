@@ -428,7 +428,7 @@ abstract public class Party extends Party_Base {
 
     public boolean isAuthorizedToManage() {
 	final User user = UserView.getCurrentUser();
-	return user.hasRoleType(RoleType.MANAGER);
+	return user == null || user.hasRoleType(RoleType.MANAGER);
     }
 
 }

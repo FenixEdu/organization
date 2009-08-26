@@ -13,7 +13,7 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
 
-    private static final String ACCOUNTABILITY_TYPE_TYPE = "module.organization.domain.UnconfirmedAccountability";
+    private static final String ACCOUNTABILITY_TYPE_TYPE = "UnconfirmedAccountability";
     private static final String ACCOUNTABILITY_TYPE_NAME_KEY = "label.accountabilityType.unconfirmed";
     private static final String ACCOUNTABILITY_TYPE_NAME_BUNDLE = "resources/OrganizationResources";
 
