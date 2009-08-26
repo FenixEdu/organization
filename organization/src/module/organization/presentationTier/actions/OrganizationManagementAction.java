@@ -137,7 +137,10 @@ public class OrganizationManagementAction extends ContextBaseAction {
 	// Role.getRole(RoleType.MANAGER));
 
 	final ActionNode topActionNode = ActionNode.createActionNode(virtualHost, parentOfNodes, "/organizationModel",
-		"viewModels", "resources.OrganizationResources", "label.manage.organization", UserGroup.getInstance());
+		"viewModels", "resources.OrganizationResources", "label.manage.organization",
+		Role.getRole(RoleType.MANAGER) // UserGroup.getInstance()
+		// In the future we want to open this up to every user... but for now we need to keep this link hidden
+		);
 
 	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewPartyTypes",
 		"resources.OrganizationResources", "label.party.type", Role.getRole(RoleType.MANAGER));
