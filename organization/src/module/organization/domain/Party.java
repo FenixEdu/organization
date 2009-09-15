@@ -431,4 +431,18 @@ abstract public class Party extends Party_Base {
 	return user == null || user.hasRoleType(RoleType.MANAGER);
     }
 
+    public boolean hasChildAccountabilityIncludingAncestry(final List<AccountabilityType> accountabilityTypes, final Party party) {
+	for (final Party child : getChildren(accountabilityTypes)) {
+	    if (child == party) {
+		return true;
+	    }
+	}
+	for (final Party parent : getParents(accountabilityTypes)) {
+	    if (parent.hasChildAccountabilityIncludingAncestry(accountabilityTypes, party)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 }

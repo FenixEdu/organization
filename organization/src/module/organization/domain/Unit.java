@@ -27,6 +27,7 @@ package module.organization.domain;
 
 import java.text.Collator;
 import java.util.Comparator;
+import java.util.List;
 
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
@@ -147,4 +148,5 @@ public class Unit extends Unit_Base {
     public void removeExpenditureUnit() {
         super.removeExpenditureUnit();
     }
+
 }
