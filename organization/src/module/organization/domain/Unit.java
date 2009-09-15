@@ -27,7 +27,6 @@ package module.organization.domain;
 
 import java.text.Collator;
 import java.util.Comparator;
-import java.util.List;
 
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
@@ -52,7 +51,8 @@ public class Unit extends Unit_Base {
     }
 
     protected Unit(final Party parent, final MultiLanguageString name, final String acronym, final PartyType partyType,
-	    final AccountabilityType accountabilityType, final LocalDate begin, final LocalDate end, final OrganizationalModel organizationalModel) {
+	    final AccountabilityType accountabilityType, final LocalDate begin, final LocalDate end,
+	    final OrganizationalModel organizationalModel) {
 	this();
 
 	check(partyType, "error.Unit.invalid.party.type");
@@ -143,10 +143,10 @@ public class Unit extends Unit_Base {
 	return getPartyName() + " (" + getAcronym() + ")";
     }
 
-    @Override
-    @Service
-    public void removeExpenditureUnit() {
-        super.removeExpenditureUnit();
-    }
+    // @Override
+    // @Service
+    // public void removeExpenditureUnit() {
+    // super.removeExpenditureUnit();
+    // }
 
 }
