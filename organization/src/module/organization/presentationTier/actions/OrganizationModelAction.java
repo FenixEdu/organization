@@ -209,7 +209,7 @@ public class OrganizationModelAction extends ContextBaseAction {
 
     }
 
-    private static final PartyViewHookManager partyViewHookManager = new PartyViewHookManager();
+    public static final PartyViewHookManager partyViewHookManager = new PartyViewHookManager();
 
     static {
 	partyViewHookManager.register(new UnitChartView());
