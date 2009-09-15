@@ -189,6 +189,10 @@ abstract public class Party extends Party_Base {
 	return getChildrenAccountabilities(new PartyByAccountabilityType(types));
     }
 
+    public Collection<Accountability> getChildrenAccountabilities(final Class<? extends Party> clazz, final Collection<AccountabilityType> types) {
+	return getChildrenAccountabilities(new PartyByAccountabilityType(clazz, types));
+    }
+
     @SuppressWarnings("unchecked")
     protected <T extends Accountability> Collection<T> getChildrenAccountabilities(final PartyPredicate predicate) {
 	final Collection<Accountability> result = new LinkedList<Accountability>();

@@ -86,7 +86,7 @@
 							"ui-corner-top ui-tabs-selected ui-state-active ui-state-focus" : "ui-corner-top ui-state-default"; %>
 					<li class="<%= cssClasses %>">
 						<html:link action="<%= url %>" paramId="viewName" paramName="hook" paramProperty="viewName">
-							<bean:write name="hook" property="viewName"/>
+							<bean:write name="hook" property="presentationName"/>
 						</html:link>
 					</li>
 				</logic:iterate>

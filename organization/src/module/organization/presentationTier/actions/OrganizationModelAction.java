@@ -52,6 +52,7 @@ import myorg.domain.exceptions.DomainException;
 import myorg.presentationTier.LayoutContext;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.presentationTier.component.OrganizationChart;
+import myorg.util.BundleUtil;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -91,6 +92,11 @@ public class OrganizationModelAction extends ContextBaseAction {
 	public PartyChart(final Set<AccountabilityType> accountabilityTypes, final Party party) {
 	    super(party, sortCollectionByParents(party.getParentAccountabilities(accountabilityTypes)),
 		    sortCollectionByChildren(party.getChildrenAccountabilities(accountabilityTypes)), 2);
+	}
+
+	public PartyChart(final Set<AccountabilityType> accountabilityTypes, final Party party, final Class<? extends Party> clazz) {
+	    super(party, sortCollectionByParents(party.getParentAccountabilities(accountabilityTypes)),
+		    sortCollectionByChildren(party.getChildrenAccountabilities(clazz, accountabilityTypes)), 2);
 	}
 
 	public PartyChart(final Accountability accountability) {
@@ -146,12 +152,7 @@ public class OrganizationModelAction extends ContextBaseAction {
 
     }
 
-    public static class PartyChartView extends PartyViewHook {
-
-	@Override
-	public String getViewName() {
-	    return "default";
-	}
+    public static abstract class PartyChartView extends PartyViewHook {
 
 	protected Set<AccountabilityType> getAccountabilityTypes(final OrganizationalModel organizationalModel) {
 	    final Set<AccountabilityType> accountabilityTypes = new HashSet<AccountabilityType>();
@@ -162,9 +163,48 @@ public class OrganizationModelAction extends ContextBaseAction {
 
 	@Override
 	public String hook(final HttpServletRequest request, final OrganizationalModel organizationalModel, final Party party) {
-	    final PartyChart partyChart = new PartyChart(getAccountabilityTypes(organizationalModel), party);
+	    final PartyChart partyChart = createPartyChart(organizationalModel, party);
 	    request.setAttribute("partyChart", partyChart);
 	    return "/organization/model/partyChart.jsp";
+	}
+
+	protected abstract PartyChart createPartyChart(final OrganizationalModel organizationalModel, final Party party);
+    }
+
+    public static class UnitChartView extends PartyChartView {
+
+	@Override
+	public String getViewName() {
+	    return "default";
+	}
+
+	@Override
+	protected PartyChart createPartyChart(final OrganizationalModel organizationalModel, final Party party) {
+	    return new PartyChart(getAccountabilityTypes(organizationalModel), party, Unit.class);
+	}
+
+	@Override
+	public String getPresentationName() {
+	    return BundleUtil.getStringFromResourceBundle("resources.OrganizationResources", "label.viewUnits");
+	}
+
+    }
+
+    public static class PeopleChartView extends PartyChartView {
+
+	@Override
+	public String getViewName() {
+	    return "viewPeople";
+	}
+
+	@Override
+	protected PartyChart createPartyChart(final OrganizationalModel organizationalModel, final Party party) {
+	    return new PartyChart(getAccountabilityTypes(organizationalModel), party, Person.class);
+	}
+
+	@Override
+	public String getPresentationName() {
+	    return BundleUtil.getStringFromResourceBundle("resources.OrganizationResources", "label.viewPeople");
 	}
 
     }
@@ -172,7 +212,8 @@ public class OrganizationModelAction extends ContextBaseAction {
     private static final PartyViewHookManager partyViewHookManager = new PartyViewHookManager();
 
     static {
-	partyViewHookManager.register(new PartyChartView());
+	partyViewHookManager.register(new UnitChartView());
+	partyViewHookManager.register(new PeopleChartView());
     }
 
     @Override

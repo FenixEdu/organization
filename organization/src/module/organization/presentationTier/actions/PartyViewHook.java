@@ -21,6 +21,8 @@ public abstract class PartyViewHook {
 
     public abstract String getViewName();
 
+    public abstract String getPresentationName();
+
     public abstract String hook(final HttpServletRequest request, final OrganizationalModel organizationalModel, final Party party);
 
     public int ordinal() {
