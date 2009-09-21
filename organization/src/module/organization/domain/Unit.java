@@ -29,6 +29,7 @@ import java.text.Collator;
 import java.util.Comparator;
 
 import myorg.domain.MyOrg;
+import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
@@ -149,4 +150,7 @@ public class Unit extends Unit_Base {
     // super.removeExpenditureUnit();
     // }
 
+    public Boolean isUserOperatorOfMailTracking(User user) {
+	return this.getMailTracking() != null && this.getMailTracking().isUserOperator(user);
+    }
 }
