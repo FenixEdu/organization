@@ -149,8 +149,4 @@ public class Unit extends Unit_Base {
     // public void removeExpenditureUnit() {
     // super.removeExpenditureUnit();
     // }
-
-    public Boolean isUserOperatorOfMailTracking(User user) {
-	return this.getMailTracking() != null && this.getMailTracking().isUserOperator(user);
-    }
 }
