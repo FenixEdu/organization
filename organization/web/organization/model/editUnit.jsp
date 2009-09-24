@@ -9,20 +9,20 @@
 <%@page import="module.organization.domain.Unit"%>
 
 <h2>
-	<bean:message key="label.model" bundle="ORGANIZATION_RESOURCES"/>
-	:
+	<bean:message key="label.model" bundle="ORGANIZATION_RESOURCES"/>:
 	<bean:write name="organizationalModel" property="name"/>
 </h2>
 
 <jsp:include page="viewPartyDetails.jsp"/>
 
-<h3>
+<h3 class="mtop15">
 	<bean:message key="label.unit.edit" bundle="ORGANIZATION_RESOURCES"/>
 </h3>
 
 <html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">
-	<span class="error0"> <bean:write name="message" /> </span>
-	<br />
+	<p>
+		<span class="error0"> <bean:write name="message" /> </span>
+	</p>
 </html:messages>
 
 
@@ -35,11 +35,12 @@
 	<%-- edit unit --%>
 	<fr:edit id="unitBean.edit.unit" name="unitBean" schema="organization.UnitBean.edit.unit" >
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2" />
+			<fr:property name="classes" value="form" />
 			<fr:property name="columnClasses" value=",,tderror" />
 		</fr:layout>
 	</fr:edit>
-	
-	<html:submit><bean:message key="label.edit" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-	<html:cancel onclick="this.form.method.value='viewModel';return true;" ><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
+	<p class="mtop05">
+		<html:submit styleClass="inputbutton"><bean:message key="label.edit" bundle="ORGANIZATION_RESOURCES" /></html:submit>
+		<html:cancel styleClass="inputbutton" onclick="this.form.method.value='viewModel';return true;" ><bean:message key="label.cancel" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
+	</p>
 </fr:form>

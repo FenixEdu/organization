@@ -60,8 +60,12 @@
 </schema>
 
 <schema name="organization.UnitBean.create.top.unit" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
-	<slot name="name" key="label.unit.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
-	<slot name="acronym" key="label.unit.acronym" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+	<slot name="name" key="label.unit.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="acronym" key="label.unit.acronym" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="40"/>
+	</slot>
 	<slot name="partyType" layout="menu-select" key="label.unit.party.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.PartyType" />
@@ -71,9 +75,15 @@
 </schema>
 
 <schema name="organization.UnitBean.create.unit" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
-	<slot name="parent.partyName" key="label.unit.parent" read-only="true" />
-	<slot name="name" key="label.unit.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
-	<slot name="acronym" key="label.unit.acronym" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+	<slot name="parent.partyName" key="label.unit.parent" read-only="true">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="name" key="label.unit.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="acronym" key="label.unit.acronym" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="40"/>
+	</slot>
 	<slot name="partyType" layout="menu-select" key="label.unit.party.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
 		<property name="choiceType" value="module.organization.domain.PartyType" />
@@ -116,8 +126,12 @@
 </schema>
 
 <schema name="organization.UnitBean.edit.unit" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
-	<slot name="name" key="label.unit.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
-	<slot name="acronym" key="label.unit.acronym" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+	<slot name="name" key="label.unit.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="acronym" key="label.unit.acronym" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="40"/>
+	</slot>
 </schema>
 
 <schema name="organization.Unit.view.parent.accountability" type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
@@ -217,11 +231,15 @@
 </schema>
 
 <schema name="module.organization.domain.dto.OrganizationalModelBean" type="module.organization.domain.dto.OrganizationalModelBean" bundle="ORGANIZATION_RESOURCES">
-	<slot name="name"/>
+	<slot name="name">
+		<property name="size" value="40"/>
+	</slot>
 </schema>
 
 <schema name="module.organization.domain.OrganizationalModel.edit" type="module.organization.domain.OrganizationalModel" bundle="ORGANIZATION_RESOURCES">
-	<slot name="name"/>
+	<slot name="name">
+		<property name="size" value="40"/>
+	</slot>
 </schema>
 
 <schema name="module.organization.domain.OrganizationalModel.name" type="module.organization.domain.OrganizationalModel" bundle="ORGANIZATION_RESOURCES">

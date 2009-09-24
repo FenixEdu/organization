@@ -9,27 +9,27 @@
 <%@page import="module.organization.domain.Unit"%>
 
 <h2>
-	<bean:message key="label.model" bundle="ORGANIZATION_RESOURCES"/>
-	:
+	<bean:message key="label.model" bundle="ORGANIZATION_RESOURCES"/>:
 	<bean:write name="organizationalModel" property="name"/>
 </h2>
 
 <jsp:include page="viewPartyDetails.jsp"/>
 
-<h3>
+<h3 class="mtop15">
 	<bean:message key="label.unit.partyTypes.manage" bundle="ORGANIZATION_RESOURCES"/>
 </h3>
 
 <html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">
-	<span class="error0"> <bean:write name="message" /> </span>
-	<br />
+	<p>
+		<span class="error0"> <bean:write name="message" /> </span>
+	</p>
 </html:messages>
 
 <bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewName=default</bean:define>
 <fr:edit id="party" name="party" schema="module.organization.domain.Party.partyTypes"
 	action="<%= url %>">
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle2" />
+		<fr:property name="classes" value="form listInsideClear" />
 		<fr:property name="columnClasses" value=",,tderror" />
 	</fr:layout>
 	<fr:destination name="cancel" path="<%= url %>" />

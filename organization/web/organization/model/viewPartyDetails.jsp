@@ -6,13 +6,12 @@
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c" %>
 <%@ taglib uri="/WEB-INF/chart.tld" prefix="chart" %>
 
-<div class="dataBox">
-	<table>
-		<tr>
-			<td colspan="2">
-				<strong><fr:view name="party" property="partyName"/></strong>
-			</td>
-		</tr>
+
+<div class="infobox mtop1 mbottom1">
+
+	<h3 class="mbottom05"><fr:view name="party" property="partyName"/></h3>
+
+	<table class="tstyle1 mbottom05">
 		<tr>
 			<th>
 				<bean:message key="label.unit.party.types" bundle="ORGANIZATION_RESOURCES"/>:
@@ -44,9 +43,11 @@
 			</td>
 		</tr>
 	</table>
+	
 </div>
 
 <html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">
-	<span class="error0"> <bean:write name="message" /> </span>
-	<br />
+	<p>
+		<span class="error0"> <bean:write name="message" /> </span>
+	</p>
 </html:messages>

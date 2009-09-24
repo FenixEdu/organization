@@ -11,10 +11,11 @@
 <h2><bean:message key="label.models" bundle="ORGANIZATION_RESOURCES"/></h2>
 
 <logic:present role="myorg.domain.RoleType.MANAGER">
-	<html:link action="/organizationModel.do?method=prepareCreateModel">
-		<bean:message key="label.models.create" bundle="ORGANIZATION_RESOURCES"/>
-	</html:link>
-	<br/>
+	<p class="mtop05">
+		<html:link action="/organizationModel.do?method=prepareCreateModel">
+			+ <bean:message key="label.models.create" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
+	</p>
 </logic:present>
 
 <logic:empty name="organizationalModels">

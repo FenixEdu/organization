@@ -9,8 +9,7 @@
 <%@page import="module.organization.domain.Unit"%>
 
 <h2>
-	<bean:message key="label.model" bundle="ORGANIZATION_RESOURCES"/>
-	:
+	<bean:message key="label.model" bundle="ORGANIZATION_RESOURCES"/>:
 	<bean:write name="organizationalModel" property="name"/>
 </h2>
 
@@ -18,7 +17,7 @@
 	<jsp:include page="viewPartyDetails.jsp"/>
 </logic:present>
 
-<h3>
+<h3 class="mtop15">
 	<logic:present name="unitBean" property="parent">
 		<bean:message key="label.create.unit" bundle="ORGANIZATION_RESOURCES" />
 	</logic:present>
@@ -29,8 +28,9 @@
 </h3>
 
 <html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">
-	<span class="error0"> <bean:write name="message" /> </span>
-	<br />
+	<p>
+		<span class="error0"> <bean:write name="message" /> </span>
+	</p>
 </html:messages>
 
 <bean:define id="actionUrl">/organizationModel.do?organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;<logic:present name="unitBean" property="parent">partyOid=<bean:write name="unitBean" property="parent.externalId" />&amp;viewName=default</logic:present></bean:define>
@@ -43,7 +43,7 @@
 	<logic:present name="unitBean" property="parent">
 		<fr:edit id="unitBean.create.unit" name="unitBean" schema="organization.UnitBean.create.unit" >
 			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle2" />
+				<fr:property name="classes" value="form" />
 				<fr:property name="columnClasses" value=",,tderror" />
 				<fr:property name="requiredMarkShown" value="true" />
 			</fr:layout>
@@ -54,13 +54,13 @@
 	<logic:notPresent name="unitBean" property="parent">
 		<fr:edit id="unitBean.create.top.unit" name="unitBean" schema="organization.UnitBean.create.top.unit">
 			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle2" />
+				<fr:property name="classes" value="form" />
 				<fr:property name="columnClasses" value=",,tderror" />
 				<fr:property name="requiredMarkShown" value="true" />
 			</fr:layout>
 		</fr:edit>
 	</logic:notPresent>
 
-	<html:submit><bean:message key="label.create" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-	<html:cancel onclick="this.form.method.value='viewModel';return true;" ><bean:message key="label.cancel" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
+	<html:submit styleClass="inputbutton"><bean:message key="label.create" bundle="ORGANIZATION_RESOURCES" /></html:submit>
+	<html:cancel onclick="this.form.method.value='viewModel';return true;" styleClass="inputbutton"><bean:message key="label.cancel" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
 </fr:form>

@@ -7,7 +7,7 @@
 
 <h2><bean:message key="label.party.types" bundle="ORGANIZATION_RESOURCES" /></h2>
 
-<ul>
+<ul class="mbottom15">
 	<li>
 		<html:link action="/organization.do?method=prepareCreatePartyType"><bean:message key="label.create.new" bundle="ORGANIZATION_RESOURCES"/></html:link>
 	</li>
@@ -16,7 +16,7 @@
 <logic:notEmpty name="partyTypes">
 	<fr:view name="partyTypes" schema="organization.PartyType.view">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="table"/>
+			<fr:property name="classes" value="tstyle2 tdleft thleft"/>
 
 			<fr:property name="linkFormat(editPartyType)" value="/organization.do?method=prepareEditPartyType&amp;partyTypeOid=${externalId}" />
 			<fr:property name="key(editPartyType)" value="label.edit"/>

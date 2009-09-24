@@ -9,54 +9,50 @@
 <%@page import="module.organization.domain.Unit"%>
 
 <h2>
-	<bean:message key="label.model" bundle="ORGANIZATION_RESOURCES"/>
-	:
+	<bean:message key="label.model" bundle="ORGANIZATION_RESOURCES"/>:
 	<bean:write name="organizationalModel" property="name"/>
 </h2>
 
 <logic:present role="myorg.domain.RoleType.MANAGER">
-	<html:link action="/organizationModel.do?method=editModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
-		<bean:message key="label.model.edit" bundle="ORGANIZATION_RESOURCES"/>
-	</html:link>
-	|
-	<html:link action="/organizationModel.do?method=manageModelAccountabilityTypes" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
-		<bean:message key="label.model.accountabilityTypes.manage" bundle="ORGANIZATION_RESOURCES"/>
-	</html:link>
-	|
-	<html:link action="/organizationModel.do?method=prepareAddUnitToModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
-		<bean:message key="label.model.add.unit" bundle="ORGANIZATION_RESOURCES"/>
-	</html:link>
-	|
-	<html:link action="/organizationModel.do?method=prepareCreateUnit" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
-		<bean:message key="label.model.create.unit" bundle="ORGANIZATION_RESOURCES"/>
-	</html:link>
-	|
-	<html:link action="/organizationModel.do?method=deleteModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
-		<bean:message key="label.model.delete" bundle="ORGANIZATION_RESOURCES"/>
-	</html:link>
-	<br/>
+	<p class="mvert05">
+		<html:link action="/organizationModel.do?method=editModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
+			<bean:message key="label.model.edit" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
+		|
+		<html:link action="/organizationModel.do?method=manageModelAccountabilityTypes" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
+			<bean:message key="label.model.accountabilityTypes.manage" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
+		|
+		<html:link action="/organizationModel.do?method=prepareAddUnitToModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
+			<bean:message key="label.model.add.unit" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
+		|
+		<html:link action="/organizationModel.do?method=prepareCreateUnit" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
+			<bean:message key="label.model.create.unit" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
+		|
+		<html:link action="/organizationModel.do?method=deleteModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
+			<bean:message key="label.model.delete" bundle="ORGANIZATION_RESOURCES"/>
+		</html:link>
+	</p>
 </logic:present>
 
-<div class="dinline">
-	<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/></bean:define>
-	<fr:form action="<%= url %>">
-		<table>
-			<tr>
-			<td>
-				<fr:edit id="partySearchBean" name="partySearchBean" schema="module.organization.domain.search.PartySearchBean">
-					<fr:layout name="tabular">
-						<fr:property name="classes" value="form"/>
-						<fr:property name="columnClasses" value=",,tderror"/>
-					</fr:layout>
-				</fr:edit>
-			</td>
-			<td style="padding-right: 10px; padding-bottom: 5px; vertical-align: top; padding: 1.5em 0 1.5em;">
-				<html:submit styleClass="inputbutton"><bean:message key="renderers.form.search.name" bundle="RENDERER_RESOURCES"/></html:submit>
-			</td>
-			</tr>
-		</table>
-	</fr:form>
-</div>
+
+<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/></bean:define>
+<fr:form action="<%= url %>">
+
+	<fr:edit id="partySearchBean" name="partySearchBean" schema="module.organization.domain.search.PartySearchBean">
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="form mbottom0 mtop15"/>
+			<fr:property name="columnClasses" value=",,tderror"/>
+		</fr:layout>
+	</fr:edit>
+	<p>
+		<html:submit styleClass="inputbutton"><bean:message key="renderers.form.search.name" bundle="RENDERER_RESOURCES"/></html:submit>
+	</p>
+
+</fr:form>
+
 
 <logic:present name="partiesChart">
 	<table width="100%" align="center">
@@ -77,7 +73,7 @@
 
 <logic:present name="party" scope="request">
 	<jsp:include page="viewPartyDetails.jsp"/>
-	<div class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<div class="ui-tabs ui-widget ui-widget-content ui-corner-all" style="font-size: 1.0em;">
 		<logic:notEmpty name="hooks">
 			<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 				<logic:iterate id="hook" type="module.organization.presentationTier.actions.PartyViewHook" name="hooks">
@@ -100,14 +96,18 @@
 	</div>
 </logic:present>
 
-<h4>
-<bean:message key="label.model.accountabilityTypes" bundle="ORGANIZATION_RESOURCES"/>:
+<h4 class="mtop1">
+	<bean:message key="label.model.accountabilityTypes" bundle="ORGANIZATION_RESOURCES"/>:
 </h4>
+
 <logic:empty name="organizationalModel" property="accountabilityTypes">
-	<bean:message key="label.model.accountabilityTypes.none" bundle="ORGANIZATION_RESOURCES"/>
+	<p>
+		<em><bean:message key="label.model.accountabilityTypes.none" bundle="ORGANIZATION_RESOURCES"/></em>
+	</p>
 </logic:empty>
+
 <logic:notEmpty name="organizationalModel" property="accountabilityTypes">
-	<ol>
+	<ol class="mtop05">
 		<logic:iterate id="accountabilityType" name="organizationalModel" property="sortedAccountabilityTypes">
 			<li>
 				<bean:write name="accountabilityType" property="name.content"/>
