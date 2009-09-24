@@ -43,7 +43,8 @@ public class Unit extends Unit_Base {
 	public int compare(final Unit unit1, Unit unit2) {
 	    final String name1 = unit1.getPresentationName();
 	    final String name2 = unit2.getPresentationName();
-	    return Collator.getInstance().compare(name1, name2);
+	    final int c = Collator.getInstance().compare(name1, name2);
+	    return c == 0 ? unit2.hashCode() - unit1.hashCode() : c;
 	}
     };
 
