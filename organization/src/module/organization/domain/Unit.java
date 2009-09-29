@@ -29,7 +29,6 @@ import java.text.Collator;
 import java.util.Comparator;
 
 import myorg.domain.MyOrg;
-import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
@@ -145,9 +144,13 @@ public class Unit extends Unit_Base {
 	return getPartyName() + " (" + getAcronym() + ")";
     }
 
-    // @Override
-    // @Service
-    // public void removeExpenditureUnit() {
-    // super.removeExpenditureUnit();
-    // }
+    public void closeAllParentAccountabilitiesByType(final AccountabilityType accountabilityType) {
+	final LocalDate now = new LocalDate();
+	for (final Accountability accountability : getParentAccountabilitiesSet()) {
+	    if (accountability.getEndDate() == null || accountability.getEndDate().isAfter(now)) {
+		accountability.setEndDate(now);
+	    }
+	}
+    }
+
 }

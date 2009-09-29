@@ -194,4 +194,12 @@ public class Accountability extends Accountability_Base {
 	setEndDate(end);
     }
 
+    public boolean intersects(final LocalDate begin, final LocalDate end) {
+	return !isAfter(getBeginDate(), end) && !isAfter(begin, getEndDate());
+    }
+
+    private static boolean isAfter(final LocalDate localDate1, final LocalDate localDate2) {
+	return localDate1 != null && localDate2 != null && localDate2.isBefore(localDate1);
+    }
+
 }

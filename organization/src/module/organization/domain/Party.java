@@ -368,6 +368,18 @@ abstract public class Party extends Party_Base {
 
     @Service
     public Accountability addChild(final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
+	for (final Accountability accountability : getChildAccountabilitiesSet()) {
+	    if (accountability.getChild() == child && accountability.getAccountabilityType() == type && accountability.intersects(begin, end)) {
+		if (begin == null || (begin != null && accountability.getBeginDate() != null && begin.isBefore(accountability.getBeginDate()))) {
+		    accountability.setBeginDate(begin);
+		}
+		if (end == null || (end != null && accountability.getEndDate() != null && end.isAfter(accountability.getEndDate()))) {
+		    accountability.setEndDate(end);
+		}
+		return accountability;
+	    }
+	}
+
 	return Accountability.create(this, child, type, begin, end);
     }
 
