@@ -153,4 +153,21 @@ public class Unit extends Unit_Base {
 	}
     }
 
+    @Override
+    protected Party findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(final AccountabilityType accountabilityType,
+	    final PartyType partyType, final String acronym) {
+	if (hasPartyTypes(partyType) && acronym.equals(getAcronym())) {
+	    return this;
+	}
+	for (final Accountability accountability : getChildAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == accountabilityType) {
+		final Party party = accountability.getChild().findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(accountabilityType, partyType, acronym);
+		if (party != null) {
+		    return party;
+		}
+	    }
+	}
+	return null;
+    }
+
 }

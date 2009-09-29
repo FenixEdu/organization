@@ -461,4 +461,20 @@ abstract public class Party extends Party_Base {
 	return false;
     }
 
+    public static Party findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(final Set<Party> parties,
+	    final AccountabilityType accountabilityType, final PartyType partyType, final String acronym) {
+	for (final Party party : parties) {
+	    final Party result = party.findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(accountabilityType, partyType, acronym);
+	    if (result != null) {
+		return result;
+	    }
+	}
+	return null;
+    }
+
+    protected Party findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(final AccountabilityType accountabilityType,
+	    final PartyType partyType, final String acronym) {
+	return null;
+    }
+
 }
