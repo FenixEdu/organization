@@ -10,7 +10,6 @@ import java.util.TreeSet;
 import module.organization.domain.dto.OrganizationalModelBean;
 import myorg.domain.MyOrg;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class OrganizationalModel extends OrganizationalModel_Base {
@@ -54,7 +53,7 @@ public class OrganizationalModel extends OrganizationalModel_Base {
 	getAccountabilityTypesSet().clear();
 	getPartiesSet().clear();
 	removeMyOrg();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     public void setAccountabilityTypes(final List<AccountabilityType> accountabilityTypes) {

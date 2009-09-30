@@ -53,7 +53,6 @@ import myorg.domain.contents.ActionNode;
 import myorg.domain.contents.Node;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.Role;
-import myorg.domain.groups.UserGroup;
 import myorg.presentationTier.LayoutContext;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.presentationTier.forms.BaseForm;

@@ -33,7 +33,6 @@ import myorg.domain.exceptions.DomainException;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.Transaction;
 
 public class Accountability extends Accountability_Base {
 
@@ -177,7 +176,7 @@ public class Accountability extends Accountability_Base {
 	removeChild();
 	removeAccountabilityType();
 	removeMyOrg();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     static Accountability create(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,

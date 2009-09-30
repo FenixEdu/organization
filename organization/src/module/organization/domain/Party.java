@@ -48,7 +48,6 @@ import myorg.domain.exceptions.DomainException;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 abstract public class Party extends Party_Base {
@@ -344,7 +343,7 @@ abstract public class Party extends Party_Base {
     public void delete() {
 	canDelete();
 	disconnect();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     protected void canDelete() {

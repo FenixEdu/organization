@@ -30,7 +30,6 @@ import java.io.Serializable;
 import myorg.domain.MyOrg;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.util.DomainReference;
-import pt.ist.fenixframework.pstm.Transaction;
 
 abstract public class ConnectionRule extends ConnectionRule_Base {
 
@@ -65,7 +64,7 @@ abstract public class ConnectionRule extends ConnectionRule_Base {
     @Service
     public void delete() {
 	disconnect();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     protected void disconnect() {

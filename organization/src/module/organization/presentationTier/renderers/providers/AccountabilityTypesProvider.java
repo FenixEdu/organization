@@ -29,7 +29,6 @@ import java.util.ArrayList;
 
 import module.organization.domain.AccountabilityType;
 import myorg.domain.MyOrg;
-import pt.ist.fenixWebFramework.rendererExtensions.converters.DomainObjectKeyArrayConverter;
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 

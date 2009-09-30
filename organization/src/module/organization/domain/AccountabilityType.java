@@ -33,7 +33,6 @@ import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.util.DomainReference;
-import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class AccountabilityType extends AccountabilityType_Base implements Comparable<AccountabilityType> {
@@ -144,7 +143,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     public void delete() {
 	canDelete();
 	disconnect();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     protected void canDelete() {

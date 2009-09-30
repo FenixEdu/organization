@@ -31,7 +31,6 @@ import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.util.DomainReference;
-import pt.ist.fenixframework.pstm.Transaction;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class PartyType extends PartyType_Base implements Comparable<PartyType> {
@@ -122,7 +121,7 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
     public void delete() {
 	canDelete();
 	removeMyOrg();
-	Transaction.deleteObject(this);
+	deleteDomainObject();
     }
 
     private void canDelete() {
