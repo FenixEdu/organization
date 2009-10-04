@@ -53,6 +53,7 @@ import myorg.domain.contents.ActionNode;
 import myorg.domain.contents.Node;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.Role;
+import myorg.domain.groups.UserGroup;
 import myorg.presentationTier.LayoutContext;
 import myorg.presentationTier.actions.ContextBaseAction;
 import myorg.presentationTier.forms.BaseForm;
@@ -137,7 +138,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
 	final ActionNode topActionNode = ActionNode.createActionNode(virtualHost, parentOfNodes, "/organizationModel",
 		"viewModels", "resources.OrganizationResources", "label.manage.organization",
-		Role.getRole(RoleType.MANAGER) // UserGroup.getInstance()
+		/* Role.getRole(RoleType.MANAGER) // */ UserGroup.getInstance()
 		// In the future we want to open this up to every user... but for now we need to keep this link hidden
 		);
 
