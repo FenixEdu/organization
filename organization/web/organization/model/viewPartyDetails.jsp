@@ -9,7 +9,12 @@
 
 <div class="infobox mtop1 mbottom1">
 
-	<h3 class="mbottom05"><fr:view name="party" property="partyName"/> (<fr:view name="party" property="acronym"/>)</h3>
+	<h3 class="mbottom05">
+		<fr:view name="party" property="partyName"/>
+		<logic:equal name="party" property="unit" value="true">
+			(<fr:view name="party" property="acronym"/>)
+		</logic:equal>
+	</h3>
 
 	<table class="tstyle1 mbottom05">
 		<tr>
