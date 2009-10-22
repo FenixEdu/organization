@@ -38,7 +38,7 @@
 						if (object instanceof Accountability) {
 					%>
 						<div class="orgTBox orgTBoxLight">
-							<bean:define id="urlA" type="java.lang.String">/organizationModel.do?method=viewModel&amp;viewName=default&amp;partyOid=<bean:write name="object" property="parent.externalId"/></bean:define>
+							<bean:define id="urlA" type="java.lang.String">/organizationModel.do?method=viewModel&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %>&amp;partyOid=<bean:write name="object" property="parent.externalId"/></bean:define>
 							<html:link action="<%= urlA %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 								<bean:write name="object" property="parent.partyName"/>
 							</html:link>
@@ -47,7 +47,7 @@
 						} else {
 					%>
 						<div class="orgTBox orgTBoxLight">
-							<bean:define id="urlP" type="java.lang.String">/organizationModel.do?method=viewModel&amp;viewName=default&amp;partyOid=<bean:write name="object" property="externalId"/></bean:define>
+							<bean:define id="urlP" type="java.lang.String">/organizationModel.do?method=viewModel&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %>&amp;partyOid=<bean:write name="object" property="externalId"/></bean:define>
 							<html:link action="<%= urlP %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 								<bean:write name="object" property="partyName"/>
 							</html:link>
@@ -72,14 +72,14 @@
 			</dt:format>
 		</font>
 	&nbsp;&nbsp;&nbsp;&nbsp;
-	<bean:define id="urlConfirm">/organizationModel.do?method=confirmAccountability&amp;viewName=default&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/></bean:define>
+	<bean:define id="urlConfirm">/organizationModel.do?method=confirmAccountability&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %>&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/></bean:define>
 	<html:link action="<%= urlConfirm %>" paramId="unconfirmedAccountabilityOid" paramName="unconfirmedAccountability" paramProperty="externalId">
 		<html:img page="/organization/images/accept.png"/>
 	</html:link>
 	<html:link action="<%= urlConfirm %>" paramId="unconfirmedAccountabilityOid" paramName="unconfirmedAccountability" paramProperty="externalId">
 		<bean:message key="label.confirm" bundle="ORGANIZATION_RESOURCES"/>
 	</html:link>
-	<bean:define id="urlReject">/organizationModel.do?method=rejectAccountability&amp;viewName=default&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/></bean:define>
+	<bean:define id="urlReject">/organizationModel.do?method=rejectAccountability&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %>&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/></bean:define>
 	&nbsp;&nbsp;
 	<html:link action="<%= urlReject %>" paramId="unconfirmedAccountabilityOid" paramName="unconfirmedAccountability" paramProperty="externalId">
 		<html:img page="/organization/images/cross.png"/>

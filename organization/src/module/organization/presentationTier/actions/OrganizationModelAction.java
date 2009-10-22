@@ -171,11 +171,13 @@ public class OrganizationModelAction extends ContextBaseAction {
 	protected abstract PartyChart createPartyChart(final OrganizationalModel organizationalModel, final Party party);
     }
 
+    public static final String UNIT_CHART_VIEW_NAME = "00_default";
+
     public static class UnitChartView extends PartyChartView {
 
 	@Override
 	public String getViewName() {
-	    return "default";
+	    return UNIT_CHART_VIEW_NAME;
 	}
 
 	@Override
@@ -194,7 +196,7 @@ public class OrganizationModelAction extends ContextBaseAction {
 
 	@Override
 	public String getViewName() {
-	    return "viewPeople";
+	    return "01_viewPeople";
 	}
 
 	@Override
@@ -247,7 +249,7 @@ public class OrganizationModelAction extends ContextBaseAction {
 	    party = getDomainObject(request, "partyOid");
 	    if (party == null && organizationalModel.getPartiesCount() == 1) {
 		party = organizationalModel.getPartiesIterator().next();
-		request.setAttribute("viewName", "default");
+		request.setAttribute("viewName", UNIT_CHART_VIEW_NAME);
 	    }
 	    partySearchBean = new PartySearchBean(party);
 	} else {

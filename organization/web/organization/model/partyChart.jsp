@@ -17,29 +17,29 @@
 	<logic:present name="partyChart" property="unit">
 		<bean:define id="unit" name="partyChart" property="unit"/>
 		<logic:present role="myorg.domain.RoleType.MANAGER">
-			<bean:define id="url">/organizationModel.do?method=prepareEditUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+			<bean:define id="url">/organizationModel.do?method=prepareEditUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 			<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="label.unit.edit" bundle="ORGANIZATION_RESOURCES"/>
 			</html:link>
 			|
-			<bean:define id="url">/organizationModel.do?method=managePartyPartyTypes&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+			<bean:define id="url">/organizationModel.do?method=managePartyPartyTypes&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 			<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="label.unit.partyTypes.manage" bundle="ORGANIZATION_RESOURCES"/>
 			</html:link>
 			|
 		</logic:present>
-		<bean:define id="url">/organizationModel.do?method=prepareAddUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+		<bean:define id="url">/organizationModel.do?method=prepareAddUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.unit.child.add" bundle="ORGANIZATION_RESOURCES"/>
 		</html:link>
 		|
-		<bean:define id="url">/organizationModel.do?method=prepareCreateUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+		<bean:define id="url">/organizationModel.do?method=prepareCreateUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.unit.child.create" bundle="ORGANIZATION_RESOURCES"/>
 		</html:link>
 		<logic:present role="myorg.domain.RoleType.MANAGER">
 			|
-			<bean:define id="url">/organizationModel.do?method=deleteUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=default</bean:define>
+			<bean:define id="url">/organizationModel.do?method=deleteUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 			<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="label.unit.delete" bundle="ORGANIZATION_RESOURCES"/>
 			</html:link>
@@ -96,7 +96,7 @@
 								<% if (accountabilityTypeIndex > 0) { %>
 									<span style="position: absolute; top: -4px; right: 3px; color: #999999; font-size: 8px;"><%= accountabilityTypeIndex %></span>
 								<% } %>
-								<bean:define id="url">/organizationModel.do?method=viewModel&amp;viewName=default&amp;partyOid=<%= party.getExternalId() %></bean:define>
+								<bean:define id="url">/organizationModel.do?method=viewModel&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %>&amp;partyOid=<%= party.getExternalId() %></bean:define>
 								<html:link action="<%= url %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 									<%= party.getPartyName().getContent() %>
 								</html:link>
@@ -114,7 +114,7 @@
 								<div class="tipBox">
 									<bean:message key="label.unit.has.unconfirmed.accountabilities" bundle="ORGANIZATION_RESOURCES"/>
 									<bean:message key="label.unit.has.unconfirmed.accountabilities.click.prefix" bundle="ORGANIZATION_RESOURCES"/>
-									<bean:define id="url">/organizationModel.do?method=reviewUnconfirmedAccountabilities&amp;viewName=default&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/></bean:define>
+									<bean:define id="url">/organizationModel.do?method=reviewUnconfirmedAccountabilities&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %>&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/></bean:define>
 									<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 										<bean:message key="label.unit.has.unconfirmed.accountabilities.click.infix" bundle="ORGANIZATION_RESOURCES"/>
 									</html:link>

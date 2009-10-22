@@ -60,7 +60,7 @@
 			<td align="center">
 				<chart:orgChart id="party" name="partiesChart" type="java.lang.Object">
 					<div class="orgTBox orgTBoxLight">
-						<bean:define id="url">/organizationModel.do?method=viewModel&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewName=default</bean:define>
+						<bean:define id="url">/organizationModel.do?method=viewModel&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 						<html:link action="<%= url %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 							<bean:write name="party" property="partyName"/>
 						</html:link>
