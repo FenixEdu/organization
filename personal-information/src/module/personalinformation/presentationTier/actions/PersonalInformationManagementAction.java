@@ -28,12 +28,16 @@ package module.personalinformation.presentationTier.actions;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.organization.domain.OrganizationalModel;
+import module.organization.domain.Party;
+import module.organization.presentationTier.actions.PartyViewHook;
 import myorg.domain.RoleType;
 import myorg.domain.VirtualHost;
 import myorg.domain.contents.ActionNode;
 import myorg.domain.contents.Node;
 import myorg.domain.groups.Role;
 import myorg.presentationTier.actions.ContextBaseAction;
+import myorg.util.BundleUtil;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -44,6 +48,29 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/personalInformation")
 public class PersonalInformationManagementAction extends ContextBaseAction {
+
+    public static class PersonalInformationView extends PartyViewHook {
+
+	@Override
+	public String hook(final HttpServletRequest request, final OrganizationalModel organizationalModel, final Party party) {
+	    return "/personalInformation/organizationModelView.jsp";
+	}
+
+	@Override
+	public String getViewName() {
+	    return "02_personalInformation";
+	}
+
+	@Override
+	public String getPresentationName() {
+	    return BundleUtil.getStringFromResourceBundle("resources.PersonalInformationResources", "label.personalInformationView");
+	}
+
+	@Override
+	public boolean isAvailableFor(final Party party) {
+	    return party != null && party.isPerson();
+	}
+    }
 
     @CreateNodeAction(bundle = "PERSONAL_INFORMATION_RESOURCES", key = "add.node.manage.personal.information", groupKey = "label.module.personal.information")
     public final ActionForward createOrganizationNode(final ActionMapping mapping, final ActionForm form,
@@ -70,4 +97,5 @@ public class PersonalInformationManagementAction extends ContextBaseAction {
 	    final HttpServletResponse response) throws Exception {
 	return forward(request, "/personalInformation/manage.jsp");
     }
+
 }

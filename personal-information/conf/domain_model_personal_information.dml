@@ -31,6 +31,10 @@ enum module.personalinformation.domain.Gender as Gender;
 enum module.personalinformation.domain.MaritalStatus as MaritalStatus;
 
 
+class module.personalinformation.domain.PersonalInformationSystem {
+}
+
+
 class module.personalinformation.domain.PersonalInformation {
 
 	LocalDate birthDate;
@@ -62,7 +66,13 @@ class module.personalinformation.domain.IdentificationDocument {
 		String emissionLocation;
 	}
 
+
 /** Relations **/
+
+relation MyOrgPersonalInformationSystem {
+	myorg.domain.MyOrg playsRole myOrg;
+	module.personalinformation.domain.PersonalInformationSystem playsRole personalInformationSystem;
+}
 
 relation MyOrgPersonalInformation {
 	myorg.domain.MyOrg playsRole myOrg;
