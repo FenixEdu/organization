@@ -80,7 +80,7 @@ public class Unit extends Unit_Base {
 	    throw new DomainException("error.Unit.invalid.name");
 	}
 
-	if (acronym == null || acronym.isEmpty()) {
+	if (acronym == null /* || acronym.isEmpty() */ ) {
 	    throw new DomainException("error.Unit.invalid.acronym");
 	}
     }
