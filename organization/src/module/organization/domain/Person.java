@@ -25,6 +25,10 @@
 
 package module.organization.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import module.organization.domain.PartyType.PartyTypeBean;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
@@ -34,6 +38,7 @@ import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.util.DomainReference;
+import pt.utl.ist.fenix.tools.util.StringNormalizer;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class Person extends Person_Base {
@@ -177,6 +182,37 @@ public class Person extends Person_Base {
 	    }
 	}
 	return partyType;
+    }
+
+    public static List<Person> searchPersons(String value) {
+	final List<Person> persons = new ArrayList<Person>();
+
+	final String trimmedValue = value.trim();
+	final String[] input = trimmedValue.split(" ");
+	StringNormalizer.normalize(input);
+
+	for (final Party party : MyOrg.getInstance().getPersonsSet()) {
+	    if (party.isPerson()) {
+		final Person person = (Person) party;
+		final String unitName = StringNormalizer.normalize(person.getPartyName().getContent());
+		if (hasMatch(input, unitName)) {
+		    persons.add(person);
+		}
+	    }
+	}
+
+	Collections.sort(persons, Party.COMPARATOR_BY_NAME);
+
+	return persons;
+    }
+
+    private static boolean hasMatch(final String[] input, final String unitNameParts) {
+	for (final String namePart : input) {
+	    if (unitNameParts.indexOf(namePart) == -1) {
+		return false;
+	    }
+	}
+	return true;
     }
 
 }
