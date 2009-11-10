@@ -7,23 +7,23 @@
 
 <h2><bean:message key="label.create.new" bundle="ORGANIZATION_RESOURCES" /></h2>
 
-<fr:form action="/organization.do">
-	<html:hidden name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="method" value="prepareCreateConnectionRule" />
-
-	<bean:message key="label.connection.rule" bundle="ORGANIZATION_RESOURCES" />
-	<html:select name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="connectionRuleClassName" onchange="this.form.submit();">
-		<html:option value=""><bean:message key="label.organization.choose.an.option" bundle="ORGANIZATION_RESOURCES" /></html:option>
-		<html:option value="module.organization.domain.connectionRules.PartyTypeConnectionRule$PartyTypeConnectionRuleBean"><bean:message key="label.PartyTypeConnectionRule" bundle="ORGANIZATION_RESOURCES" /></html:option>
-		<html:option value="module.organization.domain.connectionRules.UniqueNameAndAcronymConnectionRule$UniqueNameAndAcronymConnectionRuleBean"><bean:message key="label.UniqueNameAndAcronymConnectionRule" bundle="ORGANIZATION_RESOURCES" /></html:option>
-	</html:select>
-</fr:form>
+<div class="mvert1">
+	<fr:form action="/organization.do">
+		<html:hidden name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="method" value="prepareCreateConnectionRule" />
+		<bean:message key="label.connection.rule" bundle="ORGANIZATION_RESOURCES" />:
+		<html:select name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="connectionRuleClassName" onchange="this.form.submit();">
+			<html:option value=""><bean:message key="label.organization.choose.an.option" bundle="ORGANIZATION_RESOURCES" /></html:option>
+			<html:option value="module.organization.domain.connectionRules.PartyTypeConnectionRule$PartyTypeConnectionRuleBean"><bean:message key="label.PartyTypeConnectionRule" bundle="ORGANIZATION_RESOURCES" /></html:option>
+			<html:option value="module.organization.domain.connectionRules.UniqueNameAndAcronymConnectionRule$UniqueNameAndAcronymConnectionRuleBean"><bean:message key="label.UniqueNameAndAcronymConnectionRule" bundle="ORGANIZATION_RESOURCES" /></html:option>
+		</html:select>
+	</fr:form>
+</div>
 
 <fr:form action="/organization.do">	
 	<html:hidden name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="method" value="createConnectionRule" />
 	
 	<html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">
-		<span class="error0"> <bean:write name="message" /> </span>
-		<br />
+		<p><span class="error0"><bean:write name="message" /></span></p>
 	</html:messages>
 	
 	<logic:present name="connectionRuleBean">
@@ -31,14 +31,15 @@
 
 		<fr:edit id="connectionRuleBean" name="connectionRuleBean" schema="<%= schema %>">
 			<fr:layout name="tabular">
-				<fr:property name="classes" value="tstyle2" />
+				<fr:property name="classes" value="tstyle5" />
 				<fr:property name="columnClasses" value=",,tderror" />
 			</fr:layout>
 			<fr:destination name="invalid" path="/organization.do?method=createConnectionRuleInvalid" />
 		</fr:edit>
-	</logic:present>
 
-	<html:submit styleClass="inputbutton"><bean:message key="label.create" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-	<html:cancel styleClass="inputbutton" onclick="this.form.method.value='viewConnectionRules';return true;" ><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
+		<html:submit styleClass="inputbutton"><bean:message key="label.create" bundle="ORGANIZATION_RESOURCES" /></html:submit>
+		<html:cancel styleClass="inputbutton" onclick="this.form.method.value='viewConnectionRules';return true;" ><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
+
+	</logic:present>
 
 </fr:form>

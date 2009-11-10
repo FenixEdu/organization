@@ -6,11 +6,15 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 
 <h2><bean:message key="label.connection.rules" bundle="ORGANIZATION_RESOURCES" /></h2>
-<h3><bean:message key="label.accountability.type" bundle="ORGANIZATION_RESOURCES" /> <fr:view name="accountabilityType" property="name" /></h3>
+
+<p class="mtop05">
+	<strong><bean:message key="label.accountability.type" bundle="ORGANIZATION_RESOURCES" /> <fr:view name="accountabilityType" property="name" /></strong>
+</p>
 
 <html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">
-	<span class="error0"> <bean:write name="message" /> </span>
-	<br />
+	<p>
+		<span class="error0"><bean:write name="message" /></span>
+	</p>
 </html:messages>
 
 <bean:define id="accountabilityTypeOid" name="accountabilityType" property="externalId"  type="java.lang.String"/>
@@ -53,7 +57,9 @@
 	</logic:notEmpty>
 	
 	<logic:empty name="connectionRules">
-		<em><strong><bean:message key="label.no.connection.rules" bundle="ORGANIZATION_RESOURCES" /></strong></em>
+		<p>
+			<em><bean:message key="label.no.connection.rules" bundle="ORGANIZATION_RESOURCES" /></em>
+		</p>
 	</logic:empty>
 	
 	<html:cancel onclick="this.form.method.value='viewAccountabilityTypes';return true;" ><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:cancel>

@@ -16,7 +16,7 @@
 	schema="organization.PartyTypeBean"
 	action="/organization.do?method=createPartyType">
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle2" />
+		<fr:property name="classes" value="tstyle5" />
 		<fr:property name="columnClasses" value=",,tderror" />
 	</fr:layout>
 	<fr:destination name="cancel" path="/organization.do?method=viewPartyTypes" />

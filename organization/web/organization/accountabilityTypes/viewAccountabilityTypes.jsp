@@ -7,15 +7,16 @@
 
 <h2><bean:message key="label.accountability.types" bundle="ORGANIZATION_RESOURCES" /></h2>
 
-<ul>
+<ul class="mbottom15">
 	<li>
 		<html:link action="/organization.do?method=prepareCreateAccountabilityType"><bean:message key="label.create.new" bundle="ORGANIZATION_RESOURCES"/></html:link>
 	</li>
 </ul>
+
 <logic:notEmpty name="accountabilityTypes">
 	<fr:view name="accountabilityTypes" schema="organization.AccountabilityType.view">
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="table"/>
+			<fr:property name="classes" value="tstyle2 tdleft thleft"/>
 
 			<fr:property name="linkFormat(editAccountabilityType)" value="/organization.do?method=prepareEditAccountabilityType&amp;accountabilityTypeOid=${externalId}" />
 			<fr:property name="key(editAccountabilityType)" value="label.edit"/>

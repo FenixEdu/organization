@@ -9,8 +9,12 @@
 
 <schema name="organization.PartyTypeBean" type="module.organization.domain.PartyType$PartyTypeBean" 
 	bundle="ORGANIZATION_RESOURCES">
-	<slot name="type" key="label.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
-	<slot name="name" key="label.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+	<slot name="type" key="label.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="name" key="label.name" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="40"/>
+	</slot>
 </schema>
 
 <schema name="organization.AccountabilityType.view" type="module.organization.domain.AccountabilityType" 
@@ -21,8 +25,12 @@
 
 <schema name="organization.AccountabilityTypeBean" type="module.organization.domain.AccountabilityType$AccountabilityTypeBean" 
 	bundle="ORGANIZATION_RESOURCES">
-	<slot name="type" key="label.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
-	<slot name="name" key="label.name" />
+	<slot name="type" key="label.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="name" key="label.name">
+		<property name="size" value="40"/>
+	</slot>
 </schema>
 
 <schema name="organization.ConnectionRule.view" type="module.organization.domain.ConnectionRule" bundle="ORGANIZATION_RESOURCES">
