@@ -40,10 +40,25 @@ public class Unit extends Unit_Base {
 
     public static final Comparator<Unit> COMPARATOR_BY_PRESENTATION_NAME = new Comparator<Unit>() {
 	public int compare(final Unit unit1, Unit unit2) {
+	    final int depth1 = unit1.depth();
+	    final int depth2 = unit2.depth();
+	    if (depth1 != depth2) {
+		return depth1 - depth2;
+	    }
+
 	    final String name1 = unit1.getPresentationName();
 	    final String name2 = unit2.getPresentationName();
 	    final int c = Collator.getInstance().compare(name1, name2);
-	    return c == 0 ? unit2.hashCode() - unit1.hashCode() : c;
+	    if (c == 0) {
+		final String acronym1 = unit1.getAcronym();
+		final String acronym2 = unit2.getAcronym();
+		if (acronym1 == null || acronym2 == null) {
+		    return unit2.hashCode() - unit1.hashCode();
+		}
+		final int a = Collator.getInstance().compare(acronym1, acronym2);
+		return a == 0 ? unit2.hashCode() - unit1.hashCode() : a;
+	    }
+	    return c;
 	}
     };
 
@@ -168,6 +183,24 @@ public class Unit extends Unit_Base {
 	    }
 	}
 	return null;
+    }
+
+    private int depth() {
+	int depth = 0;
+	if (hasAnyOrganizationalModels()) {
+	    return depth;
+	}
+	for (final Accountability accountability : getParentAccountabilitiesSet()) {
+	    final Party party = accountability.getParent();
+	    if (party.isUnit()) {
+		final Unit unit = (Unit) party;
+		final int parentDepth = unit.depth();
+		if (parentDepth > depth) {
+		    depth = parentDepth;
+		}
+	    }
+	}
+	return depth + 1;
     }
 
 }
