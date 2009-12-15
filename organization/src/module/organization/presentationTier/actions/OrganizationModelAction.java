@@ -513,4 +513,26 @@ public class OrganizationModelAction extends ContextBaseAction {
 	return reviewUnconfirmedAccountabilities(mapping, form, request, response);
     }
 
+    public ActionForward prepareDeleteAccountability(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
+	request.setAttribute("organizationalModel", organizationalModel);
+	final Party party = getDomainObject(request, "partyOid");
+	request.setAttribute("party", party);
+	final UnitBean unitBean = new UnitBean();
+	unitBean.setParent(party);
+	request.setAttribute("unitBean", unitBean);
+	return forward(request, "/organization/model/deleteAccountability.jsp");
+    }
+
+    public ActionForward deleteAccountability(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
+	final Accountability accountability = getDomainObject(request, "accountabilityOid");
+	if (accountability != null) {
+	    final Party child = accountability.getChild();
+	    child.removeParent(accountability);
+	}
+	return viewModel(mapping, form, request, response);
+    }
+
 }
