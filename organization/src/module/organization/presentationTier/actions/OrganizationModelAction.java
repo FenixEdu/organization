@@ -244,7 +244,7 @@ public class OrganizationModelAction extends ContextBaseAction {
 	request.setAttribute("organizationalModel", organizationalModel);
 
 	Party party;
-	PartySearchBean partySearchBean = getRenderedObject("partyBean");
+	PartySearchBean partySearchBean = getRenderedObject("partySearchBean");
 	if (partySearchBean == null) {
 	    party = getDomainObject(request, "partyOid");
 	    if (party == null && organizationalModel.getPartiesCount() == 1) {
