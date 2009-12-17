@@ -283,6 +283,7 @@
 
 <schema name="module.organization.domain.Accountability.with.child.info" type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
 	<slot name="child.partyName" key="label.name"/>
+	<slot name="accountabilityType.type" key="label.type"/>
 	<slot name="beginDate" key="label.begin"/>
 	<slot name="endDate" key="label.end" />
 </schema>

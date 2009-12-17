@@ -27,6 +27,7 @@ package module.organization.domain;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -424,15 +425,18 @@ abstract public class Party extends Party_Base {
     public Set<OrganizationalModel> getAllOrganizationModels() {
 	final Set<OrganizationalModel> organizationModels = new TreeSet<OrganizationalModel>(
 		OrganizationalModel.COMPARATORY_BY_NAME);
-	addAllOrganizationModels(organizationModels);
+	addAllOrganizationModels(organizationModels, new HashSet<Party>());
 	return organizationModels;
     }
 
-    public void addAllOrganizationModels(final Set<OrganizationalModel> organizationModels) {
-	organizationModels.addAll(getOrganizationalModelsSet());
-	for (final Accountability accountability : getParentAccountabilitiesSet()) {
-	    final Party party = accountability.getParent();
-	    party.addAllOrganizationModels(organizationModels);
+    public void addAllOrganizationModels(final Set<OrganizationalModel> organizationModels, final Set<Party> processed) {
+	if (!processed.contains(this)) {
+	    processed.add(this);
+	    organizationModels.addAll(getOrganizationalModelsSet());
+	    for (final Accountability accountability : getParentAccountabilitiesSet()) {
+		final Party party = accountability.getParent();
+		party.addAllOrganizationModels(organizationModels, processed);
+	    }
 	}
     }
 

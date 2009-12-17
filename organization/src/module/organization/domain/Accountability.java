@@ -99,8 +99,11 @@ public class Accountability extends Accountability_Base {
 	}
 
 	if (oldest != null && begin.isBefore(oldest.getBeginDate())) {
-	    throw new DomainException("error.Accountability.begin.starts.before.oldest.parent.begin", oldest.getChild()
-		    .getPartyName().getContent(), oldest.getBeginDate().toString("dd/MM/yyyy"));
+	    final String[] args = new String[] {
+		    oldest.getChild().getPartyName().getContent(),
+		    oldest.getBeginDate().toString("dd/MM/yyyy")
+	    };
+	    throw new DomainException("error.Accountability.begin.starts.before.oldest.parent.begin", args);
 	}
     }
 
@@ -136,7 +139,7 @@ public class Accountability extends Accountability_Base {
     }
 
     public boolean contains(final LocalDate date) {
-	return !getBeginDate().isAfter(date) && (!hasEndDate() || !getEndDate().isAfter(date));
+	return !getBeginDate().isAfter(date) && (!hasEndDate() || getEndDate().isAfter(date));
     }
 
     public boolean contains(final LocalDate begin, final LocalDate end) {

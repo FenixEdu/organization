@@ -109,8 +109,11 @@ public class PartyTypeConnectionRule extends PartyTypeConnectionRule_Base {
 	    if (each != this && each instanceof PartyTypeConnectionRule) {
 		final PartyTypeConnectionRule rule = (PartyTypeConnectionRule) each;
 		if (rule.getAllowedParent().equals(allowedParent) && rule.getAllowedChild().equals(allowedChild)) {
-		    throw new DomainException("error.PartyTypeConnectionRule.already.exists.with.same.parent.and.child",
-			    allowedParent.getName().getContent(), allowedChild.getName().getContent());
+		    final String[] args = new String[] {
+			    allowedParent.getName().getContent(),
+			    allowedChild.getName().getContent()
+		    };
+		    throw new DomainException("error.PartyTypeConnectionRule.already.exists.with.same.parent.and.child", args);
 		}
 	    }
 	}
