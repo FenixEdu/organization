@@ -451,14 +451,21 @@ abstract public class Party extends Party_Base {
     }
 
     public boolean hasChildAccountabilityIncludingAncestry(final List<AccountabilityType> accountabilityTypes, final Party party) {
-	for (final Party child : getChildren(accountabilityTypes)) {
-	    if (child == party) {
-		return true;
+	return hasChildAccountabilityIncludingAncestry(new HashSet<Party>(), accountabilityTypes, party);
+    }
+
+    private boolean hasChildAccountabilityIncludingAncestry(final Set<Party> processed, final List<AccountabilityType> accountabilityTypes, final Party party) {
+	if (!processed.contains(this)) {
+	    processed.add(this);
+	    for (final Party child : getChildren(accountabilityTypes)) {
+		if (child == party) {
+		    return true;
+		}
 	    }
-	}
-	for (final Party parent : getParents(accountabilityTypes)) {
-	    if (parent.hasChildAccountabilityIncludingAncestry(accountabilityTypes, party)) {
-		return true;
+	    for (final Party parent : getParents(accountabilityTypes)) {
+		if (parent.hasChildAccountabilityIncludingAncestry(processed, accountabilityTypes, party)) {
+		    return true;
+		}
 	    }
 	}
 	return false;
