@@ -48,6 +48,7 @@ import module.organization.domain.Unit;
 import module.organization.domain.UnitBean;
 import module.organization.domain.dto.OrganizationalModelBean;
 import module.organization.domain.search.PartySearchBean;
+import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import myorg.presentationTier.LayoutContext;
 import myorg.presentationTier.actions.ContextBaseAction;
@@ -218,23 +219,30 @@ public class OrganizationModelAction extends ContextBaseAction {
 	partyViewHookManager.register(new PeopleChartView());
     }
 
+    public static void addHeadToLayoutContext(final HttpServletRequest request) {
+	final LayoutContext layoutContext = (LayoutContext) getContext(request);
+	layoutContext.addHead("/organization/layoutContext/head.jsp");
+    }
+
     @Override
     public ActionForward execute(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
 	final ActionForward forward = super.execute(mapping, form, request, response);
-	final LayoutContext layoutContext = (LayoutContext) getContext(request);
-	layoutContext.addHead("/organization/layoutContext/head.jsp");
+	addHeadToLayoutContext(request);
 	return forward;
+    }
+
+    public static void viewModels(final HttpServletRequest request) {
+	final Set<OrganizationalModel> organizationalModels = new TreeSet<OrganizationalModel>(OrganizationalModel.COMPARATORY_BY_NAME);
+	organizationalModels.addAll(MyOrg.getInstance().getOrganizationalModelsSet());
+	request.setAttribute("organizationalModels", organizationalModels);
+	final OrganizationalModelChart organizationalModelChart = new OrganizationalModelChart(organizationalModels);
+	request.setAttribute("organizationalModelChart", organizationalModelChart);
     }
 
     public ActionForward viewModels(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) throws Exception {
-	final Set<OrganizationalModel> organizationalModels = new TreeSet<OrganizationalModel>(
-		OrganizationalModel.COMPARATORY_BY_NAME);
-	organizationalModels.addAll(getMyOrg().getOrganizationalModelsSet());
-	request.setAttribute("organizationalModels", organizationalModels);
-	final OrganizationalModelChart organizationalModelChart = new OrganizationalModelChart(organizationalModels);
-	request.setAttribute("organizationalModelChart", organizationalModelChart);
+	viewModels(request);
 	return forward(request, "/organization/model/viewModels.jsp");
     }
 

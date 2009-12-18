@@ -17,7 +17,8 @@ public class OrganizationalModel extends OrganizationalModel_Base {
     public static final Comparator<OrganizationalModel> COMPARATORY_BY_NAME = new Comparator<OrganizationalModel>() {
 	@Override
 	public int compare(final OrganizationalModel o1, final OrganizationalModel o2) {
-	    return o1.getName().compareTo(o2.getName());
+	    final int c = o1.getName().compareTo(o2.getName());
+	    return c == 0 ? o1.hashCode() - o2.hashCode() : c;
 	}
     };
 

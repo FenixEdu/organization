@@ -37,7 +37,7 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class AccountabilityType extends AccountabilityType_Base implements Comparable<AccountabilityType> {
 
-    public static final Comparator<AccountabilityType> COMPARATORY_BY_NAME = new Comparator<AccountabilityType>() {
+    public static class AccountabilityTypeComparator implements Comparator<AccountabilityType>, Serializable {
 
 	@Override
 	public int compare(final AccountabilityType o1, final AccountabilityType o2) {
@@ -45,7 +45,9 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
 	    return c == 0 ? o2.hashCode() - o1.hashCode() : c;
 	}
 
-    };
+    }
+
+    public static final Comparator<AccountabilityType> COMPARATORY_BY_NAME = new AccountabilityTypeComparator();
 
     static public class AccountabilityTypeBean implements Serializable {
 
