@@ -155,8 +155,9 @@ public class Unit extends Unit_Base {
 	return new Unit(null, name, acronym, partyType, null, new LocalDate(), null, null);
     }
 
+    @Override
     public String getPresentationName() {
-	return getPartyName() + " (" + getAcronym() + ")";
+	return getAcronym() == null || getAcronym().isEmpty() ? super.getPresentationName() : super.getPresentationName() + " (" + getAcronym() + ')';
     }
 
     public void closeAllParentAccountabilitiesByType(final AccountabilityType accountabilityType) {

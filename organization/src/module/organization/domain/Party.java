@@ -487,4 +487,8 @@ abstract public class Party extends Party_Base {
 	return null;
     }
 
+    public String getPresentationName() {
+	return getPartyName().getContent();
+    }
+
 }
