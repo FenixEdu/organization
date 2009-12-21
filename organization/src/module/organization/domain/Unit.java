@@ -27,6 +27,8 @@ package module.organization.domain;
 
 import java.text.Collator;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
@@ -187,17 +189,24 @@ public class Unit extends Unit_Base {
     }
 
     private int depth() {
+	return depth(new HashSet<Accountability>());
+    }
+
+    private int depth(final Set<Accountability> processed) {
 	int depth = 0;
 	if (hasAnyOrganizationalModels()) {
 	    return depth;
 	}
 	for (final Accountability accountability : getParentAccountabilitiesSet()) {
-	    final Party party = accountability.getParent();
-	    if (party.isUnit()) {
-		final Unit unit = (Unit) party;
-		final int parentDepth = unit.depth();
-		if (parentDepth > depth) {
-		    depth = parentDepth;
+	    if (!processed.contains(accountability)) {
+		processed.add(accountability);
+		final Party party = accountability.getParent();
+		if (party.isUnit()) {
+		    final Unit unit = (Unit) party;
+		    final int parentDepth = unit.depth(processed);
+		    if (parentDepth > depth) {
+			depth = parentDepth;
+		    }
 		}
 	    }
 	}

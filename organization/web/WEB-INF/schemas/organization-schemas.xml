@@ -219,7 +219,7 @@
 		bundle="ORGANIZATION_RESOURCES">
 	<slot name="party" layout="autoComplete" key="label.party" bundle="ORGANIZATION_RESOURCES">
         <property name="labelField" value="partyName.content"/>
-		<property name="format" value="${partyName.content}"/>
+		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="3"/>		
 		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.UnitAutoCompleteProvider"/>
 		<property name="size" value="60"/>
