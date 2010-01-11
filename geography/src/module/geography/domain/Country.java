@@ -24,9 +24,11 @@
  */
 package module.geography.domain;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 
 import module.organization.domain.Unit;
 import myorg.domain.MyOrg;
@@ -42,6 +44,26 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  * @author Pedro Santos (pedro.miguel.santos@ist.utl.pt)
  */
 public class Country extends Country_Base implements GeographicConstants {
+
+    public static final Comparator<Country> COMPARATOR_BY_NAME = new Comparator<Country>() {
+	public int compare(final Country country1, Country country2) {
+	    final String name1 = country1.getName().getContent();
+	    final String name2 = country2.getName().getContent();
+	    final int c = Collator.getInstance().compare(name1, name2);
+	    if (c == 0) {
+		final String acronym1 = country1.getAcronym();
+		final String acronym2 = country2.getAcronym();
+		if (acronym1 == null || acronym2 == null) {
+		    return country2.hashCode() - country1.hashCode();
+		}
+		final int a = Collator.getInstance().compare(acronym1, acronym2);
+		return a == 0 ? country2.hashCode() - country1.hashCode() : a;
+	    }
+	    return c;
+	}
+    };
+    
+
 
     public Country(Planet parent, String iso3166alpha2Code, String iso3166alpha3Code, Integer iso3166numericCode,
 	    MultiLanguageString name, MultiLanguageString nationality) {
