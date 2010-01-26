@@ -35,7 +35,6 @@ import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import myorg.util.BundleUtil;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 public class PartyTypeConnectionRule extends PartyTypeConnectionRule_Base {
 
@@ -43,8 +42,8 @@ public class PartyTypeConnectionRule extends PartyTypeConnectionRule_Base {
 
 	static private final long serialVersionUID = -1173570520382412227L;
 
-	private DomainReference<PartyType> parent;
-	private DomainReference<PartyType> child;
+	private PartyType parent;
+	private PartyType child;
 
 	public PartyTypeConnectionRuleBean() {
 	    super();
@@ -57,19 +56,19 @@ public class PartyTypeConnectionRule extends PartyTypeConnectionRule_Base {
 	}
 
 	public PartyType getParent() {
-	    return parent != null ? parent.getObject() : null;
+	    return parent;
 	}
 
 	public void setParent(final PartyType parent) {
-	    this.parent = (parent != null ? new DomainReference<PartyType>(parent) : null);
+	    this.parent = parent;
 	}
 
 	public PartyType getChild() {
-	    return child != null ? child.getObject() : null;
+	    return child;
 	}
 
 	public void setChild(final PartyType child) {
-	    this.child = (child != null ? new DomainReference<PartyType>(child) : null);
+	    this.child = child;
 	}
 
 	@Override
@@ -109,10 +108,8 @@ public class PartyTypeConnectionRule extends PartyTypeConnectionRule_Base {
 	    if (each != this && each instanceof PartyTypeConnectionRule) {
 		final PartyTypeConnectionRule rule = (PartyTypeConnectionRule) each;
 		if (rule.getAllowedParent().equals(allowedParent) && rule.getAllowedChild().equals(allowedChild)) {
-		    final String[] args = new String[] {
-			    allowedParent.getName().getContent(),
-			    allowedChild.getName().getContent()
-		    };
+		    final String[] args = new String[] { allowedParent.getName().getContent(),
+			    allowedChild.getName().getContent() };
 		    throw new DomainException("error.PartyTypeConnectionRule.already.exists.with.same.parent.and.child", args);
 		}
 	    }

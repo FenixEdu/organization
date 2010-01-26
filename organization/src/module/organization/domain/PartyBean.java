@@ -29,23 +29,21 @@ import java.io.Serializable;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.fenixWebFramework.util.DomainReference;
-
 abstract public class PartyBean implements Serializable {
 
     private static final long serialVersionUID = -4325706118973127412L;
 
-    private DomainReference<Party> parent;
-    private DomainReference<AccountabilityType> accountabilityType;
+    private Party parent;
+    private AccountabilityType accountabilityType;
     private LocalDate begin;
     private LocalDate end;
 
     public Party getParent() {
-	return (this.parent != null) ? this.parent.getObject() : null;
+	return parent;
     }
 
     public void setParent(Party parent) {
-	this.parent = (parent != null) ? new DomainReference<Party>(parent) : null;
+	this.parent = parent;
     }
 
     public boolean hasParent() {
@@ -53,12 +51,11 @@ abstract public class PartyBean implements Serializable {
     }
 
     public AccountabilityType getAccountabilityType() {
-	return (this.accountabilityType != null) ? this.accountabilityType.getObject() : null;
+	return accountabilityType;
     }
 
     public void setAccountabilityType(AccountabilityType accountabilityType) {
-	this.accountabilityType = (accountabilityType != null) ? new DomainReference<AccountabilityType>(accountabilityType)
-		: null;
+	this.accountabilityType = accountabilityType;
     }
 
     public LocalDate getBegin() {
@@ -78,5 +75,6 @@ abstract public class PartyBean implements Serializable {
     }
 
     abstract public Party getParty();
+
     abstract public void addParent();
 }

@@ -29,14 +29,13 @@ import java.io.Serializable;
 
 import myorg.domain.MyOrg;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixWebFramework.util.DomainReference;
 
 abstract public class ConnectionRule extends ConnectionRule_Base {
 
     static abstract public class ConnectionRuleBean implements Serializable {
 
 	private static final long serialVersionUID = -5549142750086201478L;
-	private DomainReference<ConnectionRule> connectionRule;
+	private ConnectionRule connectionRule;
 
 	protected ConnectionRuleBean() {
 	}
@@ -46,11 +45,11 @@ abstract public class ConnectionRule extends ConnectionRule_Base {
 	}
 
 	public ConnectionRule getConnectionRule() {
-	    return connectionRule != null ? connectionRule.getObject() : null;
+	    return connectionRule;
 	}
 
 	public void setConnectionRule(final ConnectionRule connectionRule) {
-	    this.connectionRule = (connectionRule != null ? new DomainReference<ConnectionRule>(connectionRule) : null);
+	    this.connectionRule = connectionRule;
 	}
 
 	abstract public ConnectionRule create();

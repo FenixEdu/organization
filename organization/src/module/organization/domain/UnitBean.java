@@ -27,17 +27,16 @@ package module.organization.domain;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.fenixWebFramework.util.DomainReference;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class UnitBean extends PartyBean {
 
     private static final long serialVersionUID = 2418079845917474575L;
-    
-    private DomainReference<Unit> unit;
-    private DomainReference<Party> child;
-    private DomainReference<PartyType> partyType;
-    private DomainReference<OrganizationalModel> organizationalModel;
+
+    private Unit unit;
+    private Party child;
+    private PartyType partyType;
+    private OrganizationalModel organizationalModel;
 
     private MultiLanguageString name;
     private String acronym;
@@ -55,25 +54,25 @@ public class UnitBean extends PartyBean {
     }
 
     public Party getChild() {
-	return (this.child != null) ? this.child.getObject() : null;
+	return child;
     }
 
     public void setChild(Party party) {
-	this.child = (party != null) ? new DomainReference<Party>(party) : null;
+	this.child = party;
     }
 
     public Unit getUnit() {
-	return (this.unit != null) ? this.unit.getObject() : null;
+	return unit;
     }
 
     public void setUnit(Unit unit) {
-	this.unit = (unit != null) ? new DomainReference<Unit>(unit) : null;
+	this.unit = unit;
     }
 
     public boolean isTop() {
 	return getUnit().isTop();
     }
-    
+
     @Override
     public Party getParty() {
 	return getUnit();
@@ -96,11 +95,11 @@ public class UnitBean extends PartyBean {
     }
 
     public PartyType getPartyType() {
-	return (this.partyType != null) ? this.partyType.getObject() : null;
+	return partyType;
     }
 
     public void setPartyType(PartyType partyType) {
-	this.partyType = (partyType != null) ? new DomainReference<PartyType>(partyType) : null;
+	this.partyType = partyType;
     }
 
     public Unit createUnit() {
@@ -121,11 +120,11 @@ public class UnitBean extends PartyBean {
     }
 
     public OrganizationalModel getOrganizationalModel() {
-        return organizationalModel == null ? null : organizationalModel.getObject();
+	return organizationalModel;
     }
 
     public void setOrganizationalModel(final OrganizationalModel organizationalModel) {
-        this.organizationalModel = organizationalModel == null ? null : new DomainReference<OrganizationalModel>(organizationalModel);
+	this.organizationalModel = organizationalModel;
     }
 
 }

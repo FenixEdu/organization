@@ -30,7 +30,6 @@ import java.io.Serializable;
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixWebFramework.util.DomainReference;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class PartyType extends PartyType_Base implements Comparable<PartyType> {
@@ -40,7 +39,7 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
 	private static final long serialVersionUID = -3867902288197067597L;
 	private String type;
 	private MultiLanguageString name;
-	private DomainReference<PartyType> partyType;
+	private PartyType partyType;
 
 	public PartyTypeBean() {
 	}
@@ -68,11 +67,11 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
 	}
 
 	public PartyType getPartyType() {
-	    return partyType != null ? partyType.getObject() : null;
+	    return partyType;
 	}
 
 	public void setPartyType(final PartyType partyType) {
-	    this.partyType = (partyType != null ? new DomainReference<PartyType>(partyType) : null);
+	    this.partyType = partyType;
 	}
 
 	public void edit() {

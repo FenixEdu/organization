@@ -32,7 +32,6 @@ import java.util.List;
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixWebFramework.util.DomainReference;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class AccountabilityType extends AccountabilityType_Base implements Comparable<AccountabilityType> {
@@ -54,7 +53,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
 	private static final long serialVersionUID = -1189746935274309327L;
 	private String type;
 	private MultiLanguageString name;
-	private DomainReference<AccountabilityType> accountabilityType;
+	private AccountabilityType accountabilityType;
 
 	public AccountabilityTypeBean() {
 	}
@@ -87,12 +86,11 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
 	}
 
 	public AccountabilityType getAccountabilityType() {
-	    return accountabilityType != null ? accountabilityType.getObject() : null;
+	    return accountabilityType;
 	}
 
 	public void setAccountabilityType(final AccountabilityType accountabilityType) {
-	    this.accountabilityType = (accountabilityType != null ? new DomainReference<AccountabilityType>(accountabilityType)
-		    : null);
+	    this.accountabilityType = accountabilityType;
 	}
 
 	public AccountabilityType create() {

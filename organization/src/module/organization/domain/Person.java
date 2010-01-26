@@ -37,7 +37,6 @@ import myorg.domain.User.UserPresentationStrategy;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixWebFramework.util.DomainReference;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -64,7 +63,7 @@ public class Person extends Person_Base {
     static public class PersonBean extends PartyBean {
 	private static final long serialVersionUID = -7516282978280402225L;
 
-	private DomainReference<Person> person;
+	private Person person;
 	private String name;
 
 	public PersonBean() {
@@ -87,11 +86,11 @@ public class Person extends Person_Base {
 	}
 
 	public Person getPerson() {
-	    return (this.person != null) ? this.person.getObject() : null;
+	    return this.person;
 	}
 
 	public void setPerson(Person person) {
-	    this.person = (person != null) ? new DomainReference<Person>(person) : null;
+	    this.person = person;
 	}
 
 	@Override
