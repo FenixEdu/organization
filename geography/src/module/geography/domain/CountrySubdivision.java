@@ -34,7 +34,6 @@ import myorg.domain.exceptions.DomainException;
 import org.joda.time.LocalDate;
 
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
-import pt.utl.ist.fenix.tools.util.i18n.UniversalMultiLanguageString;
 
 /**
  * A {@link Country} subdivision of some level of jurisdiction. Subdivisions are
@@ -120,8 +119,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
     public MultiLanguageString getFullName() {
 	if (getLevel() == 1)
 	    return getName();
-	return MultiLanguageString
-		.append(getName(), new UniversalMultiLanguageString(", "), getParentSubdivision().getFullName());
+	return getName().append(", ").append(getParentSubdivision().getFullName());
     }
 
     protected String getExtendedName() {
