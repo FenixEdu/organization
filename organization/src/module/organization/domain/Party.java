@@ -491,4 +491,23 @@ abstract public class Party extends Party_Base {
 	return getPartyName().getContent();
     }
 
+    public boolean isTop() {
+	return false;
+    }
+
+    public boolean hasActiveAncestry(final AccountabilityType accountabilityType, final LocalDate when) {
+	return isTop() || hasParentWithActiveAncestry(accountabilityType, when);
+    }
+
+    private boolean hasParentWithActiveAncestry(final AccountabilityType accountabilityType, final LocalDate when) {
+	for (final Accountability accountability : getParentAccountabilitiesSet()) {
+	    if (accountability.getAccountabilityType() == accountabilityType && accountability.isActive(when)) {
+		final Party parent = accountability.getParent();
+		return parent.hasActiveAncestry(accountabilityType, when);
+	    }
+	}
+	return false;
+    }
+
+
 }

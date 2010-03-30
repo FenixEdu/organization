@@ -107,6 +107,7 @@ public class Unit extends Unit_Base {
 	return true;
     }
 
+    @Override
     public boolean isTop() {
 	return !hasAnyParentAccountabilities() && hasMyOrgFromTopUnit();
     }
