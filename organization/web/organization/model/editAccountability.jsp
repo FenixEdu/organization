@@ -30,7 +30,7 @@
 <logic:present name="accountability">
 	<fr:view name="accountability">
 		<fr:schema type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
-			<fr:slot name="child.partyName" key="label.name"/>
+			<fr:slot name="child.presentationName" key="label.name"/>
 			<fr:slot name="accountabilityType.type" key="label.type"/>
 		</fr:schema>
 		<fr:layout name="tabular">
