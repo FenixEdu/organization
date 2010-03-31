@@ -58,7 +58,7 @@
 			<fr:property name="confirmationBundle(deleteAccountability)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="order(deleteAccountability)" value="2"/>
 
-			<fr:property name="sortBy" value="presentationName=asc"/>
+			<fr:property name="sortBy" value="child.presentationName=asc"/>
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
