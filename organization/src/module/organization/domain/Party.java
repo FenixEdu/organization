@@ -189,7 +189,8 @@ abstract public class Party extends Party_Base {
 	return getChildrenAccountabilities(new PartyByAccountabilityType(types));
     }
 
-    public Collection<Accountability> getChildrenAccountabilities(final Class<? extends Party> clazz, final Collection<AccountabilityType> types) {
+    public Collection<Accountability> getChildrenAccountabilities(final Class<? extends Party> clazz,
+	    final Collection<AccountabilityType> types) {
 	return getChildrenAccountabilities(new PartyByAccountabilityType(clazz, types));
     }
 
@@ -369,11 +370,15 @@ abstract public class Party extends Party_Base {
     @Service
     public Accountability addChild(final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
 	for (final Accountability accountability : getChildAccountabilitiesSet()) {
-	    if (accountability.getChild() == child && accountability.getAccountabilityType() == type && accountability.intersects(begin, end)) {
-		if (begin == null || (begin != null && accountability.getBeginDate() != null && begin.isBefore(accountability.getBeginDate()))) {
+	    if (accountability.getChild() == child && accountability.getAccountabilityType() == type
+		    && accountability.intersects(begin, end)) {
+		if (begin == null
+			|| (begin != null && accountability.getBeginDate() != null && begin.isBefore(accountability
+				.getBeginDate()))) {
 		    accountability.setBeginDate(begin);
 		}
-		if (end == null || (end != null && accountability.getEndDate() != null && end.isAfter(accountability.getEndDate()))) {
+		if (end == null
+			|| (end != null && accountability.getEndDate() != null && end.isAfter(accountability.getEndDate()))) {
 		    accountability.setEndDate(end);
 		}
 		return accountability;
@@ -454,7 +459,8 @@ abstract public class Party extends Party_Base {
 	return hasChildAccountabilityIncludingAncestry(new HashSet<Party>(), accountabilityTypes, party);
     }
 
-    private boolean hasChildAccountabilityIncludingAncestry(final Set<Party> processed, final List<AccountabilityType> accountabilityTypes, final Party party) {
+    private boolean hasChildAccountabilityIncludingAncestry(final Set<Party> processed,
+	    final List<AccountabilityType> accountabilityTypes, final Party party) {
 	if (!processed.contains(this)) {
 	    processed.add(this);
 	    for (final Party child : getChildren(accountabilityTypes)) {
@@ -474,7 +480,8 @@ abstract public class Party extends Party_Base {
     public static Party findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(final Set<Party> parties,
 	    final AccountabilityType accountabilityType, final PartyType partyType, final String acronym) {
 	for (final Party party : parties) {
-	    final Party result = party.findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(accountabilityType, partyType, acronym);
+	    final Party result = party.findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(accountabilityType, partyType,
+		    acronym);
 	    if (result != null) {
 		return result;
 	    }
@@ -499,6 +506,17 @@ abstract public class Party extends Party_Base {
 	return isTop() || hasParentWithActiveAncestry(accountabilityType, when);
     }
 
+    public boolean hasDirectActiveAncestry(final AccountabilityType accountabilityType, final LocalDate when) {
+	return !getParents(new PartyPredicate() {
+
+	    @Override
+	    public boolean eval(Party party, Accountability accountability) {
+		return accountability.getAccountabilityType() == accountabilityType && accountability.isActive(when);
+	    }
+
+	}).isEmpty();
+    }
+
     private boolean hasParentWithActiveAncestry(final AccountabilityType accountabilityType, final LocalDate when) {
 	for (final Accountability accountability : getParentAccountabilitiesSet()) {
 	    if (accountability.getAccountabilityType() == accountabilityType && accountability.isActive(when)) {
@@ -508,6 +526,5 @@ abstract public class Party extends Party_Base {
 	}
 	return false;
     }
-
 
 }
