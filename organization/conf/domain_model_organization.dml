@@ -80,6 +80,8 @@ class module.organization.domain.OrganizationalModel {
 	MultiLanguageString name;
 }
 
+class module.organization.domain.groups.PersonGroup extends myorg.domain.groups.PersistentGroup {
+}
 
 /** Relations **/
 
