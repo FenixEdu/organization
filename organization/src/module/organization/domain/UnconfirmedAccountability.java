@@ -77,6 +77,7 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
     void delete() {
 	final Party child = getChild();
 	removeUnconfirmedAccountabilityType();
+	removeUser();
 	super.delete();
 	if (child.getParentAccountabilitiesCount() == 0) {
 	    child.delete();
