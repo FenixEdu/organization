@@ -25,6 +25,7 @@
 
 package module.organization.domain.predicates;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -101,6 +102,13 @@ abstract public class PartyPredicate {
 
 	public PartyByAccountabilityType(final Collection<AccountabilityType> types) {
 	    this(null, types);
+	}
+
+	public PartyByAccountabilityType(final AccountabilityType... types) {
+	    super(null);
+	    for (AccountabilityType type : types) {
+		this.types.add(type);
+	    }
 	}
 
 	public PartyByAccountabilityType(final Class<? extends Party> clazz) {
