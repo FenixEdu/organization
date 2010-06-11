@@ -287,3 +287,7 @@
 	<slot name="beginDate" key="label.begin"/>
 	<slot name="endDate" key="label.end" />
 </schema>
+
+<schema name="module.organization.domain.Party.view.short.name" type="module.organization.domain.Party" bundle="ORGANIZATION_RESOURCES">
+	<slot name="partyName"/>
+</schema>
