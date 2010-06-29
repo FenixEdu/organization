@@ -463,12 +463,12 @@ abstract public class Party extends Party_Base {
 	return user == null || user.hasRoleType(RoleType.MANAGER);
     }
 
-    public boolean hasChildAccountabilityIncludingAncestry(final List<AccountabilityType> accountabilityTypes, final Party party) {
+    public boolean hasChildAccountabilityIncludingAncestry(final Collection<AccountabilityType> accountabilityTypes, final Party party) {
 	return hasChildAccountabilityIncludingAncestry(new HashSet<Party>(), accountabilityTypes, party);
     }
 
     private boolean hasChildAccountabilityIncludingAncestry(final Set<Party> processed,
-	    final List<AccountabilityType> accountabilityTypes, final Party party) {
+	    final Collection<AccountabilityType> accountabilityTypes, final Party party) {
 	if (!processed.contains(this)) {
 	    processed.add(this);
 	    for (final Party child : getChildren(accountabilityTypes)) {
