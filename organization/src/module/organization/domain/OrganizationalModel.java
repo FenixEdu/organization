@@ -72,4 +72,21 @@ public class OrganizationalModel extends OrganizationalModel_Base {
 	}
 	return units;
     }
+
+    public boolean containsUnit(final Party party) {
+	if (hasParties(party)) {
+	    return true;
+	}
+	for (final Accountability accountability : party.getParentAccountabilitiesSet()) {
+	    final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+	    if (accountability.isActiveNow() && hasAccountabilityTypes(accountabilityType)) {
+		final Party parent = accountability.getParent();
+		if (containsUnit(parent)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
 }

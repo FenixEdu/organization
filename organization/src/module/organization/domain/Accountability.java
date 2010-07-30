@@ -138,6 +138,11 @@ public class Accountability extends Accountability_Base {
 	return contains(date);
     }
 
+    public boolean isActiveNow() {
+	final LocalDate now = new LocalDate();
+	return isActive(now);
+    }
+
     public boolean contains(final LocalDate date) {
 	return !getBeginDate().isAfter(date) && (!hasEndDate() || getEndDate().isAfter(date));
     }
