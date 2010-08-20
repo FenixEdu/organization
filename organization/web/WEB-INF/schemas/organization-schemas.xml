@@ -118,7 +118,7 @@
 		<property name="size" value="60"/>
 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="message" value="label.pleaseSelectOne.unit"/>
-			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
+			<property name="bundle" value="ORGANIZATION_RESOURCES"/>
 			<property name="key" value="true"/>
 		</validator>
 	</slot>
@@ -225,7 +225,7 @@
 		<property name="size" value="60"/>
 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="message" value="label.pleaseSelectOne.unit"/>
-			<property name="bundle" value="EXPENDITURE_RESOURCES"/>
+			<property name="bundle" value="ORGANIZATION_RESOURCES"/>
 			<property name="key" value="true"/>
 		</validator>
 	</slot>
@@ -290,4 +290,8 @@
 
 <schema name="module.organization.domain.Party.view.short.name" type="module.organization.domain.Party" bundle="ORGANIZATION_RESOURCES">
 	<slot name="partyName"/>
+</schema>
+
+<schema name="module.organization.domain.Party.view.presentationName" type="module.organization.domain.Party" bundle="ORGANIZATION_RESOURCES">
+	<slot name="presentationName"/>
 </schema>
