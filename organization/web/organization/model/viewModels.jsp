@@ -8,6 +8,28 @@
 <%@page import="myorg.presentationTier.component.OrganizationChart"%>
 <%@page import="module.organization.domain.Unit"%>
 
+
+<html:link action="/organization.do?method=viewPartyTypes"  styleClass="secondaryLink">
+	<bean:message key="label.party.type" bundle="ORGANIZATION_RESOURCES"/>
+</html:link>
+|
+<html:link action="/organization.do?method=viewAccountabilityTypes"  styleClass="secondaryLink">
+	<bean:message key="label.party.type" bundle="ORGANIZATION_RESOURCES"/>
+</html:link>
+|
+<html:link action="/organization.do?method=viewConnectionRules"  styleClass="secondaryLink">
+	<bean:message key="label.connection.rules" bundle="ORGANIZATION_RESOURCES"/>
+</html:link>
+|
+<html:link action="/organization.do?method=viewOrganization"  styleClass="secondaryLink">
+	<bean:message key="label.organizational.structure" bundle="ORGANIZATION_RESOURCES"/>
+</html:link>
+|
+<html:link action="/organization.do?method=managePersons"  styleClass="secondaryLink">
+	<bean:message key="label.persons.manage" bundle="ORGANIZATION_RESOURCES"/>
+</html:link>
+
+
 <h2><bean:message key="label.models" bundle="ORGANIZATION_RESOURCES"/></h2>
 
 <logic:present role="myorg.domain.RoleType.MANAGER">

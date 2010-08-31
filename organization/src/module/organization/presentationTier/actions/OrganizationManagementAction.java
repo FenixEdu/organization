@@ -138,24 +138,24 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
 	final ActionNode topActionNode = ActionNode.createActionNode(virtualHost, parentOfNodes, "/organizationModel",
 		"viewModels", "resources.OrganizationResources", "label.manage.organization",
-		/* Role.getRole(RoleType.MANAGER) // */ UserGroup.getInstance()
+		Role.getRole(RoleType.MANAGER) // UserGroup.getInstance()
 		// In the future we want to open this up to every user... but for now we need to keep this link hidden
 		);
 
-	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewPartyTypes",
-		"resources.OrganizationResources", "label.party.type", Role.getRole(RoleType.MANAGER));
-
-	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewAccountabilityTypes",
-		"resources.OrganizationResources", "label.accountability.type", Role.getRole(RoleType.MANAGER));
-
-	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewConnectionRules",
-		"resources.OrganizationResources", "label.connection.rules", Role.getRole(RoleType.MANAGER));
-
-	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewOrganization",
-		"resources.OrganizationResources", "label.organizational.structure", Role.getRole(RoleType.MANAGER));
-
-	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "managePersons",
-		"resources.OrganizationResources", "label.persons.manage", Role.getRole(RoleType.MANAGER));
+//	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewPartyTypes",
+//		"resources.OrganizationResources", "label.party.type", Role.getRole(RoleType.MANAGER));
+//
+//	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewAccountabilityTypes",
+//		"resources.OrganizationResources", "label.accountability.type", Role.getRole(RoleType.MANAGER));
+//
+//	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewConnectionRules",
+//		"resources.OrganizationResources", "label.connection.rules", Role.getRole(RoleType.MANAGER));
+//
+//	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "viewOrganization",
+//		"resources.OrganizationResources", "label.organizational.structure", Role.getRole(RoleType.MANAGER));
+//
+//	ActionNode.createActionNode(virtualHost, topActionNode, "/organization", "managePersons",
+//		"resources.OrganizationResources", "label.persons.manage", Role.getRole(RoleType.MANAGER));
 
 	// ActionNode.createActionNode(virtualHost, topActionNode,
 	// "/organizationModel", "viewModels",
