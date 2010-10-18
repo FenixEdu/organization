@@ -33,7 +33,7 @@ package module.geography.domain;
 public interface GeographicConstants {
     public static final String GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME = "Geographic";
 
-    public static final String PORTUGAL_UNIT_ACRONYM = "PT";
+    public static final String PORTUGAL_UNIT_ACRONYM = "PRT";
     public static final String EARTH_UNIT_ACRONYM = "EARTH";
     public static final String MILKY_WAY_UNIT_ACRONYM = "MILKYWAY";
     public static final String MULTIVERSE_UNIT_ACRONYM = "MULTIVERSEZERO";
