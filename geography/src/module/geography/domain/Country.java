@@ -153,7 +153,7 @@ public class Country extends Country_Base implements GeographicConstants {
 
     public static Country findByAcronym(String acronym) {
 	for (Country country : MyOrg.getInstance().getCountriesSet()) {
-	    if (country.getAcronym().equals(acronym))
+	    if (country.getAcronym().equalsIgnoreCase(acronym))
 		return country;
 	}
 	return null;
