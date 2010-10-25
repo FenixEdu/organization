@@ -62,8 +62,6 @@ public class Country extends Country_Base implements GeographicConstants {
 	    return c;
 	}
     };
-    
-
 
     public Country(Planet parent, String iso3166alpha2Code, String iso3166alpha3Code, Integer iso3166numericCode,
 	    MultiLanguageString name, MultiLanguageString nationality) {
@@ -157,5 +155,21 @@ public class Country extends Country_Base implements GeographicConstants {
 		return country;
 	}
 	return null;
+    }
+
+    public void setSubdivisionLevelName(Integer level, MultiLanguageString levelName) {
+	CountrySubdivisionLevelName countrySubdivisionLevelNameToAlter = null;
+	for (CountrySubdivisionLevelName subdivisionLevel : getLevelNameSet()) {
+	    if (subdivisionLevel.getLevel() == level) {
+		countrySubdivisionLevelNameToAlter = subdivisionLevel;
+	    }
+	}
+	if (countrySubdivisionLevelNameToAlter == null) {
+	    countrySubdivisionLevelNameToAlter = new CountrySubdivisionLevelName(level, levelName);
+	    this.addLevelName(countrySubdivisionLevelNameToAlter);
+	} else {
+	    countrySubdivisionLevelNameToAlter.setName(levelName);
+	}
+
     }
 }

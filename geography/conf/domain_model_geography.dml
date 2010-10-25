@@ -60,8 +60,10 @@ class module.geography.domain.PostalExtension extends module.geography.domain.Co
 }
 
 class module.geography.domain.task.CountryCodesImport extends myorg.domain.scheduler.Task {
-	DateTime isoFileLastModified;
 }
+class module.geography.domain.task.PortugueseDistrictImport extends myorg.domain.scheduler.Task {
+}
+
 
 relation MyOrgCountries {
 	myorg.domain.MyOrg playsRole myOrg;

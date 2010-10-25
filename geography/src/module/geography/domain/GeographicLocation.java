@@ -68,7 +68,7 @@ public abstract class GeographicLocation extends GeographicLocation_Base impleme
 	return getUnit().getChildUnits(AccountabilityType.readBy(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME));
     }
 
-    protected static AccountabilityType getOrCreateAccountabilityType() {
+    public static AccountabilityType getOrCreateAccountabilityType() {
 	AccountabilityType geographic = null;
 	for (AccountabilityType accountability : MyOrg.getInstance().getAccountabilityTypesSet()) {
 	    if (accountability.getType().equals(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME)) {

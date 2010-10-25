@@ -72,6 +72,10 @@ public class CountrySubdivision extends CountrySubdivision_Base {
 	return getCountry().getSubdivisionLevelName(getLevel());
     }
 
+    public void setLevelName(MultiLanguageString levelName) {
+	getCountry().setSubdivisionLevelName(getLevel(), levelName);
+    }
+
     public Country getCountry() {
 	if (getLevel() == 1)
 	    return (Country) getParentLocation();

@@ -60,8 +60,8 @@ public class CountryCodesImport extends CountryCodesImport_Base {
 	Planet planet = Magrathea.buildEarth();
 	LineNumberReader reader = null;
 	try {
-	    File file = new File(PropertiesManager.getProperty("file.import.location") + ISO3166_FILE);
-	    if (getIsoFileLastModified() == null || file.lastModified() > getIsoFileLastModified().getMillis()) {
+	    File file = new File(PropertiesManager.getProperty("modules.geography.file.import.location") + ISO3166_FILE);
+	    if (getLastRun() == null || file.lastModified() > getLastRun().getMillis()) {
 		DateTime lastReview = new DateTime(file.lastModified());
 		reader = new LineNumberReader(new FileReader(file));
 		String line = null;
@@ -86,7 +86,6 @@ public class CountryCodesImport extends CountryCodesImport_Base {
 		logInfo("File last modification was: " + lastReview);
 		logInfo(additions + " countries added.");
 		logInfo(touches + " countries unmodified.");
-		setLastModified(lastReview);
 	    } else {
 		logInfo("File unmodified, nothing imported.");
 	    }
@@ -104,10 +103,6 @@ public class CountryCodesImport extends CountryCodesImport_Base {
 	}
     }
 
-    @Service
-    private void setLastModified(DateTime lastReview) {
-	setIsoFileLastModified(lastReview);
-    }
 
     @Service
     private Country createCountry(Planet parent, String shortCode, String longCode, Integer numericCode,

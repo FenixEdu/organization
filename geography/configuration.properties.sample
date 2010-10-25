@@ -1,0 +1,2 @@
+ #Replace the directory below with the directory where the 'distritos.txt' file downloaded from the CTT (http://www.ctt.pt) is and the iso-3166.csv file
+ modules.geography.file.import.location = /home/joantune/CIIST-Wspace
