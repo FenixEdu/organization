@@ -27,6 +27,7 @@ package module.geography.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import module.geography.util.StringsUtil;
 import module.organization.domain.Unit;
 
 import org.joda.time.LocalDate;
@@ -49,7 +50,7 @@ public class Planet extends Planet_Base {
 
     @Override
     public MultiLanguageString getType() {
-	return makeName("Planeta", PLANET_PARTYTYPE_NAME);
+	return StringsUtil.makeName("Planeta", PLANET_PARTYTYPE_NAME);
     }
 
     public Galaxy getParent() {

@@ -1,9 +1,11 @@
 package module.geography.domain.task;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,6 +21,7 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 import module.geography.domain.Country;
 import module.geography.domain.CountrySubdivision;
 import module.geography.domain.GeographicLocation;
+import module.geography.util.StringsUtil;
 import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
 import myorg._development.PropertiesManager;
@@ -37,6 +40,8 @@ public class PortugueseDistrictImportAuxiliaryServices {
     protected int modifications = 0;
 
     protected int touches = 0;
+
+    private final MultiLanguageString districtLevelName = StringsUtil.makeName("Distrito", "District");;
 
     private static PortugueseDistrictImportAuxiliaryServices singletonHolder;
 
@@ -63,7 +68,8 @@ public class PortugueseDistrictImportAuxiliaryServices {
 	    File file = new File(PropertiesManager.getProperty("modules.geography.file.import.location") + CTT_DISTRICTFILE);
 	    if (originalTask.getLastRun() == null || file.lastModified() > originalTask.getLastRun().getMillis()) {
 		DateTime lastReview = new DateTime(file.lastModified());
-		reader = new LineNumberReader(new FileReader(file));
+		FileInputStream fileReader = new FileInputStream(file);
+		reader = new LineNumberReader(new InputStreamReader(fileReader, "ISO-8859-1"));
 		String line = null;
 		while ((line = reader.readLine()) != null) {
 		    String[] parts = line.split(";");
@@ -82,7 +88,7 @@ public class PortugueseDistrictImportAuxiliaryServices {
 
 		// getting all of the existing districts
 		for (CountrySubdivision countrySubdivision : portugal.getChildren()) {
-		    if (countrySubdivision.getLevelName().getContent(Language.pt).equalsIgnoreCase("distrito")) {
+		    if (countrySubdivision.getLevelName().getContent(Language.pt).equalsIgnoreCase(districtLevelName.getContent(Language.pt))) {
 			existingDistricts.add(countrySubdivision);
 		    }
 		} // let's assert
@@ -112,12 +118,6 @@ public class PortugueseDistrictImportAuxiliaryServices {
 	}
     }
 
-    protected MultiLanguageString makeName(String pt, String en) {
-	MultiLanguageString name = new MultiLanguageString();
-	name.setContent(Language.pt, pt);
-	name.setContent(Language.en, en);
-	return name;
-    }
 
     /**
      * It modifies the data or touches (sets the last review date to the date
@@ -139,7 +139,8 @@ public class PortugueseDistrictImportAuxiliaryServices {
 	String originalDistrictAcronym = district.getAcronym();
 
 	// let's check if there are changes on the data:
-	if (!originalDistrictName.equals(districtName) || !originalDistrictAcronym.equals(districtAcronym)) {
+	if (!originalDistrictName.equals(districtName) || !originalDistrictAcronym.equals(districtAcronym)
+		|| !district.getLevelName().equals(districtLevelName)) {
 
 	    removeDistrict(district);
 	    deletions--;
@@ -162,7 +163,7 @@ public class PortugueseDistrictImportAuxiliaryServices {
 	for (Accountability accountability : district.getUnit().getParentAccountabilities(
 		district.getOrCreateAccountabilityType())) {
 	    if (accountability.isActiveNow()) {
-		activeAccountability = activeAccountability;
+		activeAccountability = accountability;
 	    }
 	}
 
@@ -171,7 +172,7 @@ public class PortugueseDistrictImportAuxiliaryServices {
 	    // of
 	    // the current date
 	    LocalDate endDate = new LocalDate();
-	    endDate = endDate.minusDays(1);
+	    // endDate = endDate.minusDays(1);
 	    activeAccountability.setEndDate(endDate);
 	}
 	deletions++;
@@ -184,7 +185,7 @@ public class PortugueseDistrictImportAuxiliaryServices {
 
     protected CountrySubdivision createDistrict(String districtCode, String districtName, DateTime lastReview) {
 	CountrySubdivision district = new CountrySubdivision(portugal, districtName, "", districtCode);
-	district.setLevelName(makeName("districto", "district"));
+	district.setLevelName(districtLevelName, false);
 	district.setLastReview(lastReview);
 	additions++;
 	return district;

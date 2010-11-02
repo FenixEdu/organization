@@ -24,6 +24,7 @@
  */
 package module.geography.domain;
 
+import myorg.domain.exceptions.DomainException;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -34,10 +35,30 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  */
 public class CountrySubdivisionLevelName extends CountrySubdivisionLevelName_Base {
 
-    public CountrySubdivisionLevelName(Integer level, MultiLanguageString name) {
+    public CountrySubdivisionLevelName(Integer level, MultiLanguageString name, Boolean isLabel) {
 	super();
+	setIsLabel(isLabel);
 	setLevel(level);
 	setName(name);
+    }
+
+    /**
+     * Warning, it doesn't account for the fact that instances of these levels,
+     * i.e. CountrySubdivions actually exist
+     * 
+     * @return true if it isn't connected to a country, false otherwise, not it
+     *         doesn't take into account the existing CountrySubdivisions
+     */
+    public boolean canBeDeleted()
+    {
+	if (this.hasCountry())
+	    throw new DomainException("error.Party.delete.has.child.accountabilities");
+	return true;
+    }
+
+    public void delete() {
+	if (canBeDeleted())
+	    this.deleteDomainObject();
     }
 
 }

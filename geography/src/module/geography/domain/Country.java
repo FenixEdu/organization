@@ -30,6 +30,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 
+import module.geography.util.StringsUtil;
+import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
 import myorg.domain.MyOrg;
 
@@ -87,7 +89,7 @@ public class Country extends Country_Base implements GeographicConstants {
 
     @Override
     public MultiLanguageString getType() {
-	return makeName("País", COUNTRY_PARTYTYPE_NAME);
+	return StringsUtil.makeName("País", COUNTRY_PARTYTYPE_NAME);
     }
 
     /**
@@ -119,6 +121,32 @@ public class Country extends Country_Base implements GeographicConstants {
 	}
 	return children;
     }
+
+    /**
+     * This method is useful because the subdivisions can change with time and
+     * these changes are tracked with the accountability
+     * 
+     * @return the country subdivisions which are actually valid for the current
+     *         DateTime (it uses the accountability to check for this).
+     * 
+     */
+    public Collection<CountrySubdivision> getCurrentChildren() {
+	return getChildrenValidAt(new LocalDate());
+    }
+
+    public Collection<CountrySubdivision> getChildrenValidAt(LocalDate date) {
+	Collection<Unit> units = getChildUnits();
+	Collection<CountrySubdivision> children = new ArrayList<CountrySubdivision>();
+	for (Unit unit : units) {
+	    for (Accountability accountability : unit.getParentAccountabilities(getOrCreateAccountabilityType())) {
+		if (accountability.isActive(date)) {
+		    children.add((CountrySubdivision) unit.getGeographicLocation());
+		}
+	    }
+	}
+	return children;
+    }
+
 
     public CountrySubdivision getChildByAcronym(String acronym) {
 	for (Unit unit : getChildUnits()) {
@@ -157,7 +185,7 @@ public class Country extends Country_Base implements GeographicConstants {
 	return null;
     }
 
-    public void setSubdivisionLevelName(Integer level, MultiLanguageString levelName) {
+    public void setSubdivisionLevelName(Integer level, MultiLanguageString levelName, Boolean isLabel) {
 	CountrySubdivisionLevelName countrySubdivisionLevelNameToAlter = null;
 	for (CountrySubdivisionLevelName subdivisionLevel : getLevelNameSet()) {
 	    if (subdivisionLevel.getLevel() == level) {
@@ -165,7 +193,7 @@ public class Country extends Country_Base implements GeographicConstants {
 	    }
 	}
 	if (countrySubdivisionLevelNameToAlter == null) {
-	    countrySubdivisionLevelNameToAlter = new CountrySubdivisionLevelName(level, levelName);
+	    countrySubdivisionLevelNameToAlter = new CountrySubdivisionLevelName(level, levelName, isLabel);
 	    this.addLevelName(countrySubdivisionLevelNameToAlter);
 	} else {
 	    countrySubdivisionLevelNameToAlter.setName(levelName);

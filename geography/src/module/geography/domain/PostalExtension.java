@@ -24,9 +24,11 @@
  */
 package module.geography.domain;
 
+import module.geography.util.StringsUtil;
 import module.organization.domain.Unit;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.util.StringUtil;
 import org.joda.time.LocalDate;
 
 /**
@@ -40,7 +42,8 @@ public class PostalExtension extends PostalExtension_Base {
     public PostalExtension(CountrySubdivision parent, String acronym, String street, String postalCode, String postalBranch) {
 	super();
 	String name = StringUtils.isNotBlank(street) ? street : postalBranch;
-	setUnit(Unit.create(parent.getUnit(), makeName(name, name), acronym, getPartyType("Subdivisão de País",
+	setUnit(Unit.create(parent.getUnit(), StringsUtil.makeName(name, name), acronym,
+		getPartyType("Subdivisão de País",
 		COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(), new LocalDate(), null));
 	setLevel(parent.getLevel() + 1);
 	setCode(postalCode);

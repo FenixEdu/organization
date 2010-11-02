@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import module.geography.util.StringsUtil;
 import module.organization.domain.Unit;
 import myorg.domain.MyOrg;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
@@ -48,7 +49,7 @@ public class Universe extends Universe_Base implements GeographicConstants {
 
     @Override
     public MultiLanguageString getType() {
-	return makeName("Universo", UNIVERSE_PARTYTYPE_NAME);
+	return StringsUtil.makeName("Universo", UNIVERSE_PARTYTYPE_NAME);
     }
 
     public Collection<Galaxy> getChildren() {

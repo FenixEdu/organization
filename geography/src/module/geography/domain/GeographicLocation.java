@@ -24,8 +24,11 @@
  */
 package module.geography.domain;
 
+import java.text.Collator;
 import java.util.Collection;
+import java.util.Comparator;
 
+import module.geography.util.StringsUtil;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.PartyType;
 import module.organization.domain.Unit;
@@ -43,6 +46,23 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  */
 public abstract class GeographicLocation extends GeographicLocation_Base implements GeographicConstants {
 
+    public static final Comparator<GeographicLocation> COMPARATOR_BY_NAME = new Comparator<GeographicLocation>() {
+	public int compare(final GeographicLocation location1, GeographicLocation location2) {
+	    final String name1 = location1.getName().getContent();
+	    final String name2 = location2.getName().getContent();
+	    final int c = Collator.getInstance().compare(name1, name2);
+	    if (c == 0) {
+		final String acronym1 = location1.getAcronym();
+		final String acronym2 = location2.getAcronym();
+		if (acronym1 == null || acronym2 == null) {
+		    return location2.hashCode() - location1.hashCode();
+		}
+		final int a = Collator.getInstance().compare(acronym1, acronym2);
+		return a == 0 ? location2.hashCode() - location1.hashCode() : a;
+	    }
+	    return c;
+	}
+    };
     public GeographicLocation() {
 	super();
     }
@@ -76,24 +96,19 @@ public abstract class GeographicLocation extends GeographicLocation_Base impleme
 	    }
 	}
 	if (geographic == null) {
-	    geographic = AccountabilityType.create(new AccountabilityTypeBean(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME, makeName(
+	    geographic = AccountabilityType.create(new AccountabilityTypeBean(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME, StringsUtil
+		    .makeName(
 		    "Geográfico", GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME)));
 	}
 	return geographic;
     }
 
-    protected static MultiLanguageString makeName(String pt, String en) {
-	MultiLanguageString name = new MultiLanguageString();
-	name.setContent(Language.pt, pt);
-	name.setContent(Language.en, en);
-	return name;
-    }
 
     protected static PartyType getPartyType(String pt, String en) {
 	for (PartyType partyType : MyOrg.getInstance().getPartyTypesSet()) {
 	    if (partyType.getType().equals(en))
 		return partyType;
 	}
-	return new PartyType(en, makeName(pt, en));
+	return new PartyType(en, StringsUtil.makeName(pt, en));
     }
 }

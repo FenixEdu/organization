@@ -28,11 +28,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import module.geography.util.StringsUtil;
 import module.organization.domain.Unit;
 import myorg.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -57,7 +59,8 @@ public class CountrySubdivision extends CountrySubdivision_Base {
 
     private CountrySubdivision(Unit parent, Integer level, String name, String acronym, String code) {
 	this();
-	setUnit(Unit.create(parent, makeName(name, name), acronym, getPartyType("Subdivisão de País",
+	setUnit(Unit.create(parent, StringsUtil.makeName(name, name), acronym,
+		getPartyType("Subdivisão de País",
 		COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(), new LocalDate(), null));
 	setLevel(level);
 	setCode(code);
@@ -72,8 +75,8 @@ public class CountrySubdivision extends CountrySubdivision_Base {
 	return getCountry().getSubdivisionLevelName(getLevel());
     }
 
-    public void setLevelName(MultiLanguageString levelName) {
-	getCountry().setSubdivisionLevelName(getLevel(), levelName);
+    public void setLevelName(MultiLanguageString levelName, Boolean isLabel) {
+	getCountry().setSubdivisionLevelName(getLevel(), levelName, isLabel);
     }
 
     public Country getCountry() {
@@ -118,6 +121,30 @@ public class CountrySubdivision extends CountrySubdivision_Base {
 	    }
 	}
 	return null;
+    }
+
+    /**
+     * Deletes this element implementing the domain rules
+     */
+    @Service
+    public void delete() {
+	Unit unit = this.getUnit();
+	removeUnit();
+	unit.delete();
+	if (canBeDeleted())
+	{
+	    this.deleteDomainObject();
+	}
+
+    }
+
+    private boolean canBeDeleted() {
+	if (this.hasPhysicalAddress() || this.hasUnit())
+ {
+	    throw new DomainException("error.CountrySubdivision.delete.is.connected");
+	}
+	return true;
+
     }
 
     public MultiLanguageString getFullName() {

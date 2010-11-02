@@ -24,6 +24,13 @@
  *   along with the Geography Module. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
+ 
+ valueType java.lang.Class as Class {
+	externalizeWith {
+		String getName();
+	}
+	internalizeWith myorg.domain.util.ClassInternalizer.internalize();
+}
 
 class module.geography.domain.GeographicLocation {
 	String ojbConcreteClass;
@@ -38,6 +45,7 @@ class module.geography.domain.Planet extends module.geography.domain.GeographicL
 
 class module.geography.domain.Country extends module.geography.domain.GeographicLocation {
 	String iso3166alpha2Code;
+	Class iAddressPrinter;
 	String iso3166alpha3Code;
 	Integer iso3166numericCode;
 	MultiLanguageString nationality;
@@ -45,6 +53,7 @@ class module.geography.domain.Country extends module.geography.domain.Geographic
 
 class module.geography.domain.CountrySubdivisionLevelName {
 	Integer level (REQUIRED);
+	Boolean isLabel (REQUIRED);
 	MultiLanguageString name (REQUIRED);
 }
 
@@ -62,6 +71,10 @@ class module.geography.domain.PostalExtension extends module.geography.domain.Co
 class module.geography.domain.task.CountryCodesImport extends myorg.domain.scheduler.Task {
 }
 class module.geography.domain.task.PortugueseDistrictImport extends myorg.domain.scheduler.Task {
+}
+class module.geography.domain.task.CleanCountrySubLevels extends myorg.domain.scheduler.Task {
+}
+class module.geography.domain.task.PortugueseMunicipalitiesImport extends myorg.domain.scheduler.Task {
 }
 
 
