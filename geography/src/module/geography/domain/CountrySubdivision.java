@@ -131,19 +131,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
 	Unit unit = this.getUnit();
 	removeUnit();
 	unit.delete();
-	if (canBeDeleted())
-	{
-	    this.deleteDomainObject();
-	}
-
-    }
-
-    private boolean canBeDeleted() {
-	if (this.hasPhysicalAddress() || this.hasUnit())
- {
-	    throw new DomainException("error.CountrySubdivision.delete.is.connected");
-	}
-	return true;
+	this.deleteDomainObject();
 
     }
 
