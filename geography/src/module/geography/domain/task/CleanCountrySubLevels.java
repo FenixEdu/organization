@@ -55,7 +55,8 @@ public class CleanCountrySubLevels extends Task {
 	    ArrayList<CountrySubdivision> countrySubdivisions = new ArrayList<CountrySubdivision>();
 	    countrySubdivisions.addAll(country.getChildren());
 	    for (CountrySubdivision countrySubdivision : countrySubdivisions) {
-		countrySubdivision.removePhysicalAddress();
+		// countrySubdivision.removePhysicalAddress(); TODO implement it
+		// in a listener in the Contacts module
 		countrySubdivision.delete();
 		countrySubDivisionDeletes++;
 	    }
