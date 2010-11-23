@@ -35,11 +35,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import module.organization.domain.predicates.PartyPredicate;
-import module.organization.domain.predicates.PartyResultCollection;
 import module.organization.domain.predicates.PartyPredicate.PartyByAccountabilityType;
 import module.organization.domain.predicates.PartyPredicate.PartyByClassType;
 import module.organization.domain.predicates.PartyPredicate.PartyByPartyType;
 import module.organization.domain.predicates.PartyPredicate.TruePartyPredicate;
+import module.organization.domain.predicates.PartyResultCollection;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.RoleType;
@@ -162,6 +162,10 @@ abstract public class Party extends Party_Base {
 	return getChildren(new PartyByAccountabilityType(Unit.class, type));
     }
 
+    public Collection<Person> getChildUnits(final Collection<AccountabilityType> types) {
+	return getChildren(new PartyByAccountabilityType(Unit.class, types));
+    }
+
     public Collection<Unit> getChildUnits(final PartyType type) {
 	return getChildren(new PartyByPartyType(Unit.class, type));
     }
@@ -172,6 +176,10 @@ abstract public class Party extends Party_Base {
 
     public Collection<Person> getChildPersons(final AccountabilityType type) {
 	return getChildren(new PartyByAccountabilityType(Person.class, type));
+    }
+
+    public Collection<Person> getChildPersons(final Collection<AccountabilityType> types) {
+	return getChildren(new PartyByAccountabilityType(Person.class, types));
     }
 
     public Collection<Person> getChildPersons(final PartyType type) {
