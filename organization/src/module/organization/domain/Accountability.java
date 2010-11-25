@@ -183,7 +183,7 @@ public class Accountability extends Accountability_Base {
 	removeParent();
 	removeChild();
 	removeAccountabilityType();
-	removeAccountabilityImportRegister();
+//	removeAccountabilityImportRegister();
 	removeMyOrg();
 	deleteDomainObject();
     }
