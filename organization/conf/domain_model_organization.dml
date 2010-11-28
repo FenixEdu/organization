@@ -83,6 +83,17 @@ class module.organization.domain.OrganizationalModel {
 class module.organization.domain.groups.PersonGroup extends myorg.domain.groups.PersistentGroup {
 }
 
+class module.organization.domain.FunctionDelegation {
+	Boolean canSubDelegate;
+}
+
+class module.organization.domain.FunctionDelegationLog {
+	DateTime operationInstant;
+	String executor;
+	String operation;
+}
+
+
 /** Relations **/
 
 relation UserPerson {
@@ -231,3 +242,35 @@ relation UserUnconfirmedAccountability {
 	}
 }
 
+relation MyOrgFunctionDelegation {
+	myorg.domain.MyOrg playsRole myOrg;
+	module.organization.domain.FunctionDelegation playsRole functionDelegation {
+		multiplicity *;
+	}
+}
+
+relation FunctionDelegationAccountabilityDelegator {
+	module.organization.domain.FunctionDelegation playsRole functionDelegationDelegated {
+		multiplicity *;
+	}
+	module.organization.domain.Accountability playsRole accountabilityDelegator;
+}
+
+relation FunctionDelegationAccountabilityDelegatee {
+	module.organization.domain.FunctionDelegation playsRole functionDelegationDelegator;
+	module.organization.domain.Accountability playsRole accountabilityDelegatee;
+}
+
+relation MyOrgFunctionDelegationLog {
+	myorg.domain.MyOrg playsRole myOrg;
+	module.organization.domain.FunctionDelegationLog playsRole functionDelegationLogs {
+		multiplicity *;
+	}
+}
+
+relation FunctionDelegationFunctionDelegationLog {
+	module.organization.domain.FunctionDelegation playsRole functionDelegation;
+	module.organization.domain.FunctionDelegationLog playsRole functionDelegationLogs {
+		multiplicity *;
+	}
+}
