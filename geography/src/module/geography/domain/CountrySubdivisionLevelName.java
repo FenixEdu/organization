@@ -24,6 +24,9 @@
  */
 package module.geography.domain;
 
+import java.text.Collator;
+import java.util.Comparator;
+
 import myorg.domain.exceptions.DomainException;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -35,9 +38,10 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  */
 public class CountrySubdivisionLevelName extends CountrySubdivisionLevelName_Base {
 
-    public CountrySubdivisionLevelName(Integer level, MultiLanguageString name, Boolean isLabel) {
+
+
+    public CountrySubdivisionLevelName(Integer level, MultiLanguageString name) {
 	super();
-	setIsLabel(isLabel);
 	setLevel(level);
 	setName(name);
     }

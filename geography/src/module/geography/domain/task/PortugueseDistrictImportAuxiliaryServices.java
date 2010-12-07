@@ -63,7 +63,6 @@ public class PortugueseDistrictImportAuxiliaryServices {
 	LineNumberReader reader = null;
 	ArrayList<CountrySubdivision> districtsOnFile = new ArrayList<CountrySubdivision>();
 	ArrayList<CountrySubdivision> existingDistricts = new ArrayList<CountrySubdivision>();
-
 	try {
 	    File file = new File(PropertiesManager.getProperty("modules.geography.file.import.location") + CTT_DISTRICTFILE);
 	    if (originalTask.getLastRun() == null || file.lastModified() > originalTask.getLastRun().getMillis()) {

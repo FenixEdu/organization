@@ -27,8 +27,10 @@ package module.geography.domain;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 
 import module.geography.util.StringsUtil;
+import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
 import myorg.domain.exceptions.DomainException;
 
@@ -48,6 +50,12 @@ public class CountrySubdivision extends CountrySubdivision_Base {
     protected CountrySubdivision() {
 	super();
     }
+
+    public static final Comparator COMPARATOR_BY_LEVEL = new Comparator<CountrySubdivision>() {
+	public int compare(final CountrySubdivision location1, CountrySubdivision location2) {
+	    return location1.getLevel().compareTo(location2.getLevel());
+	}
+    };
 
     public CountrySubdivision(Country parent, String name, String acronym, String code) {
 	this(parent.getUnit(), 1, name, acronym, code);
@@ -79,6 +87,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
 	getCountry().setSubdivisionLevelName(getLevel(), levelName, isLabel);
     }
 
+    @Override
     public Country getCountry() {
 	if (getLevel() == 1)
 	    return (Country) getParentLocation();
@@ -91,11 +100,44 @@ public class CountrySubdivision extends CountrySubdivision_Base {
 	return (CountrySubdivision) getParentLocation();
     }
 
-    public Collection<CountrySubdivision> getChildren() {
+    /**
+     * 
+     * @return the CountrySubdivision {@link CountrySubdivision} objects that
+     *         are on the same level and that are currently active
+     */
+    public Collection<CountrySubdivision> getCurrentSiblings() {
+	if (getLevel() > 1)
+	    return getParentSubdivision().getCurrentChildren();
+	else
+	    return getCountry().getCurrentChildren();
+
+    }
+
+    /**
+     * @return the children which are currently active
+     */
+    public Collection<CountrySubdivision> getCurrentChildren() {
+	return getChildren(new LocalDate());
+
+    }
+
+    /**
+     * Gets the children that are valid at the given time
+     * 
+     * @param date
+     *            the date where they should be vaild to be returned
+     * @return a collection with the active children at the given time
+     *         {@link Accountability}
+     */
+    public Collection<CountrySubdivision> getChildren(LocalDate date) {
 	Collection<Unit> units = getChildUnits();
 	Collection<CountrySubdivision> children = new ArrayList<CountrySubdivision>();
 	for (Unit unit : units) {
-	    children.add((CountrySubdivision) unit.getGeographicLocation());
+	    for (Accountability accountability : unit.getParentAccountabilities(getOrCreateAccountabilityType())) {
+		if (accountability.isActive(date)) {
+		    children.add((CountrySubdivision) unit.getGeographicLocation());
+		}
+	    }
 	}
 	return children;
     }
@@ -111,7 +153,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
 
     public CountrySubdivision getChildByCode(String... codes) {
 	String code = codes[0];
-	for (CountrySubdivision subdivision : getChildren()) {
+	for (CountrySubdivision subdivision : getCurrentChildren()) {
 	    if (subdivision.getCode().equals(code)) {
 		if (codes.length > 1) {
 		    return subdivision.getChildByCode(Arrays.asList(codes).subList(1, codes.length).toArray(new String[0]));
@@ -130,6 +172,10 @@ public class CountrySubdivision extends CountrySubdivision_Base {
     public void delete() {
 	Unit unit = this.getUnit();
 	removeUnit();
+	removePhysicalAddress();
+	for (Accountability accountability : unit.getChildAccountabilities()) {
+	    unit.removeChildAccountabilities(accountability);
+	}
 	unit.delete();
 	this.deleteDomainObject();
 

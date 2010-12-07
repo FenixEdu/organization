@@ -24,16 +24,20 @@
  */
 package module.geography.domain;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 
+import module.geography.util.AddressPrinter;
 import module.geography.util.StringsUtil;
+import module.mission.domain.ForeignMission;
 import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
 import myorg.domain.MyOrg;
+import myorg.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
 
@@ -66,20 +70,24 @@ public class Country extends Country_Base implements GeographicConstants {
     };
 
     public Country(Planet parent, String iso3166alpha2Code, String iso3166alpha3Code, Integer iso3166numericCode,
-	    MultiLanguageString name, MultiLanguageString nationality) {
+	    MultiLanguageString name, MultiLanguageString nationality, Class iAddressPrinter) {
 	super();
 	setMyOrg(MyOrg.getInstance());
 	setUnit(Unit.create(parent.getUnit(), name, iso3166alpha3Code, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
 		getOrCreateAccountabilityType(), new LocalDate(), null));
 	setIso3166alpha2Code(iso3166alpha2Code);
+	setIAddressPrinter(iAddressPrinter);
 	setIso3166alpha3Code(iso3166alpha3Code);
 	setIso3166numericCode(iso3166numericCode);
 	setNationality(nationality);
     }
 
-    public Country(Planet parent, MultiLanguageString name, String acronym, CountrySubdivisionLevelName... subdivisionNames) {
+    public Country(Planet parent, MultiLanguageString name, String acronym, Class iAddressPrinter,
+	    CountrySubdivisionLevelName... subdivisionNames) {
 	super();
 	setMyOrg(MyOrg.getInstance());
+
+	setIAddressPrinter(iAddressPrinter);
 	setUnit(Unit.create(parent.getUnit(), name, acronym, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
 		getOrCreateAccountabilityType(), new LocalDate(), null));
 	for (CountrySubdivisionLevelName subdivisionName : subdivisionNames) {
@@ -88,8 +96,25 @@ public class Country extends Country_Base implements GeographicConstants {
     }
 
     @Override
+    public void setIAddressPrinter(Class iAddressPrinter) {
+	if (!AddressPrinter.class.isAssignableFrom(iAddressPrinter))
+	    throw new DomainException("error.invalid.iaddressprinter");
+	super.setIAddressPrinter(iAddressPrinter);
+    }
+
+    @Override
     public MultiLanguageString getType() {
 	return StringsUtil.makeName("País", COUNTRY_PARTYTYPE_NAME);
+    }
+
+
+    public AddressPrinter getAddressPrinter() {
+	try {
+	    return (AddressPrinter) super.getIAddressPrinter().getConstructor().newInstance();
+	} catch (Exception e) {
+	    throw new DomainException("error.instance.iaddressprinter", e);
+	}
+
     }
 
     /**
@@ -101,7 +126,18 @@ public class Country extends Country_Base implements GeographicConstants {
 	return getLevelNameCount();
     }
 
-    MultiLanguageString getSubdivisionLevelName(Integer level) {
+    // TODO check to see if the part of removing the PhysicalAddress and
+    // everything which this module doesn't depend is required
+    @Deprecated
+    public void delete() {
+	Unit unit = this.getUnit();
+	removeUnit();
+	removeMyOrg();
+	unit.delete();
+	deleteDomainObject();
+    }
+
+    public MultiLanguageString getSubdivisionLevelName(Integer level) {
 	for (CountrySubdivisionLevelName levelName : getLevelNameSet()) {
 	    if (levelName.getLevel().equals(level))
 		return levelName.getName();
@@ -123,6 +159,22 @@ public class Country extends Country_Base implements GeographicConstants {
     }
 
     /**
+     * 
+     * @param level
+     *            the level to get
+     * @return returns the {@link CountrySubdivisionLevelName} associated with
+     *         the given level or null if it doesn't exist
+     */
+    public CountrySubdivisionLevelName getCountrySubdivisionLevel(int level) {
+	for (CountrySubdivisionLevelName countrySubdivisionLevelName : getLevelName()) {
+	    if (countrySubdivisionLevelName.getLevel() == level)
+		return countrySubdivisionLevelName;
+	}
+	return null;
+
+    }
+
+    /**
      * This method is useful because the subdivisions can change with time and
      * these changes are tracked with the accountability
      * 
@@ -134,6 +186,13 @@ public class Country extends Country_Base implements GeographicConstants {
 	return getChildrenValidAt(new LocalDate());
     }
 
+    /**
+     * 
+     * @param date
+     *            the date which they should have been active
+     * @return a {@link Collection} with the {@link CountrySubdivision} that
+     *         were active on the given date and of the
+     */
     public Collection<CountrySubdivision> getChildrenValidAt(LocalDate date) {
 	Collection<Unit> units = getChildUnits();
 	Collection<CountrySubdivision> children = new ArrayList<CountrySubdivision>();
@@ -193,7 +252,7 @@ public class Country extends Country_Base implements GeographicConstants {
 	    }
 	}
 	if (countrySubdivisionLevelNameToAlter == null) {
-	    countrySubdivisionLevelNameToAlter = new CountrySubdivisionLevelName(level, levelName, isLabel);
+	    countrySubdivisionLevelNameToAlter = new CountrySubdivisionLevelName(level, levelName);
 	    this.addLevelName(countrySubdivisionLevelNameToAlter);
 	} else {
 	    countrySubdivisionLevelNameToAlter.setName(levelName);

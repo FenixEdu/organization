@@ -12,6 +12,7 @@ import pt.ist.fenixWebFramework.services.Service;
 import module.geography.domain.Country;
 import module.geography.domain.CountrySubdivision;
 import module.geography.domain.CountrySubdivisionLevelName;
+import myorg.domain.MyOrg;
 import myorg.domain.scheduler.Task;
 import myorg.util.BundleUtil;
 
@@ -49,6 +50,7 @@ public class CleanCountrySubLevels extends Task {
 	// add to an array all of the countries one wants to clean the sublevels
 	ArrayList<Country> countriesToClean = new ArrayList<Country>();
 	countriesToClean.add(Country.getPortugal());
+	countriesToClean.addAll(MyOrg.getInstance().getCountries());
 	HashMap<String, ArrayList<Integer>> infoByCountry = new HashMap<String, ArrayList<Integer>>();
 	
 	for (Country country : countriesToClean) {

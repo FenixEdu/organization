@@ -32,6 +32,7 @@ import java.io.LineNumberReader;
 
 import module.geography.domain.Country;
 import module.geography.domain.Planet;
+import module.geography.util.AddressPrinter;
 import myorg._development.PropertiesManager;
 import myorg.util.BundleUtil;
 
@@ -61,6 +62,11 @@ public class CountryCodesImport extends CountryCodesImport_Base {
 	LineNumberReader reader = null;
 	try {
 	    File file = new File(PropertiesManager.getProperty("modules.geography.file.import.location") + ISO3166_FILE);
+	    if (!file.exists()) {
+		logInfo("Couldn't find the file: " + ISO3166_FILE + " on the path:"
+			+ PropertiesManager.getProperty("modules.geography.file.import.location"));
+		return;
+	    }
 	    if (getLastRun() == null || file.lastModified() > getLastRun().getMillis()) {
 		DateTime lastReview = new DateTime(file.lastModified());
 		reader = new LineNumberReader(new FileReader(file));
@@ -107,7 +113,7 @@ public class CountryCodesImport extends CountryCodesImport_Base {
     @Service
     private Country createCountry(Planet parent, String shortCode, String longCode, Integer numericCode,
 	    MultiLanguageString countryName, MultiLanguageString nationality, DateTime lastReview) {
-	Country country = new Country(parent, shortCode, longCode, numericCode, countryName, nationality);
+	Country country = new Country(parent, shortCode, longCode, numericCode, countryName, nationality, AddressPrinter.class);
 	country.setLastReview(lastReview);
 	additions++;
 	return country;

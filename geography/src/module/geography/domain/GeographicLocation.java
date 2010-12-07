@@ -71,6 +71,24 @@ public abstract class GeographicLocation extends GeographicLocation_Base impleme
 	return getUnit().getPartyName();
     }
 
+    /**
+     * 
+     * @return the {@link Country} that is a parent or event this
+     *         GeographicLocation or null if it has none
+     */
+    public Country getCountry() {
+	if (this instanceof Country)
+	    return (Country) this;
+	if (this instanceof CountrySubdivision || this instanceof PostalExtension)
+	    return ((CountrySubdivision) this).getCountry();
+	// recursively go and fetch the Country if it is indeed available
+	if (getParentLocation() != null)
+	    return getParentLocation().getCountry();
+	else
+	    return null;
+
+    }
+
     public String getAcronym() {
 	return getUnit().getAcronym();
     }
