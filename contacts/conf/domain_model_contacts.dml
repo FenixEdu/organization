@@ -1,0 +1,126 @@
+
+/*
+ * @(#)domain_model_contact.dml
+ *
+ * Copyright 2009 Instituto Superior Tecnico
+ * Founding Authors: João Antunes
+ *
+ *      https://fenix-ashes.ist.utl.pt/
+ *
+ *   This file is part of the Organization Module for the MyOrg web application.
+ *
+ *   The Organization Module is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published
+ *   by the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.*
+ *
+ *   The Organization Module is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
+package module.contacts.domain;
+
+enum module.contacts.domain.ContactsRoles																as ContactsRoles;
+enum module.contacts.domain.PartyContactType                                                            as PartyContactType;
+enum module.contacts.domain.PhoneType                                                            		as PhoneType;
+
+class ContactsConfigurator {
+	ContactsRoles contactsRoles;
+}
+	
+	class GroupAlias {
+		MultiLanguageString groupAlias;
+	}
+	
+    class PartyContact {
+        Boolean defaultContact;
+        PartyContactType type;
+        DateTime lastModifiedDate;
+    }
+    
+    
+    class EmailAddress extends PartyContact {
+            String value (REQUIRED);
+    }
+
+    class Phone extends PartyContact {
+            String number (REQUIRED);
+            PhoneType phoneType (REQUIRED);
+    }
+
+    class PhysicalAddress extends PartyContact {
+            String complementarAddress;
+    }
+
+    class WebAddress extends PartyContact {
+            String url (REQUIRED);
+    }
+    
+class task.IndexPersonsAndContacts extends .myorg.domain.scheduler.Task {
+}
+    
+    
+relation MyOrgContactsConfigurator {
+	.myorg.domain.MyOrg playsRole myOrg {
+		multiplicity 1;
+	}
+	ContactsConfigurator playsRole contactsConfigurator {
+		multiplicity 1;
+	}
+}
+
+relation PersistentGroupContactsConfigurator {
+	.myorg.domain.groups.PersistentGroup playsRole visibilityGroups {
+		multiplicity *;
+	}
+	ContactsConfigurator playsRole contactsConfigurator;
+}
+
+relation GroupAliasPersistentGroup{
+	.myorg.domain.groups.PersistentGroup playsRole persistentGroupAlias {
+		multiplicity 1;
+	}
+	GroupAlias playsRole groupAlias {
+		multiplicity 1;
+	}
+}
+
+relation ContactsConfiguratorPartyContact {
+	ContactsConfigurator playsRole contactsConfigurator {
+		multiplicity 1;
+	}
+	PartyContact playsRole partyContact {
+		multiplicity *;
+	}
+}
+    
+relation PartyPartyContact {
+    .module.organization.domain.Party playsRole party {
+   		multiplicity 1;
+   	}
+    PartyContact playsRole partyContacts {
+        multiplicity *;
+	}
+}
+
+
+relation GeographicLocationPhysicalAddress {
+	.module.geography.domain.GeographicLocation playsRole geographicLocation;
+	PhysicalAddress playsRole physicalAddress;
+}
+
+
+relation PersistentGroupPartyContact {
+	.myorg.domain.groups.PersistentGroup playsRole visibilityGroups {
+		multiplicity *;
+	}
+	PartyContact playsRole visibleContacts {
+		multiplicity *;
+	} 
+}

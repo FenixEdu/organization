@@ -1,0 +1,525 @@
+<schema name="myorg.modules.contacts.ListPersistentGroups" type="module.contacts.presentationTier.action.bean.GroupsSelectorBean" bundle="CONTACTS_RESOURCES">
+	<slot name="groups" bundle="CONTACTS_RESOURCES" key="manage.visibility.groups.groups.label" layout="option-select">
+        <property name="providerClass" value="module.contacts.presentationTier.renderers.providers.PersistentGroupsProvider" />
+        <property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        <property name="eachLayout" value="values"/>
+        <property name="classes" value="nobullet noindent"/>
+        <property name="sortBy" value="name"/>
+	</slot>
+</schema>
+
+
+
+<schema name="myorg.modules.contacts.EditContact.VoIPPhone.superEditor" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+	<slot name="value" key="module.contacts.domain.Phone">
+				<property name="size" value="50" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(.*@(\w+\.\w+)+){1}" />
+            			<property name="message" value="manage.contacts.edit.error.phone.invalidFormat.voip" />
+        		</validator>
+	</slot>
+	<slot name="phoneType" key="module.contacts.domain.PhoneType.label" layout="menu-postback">
+			</slot>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
+   			</slot>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+</schema>
+
+<schema name="myorg.modules.contacts.CreateContact.VoIPPhone.superEditor" extends="myorg.modules.contacts.EditContact.VoIPPhone.superEditor" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+	<remove name="phoneType"/>
+</schema>
+
+
+<schema name="myorg.modules.contacts.EditContact.VoIPPhone.regular.immutable" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+			<slot name="value" key="module.contacts.domain.Phone">
+				<property name="size" value="50" />
+				<property name="disabled" value="true"/>
+				<property name="readOnly" value="true" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(.*@(\w+\.\w+)+){1}" />
+            			<property name="message" value="manage.contacts.edit.error.phone.invalidFormat.voip" />
+        		</validator>
+   			</slot>
+			<slot name="phoneType" key="module.contacts.domain.PhoneType.label" layout="menu-postback">
+					<property name="disabled" value="true"/>
+					<property name="readOnly" value="true" />
+			</slot>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
+						<property name="disabled" value="true"/>
+						<property name="readOnly" value="true" />
+   			</slot>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+</schema>
+
+<schema name="myorg.modules.contacts.CreateContact.VoIPPhone.regular.immutable" extends="myorg.modules.contacts.EditContact.VoIPPhone.regular.immutable" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+	<remove name="phoneType"/>
+</schema>
+
+<schema name="myorg.modules.contacts.EditContact.VoIPPhone.regular" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+			<slot name="value" key="module.contacts.domain.Phone">
+				<property name="size" value="50" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(.*@(\w+\.\w+)+){1}" />
+            			<property name="message" value="manage.contacts.edit.error.phone.invalidFormat.voip" />
+        		</validator>
+   			</slot>
+			<slot name="phoneType" key="module.contacts.domain.PhoneType.label" layout="menu-postback">
+			</slot>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
+   					<property name="excludedValues" value="IMMUTABLE"/>
+   			</slot>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+</schema>
+
+<schema name="myorg.modules.contacts.CreateContact.VoIPPhone.regular" extends="myorg.modules.contacts.EditContact.VoIPPhone.regular" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+	<remove name="phoneType"/>
+</schema>
+
+<schema name="myorg.modules.contacts.EditContact.RegularPhone.regular" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+			<slot name="value" key="module.contacts.domain.Phone">
+				<property name="size" value="15" />
+				<property name="maxLength" value="15" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(\+?\d{4,15})?" />
+            			<property name="message" value="manage.contacts.edit.error.phone.invalidFormat" />
+        		</validator>
+   			</slot>
+			<slot name="phoneType" key="module.contacts.domain.PhoneType.label" layout="menu-postback" >
+			<!-- if we aren't a supereditor and this is an institutional contact we can't change the content -->
+			</slot>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
+   					<property name="excludedValues" value="IMMUTABLE"/>
+   			</slot>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+   			<slot name="visibilityGroups" key="manage.contacts.edit.visibilityGroups.label"/>
+</schema>
+
+<schema name="myorg.modules.contacts.CreateContact.RegularPhone.regular" extends="myorg.modules.contacts.EditContact.RegularPhone.regular" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+	<remove name="phoneType"/>
+</schema>
+
+
+<schema name="myorg.modules.contacts.EditContact.RegularPhone.regular.immutable" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+			<slot name="value" key="module.contacts.domain.Phone">
+				<property name="size" value="15" />
+				<property name="maxLength" value="15" />
+						<property name="disabled" value="true"/>
+						<property name="readOnly" value="true" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(\+?\d{4,15})?" />
+            			<property name="message" value="manage.contacts.edit.error.phone.invalidFormat" />
+        		</validator>
+   			</slot>
+			<slot name="phoneType" key="module.contacts.domain.PhoneType.label" layout="menu-postback" >
+			<!-- if we aren't a supereditor and this is an institutional contact we can't change the content -->
+					<property name="disabled" value="true"/>
+						<property name="readOnly" value="true" />
+			</slot>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
+						<property name="disabled" value="true"/>
+						<property name="readOnly" value="true" />
+   			</slot>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+   			<slot name="visibilityGroups" key="manage.contacts.edit.visibilityGroups.label"/>
+</schema>
+
+<schema name="myorg.modules.contacts.CreateContact.RegularPhone.regular.immutable" extends="myorg.modules.contacts.EditContact.RegularPhone.regular.immutable" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+	<remove name="phoneType"/>
+</schema>
+
+<schema name="myorg.modules.contacts.EditContact.RegularPhone.superEditor" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+			<slot name="value" key="module.contacts.domain.Phone">
+				<property name="size" value="15" />
+				<property name="maxLength" value="15" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(\+?\d{4,15})?" />
+            			<property name="message" value="manage.contacts.edit.error.phone.invalidFormat" />
+        		</validator>
+   			</slot>
+			<slot name="phoneType" key="module.contacts.domain.PhoneType.label" layout="menu-postback"/>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label"/>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+</schema>
+
+
+
+<schema name="myorg.modules.contacts.CreateContact.RegularPhone.superEditor" extends="myorg.modules.contacts.EditContact.RegularPhone.superEditor" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+	<remove name="phoneType"/>
+</schema>
+
+<schema name="myorg.modules.contacts.EditContact.ExtensionPhone.regular" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+			<slot name="value" key="module.contacts.domain.Phone">
+				<property name="size" value="4" />
+				<property name="maxLength" value="4" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(\d{4})?" />
+            			<property name="message" value="manage.contacts.edit.error.phone.invalidFormat" />
+        		</validator>
+   			</slot>
+			<slot name="phoneType" key="module.contacts.domain.PhoneType.label" layout="menu-postback" >
+			<!-- if we aren't a supereditor and this is an institutional contact we can't change the content -->
+			</slot>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
+   					<property name="excludedValues" value="IMMUTABLE"/>
+   			</slot>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+   			<slot name="visibilityGroups" key="manage.contacts.edit.visibilityGroups.label"/>
+</schema>
+
+<schema name="myorg.modules.contacts.CreateContact.ExtensionPhone.regular" extends="myorg.modules.contacts.EditContact.ExtensionPhone.regular" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+	<remove name="phoneType"/>
+</schema>
+
+<schema name="myorg.modules.contacts.EditContact.ExtensionPhone.regular.immutable" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+			<slot name="value" key="module.contacts.domain.Phone">
+				<property name="size" value="4" />
+				<property name="maxLength" value="4" />
+						<property name="disabled" value="true"/>
+						<property name="readOnly" value="true" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(\d{4})?" />
+            			<property name="message" value="manage.contacts.edit.error.phone.invalidFormat" />
+        		</validator>
+   			</slot>
+			<slot name="phoneType" key="module.contacts.domain.PhoneType.label" layout="menu-postback" >
+			<!-- if we aren't a supereditor and this is an institutional contact we can't change the content -->
+					<property name="disabled" value="true"/>
+						<property name="readOnly" value="true" />
+			</slot>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
+						<property name="disabled" value="true"/>
+						<property name="readOnly" value="true" />
+   			</slot>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+   			<slot name="visibilityGroups" key="manage.contacts.edit.visibilityGroups.label"/>
+</schema>
+
+<schema name="myorg.modules.contacts.CreateContact.ExtensionPhone.regular.immutable" extends="myorg.modules.contacts.EditContact.ExtensionPhone.regular.immutable" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+	<remove name="phoneType"/>
+</schema>
+
+<schema name="myorg.modules.contacts.EditContact.ExtensionPhone.superEditor" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+			<slot name="value" key="module.contacts.domain.Phone">
+				<property name="size" value="4" />
+				<property name="maxLength" value="4" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(\d{4})?" />
+            			<property name="message" value="manage.contacts.edit.error.phone.invalidFormat" />
+        		</validator>
+   			</slot>
+			<slot name="phoneType" key="module.contacts.domain.PhoneType.label" layout="menu-postback" >
+			<!-- if we aren't a supereditor and this is an institutional contact we can't change the content -->
+			</slot>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
+   			</slot>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+   			<slot name="visibilityGroups" key="manage.contacts.edit.visibilityGroups.label"/>
+</schema>
+
+<schema name="myorg.modules.contacts.CreateContact.ExtensionPhone.superEditor" extends="myorg.modules.contacts.EditContact.ExtensionPhone.superEditor" type="module.contacts.presentationTier.action.bean.ContactToEditBean" bundle="CONTACTS_RESOURCES">
+	<remove name="phoneType"/>
+</schema>
+
+<!-- One field contacts creation! -->
+<schema name="myorg.modules.contacts.CreateContact.WebAddress.regular" bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.ContactToCreateBean">
+			<slot name="value" key="module.contacts.domain.WebAddress">
+				<property name="size" value="50" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&amp;%@!\-\/]))?" />
+            			<property name="message" value="manage.contacts.edit.error.generic.invalidFormat" />
+        		</validator>
+   			</slot>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
+   					<property name="excludedValues" value="IMMUTABLE"/>
+			</slot>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+</schema> 
+
+<schema name="myorg.modules.contacts.CreateContact.WebAddress.superEditor" bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.ContactToCreateBean">
+			<slot name="value" key="module.contacts.domain.WebAddress">
+				<property name="size" value="50" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&amp;%@!\-\/]))?" />
+            			<property name="message" value="manage.contacts.edit.error.generic.invalidFormat" />
+        		</validator>
+   			</slot>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label"/>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+</schema> 
+
+<schema name="myorg.modules.contacts.CreateContact.EmailAddress.regular" bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.ContactToCreateBean">
+			<slot name="value" key="module.contacts.domain.EmailAddress">
+				<property name="size" value="50" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(.*@(\w+\.\w+)+){1}" />
+            			<property name="message" value="manage.contacts.edit.error.generic.invalidFormat" />
+        		</validator>
+   			</slot>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
+   					<property name="excludedValues" value="IMMUTABLE"/>
+   			</slot>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+</schema> 
+
+<schema name="myorg.modules.contacts.CreateContact.EmailAddress.superEditor" bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.ContactToCreateBean">
+			<slot name="value" key="module.contacts.domain.EmailAddress">
+				<property name="size" value="50" />
+				<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        				<property name="bundle" value="CONTACTS_RESOURCES"/>
+            			<property name="regexp" value="(.*@(\w+\.\w+)+){1}" />
+            			<property name="message" value="manage.contacts.edit.error.generic.invalidFormat" />
+        		</validator>
+   			</slot>
+   			<slot name="partyContactType" key="manage.contacts.edit.partyContactType.label"/>
+   			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachLayout" value="values"/>
+        		<property name="classes" value="nobullet noindent"/>
+        		<property name="sortBy" value="name"/>
+			</slot>
+</schema> 
+
+<!-- To allow a user to add set and unset the visibility groups regarding one contact information of  
+<schema name="myorg.modules.contacts.ListVisibilityGroups" type="module.contacts.presentationTier.action.bean.GroupsSelectorBean" bundle="CONTACTS_RESOURCES">
+	<slot name="groups" bundle="CONTACTS_RESOURCES" key="manage.contacts.visibility.groups.label" layout="option-select">
+        <property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        <property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        <property name="eachLayout" value="values"/>
+        <property name="classes" value="nobullet noindent"/>
+        <property name="sortBy" value="name"/>
+	</slot>
+</schema>
+-->
+<!-- Super editor list of users -->
+<schema name="myorg.modules.contacts.ListSuperEditorUsers" type="module.contacts.presentationTier.action.bean.PersonsBean" bundle="CONTACTS_RESOURCES">
+	<slot name="users" bundle="CONTACTS_RESOURCES" key="manage.supereditor.role.listUsers.label" layout="tabular">
+        <property name="eachSchema" value="myorg.modules.contacts.Users.listUserPersonName"/>
+        <property name="eachLayout" value="values"/>
+        <property name="classes" value="nobullet noindent"/>
+        <property name="sortBy" value="name"/>
+	</slot>
+</schema>
+
+<!-- Auto complete for the Persons -->
+<schema name="myorg.modules.contacts.configure.SuperEditorRole.listPersons" type="module.contacts.presentationTier.action.bean.PersonsBean" bundle="CONTACTS_RESOURCES">
+	<slot name="person" layout="autoComplete" key="manage.supereditor.role.person.label" bundle="CONTACTS_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+        <property name="labelField" value="name"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.contacts.presentationTier.renderers.providers.PersonAutoCompleteProvider"/>
+		<property name="size" value="60"/>
+		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+			<property name="message" value="manage.supereditor.role.pleaseSelectOne.unit"/>
+			<property name="bundle" value="CONTACTS_RESOURCES"/>
+			<property name="key" value="true"/>
+		</validator>
+	</slot>
+</schema>
+
+<!-- used by the searchContacts.jsp-->
+<schema name="myorg.modules.contacts.search.byName" type="module.contacts.presentationTier.action.bean.PersonsBean" bundle="CONTACTS_RESOURCES">
+	<slot name="person" layout="autoComplete" key="search.person.byname.label" bundle="CONTACTS_RESOURCES" >
+        <property name="labelField" value="name"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="rawSlotName" value="searchName"/>
+		<property name="indicatorShown" value="true"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.contacts.presentationTier.renderers.providers.PersonAutoCompleteProvider"/>
+		<property name="size" value="60"/>
+	</slot>
+</schema>
+
+<schema name="myorg.modules.contacts.Groups.selectItem" type="myorg.domain.groups.PersistentGroup">
+	<slot name="name"/>
+</schema>
+
+<schema name="myorg.modules.contacts.PhysicalAddress.countryList" type="module.geography.domain.Country">
+	<slot name="name"/>
+</schema>
+
+<schema name="myorg.modules.contacts.Users.listUserPersonName" type="myorg.domain.User">
+	<slot name="presentationName"/>
+</schema>
+
+<schema name="myorg.modules.contacts.Groups.listGroupAlias" type="module.contacts.domain.GroupAlias">
+	<slot name="groupAlias"/>
+</schema>
+
+<schema name="myorg.modules.contacts.GeographicLocation" type="module.geography.domain.GeographicLocation">
+	<slot name="name" key="module.contacts.empty.label"/>
+</schema>
+
+<schema name="myorg.modules.contacts.GeographicLabel" type="java.util.ArrayList">
+	<slot name="name" key="module.contacts.empty.label"/>
+</schema>
+
+<!-- Schema used by the createContact.jsp TODO complete the list of jsp that use this and the other schemas -->
+
+<schema name="module.contacts.presentationTier.action.bean.addressbean.CommonAddressBean" bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.addressbean.CommonAddressBean">
+	<slot name="addressLineOne" key="module.contacts.CommonAddressBean.addressLineOne">
+		<property name="size" value="50"/>
+		<property name="maxLength" value="50" />
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+        	<property name="message" value="manage.contacts.AddressBean.addressLineOne.required" />
+        </validator>
+        <validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        		<property name="bundle" value="CONTACTS_RESOURCES"/>
+            	<property name="message" value="manage.contacts.error.addressLineOne.invalidFormat" />
+        </validator>
+	</slot>
+	<slot name="addressLineTwo" key="module.contacts.CommonAddressBean.addressLineTwo">
+		<property name="size" value="50"/>
+		<property name="maxLength" value="50" />
+        <validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        		<property name="bundle" value="CONTACTS_RESOURCES"/>
+            	<property name="message" value="manage.contacts.error.addressLineTwo.invalidFormat" />
+        </validator>
+	</slot>
+	<slot name="city" key="module.contacts.CommonAddressBean.city">
+		<property name="size" value="10"/>
+		<property name="maxLength" value="20" />
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" >
+        	<property name="message" value="manage.contacts.CommonAddressBean.city.required" />
+        </validator>
+        <validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        		<property name="bundle" value="CONTACTS_RESOURCES"/>
+            	<property name="regexp" value="[\D||.]*" />
+            	<property name="message" value="manage.contacts.CommonAddressBean.city.invalidFormat" />
+        </validator>
+	</slot>
+</schema>
+
+<schema name="module.contacts.presentationTier.action.bean.addressbean.PortugalAddressBean" extends="module.contacts.presentationTier.action.bean.addressbean.CommonAddressBean" type="module.contacts.presentationTier.action.bean.addressbean.PortugalAddressBean" bundle="CONTACTS_RESOURCES">
+	<slot name="mainPostCode" key="module.contacts.postCode">
+		<property name="size" value="4"/>
+		<property name="maxLength" value="4" />
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" >
+			<property name="message" value="manage.contacts.postCode.required"/>
+		</validator>
+        <validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        		<property name="bundle" value="CONTACTS_RESOURCES"/>
+        		<property name="regexp" value="\d{4}?" />
+            	<property name="message" value="manage.contacts.postCode.invalidFormat" />
+        </validator>
+     </slot>
+	<slot name="postCodeExtension" key="module.contacts.PortugalAddressBean.postCodeExtension">
+		<property name="size" value="3"/>
+		<property name="maxLength" value="3" />
+        <validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        		<property name="bundle" value="CONTACTS_RESOURCES"/>
+        		<property name="regexp" value="\d{3}??" />
+            	<property name="message" value="manage.contacts.PortugalAddressBean.postCodeExtension.invalidFormat" />
+        </validator>
+     </slot>
+</schema>
+
+<schema name="module.contacts.presentationTier.action.bean.addressbean.ForeignAddressBean" extends="module.contacts.presentationTier.action.bean.addressbean.CommonAddressBean" type="module.contacts.presentationTier.action.bean.addressbean.ForeignAddressBean" bundle="CONTACTS_RESOURCES">
+	<slot name="county" key="module.contacts.ForeignAddressBean.county">
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" >
+			<property name="message" value="manage.contacts.ForeignAddressBean.county.required"/>
+		</validator>
+     </slot>
+	<slot name="postCode" key="module.contacts.postCode">
+		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" >
+			<property name="message" value="manage.contacts.postCode.required"/>
+		</validator>
+     </slot>
+</schema>
