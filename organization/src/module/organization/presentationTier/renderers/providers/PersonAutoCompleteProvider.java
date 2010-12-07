@@ -47,6 +47,9 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider {
 	StringNormalizer.normalize(input);
 
 	//TODO: refactor to use MyOrg.getInstance().getPersonsSet() ?
+	// TODO: resposta - Feito um PersonAutoCompleteProvider no modulo
+	// contacts - J.Antunes chateiem-me se eu ainda nao vos chateei por
+	// causa disto!
 	for (final Party party : MyOrg.getInstance().getPartiesSet()) {
 	    if (party.isPerson()) {
 		final Person person = (Person) party;

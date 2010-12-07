@@ -26,8 +26,10 @@
 package module.organization.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import module.organization.domain.PartyType.PartyTypeBean;
 import myorg.domain.MyOrg;
@@ -37,10 +39,14 @@ import myorg.domain.User.UserPresentationStrategy;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
-public class Person extends Person_Base {
+public class Person extends Person_Base implements Searchable, Indexable {
 
     static {
 	User.registerUserPresentationStrategy(new UserPresentationStrategy() {
@@ -212,6 +218,36 @@ public class Person extends Person_Base {
 	    }
 	}
 	return true;
+    }
+
+    /**
+     * Enum used for the values of the indexes that are used for the lucene
+     * plugin
+     * 
+     * @author João André Pereira Antunes (joao.antunes@tagus.ist.utl.pt)
+     * 
+     */
+    public enum IndexableFields implements IndexableField {
+	PERSON_NAME, PERSON_USERNAME;
+
+	@Override
+	public String getFieldName() {
+	    return name();
+	}
+
+    }
+
+    @Override
+    public IndexDocument getDocumentToIndex() {
+	IndexDocument indexDocument = new IndexDocument(this);
+	indexDocument.indexField(IndexableFields.PERSON_NAME, this.getName());
+	indexDocument.indexField(IndexableFields.PERSON_USERNAME, this.getUser().getUsername());
+	return indexDocument;
+    }
+
+    @Override
+    public Set<Indexable> getObjectsToIndex() {
+	return Collections.singleton((Indexable) this);
     }
 
 }
