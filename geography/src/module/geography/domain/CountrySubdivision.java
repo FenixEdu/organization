@@ -52,6 +52,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
     }
 
     public static final Comparator COMPARATOR_BY_LEVEL = new Comparator<CountrySubdivision>() {
+	@Override
 	public int compare(final CountrySubdivision location1, CountrySubdivision location2) {
 	    return location1.getLevel().compareTo(location2.getLevel());
 	}
@@ -172,7 +173,6 @@ public class CountrySubdivision extends CountrySubdivision_Base {
     public void delete() {
 	Unit unit = this.getUnit();
 	removeUnit();
-	removePhysicalAddress();
 	for (Accountability accountability : unit.getChildAccountabilities()) {
 	    unit.removeChildAccountabilities(accountability);
 	}
