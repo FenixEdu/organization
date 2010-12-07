@@ -122,6 +122,14 @@ public class Person extends Person_Base implements Searchable, Indexable {
 	addPartyTypes(partyType);
     }
 
+    public String getUserAliasses() {
+	try {
+	    return getRemotePerson().getUserAliass();
+	} catch (Throwable t) {
+	}
+	return getUser().getUsername();
+    }
+
     @Override
     final public boolean isPerson() {
 	return true;
