@@ -45,7 +45,7 @@ class module.geography.domain.Planet extends module.geography.domain.GeographicL
 
 class module.geography.domain.Country extends module.geography.domain.GeographicLocation {
 	String iso3166alpha2Code;
-	Class iAddressPrinter (REQUIRED);
+	Class iAddressPrinter; // (REQUIRED);
 	String iso3166alpha3Code;
 	Integer iso3166numericCode;
 	MultiLanguageString nationality;
