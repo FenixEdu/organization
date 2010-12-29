@@ -13,8 +13,13 @@ public enum ContactsRoles implements IRoleEnum {
     MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR;
 
     @Override
-    public String getRepresentation() {
+    public String getRoleName() {
 	return getClass().getName() + "." + name();
+    }
+    
+    public String getLocalizedName()
+    {
+    	return getRoleName();
     }
 
 }
