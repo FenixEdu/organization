@@ -1,13 +1,16 @@
 package module.organization.domain;
 
 import java.util.Comparator;
+import java.util.ResourceBundle;
 
 import myorg.domain.MyOrg;
+import myorg.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.DomainObject;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 public class FunctionDelegation extends FunctionDelegation_Base {
 
@@ -43,6 +46,10 @@ public class FunctionDelegation extends FunctionDelegation_Base {
 	setMyOrg(MyOrg.getInstance());
 	setAccountabilityDelegator(accountability);
 	final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+	if (unit.hasAnyIntersectingChildAccountability(person, accountabilityType, beginDate, endDate)) {
+	    throw new DomainException("error.FunctionDelegation.already.assigned", ResourceBundle.getBundle(
+		    "resources/OrganizationResources", Language.getLocale()));
+	}
 	final Accountability delegatedAccountability = unit.addChild(person, accountabilityType, beginDate, endDate);
 	setAccountabilityDelegatee(delegatedAccountability);
 	new FunctionDelegationLog(this);
@@ -53,5 +60,4 @@ public class FunctionDelegation extends FunctionDelegation_Base {
 	    final LocalDate beginDate, final LocalDate endDate) {
 	return new FunctionDelegation(accountability, unit, person, beginDate, endDate);
     }
-
 }

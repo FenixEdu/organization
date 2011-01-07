@@ -385,23 +385,53 @@ abstract public class Party extends Party_Base {
 
     @Service
     public Accountability addChild(final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
-	for (final Accountability accountability : getChildAccountabilitiesSet()) {
-	    if (accountability.getChild() == child && accountability.getAccountabilityType() == type
-		    && accountability.intersects(begin, end)) {
-		if (begin == null
-			|| (begin != null && accountability.getBeginDate() != null && begin.isBefore(accountability
-				.getBeginDate()))) {
-		    accountability.setBeginDate(begin);
-		}
-		if (end == null
-			|| (end != null && accountability.getEndDate() != null && end.isAfter(accountability.getEndDate()))) {
-		    accountability.setEndDate(end);
-		}
-		return accountability;
+	Accountability intersectingAccountability = getIntersectingChildAccountability(child, type, begin, end);
+	if (intersectingAccountability != null) {
+	    if (begin == null
+		    || (begin != null && intersectingAccountability.getBeginDate() != null && begin
+			    .isBefore(intersectingAccountability.getBeginDate()))) {
+		intersectingAccountability.setBeginDate(begin);
 	    }
+	    if (end == null
+		    || (end != null && intersectingAccountability.getEndDate() != null && end.isAfter(intersectingAccountability
+			    .getEndDate()))) {
+		intersectingAccountability.setEndDate(end);
+	    }
+	    return intersectingAccountability;
 	}
 
 	return Accountability.create(this, child, type, begin, end);
+    }
+
+    public boolean hasAnyIntersectingChildAccountability(final Party child, final AccountabilityType type, final LocalDate begin,
+	    final LocalDate end) {
+	for (final Accountability accountability : getChildAccountabilities()) {
+	    if (accountability.getChild() == child && accountability.getAccountabilityType() == type
+		    && accountability.intersects(begin, end)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    private Accountability getIntersectingChildAccountability(final Party child, final AccountabilityType type,
+	    final LocalDate begin, final LocalDate end) {
+	Accountability intersectingAccountability = null;
+	for (final Accountability accountability : getChildAccountabilities()) {
+	    if (accountability.getChild() == child && accountability.getAccountabilityType() == type
+		    && accountability.intersects(begin, end)) {
+		if (intersectingAccountability != null) {
+		    throwDomainExceptionMultipleIntersectingAccountabilities();
+		}
+		intersectingAccountability = accountability;
+	    }
+	}
+	return intersectingAccountability;
+    }
+
+    private void throwDomainExceptionMultipleIntersectingAccountabilities() {
+	throw new DomainException("error.Party.multiple.intersecting.accountabilities", ResourceBundle.getBundle(
+		"resources/OrganizationResources", Language.getLocale()));
     }
 
     @Service
@@ -471,7 +501,8 @@ abstract public class Party extends Party_Base {
 	return user == null || user.hasRoleType(RoleType.MANAGER);
     }
 
-    public boolean hasChildAccountabilityIncludingAncestry(final Collection<AccountabilityType> accountabilityTypes, final Party party) {
+    public boolean hasChildAccountabilityIncludingAncestry(final Collection<AccountabilityType> accountabilityTypes,
+	    final Party party) {
 	return hasChildAccountabilityIncludingAncestry(new HashSet<Party>(), accountabilityTypes, party);
     }
 
