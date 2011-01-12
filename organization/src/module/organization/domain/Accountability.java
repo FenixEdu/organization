@@ -27,6 +27,7 @@ package module.organization.domain;
 
 import java.util.Comparator;
 
+import jvstm.cps.ConsistencyPredicate;
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 
@@ -57,7 +58,7 @@ public class Accountability extends Accountability_Base {
 	}
 
     };
-	
+
     protected Accountability() {
 	super();
 	setMyOrg(MyOrg.getInstance());
@@ -99,10 +100,8 @@ public class Accountability extends Accountability_Base {
 	}
 
 	if (oldest != null && begin.isBefore(oldest.getBeginDate())) {
-	    final String[] args = new String[] {
-		    oldest.getChild().getPartyName().getContent(),
-		    oldest.getBeginDate().toString("dd/MM/yyyy")
-	    };
+	    final String[] args = new String[] { oldest.getChild().getPartyName().getContent(),
+		    oldest.getBeginDate().toString("dd/MM/yyyy") };
 	    throw new DomainException("error.Accountability.begin.starts.before.oldest.parent.begin", args);
 	}
     }
@@ -129,7 +128,7 @@ public class Accountability extends Accountability_Base {
 	return hasParent() && hasChild() && getAccountabilityType().isValid(getParent(), getChild());
     }
 
-    @jvstm.cps.ConsistencyPredicate
+    @ConsistencyPredicate
     protected boolean checkDateInterval() {
 	return hasBeginDate() && (!hasEndDate() || !getBeginDate().isAfter(getEndDate()));
     }
@@ -183,15 +182,15 @@ public class Accountability extends Accountability_Base {
 	removeParent();
 	removeChild();
 	removeAccountabilityType();
-//	removeAccountabilityImportRegister();
+	//	removeAccountabilityImportRegister();
 	removeMyOrg();
 	deleteDomainObject();
     }
 
     static Accountability create(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
 	    final LocalDate end) {
-	return parent.isAuthorizedToManage() ? new Accountability(parent, child, type, begin, end) :
-	    new UnconfirmedAccountability(parent, child, type, begin, end);
+	return parent.isAuthorizedToManage() ? new Accountability(parent, child, type, begin, end)
+		: new UnconfirmedAccountability(parent, child, type, begin, end);
     }
 
     @Service

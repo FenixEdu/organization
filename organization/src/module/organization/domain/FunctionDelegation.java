@@ -52,12 +52,48 @@ public class FunctionDelegation extends FunctionDelegation_Base {
 	}
 	final Accountability delegatedAccountability = unit.addChild(person, accountabilityType, beginDate, endDate);
 	setAccountabilityDelegatee(delegatedAccountability);
-	new FunctionDelegationLog(this);
+	new FunctionDelegationLog(this, "Create");
     }
 
     @Service
     public static FunctionDelegation create(final Accountability accountability, final Unit unit, final Person person,
 	    final LocalDate beginDate, final LocalDate endDate) {
 	return new FunctionDelegation(accountability, unit, person, beginDate, endDate);
+    }
+
+    @Service
+    public void edit(final LocalDate beginDate, final LocalDate endDate) {
+	new FunctionDelegationLog(this, "Edit");
+	final Accountability accountabilityDelegatee = getAccountabilityDelegatee();
+	// This avoids detecting intersections with itself
+	accountabilityDelegatee.setBeginDate(beginDate.minusDays(2));
+	accountabilityDelegatee.setEndDate(beginDate.minusDays(1));
+
+	final Unit unit = (Unit) getAccountabilityDelegatee().getParent();
+	if (unit.hasAnyIntersectingChildAccountability(accountabilityDelegatee.getChild(),
+		accountabilityDelegatee.getAccountabilityType(), beginDate, endDate)) {
+	    throw new DomainException("error.FunctionDelegation.already.assigned", ResourceBundle.getBundle(
+		    "resources/OrganizationResources", Language.getLocale()));
+	}
+
+	accountabilityDelegatee.setBeginDate(beginDate);
+	accountabilityDelegatee.setEndDate(endDate);
+    }
+
+    @Service
+    public void delete() {
+	new FunctionDelegationLog(this, "Delete");
+	for (FunctionDelegationLog log : getFunctionDelegationLogs()) {
+	    removeFunctionDelegationLogs(log);
+	}
+
+	Accountability delegatedAccountability = getAccountabilityDelegatee();
+	removeAccountabilityDelegatee();
+	delegatedAccountability.delete();
+
+	removeAccountabilityDelegator();
+	removeMyOrg();
+
+	deleteDomainObject();
     }
 }
