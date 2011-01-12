@@ -3,31 +3,23 @@ package module.geography.domain.task;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
-import java.util.HashSet;
 
-import jvstm.cps.ConsistencyException;
+import module.geography.domain.Country;
+import module.geography.domain.CountrySubdivision;
+import module.geography.util.StringsUtil;
+import module.organization.domain.Accountability;
+import myorg._development.PropertiesManager;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.Period;
 
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
-
-import module.geography.domain.Country;
-import module.geography.domain.CountrySubdivision;
-import module.geography.domain.GeographicLocation;
-import module.geography.util.StringsUtil;
-import module.organization.domain.Accountability;
-import module.organization.domain.Unit;
-import myorg._development.PropertiesManager;
-import myorg.util.BundleUtil;
 
 public class PortugueseMunicipalitiesImportAuxiliaryServices {
 
@@ -58,7 +50,6 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
 	return singletonHolder;
     }
 
-
     @Service
     public void executeTask(PortugueseMunicipalitiesImport originalTask) {
 	// let's retrieve Portugal, if it doesn't exist, we must create it
@@ -80,30 +71,26 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
 		    String municipalityCode = parts[1];
 		    String municipalityName = parts[2];
 		    CountrySubdivision district = portugal.getChildByCode(districtCode);
-		    CountrySubdivision municipality=null;
-		    if (district == null)
-		    {
+		    CountrySubdivision municipality = null;
+		    if (district == null) {
 			//abort the transaction!! throw some kind of exception and warn the user of the outcome
 			originalTask.auxLogInfo("Script aborted because the district with code: " + districtCode
 				+ " couldn't be found");
-			throw new ConsistencyException();
-		    }
-		    else
-		    {
+			throw new RuntimeException("Script aborted because the district with code: " + districtCode
+				+ " couldn't be found");
+		    } else {
 			//get the municipality
 			municipality = district.getChildByCode(municipalityCode);
-			if (municipality == null)
-			{
+			if (municipality == null) {
 			    municipality = createMunicipality(district, municipalityCode, municipalityName, lastReview);
-			}
-			else {
+			} else {
 			    modifyMunicipality(municipality, municipalityCode, municipalityName, "", lastReview);
-			    
+
 			}
 		    }
 		    municipalitiesOnFile.add(municipality);
 		}
-		
+
 		// 'removing' all of the existing municipalities
 
 		// getting all of the existing districts
