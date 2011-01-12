@@ -28,6 +28,7 @@ package module.organization.domain;
 import java.util.Comparator;
 
 import jvstm.cps.ConsistencyPredicate;
+import module.organization.domain.util.OrganizationConsistencyException;
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 
@@ -128,7 +129,7 @@ public class Accountability extends Accountability_Base {
 	return hasParent() && hasChild() && getAccountabilityType().isValid(getParent(), getChild());
     }
 
-    @ConsistencyPredicate
+    @ConsistencyPredicate(OrganizationConsistencyException.class)
     protected boolean checkDateInterval() {
 	return hasBeginDate() && (!hasEndDate() || !getBeginDate().isAfter(getEndDate()));
     }
