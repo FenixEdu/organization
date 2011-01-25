@@ -421,17 +421,13 @@ abstract public class Party extends Party_Base {
 	    if (accountability.getChild() == child && accountability.getAccountabilityType() == type
 		    && accountability.intersects(begin, end)) {
 		if (intersectingAccountability != null) {
-		    throwDomainExceptionMultipleIntersectingAccountabilities();
+		    throw new DomainException("error.Party.multiple.intersecting.accountabilities", ResourceBundle.getBundle(
+			    "resources/OrganizationResources", Language.getLocale()));
 		}
 		intersectingAccountability = accountability;
 	    }
 	}
 	return intersectingAccountability;
-    }
-
-    private void throwDomainExceptionMultipleIntersectingAccountabilities() {
-	throw new DomainException("error.Party.multiple.intersecting.accountabilities", ResourceBundle.getBundle(
-		"resources/OrganizationResources", Language.getLocale()));
     }
 
     @Service
