@@ -5,10 +5,6 @@ package module.contacts.presentationTier.action.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-
-import pt.utl.ist.fenix.tools.util.CollectionPager;
 
 import module.contacts.domain.PhoneType;
 import module.organization.domain.Person;
@@ -142,9 +138,21 @@ public class PersonsBean implements Serializable {
 		return pageNumber;
 	}
 
-	public void setSearchResult(Collection<Person> persons) {
+    public void setSearchResult(ArrayList<Person> persons) {
 		searchResult = new ArrayList(persons);
 		
 	}
+
+    public ArrayList<Person> getSearchResult() {
+	return searchResult;
+    }
+
+    public void setNumberOfPages(Integer numberOfPages) {
+	this.numberOfPages = numberOfPages;
+    }
+
+    public Integer getNumberOfPages() {
+	return numberOfPages;
+    }
 
 }
