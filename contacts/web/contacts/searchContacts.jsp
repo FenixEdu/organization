@@ -69,19 +69,31 @@ jQuery(document).ready(function($){
 <h1><bean:message key="search.person.contacts.title"
 	bundle="CONTACTS_RESOURCES" /></h1>
 
-<div id="divBasicNameSearch"><fr:edit
-	action="/contacts.do?method=searchPersonsByName" id="personSearchBean"
+<div id="divBasicNameSearch">
+	<fr:edit action="/contacts.do?method=searchPersonsByName" id="personSearchBean"
 	name="personSearchBean" schema="myorg.modules.contacts.search.byName">
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form" />
 		<fr:property name="columnClasses" value="tderror" />
 		<fr:property name="requiredMarkShown" value="true" />
 	</fr:layout>
-</fr:edit> <a href="javascript:advancedClick()"><bean:message
-	key="search.person.advanced.link" bundle="CONTACTS_RESOURCES" /></a></div>
-<div id=divAdvancedSearch><fr:edit
-	action="/contacts.do?method=searchPersonsByDetails"
-	id="personSearchByDetailsBean" name="personSearchBean">
+	</fr:edit><a href="javascript:advancedClick()"><bean:message
+	key="search.person.advanced.link" bundle="CONTACTS_RESOURCES" /></a>
+	<%-- 
+	<script type="text/javascript">
+	$('#personSearchBean').submit(function() {
+		var inputFieldVal = $('form#personSearchBean input:text[name*=person]').val();
+		var formByInput = $('form#personSearchBean input:text[name*=person]').closest('form');
+		var outputFieldVal = $('form#personSearchBean input:text[name*=searchName]').val();
+		//updateCustomValue($('form#personSearchBean input:text[name*=person]'),inputFieldVal);
+	  alert('Handler for .submit() called.\ninput value: '+inputFieldVal+'\noutput value: '+outputFieldVal);
+	  return true;
+	});
+	</script>
+	--%>
+</div>
+<div id=divAdvancedSearch>
+	<fr:edit action="/contacts.do?method=searchPersonsByDetails" id="personSearchByDetailsBean" name="personSearchBean">
 	<fr:schema bundle="CONTACTS_RESOURCES"
 		type="module.contacts.presentationTier.action.bean.PersonsBean">
 		<fr:slot name="searchName" key="search.person.byname.label" />
@@ -139,7 +151,7 @@ jQuery(document).ready(function($){
 		<logic:equal name="personSearchBean" property="resultsByDetails" value="true">
 			 <script type="text/javascript">
 				var resultsBasedOnDetails = "indeed they are";
-			</script>
+			--</script>
 		</logic:equal>
 		<%-- sanitize every string to be able to use it in HTML requests --%>
 		<% PersonsBean personSearchBean = (PersonsBean) request.getAttribute("personSearchBean");

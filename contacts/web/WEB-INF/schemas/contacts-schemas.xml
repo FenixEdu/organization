@@ -425,6 +425,7 @@
 		<property name="args" value="provider=module.contacts.presentationTier.renderers.providers.PersonAutoCompleteProvider"/>
 		<property name="size" value="60"/>
 	</slot>
+	
 </schema>
 
 <schema name="myorg.modules.contacts.Groups.selectItem" type="myorg.domain.groups.PersistentGroup">
