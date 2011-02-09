@@ -77,6 +77,7 @@ jQuery(document).ready(function($){
 		<fr:property name="columnClasses" value="tderror" />
 		<fr:property name="requiredMarkShown" value="true" />
 	</fr:layout>
+	<fr:destination name="cancel" path="/contacts.do?method=searchContacts"/>
 	</fr:edit><a href="javascript:advancedClick()"><bean:message
 	key="search.person.advanced.link" bundle="CONTACTS_RESOURCES" /></a>
 </div>
@@ -127,6 +128,7 @@ jQuery(document).ready(function($){
 		<fr:property name="row(searchWebAddress)" value="5" />
 		<fr:property name="column(searchWebAddress)" value="0" />
 	</fr:layout>
+	<fr:destination name="cancel" path="/contacts.do?method=searchContacts"/>
 </fr:edit></div>
 
 <logic:present name="personSearchBean" property="searchResult">
