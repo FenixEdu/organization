@@ -167,19 +167,19 @@ jQuery(document).ready(function($){
 		String url="/contacts.do?method=searchPersonsByDetails";
 		
 		if (searchName != null && !searchName.isEmpty())
-			url = url.concat("&amp;"+URLEncoder.encode(searchName)); 
+			url = url.concat("&amp;searchName="+URLEncoder.encode(searchName)); 
 		if (searchEmail != null && !searchEmail.isEmpty())
-			url = url.concat("&amp;"+URLEncoder.encode(searchEmail)); 
+			url = url.concat("&amp;searchEmail="+URLEncoder.encode(searchEmail)); 
 		if (searchUsername != null && !searchUsername.isEmpty())
-			url = url.concat("&amp;"+URLEncoder.encode(searchUsername)); 
+			url = url.concat("&amp;searchUsername="+URLEncoder.encode(searchUsername)); 
 		if (searchAddress != null && !searchAddress.isEmpty())
-			url = url.concat("&amp;"+URLEncoder.encode(searchAddress)); 
+			url = url.concat("&amp;searchAddress="+URLEncoder.encode(searchAddress)); 
 		if (searchPhone != null && !searchPhone.isEmpty())
-			url = url.concat("&amp;"+URLEncoder.encode(searchPhone)); 
+			url = url.concat("&amp;searchPhone="+URLEncoder.encode(searchPhone)); 
 		if (searchPhoneType != null && !searchPhoneType.isEmpty())
-			url = url.concat("&amp;"+URLEncoder.encode(searchPhoneType)); 
+			url = url.concat("&amp;searchPhoneType="+URLEncoder.encode(searchPhoneType)); 
 		if (searchWebAddress != null && !searchWebAddress.isEmpty()) 
-			url = url.concat("&amp;"+URLEncoder.encode(searchWebAddress)); 
+			url = url.concat("&amp;searchWebAddress="+URLEncoder.encode(searchWebAddress)); 
 		
 		request.setAttribute("url",url);
 		
