@@ -309,6 +309,8 @@ public class ContactsAction extends ContextBaseAction {
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	PersonsBean personSearchBean = getRenderedObject("personSearchByDetailsBean");
 
+	String typeOfSearch = request.getParameter("typeOfSearch");
+
 	Collection<Person> searchResults;
 	CollectionPager<Person> searchResultsPager;
 	if (personSearchBean == null) {
@@ -317,6 +319,12 @@ public class ContactsAction extends ContextBaseAction {
 	} else {
 	    searchResultsPager = searchPerson(personSearchBean, request, true);
 	}
+
+	if (typeOfSearch != null && typeOfSearch.equals("byDetails"))
+	    personSearchBean.setResultsByDetails(Boolean.TRUE);
+	else if (typeOfSearch != null && typeOfSearch.equals("basic"))
+	    personSearchBean.setResultsByDetails(Boolean.FALSE);
+
 	searchResults = searchResultsPager.getPage(personSearchBean.getPageNumber());
 	personSearchBean.setNumberOfPages(new Integer(searchResultsPager.getNumberOfPages()));
 	personSearchBean.setSearchResult(new ArrayList<Person>(searchResults));

@@ -52,7 +52,7 @@ public class PersonsBean implements Serializable {
 
     public void setPerson(Person person) {
 	if (person != this.person)
-	    pageNumber = new Integer(1);
+	    setPageNumber(new Integer(1));
 	this.person = person;
     }
 
@@ -70,7 +70,7 @@ public class PersonsBean implements Serializable {
 
     public void setSearchName(String searchName) {
 	if (searchName != this.searchName)
-	    pageNumber = new Integer(1);
+	    setPageNumber(new Integer(1));
 	this.searchName = searchName;
     }
 
@@ -80,7 +80,7 @@ public class PersonsBean implements Serializable {
 
     public void setSearchEmail(String searchEmail) {
 	if (searchEmail != this.searchEmail)
-	    pageNumber = new Integer(1);
+	    setPageNumber(new Integer(1));
 	this.searchEmail = searchEmail;
     }
 
@@ -90,7 +90,7 @@ public class PersonsBean implements Serializable {
 
     public void setSearchUsername(String searchUsername) {
 	if (searchUsername != this.searchUsername)
-	    pageNumber = new Integer(1);
+	    setPageNumber(new Integer(1));
 	this.searchUsername = searchUsername;
     }
 
@@ -100,7 +100,7 @@ public class PersonsBean implements Serializable {
 
     public void setSearchAddress(String searchAddress) {
 	if (searchAddress != this.searchAddress)
-	    pageNumber = new Integer(1);
+	    setPageNumber(new Integer(1));
 	this.searchAddress = searchAddress;
     }
 
@@ -110,7 +110,7 @@ public class PersonsBean implements Serializable {
 
     public void setSearchPhone(String searchPhone) {
 	if (searchPhone != this.searchPhone)
-	    pageNumber = new Integer(1);
+	    setPageNumber(new Integer(1));
 	this.searchPhone = searchPhone;
     }
 
@@ -120,7 +120,7 @@ public class PersonsBean implements Serializable {
 
     public void setSearchWebAddress(String searchWebAddress) {
 	if (searchWebAddress != this.searchWebAddress)
-	    pageNumber = new Integer(1);
+	    setPageNumber(new Integer(1));
 	this.searchWebAddress = searchWebAddress;
     }
 
@@ -130,7 +130,7 @@ public class PersonsBean implements Serializable {
 
     public void setSearchPhoneType(PhoneType searchPhoneType) {
 	if (searchPhoneType != null && searchPhoneType != this.searchPhoneType)
-	    pageNumber = new Integer(1);
+	    setPageNumber(new Integer(1));
 	this.searchPhoneType = searchPhoneType;
     }
 
@@ -139,8 +139,6 @@ public class PersonsBean implements Serializable {
     }
 
     public void setResultsByDetails(Boolean resultsByDetails) {
-	if (resultsByDetails != this.resultsByDetails)
-	    pageNumber = new Integer(1);
 	this.resultsByDetails = resultsByDetails;
     }
 
