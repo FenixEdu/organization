@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import myorg.domain.MyOrg;
+import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
@@ -212,6 +213,32 @@ public class Unit extends Unit_Base {
 	    }
 	}
 	return depth + 1;
+    }
+
+    public Set<User> getMembers(final Set<AccountabilityType> accountabilityTypes) {
+	final Set<User> result = new HashSet<User>();
+	getMembers(result, accountabilityTypes);
+	return result;
+    }
+
+    protected void getMembers(final Set<User> result, final Set<AccountabilityType> accountabilityTypes) {
+	for (final Accountability accountability : getChildAccountabilitiesSet()) {
+	    final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+	    if (accountabilityTypes.contains(accountabilityType) && accountability.isActiveNow()) {
+		final Party child = accountability.getChild();
+		if (child.isPerson()) {
+		    final Person person = (Person) child;
+		    if (person.hasUser()) {
+			result.add(person.getUser());
+		    }
+		} else if (child.isUnit()) {
+		    final Unit unit = (Unit) child;
+		    unit.getMembers(result, accountabilityTypes);
+		} else {
+		    throw new DomainException("unknown.party.type");
+		}
+	    }
+	}
     }
 
 }

@@ -83,6 +83,9 @@ class module.organization.domain.OrganizationalModel {
 class module.organization.domain.groups.PersonGroup extends myorg.domain.groups.PersistentGroup {
 }
 
+class module.organization.domain.groups.UnitGroup extends myorg.domain.groups.PersistentGroup {
+}
+
 class module.organization.domain.FunctionDelegation {
 	Boolean canSubDelegate;
 }
@@ -271,6 +274,31 @@ relation MyOrgFunctionDelegationLog {
 relation FunctionDelegationFunctionDelegationLog {
 	module.organization.domain.FunctionDelegation playsRole functionDelegation;
 	module.organization.domain.FunctionDelegationLog playsRole functionDelegationLogs {
+		multiplicity *;
+	}
+}
+
+relation UnitGroupUnit {
+	module.organization.domain.Unit playsRole unit;
+	module.organization.domain.groups.UnitGroup playsRole unitGroup {
+		multiplicity *;
+	}
+}
+
+relation UnitGroupMemberAccountabilityTypes {
+	module.organization.domain.groups.UnitGroup playsRole unitGroupFromMemberAccountabilityType {
+		multiplicity *;
+	}
+	module.organization.domain.AccountabilityType playsRole memberAccountabilityType {
+		multiplicity *;
+	}
+}
+
+relation UnitGroupChildUnitAccountabilityTypes {
+	module.organization.domain.groups.UnitGroup playsRole unitGroupFromChildUnitAccountabilityType {
+		multiplicity *;
+	}
+	module.organization.domain.AccountabilityType playsRole childUnitAccountabilityType {
 		multiplicity *;
 	}
 }

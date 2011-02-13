@@ -35,11 +35,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import module.organization.domain.predicates.PartyPredicate;
+import module.organization.domain.predicates.PartyResultCollection;
 import module.organization.domain.predicates.PartyPredicate.PartyByAccountabilityType;
 import module.organization.domain.predicates.PartyPredicate.PartyByClassType;
 import module.organization.domain.predicates.PartyPredicate.PartyByPartyType;
 import module.organization.domain.predicates.PartyPredicate.TruePartyPredicate;
-import module.organization.domain.predicates.PartyResultCollection;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.RoleType;
@@ -565,6 +565,19 @@ abstract public class Party extends Party_Base {
 	    if (accountability.getAccountabilityType() == accountabilityType && accountability.isActive(when)) {
 		final Party parent = accountability.getParent();
 		return parent.hasActiveAncestry(accountabilityType, when);
+	    }
+	}
+	return false;
+    }
+
+    public boolean hasPartyAsAncestor(final Party party, final Set<AccountabilityType> accountabilityTypes) {
+	for (final Accountability accountability : getParentAccountabilitiesSet()) {
+	    final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+	    if (accountabilityTypes.contains(accountabilityType) && accountability.isActiveNow()) {
+		final Party parent = accountability.getParent();
+		if (parent == party || parent.hasPartyAsAncestor(party, accountabilityTypes)) {
+		    return true;
+		}
 	    }
 	}
 	return false;
