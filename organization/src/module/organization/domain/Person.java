@@ -136,6 +136,7 @@ public class Person extends Person_Base implements Searchable, Indexable {
 
     @Override
     protected void disconnect() {
+	removeUser();
 	removeMyOrgFromPerson();
 	super.disconnect();
     }
