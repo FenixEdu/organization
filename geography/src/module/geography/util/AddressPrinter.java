@@ -4,6 +4,7 @@
 package module.geography.util;
 
 import module.geography.domain.Country;
+import module.geography.domain.GeographicLocation;
 
 /**
  * Interface that has the methods to be implemented by the several
@@ -26,7 +27,8 @@ public class AddressPrinter {
 
     }
 
-    public static String getFormatedAddress(String complementarAddress, Country country) {
+    public static String getFormatedAddress(String complementarAddress, Country country,
+ GeographicLocation geographicLocation) {
 	if (country.equals(Country.getPortugal())) {
 	    return complementarAddress;
 	} else
