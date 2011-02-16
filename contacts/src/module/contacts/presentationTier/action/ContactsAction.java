@@ -22,6 +22,7 @@ import module.contacts.domain.Phone;
 import module.contacts.domain.PhoneType;
 import module.contacts.domain.PhysicalAddress;
 import module.contacts.domain.WebAddress;
+import module.contacts.presentationTier.action.bean.AddressBean;
 import module.contacts.presentationTier.action.bean.AddressBeanFactory;
 import module.contacts.presentationTier.action.bean.ContactBean;
 import module.contacts.presentationTier.action.bean.ContactToCreateBean;
@@ -33,6 +34,7 @@ import module.contacts.presentationTier.action.bean.PhysicalAddressBean;
 import module.geography.domain.Country;
 import module.geography.domain.CountrySubdivision;
 import module.geography.domain.CountrySubdivisionLevelName;
+import module.organization.domain.Party;
 import module.organization.domain.Person;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
@@ -79,7 +81,7 @@ public class ContactsAction extends ContextBaseAction {
 	ContactBean emailBean = getRenderedObject("xpto");
 	Person person = UserView.getCurrentUser().getPerson();
 
-	EmailAddress.createNewEmailAddress(emailBean.getValue(), person, false, PartyContactType.PERSONAL);
+	//	EmailAddress.createNewEmailAddress(emailBean.getValue(), person, false, PartyContactType.PERSONAL,);
 
 	return frontPage(mapping, form, request, response);
 
@@ -113,8 +115,8 @@ public class ContactsAction extends ContextBaseAction {
 	 */
 	// physical address TODO improve it
 
-	PhysicalAddress.createNewPhysicalAddress(Country.getPortugal(), "none", person, true, PartyContactType.PERSONAL)
-		.setVisibleTo(existingVisbilityGroups);
+	//	PhysicalAddress.createNewPhysicalAddress(Country.getPortugal(), "none", person, true, PartyContactType.PERSONAL)
+	//		.setVisibleTo(existingVisbilityGroups);
 
 	/*
 	 * WebAddress.createNewWebAddress("http://johndoerulez.com", person,
@@ -299,7 +301,6 @@ public class ContactsAction extends ContextBaseAction {
 		UserView.getCurrentUser(), personSearchBean.getSearchName(), personSearchBean.getSearchUsername(),
 		personSearchBean.getSearchPhone(), personSearchBean.getSearchPhoneType(), personSearchBean.getSearchAddress(),
 		personSearchBean.getSearchWebAddress(), personSearchBean.getSearchEmail()));
-
 
 	return new CollectionPager<Person>(results, ContactsConfigurator.SEARCH_MAXELEMENTS_PER_PAGE);
 
@@ -514,10 +515,50 @@ public class ContactsAction extends ContextBaseAction {
 	return editContacts(mapping, form, request, response);
     }
 
+    public final ActionForward applyPartyContactCreate(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	ContactToCreateBean contactToCreateBean = getRenderedObject();
+
+	User userCreatingTheContact = UserView.getCurrentUser();
+	String value = contactToCreateBean.getValue();
+	Party party = contactToCreateBean.getParty();
+	Boolean isDefaultContact = new Boolean(contactToCreateBean.isDefaultContact());
+	PartyContactType partyContactType = contactToCreateBean.getPartyContactType();
+	PhysicalAddressBean addressBean = contactToCreateBean.getPhysicalAddressBean();
+
+	//take care of the visibility groups associated with the contact
+	ArrayList<PersistentGroup> visibilityGroups = new ArrayList<PersistentGroup>(contactToCreateBean.getVisibilityGroups());
+
+	switch (contactToCreateBean.getPartyContactKind()) {
+	case EMAIL_ADDRESS:
+	    EmailAddress.createNewEmailAddress(value, party, isDefaultContact, partyContactType, userCreatingTheContact,
+		    visibilityGroups);
+	    break;
+	case PHONE:
+	    Phone.createNewPhone(contactToCreateBean.getPhoneType(), value, party, isDefaultContact,
+		    contactToCreateBean.getPartyContactType(), userCreatingTheContact, visibilityGroups);
+	    break;
+	case WEB_ADDRESS:
+	    WebAddress.createNewWebAddress(value, party, isDefaultContact, partyContactType, userCreatingTheContact,
+		    visibilityGroups);
+	    break;
+	case PHYSICAL_ADDRESS:
+	    PhysicalAddress.createNewPhysicalAddress(addressBean.getAddressBean().getGeographicLocation(), addressBean
+		    .getAddressBean().getComplementarAddress(), party, isDefaultContact, partyContactType,
+		    userCreatingTheContact, visibilityGroups);
+
+	}
+
+	return editContacts(mapping, form, request, response);
+
+    }
+
     public final ActionForward createPartyContact(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
+	Person personToCreateContact = (Person) getDomainObject(request.getParameter("personOid"));
 	ContactToCreateBean contactToCreateBean = new ContactToCreateBean();
+	contactToCreateBean.setParty(personToCreateContact);
 	request.setAttribute("contactToCreateBean", contactToCreateBean);
 
 	return forward(request, "/contacts/createContact.jsp");
@@ -559,7 +600,9 @@ public class ContactsAction extends ContextBaseAction {
 		if (geographicLevels != null)
 		    geographicLevels.clear();
 		// add the AddressBean with the labels:
-		contactToCreateBean.getPhysicalAddressBean().setAddressBean(AddressBeanFactory.createAddressBean(country));
+		AddressBean physicalAddressBean = AddressBeanFactory.createAddressBean(country);
+		contactToCreateBean.getPhysicalAddressBean().setAddressBean(physicalAddressBean);
+		physicalAddressBean.setGeographicLocation(null);
 
 	    } else {
 		CountrySubdivisionLevelName toAdd = null;
@@ -583,9 +626,14 @@ public class ContactsAction extends ContextBaseAction {
 		    if (nextSubdivision != null) {
 			contactToCreateBean.getPhysicalAddressBean().setAddressBean(null);
 			geographicLevels.put(nextSubdivision.getName().getContent(), null);
-		    } else
-			contactToCreateBean.getPhysicalAddressBean()
-				.setAddressBean(AddressBeanFactory.createAddressBean(country));
+		    } else {
+			AddressBean physicalAddressBean = AddressBeanFactory.createAddressBean(country);
+			//get the last geographicLocation out of the levels and add it to the Bean
+			physicalAddressBean
+				.setGeographicLocation(geographicLevelsOrdered.get(geographicLevelsOrdered.size() - 1));
+			contactToCreateBean.getPhysicalAddressBean().setAddressBean(physicalAddressBean);
+
+		    }
 
 		}
 	    }

@@ -39,7 +39,7 @@ class ContactsConfigurator {
 	}
 	
     class PartyContact {
-        Boolean defaultContact;
+        Boolean defaultContact (REQUIRED);
         PartyContactType type;
         DateTime lastModifiedDate;
     }

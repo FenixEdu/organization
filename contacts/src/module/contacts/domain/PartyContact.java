@@ -1,9 +1,17 @@
 package module.contacts.domain;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import module.organization.domain.Party;
+import module.organization.domain.Person;
+import myorg.applicationTier.Authenticate.UserView;
+import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
+import myorg.domain.groups.PersistentGroup;
+import myorg.domain.groups.Role;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.DomainObject;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
@@ -12,20 +20,31 @@ import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
 import dml.runtime.Relation;
 import dml.runtime.RelationListener;
-import module.organization.domain.Party;
-import module.organization.domain.Person;
-import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.User;
-import myorg.domain.exceptions.DomainException;
-import myorg.domain.groups.PersistentGroup;
-import myorg.domain.groups.Role;
 
 public abstract class PartyContact extends PartyContact_Base implements Indexable, Searchable, IndexableField {
-    
-    public  PartyContact() {
-        super();
+
+    public PartyContact() {
+	super();
 	ContactsConfigurator.getInstance().addPartyContact(this);
 	this.PersistentGroupPartyContact.addListener(new ValidVisibilityGroupsEnforcer());
+    }
+
+    static protected void validateUser(User userCreatingTheContact, Party partyThatWillOwnTheContact, PartyContactType type) {
+	if (isOwner(userCreatingTheContact, partyThatWillOwnTheContact) && !type.equals(PartyContactType.IMMUTABLE))
+	    // if he is the owner and the contact isn't immutable, then it can
+	    // edit it
+	    return;
+	if (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(userCreatingTheContact))
+	    return;
+	throw new DomainException("manage.contacts.edit.denied.nouser");
+
+    }
+
+    static protected void validateVisibilityGroups(List<PersistentGroup> visibilityGroups) {
+	if (!ContactsConfigurator.getInstance().getVisibilityGroups().containsAll(visibilityGroups)) {
+	    throw new DomainException("manage.contacts.wrong.visibility.groups.defined");
+	}
+
     }
 
     /**
@@ -68,16 +87,16 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     }
 
     @Override
-	public Set<Indexable> getObjectsToIndex() {
+    public Set<Indexable> getObjectsToIndex() {
 	return Collections.singleton((Indexable) this);
-	}
+    }
 
-	@Override
-	public IndexDocument getDocumentToIndex() {
+    @Override
+    public IndexDocument getDocumentToIndex() {
 	IndexDocument document = new IndexDocument(this);
 	document.indexField(this, getValue());
 	return document;
-	}
+    }
 
     private DomainObject getPerson() {
 	return this.getParty();
@@ -92,8 +111,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      */
     @Service
     public void setContactValue(String value) {
-	if (UserView.getCurrentUser() ==null || !isEditableBy(UserView.getCurrentUser()))
-	{
+	if (UserView.getCurrentUser() == null || !isEditableBy(UserView.getCurrentUser())) {
 	    if (UserView.getCurrentUser() == null)
 		throw new DomainException("manage.contacts.edit.denied.nouser", "resources.ContactsResources");
 	    else
@@ -143,18 +161,18 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 
 	//add all of the groups that are on the groups but not on the current list of visibility groups
 	for (PersistentGroup persistentGroup : groups) {
-	    if (!getVisibilityGroups().contains(persistentGroup))
- {
+	    if (!getVisibilityGroups().contains(persistentGroup)) {
 		addVisibilityGroups(persistentGroup);
 	    }
 	}
-	List<PersistentGroup> currentSurplusGroups = getVisibilityGroups();
-	if (currentSurplusGroups.removeAll(groups)) {
+	List<PersistentGroup> currentSurplusGroups = new ArrayList<PersistentGroup>(getVisibilityGroups());
+	currentSurplusGroups.removeAll(groups);
+	if (!currentSurplusGroups.isEmpty()) {
 	    for (PersistentGroup persistentGroup : currentSurplusGroups) {
 		removeVisibilityGroups(persistentGroup);
 	    }
 	}
-	
+
     }
 
     public boolean isVisibleTo(User currentUser) {
@@ -184,8 +202,25 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      */
     private boolean isOwner(User currentUser) {
 	Party correspondingParty = getParty();
-	if (correspondingParty instanceof Person)
-	{
+	if (correspondingParty instanceof Person) {
+	    return (((Person) correspondingParty).getUser().equals(currentUser));
+	}
+	return false;
+    }
+
+    /**
+     * 
+     * @param currentUser
+     *            the User to assert if it is the owner of this partycontact or
+     *            not
+     * @param partyFutureContactOwner
+     *            the {@link Party} that will have the contact
+     * @return true if the currentUser is the owner of this PartyContact, false
+     *         otherwise
+     */
+    static private boolean isOwner(User currentUser, Party partyFutureContactOwner) {
+	Party correspondingParty = partyFutureContactOwner;
+	if (correspondingParty instanceof Person) {
 	    return (((Person) correspondingParty).getUser().equals(currentUser));
 	}
 	return false;
@@ -216,6 +251,19 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 	    removeVisibilityGroups(group);
 	}
 	deleteDomainObject();
+    }
+
+    @Override
+    public void setDefaultContact(Boolean defaultContact) {
+	if (defaultContact != null && defaultContact.booleanValue()) {
+	    //remove the other default contacts of this type so that there is only one for each type
+	    for (PartyContact partyContact : getParty().getPartyContacts()) {
+		if (partyContact.getClass().isInstance(this.getClass()) && partyContact.getDefaultContact().booleanValue()) {
+		    partyContact.setDefaultContact(Boolean.FALSE);
+		}
+	    }
+	}
+	super.setDefaultContact(defaultContact);
     }
 
     @Service

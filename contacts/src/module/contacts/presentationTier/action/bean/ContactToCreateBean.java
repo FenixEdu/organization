@@ -4,23 +4,15 @@
 package module.contacts.presentationTier.action.bean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import module.contacts.domain.ContactsConfigurator;
 import module.contacts.domain.EmailAddress;
-import module.contacts.domain.PartyContact;
-import module.contacts.domain.PartyContactType;
 import module.contacts.domain.Phone;
-import module.contacts.domain.PhoneType;
 import module.contacts.domain.PhysicalAddress;
 import module.contacts.domain.WebAddress;
 import module.contacts.presentationTier.KindOfPartyContact;
-import module.geography.domain.Country;
-import module.geography.domain.GeographicLocation;
+import module.organization.domain.Party;
 import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.MyOrg;
-import myorg.domain.groups.PersistentGroup;
 
 /**
  * @author João André Pereira Antunes (joao.antunes@tagus.ist.utl.pt)
@@ -34,6 +26,8 @@ public class ContactToCreateBean extends ContactToEditBean implements Serializab
     private static final long serialVersionUID = 1L;
     
     private KindOfPartyContact partyContactKind;
+
+    private Party party;
 
 
     public ContactToCreateBean() {
@@ -96,6 +90,14 @@ public class ContactToCreateBean extends ContactToEditBean implements Serializab
 
     public KindOfPartyContact getPartyContactKind() {
 	return partyContactKind;
+    }
+
+    public void setParty(Party party) {
+	this.party = party;
+    }
+
+    public Party getParty() {
+	return party;
     }
 
 }

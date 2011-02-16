@@ -53,8 +53,7 @@
 					<logic:iterate id="visibilityGroup" name="visibilityGroups">
 					<td class="acenter">
 					<%if (((module.contacts.domain.PartyContact)sortedContact).isVisibleTo((myorg.domain.groups.PersistentGroup)visibilityGroup)) {%>
-                		<%-- <img src="<%request.getContextPath();%>/images/accept.gif"/>--%>
-                		T
+                		<img src="<%= request.getContextPath() + "/contacts/image/accept.gif" %>"/>
 					<%}else {%>
 						-
 					<%}%>

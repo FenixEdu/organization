@@ -1,14 +1,25 @@
 package module.contacts.domain;
 
+import java.util.ArrayList;
+
+import module.organization.domain.Party;
+import myorg.domain.User;
+import myorg.domain.exceptions.DomainException;
+import myorg.domain.groups.PersistentGroup;
+
 import org.joda.time.DateTime;
 
 import pt.ist.fenixWebFramework.services.Service;
-import module.organization.domain.Party;
 
 public class Phone extends Phone_Base {
 
-    public Phone(PhoneType phoneType, String number, Party party, Boolean defaultContact, PartyContactType partyContactType) {
+    public Phone(PhoneType phoneType, String number, Party party, Boolean defaultContact, PartyContactType partyContactType,
+	    User userCreatingTheContact, ArrayList<PersistentGroup> visibilityGroups) {
 	super();
+
+
+	super.setVisibleTo(visibilityGroups);
+
 	super.setPhoneType(phoneType);
 	super.setNumber(number);
 	super.setParty(party);
@@ -30,12 +41,27 @@ public class Phone extends Phone_Base {
      *            if it is the default contact for this party
      * @param partyContactType
      *            the type of contact {@link PartyContactType}
+     * @param visibilityGroups
      * @return a Phone with the given parameters
      */
     @Service
     public static Phone createNewPhone(PhoneType phoneType, String number, Party party, Boolean defaultContact,
-	    PartyContactType partyContactType) {
-	return new Phone(phoneType, number, party, defaultContact, partyContactType);
+	    PartyContactType partyContactType, User userCreatingTheContact, ArrayList<PersistentGroup> visibilityGroups) {
+
+	//validate that the user can actually create this contact
+	validateUser(userCreatingTheContact, party, partyContactType);
+
+	//making sure the list of visibility groups is a valid one
+	validateVisibilityGroups(visibilityGroups);
+
+	//make sure that this isn't a duplicate contact for this party
+	for (PartyContact partyContact : party.getPartyContacts()) {
+	    if ((partyContact instanceof Phone) && partyContact.getValue() == number
+		    && partyContactType.equals(partyContact.getType()) && phoneType.equals(((Phone) partyContact).getPhoneType())) {
+		throw new DomainException("error.duplicate.partyContact");
+	    }
+	}
+	return new Phone(phoneType, number, party, defaultContact, partyContactType, userCreatingTheContact, visibilityGroups);
 
     }
 
@@ -52,6 +78,8 @@ public class Phone extends Phone_Base {
     @Override
     public String getDescription() {
 	switch (getPhoneType()) {
+	case VOIP_SIP:
+	    return "sip:" + getNumber();
 	case CELLPHONE:
 	case REGULAR_PHONE:
 	    return getNumber();

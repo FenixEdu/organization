@@ -25,6 +25,7 @@
 	<script type="text/javascript">
 				$("#xpto").attr("class","infobox_dotted");
 	</script>
+	<%-- 
 	<fr:edit name="emailBean" id="xpto" action="/contacts.do?method=createCustomEmail">
 		<fr:schema type="module.contacts.presentationTier.action.bean.ContactBean" bundle="CONTACTS_RESOURCES">
 			<fr:slot name="value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
@@ -32,6 +33,7 @@
 			</fr:slot>
 		</fr:schema> 
 	</fr:edit>
+	--%>
 	<html:link action="/contacts.do?method=modifyContacts" paramId="personOid" paramName="person" paramProperty="externalId">
 					<bean:message key="user.create.contacts.label" bundle="CONTACTS_RESOURCES"/>
 	</html:link>

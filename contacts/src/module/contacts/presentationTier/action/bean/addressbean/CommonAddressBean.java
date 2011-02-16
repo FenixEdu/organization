@@ -1,6 +1,7 @@
 package module.contacts.presentationTier.action.bean.addressbean;
 
 import module.contacts.presentationTier.action.bean.AddressBean;
+import module.geography.domain.GeographicLocation;
 
 /**
  * Refactor of the PortugalAddressBean and ForeignAddressBean that share some
@@ -9,10 +10,11 @@ import module.contacts.presentationTier.action.bean.AddressBean;
  * @author João André Pereira Antunes (joao.antunes@tagus.ist.utl.pt)
  * 
  */
-public class CommonAddressBean extends AddressBean {
+public abstract class CommonAddressBean extends AddressBean {
     private String addressLineOne;
     private String addressLineTwo;
     private String city;
+    private GeographicLocation geographicLocation;
 
     /**
      * @return the addressLineOne
@@ -57,6 +59,16 @@ public class CommonAddressBean extends AddressBean {
      */
     public void setCity(String city) {
 	this.city = city;
+    }
+
+    @Override
+    public GeographicLocation getGeographicLocation() {
+	return geographicLocation;
+    }
+
+    @Override
+    public void setGeographicLocation(GeographicLocation geographicLocation) {
+	this.geographicLocation = geographicLocation;
     }
 
 }

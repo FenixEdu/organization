@@ -11,6 +11,7 @@
 <%--
 <logic:empty name="contactToCreateBean" property="partyContactKind">
  --%>
+ <%-- Choose the kind of contact to create --%>
  <fr:form action="/contacts.do?method=applyPartyContactCreate">
 <fr:edit id="contactToCreateBean" name="contactToCreateBean" >
 		<fr:schema bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.ContactToCreateBean">
@@ -26,19 +27,24 @@
 		</logic:notEmpty>
 		</fr:schema>
 		<fr:destination name="postback" path="/contacts.do?method=chooseKindOfContactPostBack"/>
+		<fr:destination name="cancel" path="/contacts.do?method=createPartyContact"/>
+		<fr:destination name="invalid" path="/contacts.do?method=createPartyContact"/>
 		<%-- 
-		<fr:destination name="invalid" path="/contacts.do?method=editPartyContact"/>
 		<fr:destination name="invalid" path="/x"/>
 		--%>
 </fr:edit>
 <%-- 
 </logic:empty>
 --%>
+<%-- Given the type of contact, let's allow specific field to be chosen --%>
 <logic:notEmpty name="contactToCreateBean" property="partyContactKind">
-	<fr:edit id="contactToCreateType" name="contactToCreateBean">
+	<%-- The type of contact i.e. Institutional, Work, etc --%>
+	<fr:edit id="contactToCreateBean" nested="true" id="contactToCreateType" name="contactToCreateBean">
 		<fr:schema bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.ContactToCreateBean">
    			<fr:slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
+				<fr:validator name="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
    				<logic:equal name="contactToCreateBean" property="superEditor" value="false">
+   				<%-- If we aren't a supereditor i.e. a person that can edit any kind of contacts, including the immutables, we won't allow the immutable type to be set --%>
 					<logic:equal name="contactToCreateBean" property="partyContactType" value="IMMUTABLE">
 						<fr:property name="disabled" value="true"/>
 						<fr:property name="readOnly" value="true"/>
@@ -48,16 +54,17 @@
    			</fr:slot>
    		</fr:schema>
    	</fr:edit>
+	<%-- *END* The type of contact i.e. Institutional, Work, etc *END* --%>
 	<logic:equal name="contactToCreateBean" property="partyContactKind.name" value="PHONE">
 		<logic:notEmpty name="contactToCreateBean" property="phoneType" >
 			<bean:define id="schemaSuffix" name="contactToCreateBean" property="schemaSuffix"/>
-			<fr:edit id="contactToCreateSpecific" name="contactToCreateBean" schema="<%="myorg.modules.contacts.CreateContact" + schemaSuffix.toString()%>">
+			<fr:edit id="contactToCreateBean" nested="true"  name="contactToCreateBean" schema="<%="myorg.modules.contacts.CreateContact" + schemaSuffix.toString()%>">
 			</fr:edit>
 		</logic:notEmpty>
 	</logic:equal>
 <logic:equal name="contactToCreateBean" property="partyContactKind.name" value="WEB_ADDRESS">
 			<bean:define id="schemaSuffix" name="contactToCreateBean" property="schemaSuffix"/>
-			<fr:edit id="contactToCreateSpecific" name="contactToCreateBean" schema="<%="myorg.modules.contacts.CreateContact" + schemaSuffix.toString()%>">
+			<fr:edit name="contactToCreateBean" nested="true" schema="<%="myorg.modules.contacts.CreateContact" + schemaSuffix.toString()%>">
 			</fr:edit>
 </logic:equal>
 <logic:equal name="contactToCreateBean" property="partyContactKind.name" value="PHYSICAL_ADDRESS">
@@ -73,7 +80,7 @@
 				</fr:slot>
 			</fr:schema>
 			<fr:destination name="postback" path="/contacts.do?method=chooseGeographicLevelPostBack"/>
-			</fr:edit>
+		</fr:edit>
 	<logic:present name="contactToCreateBean" property="physicalAddressBean.country">
 	<%-- If we indeed have a country already selected--%>
 	<table>
@@ -85,11 +92,20 @@
 				<td>
 				<fr:edit id="<%= "id-"+index%>" name="contactToCreateBean" property="physicalAddressBean">
 						<fr:schema bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.PhysicalAddressBean">
-							<fr:slot name="<%="geographicLevels(" + ((Entry)geographicLevel).getKey() + ")"%>" layout="menu-select-postback" key="module.contacts.empty.label" >
+							<fr:slot name="<%="geographicLevels(" + ((Entry)geographicLevel).getKey() + ")"%>" bundle="CONTACTS_RESOURCES" layout="menu-select-postback" key="module.contacts.empty.label" >
 								 <fr:property name="providerClass" value="module.contacts.presentationTier.renderers.providers.GeographicLocationsProvider"/> 
 								 <fr:property name="eachSchema" value="myorg.modules.contacts.GeographicLocation"/>
+								 <fr:property name="format" value="${name}"/>
 							</fr:slot>
 						</fr:schema>
+						<fr:layout name="matrix">
+							<fr:property name="classes" value="tstyle3 thlight thright mtop05 mbottom05 thmiddle" />
+			                <fr:property name="<%="slot(geographicLevels(" + ((Entry)geographicLevel).getKey() + "))"%>" value="<%="geographicLevels(" + ((Entry)geographicLevel).getKey() + ")"%>" />
+			                <fr:property name="<%="labelHidden(geographicLevels(" + ((Entry)geographicLevel).getKey() + "))" %>" value="true"/>
+			                <fr:property name="<%="row(geographicLevels(" + ((Entry)geographicLevel).getKey() + "))"%>"  value="0" />
+			                <fr:property name="<%="column(geographicLevels(" + ((Entry)geographicLevel).getKey() + "))"%>" value="0" />
+						
+						</fr:layout>
 						<fr:destination name="postback" path="/contacts.do?method=chooseGeographicLevelPostBack"/>
 					</fr:edit>
 				</td>
@@ -101,6 +117,18 @@
 	<logic:notEmpty name="contactToCreateBean" property="physicalAddressBean.addressBean">
 		<bean:define id="schema" name="contactToCreateBean" property="physicalAddressBean.addressBean.schema"/>
 		<fr:edit name="contactToCreateBean" property="physicalAddressBean.addressBean" schema="<%=schema.toString()%>"/>
+		<%-- The visibility groups to which the contact should be added to --%>
+		<fr:edit name="contactToCreateBean">
+			<fr:schema bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.ContactToCreateBean">
+			   <fr:slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
+        		<fr:property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
+        		<fr:property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<fr:property name="eachLayout" value="values"/>
+        		<fr:property name="classes" value="nobullet noindent"/>
+        		<fr:property name="sortBy" value="name"/>
+	  		  </fr:slot>
+			</fr:schema>
+		</fr:edit>
 	</logic:notEmpty>
 	</logic:present>
 	

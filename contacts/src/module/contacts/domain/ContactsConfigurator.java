@@ -1,26 +1,16 @@
 package module.contacts.domain;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
-import dml.runtime.Relation;
-import dml.runtime.RelationListener;
-
-import module.contacts.presentationTier.KindOfPartyContact;
 import module.organization.domain.Person;
-import module.organization.domain.Person.IndexableFields;
-import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.groups.PersistentGroup;
 import myorg.domain.groups.Role;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.plugins.luceneIndexing.DomainIndexer;
-import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
+import dml.runtime.Relation;
+import dml.runtime.RelationListener;
 
 public class ContactsConfigurator extends ContactsConfigurator_Base {
 	
@@ -52,7 +42,7 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
 	if (className.equalsIgnoreCase(WebAddress.class.getName())) {
 	    return "(http|https):\\/\\/(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?";
 	} else if (className.equalsIgnoreCase(EmailAddress.class.getName())) {
-	    return "(.*@(\\w+\\.\\w+)+){1}";
+	    return "/(.*@(\\w+\\.\\w+)+){1}/";
 	}
 	return "(.*)";
 

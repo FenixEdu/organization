@@ -12,10 +12,7 @@ import module.contacts.domain.PartyContactType;
 import module.contacts.domain.Phone;
 import module.contacts.domain.PhoneType;
 import module.contacts.domain.PhysicalAddress;
-import module.geography.domain.Country;
-import module.geography.domain.GeographicLocation;
 import myorg.applicationTier.Authenticate.UserView;
-import myorg.domain.MyOrg;
 import myorg.domain.groups.PersistentGroup;
 
 /**
@@ -36,6 +33,8 @@ public class ContactToEditBean implements Serializable {
 
     protected String value;
 
+    private boolean defaultContact;
+
     private ArrayList<PersistentGroup> visibilityGroups;
 
     private boolean superEditor;
@@ -45,7 +44,7 @@ public class ContactToEditBean implements Serializable {
     protected ContactToEditBean() {
 	setValue("");
 	setVisibilityGroups(new ArrayList<PersistentGroup>());
-	superEditor = ContactsConfigurator.getInstance().isSuperEditor(UserView.getCurrentUser());
+	setSuperEditor(ContactsConfigurator.getInstance().isSuperEditor(UserView.getCurrentUser()));
     }
 
     public ContactToEditBean(PartyContact contactToWrap) {
@@ -118,6 +117,14 @@ public class ContactToEditBean implements Serializable {
 
     public PhysicalAddressBean getPhysicalAddressBean() {
 	return physicalAddressBean;
+    }
+
+    public void setDefaultContact(boolean defaultContact) {
+	this.defaultContact = defaultContact;
+    }
+
+    public boolean isDefaultContact() {
+	return defaultContact;
     }
 
 }
