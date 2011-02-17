@@ -31,11 +31,17 @@
    			<fr:slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
    				<logic:equal name="contactToEditBean" property="superEditor" value="false">
 					<logic:equal name="contactToEditBean" property="partyContactType" value="IMMUTABLE">
-						<%-- <fr:property name="disabled" value="true"/>
-						--%>
+						<fr:property name="disabled" value="true"/>
+						<%--
 						<fr:property name="readOnly" value="true"/>
+						--%>
+   						
 					</logic:equal>
-   					<fr:property name="excludedValues" value="IMMUTABLE"/>
+				</logic:equal>
+   				<logic:equal name="contactToEditBean" property="superEditor" value="false">
+					<logic:notEqual name="contactToEditBean" property="partyContactType" value="IMMUTABLE">
+   						<fr:property name="excludedValues" value="IMMUTABLE"/>
+					</logic:notEqual>
 				</logic:equal>
    			</fr:slot>
    			<fr:slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
