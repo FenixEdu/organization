@@ -9,6 +9,7 @@
 
 <html:xhtml/>
 <bean:define id="contactToEditClassName" name="contactToEditBean" property="className"/>
+<bean:define id="personEId" name="contactToEditBean" property="wrappedContact.person.OID"/>
 <fr:edit id="contactToEditBean" name="contactToEditBean" action="/contacts.do?method=applyPartyContactEdit">
 
 		<fr:schema bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.ContactToEditBean">
@@ -30,7 +31,8 @@
    			<fr:slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
    				<logic:equal name="contactToEditBean" property="superEditor" value="false">
 					<logic:equal name="contactToEditBean" property="partyContactType" value="IMMUTABLE">
-						<fr:property name="disabled" value="true"/>
+						<%-- <fr:property name="disabled" value="true"/>
+						--%>
 						<fr:property name="readOnly" value="true"/>
 					</logic:equal>
    					<fr:property name="excludedValues" value="IMMUTABLE"/>
@@ -45,8 +47,9 @@
 			</fr:slot>
 		</fr:schema>
 		<fr:destination name="postback" path="/contacts.do?method=choosePhoneRegexpPostBack"/>
+		<fr:destination name="cancel" path="<%="/contacts.do?method=editContacts&personEId="+ personEId%>"/>
 		<%-- 
-		<fr:destination name="invalid" path="/contacts.do?method=editPartyContact"/>
+		<fr:destination name="invalid" path="<%="/contacts.do?method=editContacts&personEId="+ personEId%>"/>
 		<fr:destination name="invalid" path="/x"/>
 		--%>
 </fr:edit>

@@ -13,7 +13,6 @@ import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.PersistentGroup;
 import myorg.domain.groups.Role;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.DomainObject;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
@@ -98,8 +97,11 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 	return document;
     }
 
-    private DomainObject getPerson() {
-	return this.getParty();
+    public Person getPerson() {
+	if (this.getParty() instanceof Person)
+	    return (Person) this.getParty();
+	else
+	    return null;
     }
 
     /**
