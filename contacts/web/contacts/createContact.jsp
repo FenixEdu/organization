@@ -8,6 +8,7 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 
 <html:xhtml/>
+<h2><bean:message  bundle="CONTACTS_RESOURCES" key="label.addContact"/></h2>
 <%--
 <logic:empty name="contactToCreateBean" property="partyContactKind">
  --%>
