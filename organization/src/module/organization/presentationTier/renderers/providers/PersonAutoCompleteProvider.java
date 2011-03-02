@@ -39,24 +39,23 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 public class PersonAutoCompleteProvider implements AutoCompleteProvider {
 
+    @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
 	final List<Person> persons = new ArrayList<Person>();
 
 	final String trimmedValue = value.trim();
-	final String[] input = trimmedValue.split(" ");
-	StringNormalizer.normalize(input);
+	String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
 
-	//TODO: refactor to use MyOrg.getInstance().getPersonsSet() ?
-	// TODO: resposta - Feito um PersonAutoCompleteProvider no modulo
-	// contacts - J.Antunes chateiem-me se eu ainda nao vos chateei por
-	// causa disto!
-	for (final Party party : MyOrg.getInstance().getPartiesSet()) {
-	    if (party.isPerson()) {
-		final Person person = (Person) party;
-		final String unitName = StringNormalizer.normalize(person.getPartyName().getContent());
-		if (hasMatch(input, unitName)) {
+	for (final Person person : MyOrg.getInstance().getPersonsSet()) {
+	    final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
+	    if (hasMatch(values, normalizedName)) {
 		    persons.add(person);
 		}
+	    if (person.getUser().getUsername().indexOf(value) >= 0) {
+		persons.add(person);
+	    }
+	    if (persons.size() >= maxCount) {
+		break;
 	    }
 	}
 
