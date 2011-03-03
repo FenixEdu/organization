@@ -12,24 +12,23 @@ import myorg.util.BundleUtil;
 import pt.ist.fenixWebFramework.services.Service;
 
 public class UnitGroup extends UnitGroup_Base {
-    
-    private UnitGroup(final Unit unit, final AccountabilityType[] memberTypes,
-	    final AccountabilityType[] childUnitTypes) {
-        super();
-        if (memberTypes == null || memberTypes.length == 0) {
-            throw new DomainException("cannot.create.empty.unit.group");
-        }
-        setUnit(unit);
-        addAccountabilityTypes(getMemberAccountabilityTypeSet(), memberTypes);
-        addAccountabilityTypes(getChildUnitAccountabilityTypeSet(), childUnitTypes);
+
+    private UnitGroup(final Unit unit, final AccountabilityType[] memberTypes, final AccountabilityType[] childUnitTypes) {
+	super();
+	if (memberTypes == null || memberTypes.length == 0) {
+	    throw new DomainException("cannot.create.empty.unit.group");
+	}
+	setUnit(unit);
+	addAccountabilityTypes(getMemberAccountabilityTypeSet(), memberTypes);
+	addAccountabilityTypes(getChildUnitAccountabilityTypeSet(), childUnitTypes);
     }
 
     private void addAccountabilityTypes(final Set<AccountabilityType> accountabilityTypes, final AccountabilityType[] typeArray) {
-        if (typeArray != null) {
-            for (final AccountabilityType accountabilityType : typeArray) {
-        	accountabilityTypes.add(accountabilityType);
-            }
-        }
+	if (typeArray != null) {
+	    for (final AccountabilityType accountabilityType : typeArray) {
+		accountabilityTypes.add(accountabilityType);
+	    }
+	}
     }
 
     @Override
@@ -49,16 +48,15 @@ public class UnitGroup extends UnitGroup_Base {
 	    builder.append(accountabilityType.getName().getContent());
 	}
 	final String unitName = unit.getPresentationName();
-	final String unitIdentifier = hasAnyChildUnitAccountabilityType() ?
-		BundleUtil.getFormattedStringFromResourceBundle("resources/OrganizationResources",
-			"label.persistent.group.unitGroup.includeing.subunits", unitName) : unitName;
+	final String unitIdentifier = hasAnyChildUnitAccountabilityType() ? BundleUtil.getFormattedStringFromResourceBundle(
+		"resources/OrganizationResources", "label.persistent.group.unitGroup.includeing.subunits", unitName) : unitName;
 	return BundleUtil.getFormattedStringFromResourceBundle("resources/OrganizationResources",
 		"label.persistent.group.unitGroup.name", unitIdentifier, builder.toString());
     }
 
     @Override
     public boolean isMember(final User user) {
-	if (user.hasPerson()) {
+	if (user != null && user.hasPerson()) {
 	    final Person person = user.getPerson();
 	    final Unit unit = getUnit();
 	    return person.hasPartyAsAncestor(unit, getAccountabilityTypes());
@@ -67,6 +65,7 @@ public class UnitGroup extends UnitGroup_Base {
     }
 
     private transient Set<AccountabilityType> accountabilityTypes = null;
+
     private Set<AccountabilityType> getAccountabilityTypes() {
 	Set<AccountabilityType> result = accountabilityTypes;
 	if (result == null) {
@@ -79,8 +78,8 @@ public class UnitGroup extends UnitGroup_Base {
     }
 
     @Service
-    public static UnitGroup getOrCreateGroup(final Unit unit,
-	    final AccountabilityType[] memberTypes, final AccountabilityType[] childUnitTypes) {
+    public static UnitGroup getOrCreateGroup(final Unit unit, final AccountabilityType[] memberTypes,
+	    final AccountabilityType[] childUnitTypes) {
 	if (unit == null) {
 	    return null;
 	}
@@ -100,11 +99,11 @@ public class UnitGroup extends UnitGroup_Base {
 
 	if (types1.size() == types2.length) {
 	    for (int i = 0; i < types2.length; i++) {
-		final AccountabilityType accountabilityType = types2[i]; 
+		final AccountabilityType accountabilityType = types2[i];
 		if (!types1.contains(accountabilityType)) {
 		    return false;
 		}
-		for (int j = i+1; j < types2.length; j++) {
+		for (int j = i + 1; j < types2.length; j++) {
 		    if (accountabilityType == types2[j]) {
 			return false;
 		    }
@@ -114,5 +113,5 @@ public class UnitGroup extends UnitGroup_Base {
 	}
 	return false;
     }
-    
+
 }
