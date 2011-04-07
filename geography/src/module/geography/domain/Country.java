@@ -24,7 +24,6 @@
  */
 package module.geography.domain;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +32,6 @@ import java.util.Comparator;
 
 import module.geography.util.AddressPrinter;
 import module.geography.util.StringsUtil;
-import module.mission.domain.ForeignMission;
 import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
 import myorg.domain.MyOrg;
@@ -107,7 +105,6 @@ public class Country extends Country_Base implements GeographicConstants {
 	return StringsUtil.makeName("País", COUNTRY_PARTYTYPE_NAME);
     }
 
-
     public AddressPrinter getAddressPrinter() {
 	try {
 	    return (AddressPrinter) super.getIAddressPrinter().getConstructor().newInstance();
@@ -160,8 +157,7 @@ public class Country extends Country_Base implements GeographicConstants {
 
     /**
      * 
-     * @param level
-     *            the level to get
+     * @param level the level to get
      * @return returns the {@link CountrySubdivisionLevelName} associated with
      *         the given level or null if it doesn't exist
      */
@@ -188,8 +184,7 @@ public class Country extends Country_Base implements GeographicConstants {
 
     /**
      * 
-     * @param date
-     *            the date which they should have been active
+     * @param date the date which they should have been active
      * @return a {@link Collection} with the {@link CountrySubdivision} that
      *         were active on the given date and of the
      */
@@ -205,7 +200,6 @@ public class Country extends Country_Base implements GeographicConstants {
 	}
 	return children;
     }
-
 
     public CountrySubdivision getChildByAcronym(String acronym) {
 	for (Unit unit : getChildUnits()) {
