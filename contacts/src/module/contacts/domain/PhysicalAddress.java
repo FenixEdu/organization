@@ -9,6 +9,7 @@ import module.organization.domain.Party;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.PersistentGroup;
+import net.sourceforge.fenixedu.domain.contacts.RemotePartyContact;
 
 import org.joda.time.DateTime;
 
@@ -20,7 +21,6 @@ public class PhysicalAddress extends PhysicalAddress_Base {
 	    Boolean defaultContact, PartyContactType partyContactType, User userCreatingTheContact,
 	    ArrayList<PersistentGroup> visibilityGroups) {
 	super();
-
 
 	super.setVisibleTo(visibilityGroups);
 
@@ -34,38 +34,46 @@ public class PhysicalAddress extends PhysicalAddress_Base {
 
     }
 
+    PhysicalAddress(RemotePartyContact remote) {
+	// TODO
+	throw new UnsupportedOperationException();
+    }
+
+    @Override
+    protected void updateFromRemote(RemotePartyContact remote) {
+	// TODO
+	throw new UnsupportedOperationException();
+    }
+
     /**
      * 
      * Creates, returns and associates a PhysicalAddress with the given party
      * 
-     * @param geographicLocation
-     *            the GeographicLocation see {@link GeographicLocation}
-     * @param complementarAddressString
-     *            the complementar address string depending on the details or
-     *            the lack of them that the Geography module gives (or even if
-     *            it is used) see the AddressPrinter for more information
-     *            {@link AddressPrinter}
-     * @param party
-     *            the party to which this physical address is associated
-     * @param defaultContact
-     *            if it is the default contact for this party
-     * @param partyContactType
-     *            the PartyContactType, see {@link PartyContactType}
-     * @param visibilityGroups
-     *            the visibility groups to which this contact will be visible to
+     * @param geographicLocation the GeographicLocation see
+     *            {@link GeographicLocation}
+     * @param complementarAddressString the complementar address string
+     *            depending on the details or the lack of them that the
+     *            Geography module gives (or even if it is used) see the
+     *            AddressPrinter for more information {@link AddressPrinter}
+     * @param party the party to which this physical address is associated
+     * @param defaultContact if it is the default contact for this party
+     * @param partyContactType the PartyContactType, see
+     *            {@link PartyContactType}
+     * @param visibilityGroups the visibility groups to which this contact will
+     *            be visible to
      * @return a PhysicalAddress with the given parameters
      */
     @Service
     public static PhysicalAddress createNewPhysicalAddress(GeographicLocation geographicLocation,
 	    String complementarAddressString, Party party, Boolean defaultContact, PartyContactType partyContactType,
 	    User userCreatingTheContact, ArrayList<PersistentGroup> visibilityGroups) {
-	//validate that the user can actually create this contact
+	// validate that the user can actually create this contact
 	validateUser(userCreatingTheContact, party, partyContactType);
 
-	//making sure the list of visibility groups is a valid one
+	// making sure the list of visibility groups is a valid one
 	validateVisibilityGroups(visibilityGroups);
 
-	//make sure that this isn't a duplicate contact for this party
+	// make sure that this isn't a duplicate contact for this party
 	for (PartyContact partyContact : party.getPartyContacts()) {
 	    if (partyContact instanceof PhysicalAddress && partyContact.getValue() == complementarAddressString
 		    && ((PhysicalAddress) partyContact).getGeographicLocation().equals(geographicLocation)) {

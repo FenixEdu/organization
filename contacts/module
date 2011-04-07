@@ -1,2 +1,2 @@
 name=contacts
-depends=core,organization
+depends=core,organization,geography

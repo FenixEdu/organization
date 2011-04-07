@@ -1,11 +1,14 @@
 package module.contacts.domain;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import module.organization.domain.Party;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.PersistentGroup;
+import net.sourceforge.fenixedu.domain.contacts.RemoteEmailAddress;
+import net.sourceforge.fenixedu.domain.contacts.RemotePartyContact;
 
 import org.joda.time.DateTime;
 
@@ -14,7 +17,7 @@ import pt.ist.fenixWebFramework.services.Service;
 public class EmailAddress extends EmailAddress_Base {
 
     public EmailAddress(String emailAddress, Party party, Boolean defaultContact, PartyContactType partyContactType,
-	    User userCreatingTheContact, ArrayList<PersistentGroup> visibilityGroups) {
+	    List<PersistentGroup> visibilityGroups) {
 	super();
 
 	super.setVisibleTo(visibilityGroups);
@@ -27,32 +30,44 @@ public class EmailAddress extends EmailAddress_Base {
 	super.setLastModifiedDate(new DateTime());
     }
 
+    EmailAddress(Party party, RemoteEmailAddress remote) {
+	// TODO: get visibility from remote.
+	this(remote.getValue(), party, remote.getDefaultContact(), convertRemoteContactType(remote.getPartyContactTypeString()),
+		null);
+	setRemotePartyContact(remote);
+    }
+
+    @Override
+    protected void updateFromRemote(RemotePartyContact remote) {
+	// TODO: get type and visibility from remote.
+	RemoteEmailAddress remoteEmail = (RemoteEmailAddress) remote;
+	setValue(remoteEmail.getValue());
+	setType(convertRemoteContactType(remote.getPartyContactTypeString()));
+	setDefaultContact(remote.getDefaultContact());
+    }
+
     /**
      * Creates, returns and associates an EmailAddress with the given party
      * 
-     * @param emailAddress
-     *            the string with the email value e.g. johndoe@nonexisting.com
-     * @param party
-     *            the party to which the contact is associated
-     * @param defaultContact
-     *            if this is the default contact of the given party
-     * @param partyContactType
-     *            the partytype, see {@link PartyContactType}
-     * @param visibilityGroups
-     *            the visibility groups to which this contact is going to be
-     *            visible to.
+     * @param emailAddress the string with the email value e.g.
+     *            johndoe@nonexisting.com
+     * @param party the party to which the contact is associated
+     * @param defaultContact if this is the default contact of the given party
+     * @param partyContactType the partytype, see {@link PartyContactType}
+     * @param visibilityGroups the visibility groups to which this contact is
+     *            going to be visible to.
      * @return an EmailAddress with the given parameters
      */
     @Service
     public static EmailAddress createNewEmailAddress(String emailAddress, Party party, Boolean defaultContact,
 	    PartyContactType partyContactType, User userCreatingTheContact, ArrayList<PersistentGroup> visibilityGroups) {
-	//validate that the user can actually create this contact
+	// validate that the user can actually create this contact
 	validateUser(userCreatingTheContact, party, partyContactType);
 
-	//making sure the list of visibility groups is a valid one
+	// making sure the list of visibility groups is a valid one
 	validateVisibilityGroups(visibilityGroups);
 
-	//make sure that this isn't a duplicate contact for this party
+	// make sure that this isn't a duplicate contact for this party
 	for (PartyContact partyContact : party.getPartyContacts()) {
 	    if (partyContact instanceof EmailAddress && partyContact.getValue() == emailAddress
 		    && partyContactType.equals(partyContact.getType())) {
@@ -60,8 +75,7 @@ public class EmailAddress extends EmailAddress_Base {
 	    }
 	}
 
-	return new EmailAddress(emailAddress, party, defaultContact, partyContactType, userCreatingTheContact, visibilityGroups);
-
+	return new EmailAddress(emailAddress, party, defaultContact, partyContactType, visibilityGroups);
     }
 
     @Override

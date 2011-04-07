@@ -12,6 +12,15 @@ import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.PersistentGroup;
 import myorg.domain.groups.Role;
+import net.sourceforge.fenixedu.domain.contacts.RemoteEmailAddress;
+import net.sourceforge.fenixedu.domain.contacts.RemoteMobilePhone;
+import net.sourceforge.fenixedu.domain.contacts.RemotePartyContact;
+import net.sourceforge.fenixedu.domain.contacts.RemotePhone;
+import net.sourceforge.fenixedu.domain.contacts.RemotePhysicalAddress;
+import net.sourceforge.fenixedu.domain.contacts.RemoteWebAddress;
+
+import org.apache.commons.lang.StringUtils;
+
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
@@ -108,8 +117,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      * Sets the contact value making sure that the user that called this method
      * has permissions to do it
      * 
-     * @param value
-     *            the value to set
+     * @param value the value to set
      */
     @Service
     public void setContactValue(String value) {
@@ -134,8 +142,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     }
 
     /**
-     * @param value
-     *            the value to set on the contact.
+     * @param value the value to set on the contact.
      */
     protected abstract void setValue(String value);
 
@@ -155,20 +162,23 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      * {@link ContactsConfigurator}, otherwise it throws an exception
      * automaticly due to the listener
      * 
-     * @param groups
-     *            the groups to which this PartyContact will be visibile to
+     * @param groups the groups to which this PartyContact will be visibile to
      */
     @Service
     public void setVisibleTo(List<PersistentGroup> groups) {
-
-	//add all of the groups that are on the groups but not on the current list of visibility groups
-	for (PersistentGroup persistentGroup : groups) {
-	    if (!getVisibilityGroups().contains(persistentGroup)) {
-		addVisibilityGroups(persistentGroup);
+	// add all of the groups that are on the groups but not on the current
+	// list of visibility groups
+	if (groups != null) {
+	    for (PersistentGroup persistentGroup : groups) {
+		if (!getVisibilityGroups().contains(persistentGroup)) {
+		    addVisibilityGroups(persistentGroup);
+		}
 	    }
 	}
 	List<PersistentGroup> currentSurplusGroups = new ArrayList<PersistentGroup>(getVisibilityGroups());
-	currentSurplusGroups.removeAll(groups);
+	if (groups != null) {
+	    currentSurplusGroups.removeAll(groups);
+	}
 	if (!currentSurplusGroups.isEmpty()) {
 	    for (PersistentGroup persistentGroup : currentSurplusGroups) {
 		removeVisibilityGroups(persistentGroup);
@@ -196,9 +206,8 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     // DEPENDENCY
     /**
      * 
-     * @param currentUser
-     *            the User to assert if it is the owner of this partycontact or
-     *            not
+     * @param currentUser the User to assert if it is the owner of this
+     *            partycontact or not
      * @return true if the currentUser is the owner of this PartyContact, false
      *         otherwise
      */
@@ -212,11 +221,10 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 
     /**
      * 
-     * @param currentUser
-     *            the User to assert if it is the owner of this partycontact or
-     *            not
-     * @param partyFutureContactOwner
-     *            the {@link Party} that will have the contact
+     * @param currentUser the User to assert if it is the owner of this
+     *            partycontact or not
+     * @param partyFutureContactOwner the {@link Party} that will have the
+     *            contact
      * @return true if the currentUser is the owner of this PartyContact, false
      *         otherwise
      */
@@ -258,7 +266,8 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     @Override
     public void setDefaultContact(Boolean defaultContact) {
 	if (defaultContact != null && defaultContact.booleanValue()) {
-	    //remove the other default contacts of this type so that there is only one for each type
+	    // remove the other default contacts of this type so that there is
+	    // only one for each type
 	    for (PartyContact partyContact : getParty().getPartyContacts()) {
 		if (partyContact.getClass().isInstance(this.getClass()) && partyContact.getDefaultContact().booleanValue()) {
 		    partyContact.setDefaultContact(Boolean.FALSE);
@@ -273,7 +282,56 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 	if (!isEditableBy(currentUser))
 	    throw new DomainException("manage.contacts.edit.denied", UserView.getCurrentUser().getUsername());
 	delete();
-
     }
 
+    public static PartyContact updatePartyContactFromRemoteReference(Party party, RemotePartyContact remote) {
+	for (PartyContact contact : ContactsConfigurator.getInstance().getPartyContactSet()) {
+	    if (contact.getRemotePartyContact().equals(remote)) {
+		contact.updateFromRemote(remote);
+		return contact;
+	    }
+	}
+	if (remote instanceof RemoteEmailAddress) {
+	    return new EmailAddress(party, (RemoteEmailAddress) remote);
+	}
+	if (remote instanceof RemoteMobilePhone) {
+	    return new Phone(party, (RemoteMobilePhone) remote);
+	}
+	if (remote instanceof RemotePhone) {
+	    return new Phone(party, (RemotePhone) remote);
+	}
+	if (remote instanceof RemotePhysicalAddress) {
+	    return null;
+	    // return new PhysicalAddress(remote);
+	}
+	if (remote instanceof RemoteWebAddress) {
+	    return new WebAddress(party, (RemoteWebAddress) remote);
+	}
+	throw new RuntimeException("unrecognised remote contact type");
+    }
+
+    protected abstract void updateFromRemote(RemotePartyContact remote);
+
+    protected static PartyContactType convertRemoteContactType(String type) {
+	if (type.equals("INSTITUTIONAL")) {
+	    return PartyContactType.IMMUTABLE;
+	} else if (type.equals("WORK")) {
+	    return PartyContactType.WORK;
+	} else if (type.equals("PERSONAL")) {
+	    return PartyContactType.PERSONAL;
+	}
+	throw new RuntimeException("unrecognised remote type: " + type);
+    }
+
+    public static String getEmailForSendingEmails(Party party) {
+	for (PartyContact contact : party.getPartyContactsSet()) {
+	    if (contact instanceof EmailAddress) {
+		EmailAddress email = (EmailAddress) contact;
+		if (email.getType().equals(PartyContactType.IMMUTABLE)) {
+		    return contact.getValue();
+		}
+	    }
+	}
+	return StringUtils.EMPTY;
+    }
 }

@@ -30,6 +30,8 @@ enum module.contacts.domain.ContactsRoles																as ContactsRoles;
 enum module.contacts.domain.PartyContactType                                                            as PartyContactType;
 enum module.contacts.domain.PhoneType                                                            		as PhoneType;
 
+external class .net.sourceforge.fenixedu.domain.contacts.RemotePartyContact;
+
 class ContactsConfigurator {
 	ContactsRoles contactsRoles;
 }
@@ -64,6 +66,8 @@ class ContactsConfigurator {
     
 class task.IndexPersonsAndContacts extends .myorg.domain.scheduler.Task {
 }
+
+class task.SyncContactsFromRemote extends .myorg.domain.scheduler.Task;
     
     
 relation MyOrgContactsConfigurator {
@@ -123,4 +127,9 @@ relation PersistentGroupPartyContact {
 	PartyContact playsRole visibleContacts {
 		multiplicity *;
 	} 
+}
+
+relation ContactRemoteContact {
+	PartyContact playsRole;
+    .net.sourceforge.fenixedu.domain.contacts.RemotePartyContact playsRole remotePartyContact;
 }

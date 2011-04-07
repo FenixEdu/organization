@@ -6,6 +6,8 @@ import module.organization.domain.Party;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.PersistentGroup;
+import net.sourceforge.fenixedu.domain.contacts.RemotePartyContact;
+import net.sourceforge.fenixedu.domain.contacts.RemoteWebAddress;
 
 import org.joda.time.DateTime;
 
@@ -13,7 +15,7 @@ import pt.ist.fenixWebFramework.services.Service;
 
 public class WebAddress extends WebAddress_Base {
 
-    public WebAddress(String url, Party party, Boolean defaultContact, PartyContactType type, User userCreatingTheContact,
+    public WebAddress(String url, Party party, Boolean defaultContact, PartyContactType type,
 	    ArrayList<PersistentGroup> visibilityGroups) {
 	super();
 
@@ -26,40 +28,51 @@ public class WebAddress extends WebAddress_Base {
 	super.setLastModifiedDate(new DateTime());
     }
 
+    WebAddress(Party party, RemoteWebAddress remote) {
+	// TODO: get type and visibility from remote.
+	this(remote.getUrl(), party, remote.getDefaultContact(), convertRemoteContactType(remote.getPartyContactTypeString()),
+		null);
+	setRemotePartyContact(remote);
+    }
+
+    @Override
+    protected void updateFromRemote(RemotePartyContact remote) {
+	// TODO: get type and visibility from remote.
+	RemoteWebAddress remoteWebAddress = (RemoteWebAddress) remote;
+	setUrl(remoteWebAddress.getUrl());
+	setType(convertRemoteContactType(remote.getPartyContactTypeString()));
+	setDefaultContact(remoteWebAddress.getDefaultContact());
+    }
+
     /**
      * 
      * Creates, returns and associates a WebAddress with the given party
      * 
-     * @param url
-     *            the URL of the web address
-     * @param party
-     *            the party to which the contact belongs
-     * @param defaultContact
-     *            if it is the default contact for this party
-     * @param type
-     *            the type of contact {@link PartyContactType}
-     * @param visibilityGroups
-     *            the visibility groups that the user defined to make the
-     *            contact visible to
+     * @param url the URL of the web address
+     * @param party the party to which the contact belongs
+     * @param defaultContact if it is the default contact for this party
+     * @param type the type of contact {@link PartyContactType}
+     * @param visibilityGroups the visibility groups that the user defined to
+     *            make the contact visible to
      * @return an WebAddress with the given parameters
      */
     @Service
     public static WebAddress createNewWebAddress(String url, Party party, Boolean defaultContact, PartyContactType type,
 	    User userCreatingTheContact, ArrayList<PersistentGroup> visibilityGroups) {
-	//validate that the user can actually create this contact
+	// validate that the user can actually create this contact
 	validateUser(userCreatingTheContact, party, type);
 
-	//making sure the list of visibility groups is a valid one
+	// making sure the list of visibility groups is a valid one
 	validateVisibilityGroups(visibilityGroups);
 
-	//make sure that this isn't a duplicate contact for this party
+	// make sure that this isn't a duplicate contact for this party
 	for (PartyContact partyContact : party.getPartyContacts()) {
 	    if (partyContact instanceof WebAddress && partyContact.getValue() == url && type.equals(partyContact.getType())) {
 		throw new DomainException("error.duplicate.partyContact");
 	    }
 	}
 
-	return new WebAddress(url, party, defaultContact, type, userCreatingTheContact, visibilityGroups);
+	return new WebAddress(url, party, defaultContact, type, visibilityGroups);
     }
 
     @Override
