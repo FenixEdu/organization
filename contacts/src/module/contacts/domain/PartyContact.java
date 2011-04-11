@@ -323,15 +323,20 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 	throw new RuntimeException("unrecognised remote type: " + type);
     }
 
-    public static String getEmailForSendingEmails(Party party) {
+    public static EmailAddress getEmailAddressForSendingEmails(Party party) {
 	for (PartyContact contact : party.getPartyContactsSet()) {
 	    if (contact instanceof EmailAddress) {
 		EmailAddress email = (EmailAddress) contact;
 		if (email.getType().equals(PartyContactType.IMMUTABLE)) {
-		    return contact.getValue();
+		    return email;
 		}
 	    }
 	}
-	return StringUtils.EMPTY;
+	return null;
+    }
+
+    public static String getEmailForSendingEmails(Party party) {
+	EmailAddress email = getEmailAddressForSendingEmails(party);
+	return email != null ? email.getValue() : StringUtils.EMPTY;
     }
 }
