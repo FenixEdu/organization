@@ -190,8 +190,10 @@ public class Accountability extends Accountability_Base {
 
     static Accountability create(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
 	    final LocalDate end) {
-	return parent.isAuthorizedToManage() ? new Accountability(parent, child, type, begin, end)
-		: new UnconfirmedAccountability(parent, child, type, begin, end);
+	//TODO Fenix-133: allow the access control to be done in a more dynamic way, see issue for more info
+	//	return parent.isAuthorizedToManage() ? new Accountability(parent, child, type, begin, end)
+	//		: new UnconfirmedAccountability(parent, child, type, begin, end);
+	return new Accountability(parent, child, type, begin, end);
     }
 
     @Service
