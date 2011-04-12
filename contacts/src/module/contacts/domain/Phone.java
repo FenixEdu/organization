@@ -6,9 +6,6 @@ import module.organization.domain.Party;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.PersistentGroup;
-import net.sourceforge.fenixedu.domain.contacts.RemoteMobilePhone;
-import net.sourceforge.fenixedu.domain.contacts.RemotePartyContact;
-import net.sourceforge.fenixedu.domain.contacts.RemotePhone;
 
 import org.joda.time.DateTime;
 
@@ -28,37 +25,6 @@ public class Phone extends Phone_Base {
 	super.setDefaultContact(defaultContact);
 	super.setType(partyContactType);
 	super.setLastModifiedDate(new DateTime());
-    }
-
-    Phone(Party party, RemoteMobilePhone remote) {
-	// TODO: get type and visibility from remote.
-	this(PhoneType.CELLPHONE, remote.getNumber(), party, remote.getDefaultContact(), convertRemoteContactType(remote
-		.getPartyContactTypeString()), null);
-	setRemotePartyContact(remote);
-    }
-
-    Phone(Party party, RemotePhone remote) {
-	// TODO: get type and visibility from remote.
-	this(PhoneType.REGULAR_PHONE, remote.getNumber(), party, remote.getDefaultContact(), convertRemoteContactType(remote
-		.getPartyContactTypeString()), null);
-	setRemotePartyContact(remote);
-    }
-
-    @Override
-    protected void updateFromRemote(RemotePartyContact remote) {
-	// TODO: get type and visibility from remote.
-	if (remote instanceof RemoteMobilePhone) {
-	    RemoteMobilePhone phone = (RemoteMobilePhone) remote;
-	    setPhoneType(PhoneType.CELLPHONE);
-	    setNumber(phone.getNumber());
-	}
-	if (remote instanceof RemotePhone) {
-	    RemotePhone phone = (RemotePhone) remote;
-	    setPhoneType(PhoneType.REGULAR_PHONE);
-	    setNumber(phone.getNumber());
-	}
-	setDefaultContact(remote.getDefaultContact());
-	setType(convertRemoteContactType(remote.getPartyContactTypeString()));
     }
 
     /**

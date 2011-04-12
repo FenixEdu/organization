@@ -12,12 +12,6 @@ import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.PersistentGroup;
 import myorg.domain.groups.Role;
-import net.sourceforge.fenixedu.domain.contacts.RemoteEmailAddress;
-import net.sourceforge.fenixedu.domain.contacts.RemoteMobilePhone;
-import net.sourceforge.fenixedu.domain.contacts.RemotePartyContact;
-import net.sourceforge.fenixedu.domain.contacts.RemotePhone;
-import net.sourceforge.fenixedu.domain.contacts.RemotePhysicalAddress;
-import net.sourceforge.fenixedu.domain.contacts.RemoteWebAddress;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -282,45 +276,6 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 	if (!isEditableBy(currentUser))
 	    throw new DomainException("manage.contacts.edit.denied", UserView.getCurrentUser().getUsername());
 	delete();
-    }
-
-    public static PartyContact updatePartyContactFromRemoteReference(Party party, RemotePartyContact remote) {
-	for (PartyContact contact : ContactsConfigurator.getInstance().getPartyContactSet()) {
-	    if (contact.getRemotePartyContact().equals(remote)) {
-		contact.updateFromRemote(remote);
-		return contact;
-	    }
-	}
-	if (remote instanceof RemoteEmailAddress) {
-	    return new EmailAddress(party, (RemoteEmailAddress) remote);
-	}
-	if (remote instanceof RemoteMobilePhone) {
-	    return new Phone(party, (RemoteMobilePhone) remote);
-	}
-	if (remote instanceof RemotePhone) {
-	    return new Phone(party, (RemotePhone) remote);
-	}
-	if (remote instanceof RemotePhysicalAddress) {
-	    return null;
-	    // return new PhysicalAddress(remote);
-	}
-	if (remote instanceof RemoteWebAddress) {
-	    return new WebAddress(party, (RemoteWebAddress) remote);
-	}
-	throw new RuntimeException("unrecognised remote contact type");
-    }
-
-    protected abstract void updateFromRemote(RemotePartyContact remote);
-
-    protected static PartyContactType convertRemoteContactType(String type) {
-	if (type.equals("INSTITUTIONAL")) {
-	    return PartyContactType.IMMUTABLE;
-	} else if (type.equals("WORK")) {
-	    return PartyContactType.WORK;
-	} else if (type.equals("PERSONAL")) {
-	    return PartyContactType.PERSONAL;
-	}
-	throw new RuntimeException("unrecognised remote type: " + type);
     }
 
     public static EmailAddress getEmailAddressForSendingEmails(Party party) {

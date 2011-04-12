@@ -6,8 +6,6 @@ import module.organization.domain.Party;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.PersistentGroup;
-import net.sourceforge.fenixedu.domain.contacts.RemotePartyContact;
-import net.sourceforge.fenixedu.domain.contacts.RemoteWebAddress;
 
 import org.joda.time.DateTime;
 
@@ -26,22 +24,6 @@ public class WebAddress extends WebAddress_Base {
 	super.setType(type);
 
 	super.setLastModifiedDate(new DateTime());
-    }
-
-    WebAddress(Party party, RemoteWebAddress remote) {
-	// TODO: get type and visibility from remote.
-	this(remote.getUrl(), party, remote.getDefaultContact(), convertRemoteContactType(remote.getPartyContactTypeString()),
-		null);
-	setRemotePartyContact(remote);
-    }
-
-    @Override
-    protected void updateFromRemote(RemotePartyContact remote) {
-	// TODO: get type and visibility from remote.
-	RemoteWebAddress remoteWebAddress = (RemoteWebAddress) remote;
-	setUrl(remoteWebAddress.getUrl());
-	setType(convertRemoteContactType(remote.getPartyContactTypeString()));
-	setDefaultContact(remoteWebAddress.getDefaultContact());
     }
 
     /**

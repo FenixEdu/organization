@@ -9,7 +9,6 @@ import module.organization.domain.Party;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.PersistentGroup;
-import net.sourceforge.fenixedu.domain.contacts.RemotePartyContact;
 
 import org.joda.time.DateTime;
 
@@ -32,17 +31,6 @@ public class PhysicalAddress extends PhysicalAddress_Base {
 
 	super.setLastModifiedDate(new DateTime());
 
-    }
-
-    PhysicalAddress(RemotePartyContact remote) {
-	// TODO
-	throw new UnsupportedOperationException();
-    }
-
-    @Override
-    protected void updateFromRemote(RemotePartyContact remote) {
-	// TODO
-	throw new UnsupportedOperationException();
     }
 
     /**

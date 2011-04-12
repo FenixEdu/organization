@@ -7,8 +7,6 @@ import module.organization.domain.Party;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.PersistentGroup;
-import net.sourceforge.fenixedu.domain.contacts.RemoteEmailAddress;
-import net.sourceforge.fenixedu.domain.contacts.RemotePartyContact;
 
 import org.joda.time.DateTime;
 
@@ -28,22 +26,6 @@ public class EmailAddress extends EmailAddress_Base {
 	super.setType(partyContactType);
 
 	super.setLastModifiedDate(new DateTime());
-    }
-
-    EmailAddress(Party party, RemoteEmailAddress remote) {
-	// TODO: get visibility from remote.
-	this(remote.getValue(), party, remote.getDefaultContact(), convertRemoteContactType(remote.getPartyContactTypeString()),
-		null);
-	setRemotePartyContact(remote);
-    }
-
-    @Override
-    protected void updateFromRemote(RemotePartyContact remote) {
-	// TODO: get type and visibility from remote.
-	RemoteEmailAddress remoteEmail = (RemoteEmailAddress) remote;
-	setValue(remoteEmail.getValue());
-	setType(convertRemoteContactType(remote.getPartyContactTypeString()));
-	setDefaultContact(remote.getDefaultContact());
     }
 
     /**
