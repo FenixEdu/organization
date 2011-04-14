@@ -66,7 +66,7 @@ public class Accountability extends Accountability_Base {
 	setBeginDate(new LocalDate());
     }
 
-    protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
+//    protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
 	    final LocalDate end) {
 	this();
 
@@ -194,6 +194,13 @@ public class Accountability extends Accountability_Base {
 	//	return parent.isAuthorizedToManage() ? new Accountability(parent, child, type, begin, end)
 	//		: new UnconfirmedAccountability(parent, child, type, begin, end);
 	return new Accountability(parent, child, type, begin, end);
+    }
+
+    @Override
+    public void setBeginDate(LocalDate beginDate) {
+	super.setBeginDate(beginDate);
+	//	AccountabilityHistory.registerAccountabilityChange(this,
+	//		AccountabilityOperationType.UPDATE.setUpdateType(AccountabilityOperationType.TypeOfUpdate.UPDATE_BEGIN_DATE));
     }
 
     @Service
