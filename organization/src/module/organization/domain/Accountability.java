@@ -66,7 +66,7 @@ public class Accountability extends Accountability_Base {
 	setBeginDate(new LocalDate());
     }
 
-//    protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
+    protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
 	    final LocalDate end) {
 	this();
 
