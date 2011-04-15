@@ -115,10 +115,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      */
     @Service
     public void setContactValue(String value) {
-	if (UserView.getCurrentUser() == null || !isEditableBy(UserView.getCurrentUser())) {
-	    if (UserView.getCurrentUser() == null)
-		throw new DomainException("manage.contacts.edit.denied.nouser", "resources.ContactsResources");
-	    else
+	if (UserView.getCurrentUser() != null && !isEditableBy(UserView.getCurrentUser())) {
 		throw new DomainException("manage.contacts.edit.denied", "resources.ContactsResources", UserView.getCurrentUser()
 			.getUsername());
 	}
