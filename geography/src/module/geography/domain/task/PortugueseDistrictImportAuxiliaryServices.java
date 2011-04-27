@@ -3,29 +3,23 @@ package module.geography.domain.task;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
-import java.util.HashSet;
+
+import module.geography.domain.Country;
+import module.geography.domain.CountrySubdivision;
+import module.geography.util.StringsUtil;
+import module.organization.domain.Accountability;
+import myorg._development.PropertiesManager;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.Period;
 
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
-
-import module.geography.domain.Country;
-import module.geography.domain.CountrySubdivision;
-import module.geography.domain.GeographicLocation;
-import module.geography.util.StringsUtil;
-import module.organization.domain.Accountability;
-import module.organization.domain.Unit;
-import myorg._development.PropertiesManager;
-import myorg.domain.User;
 
 public class PortugueseDistrictImportAuxiliaryServices {
 
@@ -172,7 +166,7 @@ public class PortugueseDistrictImportAuxiliaryServices {
 	    // the current date
 	    LocalDate endDate = new LocalDate();
 	    // endDate = endDate.minusDays(1);
-	    activeAccountability.setEndDate(endDate);
+	    activeAccountability.editDates(activeAccountability.getBeginDate(), endDate);
 	}
 	deletions++;
     }

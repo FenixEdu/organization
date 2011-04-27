@@ -143,7 +143,7 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
 	    // the current date
 	    LocalDate endDate = new LocalDate();
 	    // endDate = endDate.minusDays(1);
-	    activeAccountability.setEndDate(endDate);
+	    activeAccountability.editDates(activeAccountability.getBeginDate(), endDate);
 	}
 	deletions++;
 
