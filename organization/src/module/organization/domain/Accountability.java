@@ -160,7 +160,20 @@ public class Accountability extends Accountability_Base {
     }
 
     public boolean isActive(final LocalDate date) {
-	return contains(date);
+	return contains(date) && !isHistoricItem();
+    }
+
+    /**
+     * 
+     * @return true if it only has AccountabilityHistory relations, false
+     *         otherwise
+     */
+    private boolean isHistoricItem() {
+	if (getParent() != null || getChild() != null)
+	    return false;
+	if (getInactiveParent() != null || getInactiveChild() != null)
+	    return true;
+	throw new DomainException("accountability.object.illegal.state.either.active.or.inactive.please");
     }
 
     public boolean isActiveNow() {

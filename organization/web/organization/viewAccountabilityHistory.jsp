@@ -83,10 +83,10 @@ color: #999;
 	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.party.parent" /></th>
 	  </tr>
 	  <logic:iterate  name="accItemsToDisplay" id="accItem">
-	  <logic:equal value="false" name="accItem" parameter="activeNow" >
+	  <logic:equal value="false" name="accItem" property="activeNow" >
 	  	<tr class="disabled">
 	  </logic:equal>
-	  <logic:notEqual value="false" name="accItem" parameter="activeNow" >
+	  <logic:notEqual value="false" name="accItem" property="activeNow" >
 	  	<tr>
 	  </logic:notEqual>
 	    <td><bean:write name="accItem" property="creationDate"/></td>
