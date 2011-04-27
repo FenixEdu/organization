@@ -32,9 +32,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import module.organization.domain.predicates.PartyPredicate;
+import module.organization.domain.predicates.PartyPredicate.PartyByAccTypeAndDates;
 import module.organization.domain.predicates.PartyPredicate.PartyByAccountabilityType;
 import module.organization.domain.predicates.PartyPredicate.PartyByClassType;
 import module.organization.domain.predicates.PartyPredicate.PartyByPartyType;
@@ -119,6 +121,46 @@ abstract public class Party extends Party_Base {
 	return (List<T>) result;
     }
 
+    public Collection<Accountability> getParentAccountabilities(final LocalDate startDate, final LocalDate endDate,
+	    final AccountabilityType... types) {
+	return getParentAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, types));
+    }
+
+    public Collection<? extends Accountability> getParentAccountabilities(LocalDate startDate, LocalDate endDate,
+	    List<AccountabilityType> accTypes) {
+	return getParentAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, accTypes));
+    }
+
+    public Collection<Accountability> getParentAccountabilitiesHistory(final LocalDate startDate, final LocalDate endDate,
+	    final AccountabilityType... types) {
+	return getParentAccountabilitiesHistory(new PartyByAccTypeAndDates(startDate, endDate, types));
+    }
+
+    public Collection<? extends Accountability> getParentAccountabilitiesHistory(LocalDate startDate, LocalDate endDate,
+	    List<AccountabilityType> accTypes) {
+	return getParentAccountabilitiesHistory(new PartyByAccTypeAndDates(startDate, endDate, accTypes));
+    }
+
+    public Collection<Accountability> getChildrenAccountabilities(final LocalDate startDate, final LocalDate endDate,
+	    final AccountabilityType... types) {
+	return getChildrenAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, types));
+    }
+
+    private Collection<? extends Accountability> getChildrenAccountabilities(LocalDate startDate, LocalDate endDate,
+	    List<AccountabilityType> accTypes) {
+	return getChildrenAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, accTypes));
+    }
+
+    public Collection<Accountability> getChildrenAccountabilitiesHistory(final LocalDate startDate, final LocalDate endDate,
+	    final AccountabilityType... types) {
+	return getChildrenAccountabilitiesHistory(new PartyByAccTypeAndDates(startDate, endDate, types));
+    }
+
+    public Collection<? extends Accountability> getChildrenAccountabilitiesHistory(LocalDate startDate, LocalDate endDate,
+	    List<AccountabilityType> accTypes) {
+	return getChildrenAccountabilitiesHistory(new PartyByAccTypeAndDates(startDate, endDate, accTypes));
+    }
+
     public Collection<Accountability> getParentAccountabilities(final Collection<AccountabilityType> types) {
 	return getParentAccountabilities(new PartyByAccountabilityType(types));
     }
@@ -138,6 +180,24 @@ abstract public class Party extends Party_Base {
 	return (List<T>) result;
     }
 
+    public Collection<Accountability> getParentAccountabilitiesHistory(final Collection<AccountabilityType> types) {
+	return getParentAccountabilitiesHistory(new PartyByAccountabilityType(types));
+    }
+
+    public Collection<Accountability> getParentAccountabilitiesHistory(final AccountabilityType... types) {
+	return getParentAccountabilitiesHistory(new PartyByAccountabilityType(types));
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T extends Accountability> Collection<T> getParentAccountabilitiesHistory(final PartyPredicate predicate) {
+	final Collection<Accountability> result = new LinkedList<Accountability>();
+	for (final Accountability accountability : getParentAccountabilityHistoryItems()) {
+	    if (predicate.eval(accountability.getParent(), accountability)) {
+		result.add(accountability);
+	    }
+	}
+	return (List<T>) result;
+    }
     public Collection<Party> getChildren() {
 	return getChildren(new TruePartyPredicate());
     }
@@ -214,6 +274,17 @@ abstract public class Party extends Party_Base {
     protected <T extends Accountability> Collection<T> getChildrenAccountabilities(final PartyPredicate predicate) {
 	final Collection<Accountability> result = new LinkedList<Accountability>();
 	for (final Accountability accountability : getChildAccountabilities()) {
+	    if (predicate.eval(accountability.getChild(), accountability)) {
+		result.add(accountability);
+	    }
+	}
+	return (List<T>) result;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T extends Accountability> Collection<T> getChildrenAccountabilitiesHistory(final PartyPredicate predicate) {
+	final Collection<Accountability> result = new LinkedList<Accountability>();
+	for (final Accountability accountability : getChildAccountabilityHistoryItems()) {
 	    if (predicate.eval(accountability.getChild(), accountability)) {
 		result.add(accountability);
 	    }
@@ -390,12 +461,12 @@ abstract public class Party extends Party_Base {
 	    if (begin == null
 		    || (begin != null && intersectingAccountability.getBeginDate() != null && begin
 			    .isBefore(intersectingAccountability.getBeginDate()))) {
-		intersectingAccountability.setBeginDate(begin);
+		intersectingAccountability.editDates(begin, intersectingAccountability.getEndDate());
 	    }
 	    if (end == null
 		    || (end != null && intersectingAccountability.getEndDate() != null && end.isAfter(intersectingAccountability
 			    .getEndDate()))) {
-		intersectingAccountability.setEndDate(end);
+		intersectingAccountability.editDates(intersectingAccountability.getBeginDate(), end);
 	    }
 	    return intersectingAccountability;
 	}
@@ -582,5 +653,40 @@ abstract public class Party extends Party_Base {
 	}
 	return false;
     }
+
+    /**
+     * 
+     * @param accTypes
+     *            the AccountabilityType types to use on the retrieval or null
+     *            to get all
+     * @param dateOfStart
+     *            the mininum date to retrieve elements for, or null if there is
+     *            no minimum
+     * @param dateOfEnd
+     *            the maximum date to retrieve elements for, or null if there is
+     *            no maximum
+     * @return a list of historic and actual Accountabilities
+     *         {@link Accountability}
+     */
+    public SortedSet<Accountability> getAccountabilitiesAndHistoricItems(List<AccountabilityType> accTypes,
+	    LocalDate dateOfStart,
+	    LocalDate dateOfEnd) {
+	TreeSet<Accountability> accountabilities = new TreeSet<Accountability>(
+		Accountability.COMPARATOR_BY_CREATION_DATE_FALLBACK_TO_START_DATE);
+
+	accountabilities.addAll(getParentAccountabilities(dateOfStart, dateOfEnd, accTypes));
+	accountabilities.addAll(getChildrenAccountabilities(dateOfStart, dateOfEnd, accTypes));
+
+	//get the historic items
+	accountabilities.addAll(getParentAccountabilitiesHistory(dateOfStart, dateOfEnd, accTypes));
+	accountabilities.addAll(getChildrenAccountabilitiesHistory(dateOfStart, dateOfEnd, accTypes));
+	
+	return accountabilities;
+
+    }
+
+
+
+
 
 }

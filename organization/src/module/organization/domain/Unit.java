@@ -42,6 +42,7 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 public class Unit extends Unit_Base {
 
     public static final Comparator<Unit> COMPARATOR_BY_PRESENTATION_NAME = new Comparator<Unit>() {
+	@Override
 	public int compare(final Unit unit1, Unit unit2) {
 	    final int depth1 = unit1.depth();
 	    final int depth2 = unit2.depth();
@@ -168,7 +169,7 @@ public class Unit extends Unit_Base {
 	final LocalDate now = new LocalDate();
 	for (final Accountability accountability : getParentAccountabilitiesSet()) {
 	    if (accountability.getEndDate() == null || accountability.getEndDate().isAfter(now)) {
-		accountability.setEndDate(now);
+		accountability.editDates(accountability.getBeginDate(), now);
 	    }
 	}
     }

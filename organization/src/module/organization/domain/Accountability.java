@@ -26,12 +26,17 @@
 package module.organization.domain;
 
 import java.util.Comparator;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jvstm.cps.ConsistencyPredicate;
+import module.organization.domain.predicates.PartyPredicate.PartyByAccTypeAndDates;
 import module.organization.domain.util.OrganizationConsistencyException;
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
@@ -59,11 +64,31 @@ public class Accountability extends Accountability_Base {
 	}
 
     };
+    
+    public static final Comparator<Accountability> COMPARATOR_BY_CREATION_DATE_FALLBACK_TO_START_DATE = new Comparator<Accountability>() {
+
+	@Override
+	public int compare(final Accountability o1, final Accountability o2) {
+	    DateTime o1CreationDate = o1.getCreationDate();
+	    DateTime o2CreationDate = o2.getCreationDate();
+
+	    if (o1CreationDate == null) {
+		o1CreationDate = o1.getBeginDate().toDateTimeAtStartOfDay();
+	    }
+	    if (o2CreationDate == null) {
+		o2CreationDate = o2.getBeginDate().toDateTimeAtStartOfDay();
+	    }
+	    return o1CreationDate.compareTo(o2CreationDate);
+	};
+
+    };
 
     protected Accountability() {
 	super();
+	setCreationDate(new DateTime());
 	setMyOrg(MyOrg.getInstance());
-	setBeginDate(new LocalDate());
+	super.setBeginDate(new LocalDate());
+	setCreatorUser(myorg.applicationTier.Authenticate.UserView.getCurrentUser());
     }
 
     protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
@@ -81,8 +106,8 @@ public class Accountability extends Accountability_Base {
 	setParent(parent);
 	setChild(child);
 	setAccountabilityType(type);
-	setBeginDate(begin);
-	setEndDate(end);
+	super.setBeginDate(begin);
+	super.setEndDate(end);
     }
 
     protected void checkDates(final Party parent, final LocalDate begin, final LocalDate end) {
@@ -179,13 +204,11 @@ public class Accountability extends Accountability_Base {
     }
 
     @Service
+    /**
+     * It doesn't actually delete the accountability as it actually marks it as an accountability history item
+     */
     void delete() {
-	removeParent();
-	removeChild();
-	removeAccountabilityType();
-	//	removeAccountabilityImportRegister();
-	removeMyOrg();
-	deleteDomainObject();
+	setInactive();
     }
 
     static Accountability create(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
@@ -197,18 +220,63 @@ public class Accountability extends Accountability_Base {
     }
 
     @Override
+    @Deprecated
     public void setBeginDate(LocalDate beginDate) {
-	super.setBeginDate(beginDate);
-	//	AccountabilityHistory.registerAccountabilityChange(this,
-	//		AccountabilityOperationType.UPDATE.setUpdateType(AccountabilityOperationType.TypeOfUpdate.UPDATE_BEGIN_DATE));
+	throw new DomainException("should.not.use.this.method.use.editDates.instead");
     }
 
+    @Override
+    @Deprecated
+    public void setEndDate(LocalDate endDate) {
+	throw new DomainException("should.not.use.this.method.use.editDates.instead");
+    }
+
+    /**
+     * sets the dates of the current accountability to the ones given. It does
+     * not mark this accountability as an historic one or creates new ones like
+     * editDates does {@link #editDates(LocalDate, LocalDate)} * NOTE * this
+     * should only be invoked by constructors that create new accountabilities
+     * and does not check the dates as the constructors are responsible for
+     * doing that
+     * 
+     * @param begin
+     *            the new begin date one)
+     * @param end
+     *            the new end date one)
+     */
+    protected void createDates(final LocalDate begin, final LocalDate end) {
+	super.setEndDate(end);
+	super.setBeginDate(begin);
+
+    }
+
+    /**
+     * Marks the current accountability as an historic one and creates a new one
+     * based on the new dates
+     * 
+     * @param begin
+     *            the new begin date
+     * @param end
+     *            the new end date
+     */
     @Service
     public void editDates(final LocalDate begin, final LocalDate end) {
 	check(begin, "error.Accountability.invalid.begin");
 	checkDates(getParent(), begin, end);
-	setBeginDate(begin);
-	setEndDate(end);
+	new Accountability(getParent(), getChild(), getAccountabilityType(), begin, end);
+	setInactive();
+    }
+
+    /**
+     * Removes its regular connections with its parties and assigns the other
+     * connections to it
+     */
+    private void setInactive() {
+	setInactiveChild(getChild());
+	setInactiveParent(getInactiveParent());
+	setChild(null);
+	setParent(null);
+
     }
 
     public boolean intersects(final LocalDate begin, final LocalDate end) {
@@ -217,6 +285,30 @@ public class Accountability extends Accountability_Base {
 
     private static boolean isAfter(final LocalDate localDate1, final LocalDate localDate2) {
 	return localDate1 != null && localDate2 != null && localDate2.isBefore(localDate1);
+    }
+
+    public static SortedSet<Accountability> getActiveAndInactiveAccountabilities(List<AccountabilityType> accTypes,
+	    List<Party> parties, LocalDate startDate, LocalDate endDate) {
+	SortedSet<Accountability> accountabilities = new TreeSet<Accountability>(
+		Accountability.COMPARATOR_BY_CREATION_DATE_FALLBACK_TO_START_DATE);
+
+	//let's iterate through the parties
+	for (Party party : parties) {
+	    accountabilities.addAll(party.getAccountabilitiesAndHistoricItems(accTypes, startDate, endDate));
+	}
+	//if no parties have been specified, we will get all of the accountabilities!!
+	if (parties == null || parties.isEmpty()) {
+	    final PartyByAccTypeAndDates typeAndDates = new PartyByAccTypeAndDates(startDate, endDate, accTypes);
+	    for (final Accountability accountability : MyOrg.getInstance().getAccountabilities()) {
+		if (typeAndDates.eval(null, accountability)) {
+		    accountabilities.add(accountability);
+		}
+
+	    }
+	}
+
+	return accountabilities;
+
     }
 
 }

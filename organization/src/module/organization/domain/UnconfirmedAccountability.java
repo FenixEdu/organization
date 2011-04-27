@@ -39,8 +39,7 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
 	setChild(child);
 	setAccountabilityType(readAccountabilityType());
 	setUnconfirmedAccountabilityType(type);
-	setBeginDate(begin);
-	setEndDate(end);
+	createDates(begin, end);
     }
 
     @Service

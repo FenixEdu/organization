@@ -66,8 +66,7 @@ public class FunctionDelegation extends FunctionDelegation_Base {
 	new FunctionDelegationLog(this, "Edit");
 	final Accountability accountabilityDelegatee = getAccountabilityDelegatee();
 	// This avoids detecting intersections with itself
-	accountabilityDelegatee.setBeginDate(beginDate.minusDays(2));
-	accountabilityDelegatee.setEndDate(beginDate.minusDays(1));
+	accountabilityDelegatee.editDates(beginDate.minusDays(2), endDate.minusDays(1));
 
 	final Unit unit = (Unit) getAccountabilityDelegatee().getParent();
 	if (unit.hasAnyIntersectingChildAccountability(accountabilityDelegatee.getChild(),
@@ -76,8 +75,7 @@ public class FunctionDelegation extends FunctionDelegation_Base {
 		    "resources/OrganizationResources", Language.getLocale()));
 	}
 
-	accountabilityDelegatee.setBeginDate(beginDate);
-	accountabilityDelegatee.setEndDate(endDate);
+	accountabilityDelegatee.editDates(beginDate, endDate);
     }
 
     @Service

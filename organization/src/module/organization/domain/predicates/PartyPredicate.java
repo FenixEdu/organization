@@ -28,12 +28,15 @@ package module.organization.domain.predicates;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Party;
 import module.organization.domain.PartyType;
+
+import org.joda.time.LocalDate;
 
 abstract public class PartyPredicate {
 
@@ -72,7 +75,7 @@ abstract public class PartyPredicate {
     }
 
     static public class PartyByPartyType extends PartyByClassType {
-	private PartyType type;
+	private final PartyType type;
 
 	public PartyByPartyType(final PartyType type) {
 	    this(null, type);
@@ -93,8 +96,56 @@ abstract public class PartyPredicate {
 	}
     }
 
+    static public class PartyByAccTypeAndDates extends PartyPredicate {
+	
+	private final LocalDate dateOfStart;
+	private final LocalDate dateOfEnd;
+	List<AccountabilityType> types = new ArrayList<AccountabilityType>();
+
+	public PartyByAccTypeAndDates(final LocalDate dateOfStart, final LocalDate dateOfEnd, final AccountabilityType... types) {
+	    for (AccountabilityType type : types) {
+		this.types.add(type);
+	    }
+	    this.dateOfStart = dateOfStart;
+	    this.dateOfEnd = dateOfEnd;
+	}
+
+	public PartyByAccTypeAndDates(final LocalDate dateOfStart, final LocalDate dateOfEnd, List<AccountabilityType> types) {
+	    if (types != null)
+		this.types.addAll(types);
+	    this.dateOfStart = dateOfStart;
+	    this.dateOfEnd = dateOfEnd;
+	}
+
+	@Override
+	public boolean eval(Party party, Accountability accountability) {
+
+	    return accountability.intersects(dateOfStart, dateOfEnd) && hasMatchingOrNoAccountabilityType(accountability);
+	}
+
+	public boolean wasActiveAtStartDate(Accountability accountability) {
+	    return dateOfStart == null || accountability.contains(dateOfStart);
+	}
+
+	public boolean wasActiveAtEndDate(Accountability accountability) {
+	    return dateOfEnd == null || accountability.contains(dateOfEnd);
+	}
+
+	protected boolean hasMatchingOrNoAccountabilityType(final Accountability accountability) {
+	    if (types.isEmpty())
+		return true;
+	    for (final AccountabilityType type : types) {
+		if (hasAccountabilityType(type, accountability)) {
+		    return true;
+		}
+	    }
+	    return false;
+	}
+
+    }
+
     static public class PartyByAccountabilityType extends PartyByClassType {
-	private Set<AccountabilityType> types = new HashSet<AccountabilityType>();
+	private final Set<AccountabilityType> types = new HashSet<AccountabilityType>();
 
 	public PartyByAccountabilityType(final AccountabilityType type) {
 	    this(null, type);

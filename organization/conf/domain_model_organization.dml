@@ -24,7 +24,7 @@
  *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-
+ 
 
 valueType pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString as MultiLanguageString {
     externalizeWith {
@@ -41,6 +41,7 @@ class module.organization.domain.AccountabilityType {
 }
 
 class module.organization.domain.Accountability {
+	DateTime creationDate;
 	LocalDate beginDate;
 	LocalDate endDate;
 }
@@ -48,7 +49,7 @@ class module.organization.domain.Accountability {
 	class module.organization.domain.UnconfirmedAccountability extends module.organization.domain.Accountability {
 		DateTime submited;
 	}
-
+	
 class module.organization.domain.PartyType {
 	String type;
 	MultiLanguageString name;
@@ -103,6 +104,7 @@ relation UserPerson {
 	myorg.domain.User playsRole user;
 	module.organization.domain.Person playsRole person;
 }
+
 
 relation MyOrgAccountabilityType {
 	myorg.domain.MyOrg playsRole myOrg;
@@ -169,6 +171,27 @@ relation PartyTypeParty {
 	}
 }
 
+
+relation AccountabilityUser {
+	myorg.domain.User playsRole creatorUser;
+	module.organization.domain.Accountability playsRole accountabilitiesCreated {
+		multiplicity *;
+	}
+}
+
+relation PartyParentAccountabilityHistory {
+	module.organization.domain.Party playsRole inactiveChild;
+	module.organization.domain.Accountability playsRole parentAccountabilityHistoryItems {
+		multiplicity *;
+	}
+}
+
+relation PartyChildAccountabilityHistory {
+	module.organization.domain.Party playsRole inactiveParent;
+	module.organization.domain.Accountability playsRole childAccountabilityHistoryItems {
+		multiplicity *;
+	}
+}
 relation PartyParentAccountabilities {
 	module.organization.domain.Party playsRole child;
 	module.organization.domain.Accountability playsRole parentAccountabilities {
