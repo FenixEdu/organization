@@ -67,10 +67,10 @@ class task.IndexPersonsAndContacts extends .myorg.domain.scheduler.Task {
     
 relation MyOrgContactsConfigurator {
 	.myorg.domain.MyOrg playsRole myOrg {
-		multiplicity 1;
+		multiplicity 0..1;
 	}
 	ContactsConfigurator playsRole contactsConfigurator {
-		multiplicity 1;
+		multiplicity 0..1;
 	}
 }
 
@@ -83,16 +83,16 @@ relation PersistentGroupContactsConfigurator {
 
 relation GroupAliasPersistentGroup{
 	.myorg.domain.groups.PersistentGroup playsRole persistentGroupAlias {
-		multiplicity 1;
+		multiplicity 0..1;
 	}
 	GroupAlias playsRole groupAlias {
-		multiplicity 1;
+		multiplicity 0..1;
 	}
 }
 
 relation ContactsConfiguratorPartyContact {
 	ContactsConfigurator playsRole contactsConfigurator {
-		multiplicity 1;
+		multiplicity 0..1;
 	}
 	PartyContact playsRole partyContact {
 		multiplicity *;
@@ -101,7 +101,7 @@ relation ContactsConfiguratorPartyContact {
     
 relation PartyPartyContact {
     .module.organization.domain.Party playsRole party {
-   		multiplicity 1;
+   		multiplicity 0..1;
    	}
     PartyContact playsRole partyContacts {
         multiplicity *;
