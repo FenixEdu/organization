@@ -33,6 +33,11 @@ public class PhysicalAddress extends PhysicalAddress_Base {
 
     }
 
+    public PhysicalAddress() {
+//	this(null,complementarAddressString,null,true,PartyContactType.IMMUTABLE, null, null);
+	super();
+    }
+    
     /**
      * 
      * Creates, returns and associates a PhysicalAddress with the given party
