@@ -1,4 +1,4 @@
-/** package module.personalinformation.domain; **/
+package module.personalinformation.domain;
 
 /*
  * @(#)domain_model_personal_information.dml
@@ -31,16 +31,23 @@ enum module.personalinformation.domain.Gender as Gender;
 enum module.personalinformation.domain.MaritalStatus as MaritalStatus;
 
 
-class module.personalinformation.domain.PersonalInformationSystem {
+class PersonalInformationSystem {
+
 }
 
+class PartyInformation {
+	String fiscalCode;
+}
 
-class module.personalinformation.domain.PersonalInformation {
+class UnitInformation extends  PartyInformation {
+
+}
+
+class PersonalInformation extends  PartyInformation {
 
 	LocalDate birthDate;
 	Gender gender;
 	MaritalStatus maritalStatus;
-	String fiscalCode;
 			
 	String fathersName;
 	String mothersName;
@@ -54,13 +61,13 @@ class module.personalinformation.domain.PersonalInformation {
 	//private DomainReference<Country> countryOfBirth;
 }
 
-class module.personalinformation.domain.IdentificationDocument {
+class IdentificationDocument {
 	String ojbConcreteClass;
 	IDDocumentType type;
 	String number;
 }
 
-	class module.personalinformation.domain.IdentityCard extends module.personalinformation.domain.IdentificationDocument {
+	class IdentityCard extends IdentificationDocument {
 		LocalDate emissionDate;
 		LocalDate expirationDate;
 		String emissionLocation;
@@ -70,30 +77,30 @@ class module.personalinformation.domain.IdentificationDocument {
 /** Relations **/
 
 relation MyOrgPersonalInformationSystem {
-	myorg.domain.MyOrg playsRole myOrg;
-	module.personalinformation.domain.PersonalInformationSystem playsRole personalInformationSystem;
+	.myorg.domain.MyOrg playsRole myOrg;
+	PersonalInformationSystem playsRole personalInformationSystem;
 }
 
 relation MyOrgPersonalInformation {
-	myorg.domain.MyOrg playsRole myOrg;
-	module.personalinformation.domain.PersonalInformation playsRole personalInformations {
+	.myorg.domain.MyOrg playsRole myOrg;
+	PersonalInformation playsRole personalInformations {
 		multiplicity *;
 	}
 }
 
 relation MyOrgIdentificationDocument {
-	myorg.domain.MyOrg playsRole myOrg;
-	module.personalinformation.domain.IdentificationDocument playsRole identificationDocuments {
+	.myorg.domain.MyOrg playsRole myOrg;
+	IdentificationDocument playsRole identificationDocuments {
 		multiplicity *;
 	}
 }
 
-relation PersonPersonalInformation {
-	module.organization.domain.Person playsRole person;
-	module.personalinformation.domain.PersonalInformation playsRole personalInformation;
+relation PartyPartyInformation {
+	.module.organization.domain.Party  playsRole party;
+	PartyInformation playsRole partyInformation;
 }
 
 relation PersonalInformationIdentificationDocument {
-	module.personalinformation.domain.PersonalInformation playsRole personalInformation;
-	module.personalinformation.domain.IdentificationDocument playsRole idDocument;
+	PersonalInformation playsRole personalInformation;
+	IdentificationDocument playsRole idDocument;
 }
