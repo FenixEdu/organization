@@ -94,8 +94,18 @@ color: #999;
 	    <td><bean:write name="accItem" property="beginDate"/></td>
 	    <td><bean:write name="accItem" property="endDate"/></td>
 	    <td><bean:write name="accItem" property="accountabilityType.name.content"/></td>
-	    <td><bean:write name="accItem" property="child.partyName"/></td>
-	    <td><bean:write name="accItem" property="parent.partyName"/></td>
+	    <logic:present name="accItem" property="child">
+	    	<td><bean:write name="accItem" property="child.partyName"/></td>
+	    </logic:present>
+	    <logic:notPresent name="accItem" property="child">
+	    	<td>-</td>
+	    </logic:notPresent>
+	    <logic:present name="accItem" property="parent">
+	    	<td><bean:write name="accItem" property="parent.partyName"/></td>
+	    </logic:present>
+	    <logic:notPresent name="accItem" property="parent">
+	    	<td>-</td>
+	    </logic:notPresent>
 	  </tr>
 	  
 	  </logic:iterate>
