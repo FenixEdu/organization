@@ -249,5 +249,9 @@ public class Person extends Person_Base implements Searchable, Indexable {
     public Set<Indexable> getObjectsToIndex() {
 	return Collections.singleton((Indexable) this);
     }
+    
+    public String getPresentationString() {
+	return String.format("(%s) - %s", getUser().getUsername() , getName());
+    }
 
 }
