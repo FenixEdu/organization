@@ -26,6 +26,7 @@
 package module.organization.domain;
 
 import java.text.Collator;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,9 +38,13 @@ import myorg.domain.exceptions.DomainException;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
+import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
-public class Unit extends Unit_Base {
+public class Unit extends Unit_Base implements Indexable, Searchable {
 
     public static final Comparator<Unit> COMPARATOR_BY_PRESENTATION_NAME = new Comparator<Unit>() {
 	@Override
@@ -240,6 +245,36 @@ public class Unit extends Unit_Base {
 		}
 	    }
 	}
+    }
+    
+    /**
+     * Enum used for the values of the indexes that are used for the lucene
+     * plugin
+     * 
+     * @author Sérgio Silva (sergio.silva@ist.utl.pt)
+     * 
+     */
+    public enum IndexableFields implements IndexableField {
+	UNIT_NAME, UNIT_ACRONYM;
+
+	@Override
+	public String getFieldName() {
+	    return name();
+	}
+
+    }
+
+    @Override
+    public IndexDocument getDocumentToIndex() {
+	IndexDocument indexDocument = new IndexDocument(this);
+	indexDocument.indexField(IndexableFields.UNIT_NAME, this.getPresentationName());
+	indexDocument.indexField(IndexableFields.UNIT_ACRONYM, this.getAcronym());
+	return indexDocument;
+    }
+
+    @Override
+    public Set<Indexable> getObjectsToIndex() {
+	return Collections.singleton((Indexable) this);
     }
 
 }

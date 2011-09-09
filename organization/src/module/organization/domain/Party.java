@@ -44,6 +44,7 @@ import module.organization.domain.predicates.PartyPredicate.TruePartyPredicate;
 import module.organization.domain.predicates.PartyResultCollection;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.MyOrg;
+import myorg.domain.Presentable;
 import myorg.domain.RoleType;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
@@ -53,7 +54,7 @@ import org.joda.time.LocalDate;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
-abstract public class Party extends Party_Base {
+abstract public class Party extends Party_Base implements Presentable {
 
     static public final Comparator<Party> COMPARATOR_BY_NAME = new Comparator<Party>() {
 	@Override
@@ -608,6 +609,7 @@ abstract public class Party extends Party_Base {
 	return null;
     }
 
+    @Override
     public String getPresentationName() {
 	return getPartyName().getContent();
     }
@@ -684,9 +686,5 @@ abstract public class Party extends Party_Base {
 	return accountabilities;
 
     }
-
-
-
-
 
 }
