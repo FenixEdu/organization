@@ -250,8 +250,9 @@ public class Person extends Person_Base implements Searchable, Indexable {
 	return Collections.singleton((Indexable) this);
     }
     
-    public String getPresentationString() {
-	return String.format("(%s) - %s", getUser().getUsername() , getName());
+    @Override
+    public String getPresentationName() {
+	return hasUser() ? getUser().getPresentationName() : getName();
     }
 
 }
