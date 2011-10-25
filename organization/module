@@ -1,2 +1,2 @@
 name=organization
-depends=core
+depends=core, lucene
