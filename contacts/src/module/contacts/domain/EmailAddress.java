@@ -1,6 +1,5 @@
 package module.contacts.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import module.organization.domain.Party;
@@ -42,7 +41,7 @@ public class EmailAddress extends EmailAddress_Base {
      */
     @Service
     public static EmailAddress createNewEmailAddress(String emailAddress, Party party, Boolean defaultContact,
-	    PartyContactType partyContactType, User userCreatingTheContact, ArrayList<PersistentGroup> visibilityGroups) {
+	    PartyContactType partyContactType, User userCreatingTheContact, List<PersistentGroup> visibilityGroups) {
 	// validate that the user can actually create this contact
 	validateUser(userCreatingTheContact, party, partyContactType);
 
