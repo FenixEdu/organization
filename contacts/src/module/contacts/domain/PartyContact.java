@@ -122,6 +122,19 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 	setValue(value);
     }
 
+    /**
+     * 
+     * Changes the contact value without looking if the user has permissions or
+     * not
+     * 
+     * @param value
+     *            the value to set
+     */
+    @Service
+    public void forceChangeContactValue(String value) {
+	setValue(value);
+    }
+
     public boolean isEditableBy(User user) {
 	if (isOwner(user) && !getType().equals(PartyContactType.IMMUTABLE))
 	    // if he is the owner and the contact isn't immutable, then it can
