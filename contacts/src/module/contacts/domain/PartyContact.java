@@ -32,13 +32,14 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     }
 
     static protected void validateUser(User userCreatingTheContact, Party partyThatWillOwnTheContact, PartyContactType type) {
-	if (isOwner(userCreatingTheContact, partyThatWillOwnTheContact) && !type.equals(PartyContactType.IMMUTABLE))
-	    // if he is the owner and the contact isn't immutable, then it can
-	    // edit it
-	    return;
-	if (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(userCreatingTheContact))
-	    return;
-	throw new DomainException("manage.contacts.edit.denied.nouser");
+	//joantune: for now the validation isn't done at this level!
+	//	if (isOwner(userCreatingTheContact, partyThatWillOwnTheContact) && !type.equals(PartyContactType.IMMUTABLE))
+	//	    // if he is the owner and the contact isn't immutable, then it can
+	//	    // edit it
+	//	    return;
+	//	if (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(userCreatingTheContact))
+	//	    return;
+	//	throw new DomainException("manage.contacts.edit.denied.nouser");
 
     }
 
