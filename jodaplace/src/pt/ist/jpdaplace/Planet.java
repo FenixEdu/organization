@@ -58,6 +58,7 @@ public class Planet extends Place<Place<?, Planet>, Country> {
 	loadDistricts(country, resourcePrefix);
 	loadMunicipalities(country, resourcePrefix);
 	loadPostalCodes(country, resourcePrefix);
+	loadParishes(country, resourcePrefix);
     }
 
     private void loadDistricts(final Country country, final String resourcePrefix) {
@@ -130,17 +131,53 @@ public class Planet extends Place<Place<?, Planet>, Country> {
 	}
     }
 
+    private void loadParishes(final Country country, final String resourcePrefix) {
+	final String[] content = FileUtil.readResource(resourcePrefix + "/parishes.txt");
+	for (final String line : content) {
+	    final int s1 = line.indexOf(';');
+	    final int s2 = line.indexOf(';', s1 + 1);
+	    final int s3 = line.indexOf(';', s2 + 1);
+	    final int s4 = line.indexOf(';', s3 + 1);
+	    final int s5 = line.indexOf(';', s4 + 1);
+	    final int s6 = line.indexOf(';', s5 + 1);
+
+	    final String districtKey = line.substring(s1 + 1, s2);
+	    final String municipalityKey = line.substring(s3 + 1, s4);
+	    final String parishKey = line.substring(s5 + 1, s6);
+	    final String parishName = line.substring(s6 + 1);
+
+	    final District district = country.getPlace(districtKey);
+	    if (district == null) {
+		System.out.println("no district for: " + districtKey);
+	    } else {
+		final Municipality municipality = district.getPlace(municipalityKey);
+		if (municipality == null) {
+		    System.out.println("no municipality for: " + districtKey + " " + municipalityKey);
+		} else {
+		    new Parish(municipality, parishName, parishKey);
+		}
+	    }
+	}
+    }
+
     @Override
     void exportAsString(final StringBuilder result) {
 	// do nothing ...
     }
 
-    public static Place importFromString(final String string) {
+    public static Place importPlaceFromString(final String string) {
 	if (string == null || string.length() == 0) {
 	    return null;
 	}
 	final Planet earth = Planet.getEarth();
 	return earth.importFrom(string);
+    }
+
+    public static Parish importParishFromString(final String string) {
+	if (string == null || string.length() == 0) {
+	    return null;
+	}
+	return Parish.importParishFromString(string);
     }
 
 }

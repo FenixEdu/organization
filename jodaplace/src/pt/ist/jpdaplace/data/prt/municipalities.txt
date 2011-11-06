@@ -221,6 +221,36 @@
 18;02;Carregal do Sal
 18;03;Castro Daire
 18;04;Cinfães
+19;01;Angra do Heroismo
+19;02;Calheta
+19;03;Santa Cruz da Graciosa
+19;04;Velas
+19;05;Vila Praia da Vitoria
+20;01;Corvo
+20;02;Horta
+20;03;Lajes das Flores
+20;04;Lajes do Pico
+20;05;Madalena
+20;06;Santa Cruz das Flores
+20;07;S. Roque do Pico
+21;01;Lagoa
+21;02;Nordeste
+21;03;Ponta Delgada
+21;04;Povoação
+21;05;Ribeira Grande
+21;06;Vila Franca do Campo
+21;07;Vila do Porto
+22;01;Calheta
+22;02;Camara de Lobos
+22;03;Funchal
+22;04;Machico
+22;05;Ponta do Sol
+22;06;Porto Moniz
+22;07;Porto Santo
+22;08;Ribeira Brava
+22;09;Santa Cruz
+22;10;Santana
+22;11;S. Vicente
 31;05;Ponta do Sol
 31;06;Porto Moniz
 31;07;Ribeira Brava

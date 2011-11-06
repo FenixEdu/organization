@@ -16,6 +16,10 @@
 16;Viana do Castelo
 17;Vila Real
 18;Viseu
+19;Angra do Heroismo
+20;Horta
+21;Ponta Delgada
+22;Funchal
 31;Ilha da Madeira
 32;Ilha de Porto Santo
 41;Ilha de Santa Maria
