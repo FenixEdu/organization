@@ -25,19 +25,25 @@ public class PartiesAutoCompleteProvider implements AutoCompleteProvider {
 	for (final Party party : MyOrg.getInstance().getParties()) {
 	    final String partyName = StringNormalizer.normalize(party.getPartyName().getContent());
 	    if (hasMatch(input, partyName)) {
-		parties.add(party);
+		if (allowResult(party)) {
+		    parties.add(party);
+		}
 	    } else {
 		if (party.isUnit()) {
 		    final Unit unit = (Unit) party;
 		    final String unitAcronym = StringNormalizer.normalize(unit.getAcronym());
 		    if (hasMatch(input, unitAcronym)) {
-			parties.add(unit);
+			if (allowResult(party)) {
+			    parties.add(unit);
+			}
 		    }
 		} else if (party.isPerson()) {
 		    final Person person = (Person) party;
 		    final String username = person.hasUser() ? person.getUser().getUsername() : null;
 		    if (username != null && username.equalsIgnoreCase(trimmedValue)) {
-			parties.add(person);
+			if (allowResult(party)) {
+			    parties.add(person);
+			}
 		    }
 		} else {
 		    throw new Error("Unknown party type: " + party);
@@ -48,6 +54,10 @@ public class PartiesAutoCompleteProvider implements AutoCompleteProvider {
 	Collections.sort(parties, Party.COMPARATOR_BY_TYPE_AND_NAME);
 
 	return parties;
+    }
+
+    protected boolean allowResult(final Party party) {
+	return true;
     }
 
     private boolean hasMatch(final String[] input, final String partyNameParts) {
