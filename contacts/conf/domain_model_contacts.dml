@@ -39,6 +39,7 @@ class ContactsConfigurator {
 	}
 	
     class PartyContact {
+    	String ojbConcreteClass;
         Boolean defaultContact (REQUIRED);
         PartyContactType type;
         DateTime lastModifiedDate;
