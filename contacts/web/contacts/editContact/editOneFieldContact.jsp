@@ -9,7 +9,7 @@
 
 <html:xhtml/>
 <bean:define id="contactToEditClassName" name="contactToEditBean" property="className"/>
-<bean:define id="personEId" name="contactToEditBean" property="wrappedContact.person.OID"/>
+<bean:define id="personEId" name="contactToEditBean" property="wrappedContact.party.OID"/>
 <fr:edit id="contactToEditBean" name="contactToEditBean" action="/contacts.do?method=applyPartyContactEdit">
 
 		<fr:schema bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.ContactToEditBean">
@@ -43,6 +43,7 @@
    						<fr:property name="excludedValues" value="IMMUTABLE"/>
 					</logic:notEqual>
 				</logic:equal>
+				<fr:validator name="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
    			</fr:slot>
    			<fr:slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<fr:property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
@@ -58,4 +59,9 @@
 		<fr:destination name="invalid" path="<%="/contacts.do?method=editContacts&personEId="+ personEId%>"/>
 		<fr:destination name="invalid" path="/x"/>
 		--%>
+		
+		<fr:layout name="tabular">
+			<fr:property name="requiredMarkShown" value="true" />
+			<fr:property name="requiredMessageShown" value="true" />
+		</fr:layout>
 </fr:edit>

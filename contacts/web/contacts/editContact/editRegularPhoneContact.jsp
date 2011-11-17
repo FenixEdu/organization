@@ -23,14 +23,14 @@
             			<fr:property name="message" value="manage.contacts.edit.error.phone.invalidFormat" />
         		</fr:validator>
    			</fr:slot>
-			<fr:slot name="phoneType" key="module.contacts.domain.PhoneType.label" layout="menu-postback" >
-			<%-- if we aren't a supereditor and this is an institutional contact we can't change the content --%>
-			<logic:equal name="contactToEditBean" property="partyContactType" value="IMMUTABLE">
-				<logic:equal name="contactToEditBean" property="superEditor" value="false">
-					<fr:property name="disabled" value="true"/>
-				</logic:equal>
-			</logic:equal>
-			</fr:slot>
+<%-- 			<fr:slot name="phoneType" key="module.contacts.domain.PhoneType.label" layout="menu-postback" > --%>
+<!-- 			if we aren't a supereditor and this is an institutional contact we can't change the content -->
+<%-- 			<logic:equal name="contactToEditBean" property="partyContactType" value="IMMUTABLE"> --%>
+<%-- 				<logic:equal name="contactToEditBean" property="superEditor" value="false"> --%>
+<%-- 					<fr:property name="disabled" value="true"/> --%>
+<%-- 				</logic:equal> --%>
+<%-- 			</logic:equal> --%>
+<%-- 			</fr:slot> --%>
    			<fr:slot name="partyContactType" key="manage.contacts.edit.partyContactType.label">
 				<logic:equal name="contactToEditBean" property="superEditor" value="false">
 					<logic:equal name="contactToEditBean" property="partyContactType" value="IMMUTABLE">
@@ -38,6 +38,7 @@
 					</logic:equal>
    					<fr:property name="excludedValues" value="IMMUTABLE"/>
 				</logic:equal>
+				<fr:validator name="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
    			</fr:slot>
    			<fr:slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<fr:property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
@@ -78,6 +79,11 @@
 		<fr:destination name="invalid" path="/x"/>
 		--%>
 	</logic:equal>
+	
+	<fr:layout name="tabular">
+		<fr:property name="requiredMarkShown" value="true" />
+		<fr:property name="requiredMessageShown" value="true" />
+	</fr:layout>
 </fr:edit>
 <%-- select the visibility groups to which one should allow or deny the visibility. They groups should appear with the alias if it exists 
 <fr:edit action="/contacts.do?method=setVisibilityGroups" id="visibilityGroupsConcededBean" name="visibilityGroupsConcededBean" schema="myorg.modules.contacts.ListVisibilityGroups">

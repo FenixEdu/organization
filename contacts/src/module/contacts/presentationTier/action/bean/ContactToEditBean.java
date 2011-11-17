@@ -5,6 +5,13 @@ package module.contacts.presentationTier.action.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+
+import javax.servlet.http.HttpServletRequest;
 
 import module.contacts.domain.ContactsConfigurator;
 import module.contacts.domain.PartyContact;
@@ -41,10 +48,22 @@ public class ContactToEditBean implements Serializable {
 
     private PartyContactType partyContactType;
 
+    private String forwardPath;
+
+    private TreeMap<String, String> parametersMap;
+    
+    private final static String[] parametersToIgnore = { "forwardToAction", "forwardToMethod", "_request_checksum_", "method" };
+
+
     protected ContactToEditBean() {
 	setValue("");
 	setVisibilityGroups(new ArrayList<PersistentGroup>());
 	setSuperEditor(ContactsConfigurator.getInstance().isSuperEditor(UserView.getCurrentUser()));
+    }
+
+    public ContactToEditBean(String forwardPath) {
+	this();
+	setForwardPath(forwardPath);
     }
 
     public ContactToEditBean(PartyContact contactToWrap) {
@@ -60,6 +79,24 @@ public class ContactToEditBean implements Serializable {
 	if (getWrappedContact() instanceof PhysicalAddress) {
 	    PhysicalAddress physicalAddress = (PhysicalAddress) getWrappedContact();
 	    // TODO make this actually get the country - talk with pedro
+	}
+    }
+
+    public void setForwardPathAndParameters(String path, HttpServletRequest request) {
+	setForwardPath(path);
+	setParametersMap(new TreeMap<String, String>());
+
+	ArrayList<String> toIgnore = new ArrayList<String>(Arrays.asList(parametersToIgnore));
+
+	Iterator<?> entries = request.getParameterMap().entrySet().iterator();
+	while (entries.hasNext()) {
+	    Entry<String, Object> thisEntry = (Entry<String, Object>) entries.next();
+	    String key = thisEntry.getKey();
+	    String value = request.getParameter(key);
+
+	    if (!toIgnore.contains(key)) {
+		getParametersMap().put(key, value);
+	    }
 	}
     }
 
@@ -125,6 +162,57 @@ public class ContactToEditBean implements Serializable {
 
     public boolean isDefaultContact() {
 	return defaultContact;
+    }
+
+    public void setForwardPath(String forwardPath) {
+	this.forwardPath = forwardPath;
+    }
+
+    public String getForwardPath() {
+	return forwardPath;
+    }
+
+    public String getForwardPathWithParameters() {
+	String ret = getForwardPath();
+
+	Iterator<?> entries = getParametersMap().entrySet().iterator();
+	while (entries.hasNext()) {
+	    Entry<String, String> thisEntry = (Entry<String, String>) entries.next();
+	    String key = thisEntry.getKey();
+	    Object value = thisEntry.getValue();
+
+	    ret += (!ret.contains("?")) ? "?" : "&";
+	    ret += key + "=" + value;
+	}
+
+	return ret;
+    }
+
+    public void setParametersMap(TreeMap<String, String> treeMap) {
+	this.parametersMap = treeMap;
+    }
+
+    public Map<String, String> getParametersMap() {
+	return parametersMap;
+    }
+
+    public static String getForwardPathFor(String path, HttpServletRequest request) {
+	String ret = path;
+	ArrayList<String> toIgnore = new ArrayList<String>(Arrays.asList(parametersToIgnore));
+	
+	Iterator<?> entries = request.getParameterMap().entrySet().iterator();
+	while (entries.hasNext()) {
+	    Entry<String, Object> thisEntry = (Entry<String, Object>) entries.next();
+	    String key = thisEntry.getKey();
+	    String value = request.getParameter(key);
+
+	    if (!toIgnore.contains(key)) {
+		 ret += (!ret.contains("?")) ? "?" : "&";
+		 ret += key + "=" + value;
+	    }
+	}
+	
+	return ret;
     }
 
 }

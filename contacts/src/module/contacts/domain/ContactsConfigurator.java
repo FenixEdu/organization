@@ -40,9 +40,9 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
      */
     public static String getJSRegExp(String className) {
 	if (className.equalsIgnoreCase(WebAddress.class.getName())) {
-	    return "(http|https):\\/\\/(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?";
+	    return "((http|https):\\/\\/)?(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?";
 	} else if (className.equalsIgnoreCase(EmailAddress.class.getName())) {
-	    return "/(.*@(\\w+\\.\\w+)+){1}/";
+	    return "(\\w+(\\.\\w)*@(\\w+\\.\\w+)+){1}";
 	}
 	return "(.*)";
 

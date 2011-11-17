@@ -34,6 +34,10 @@ public class ContactToCreateBean extends ContactToEditBean implements Serializab
 	super();
     }
 
+    public ContactToCreateBean(String forwardPath) {
+	super(forwardPath);
+    }
+
     public String getSchemaSuffix() {
 	String toReturn = new String();
 	switch (partyContactKind) {

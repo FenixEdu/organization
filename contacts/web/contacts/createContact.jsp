@@ -23,13 +23,29 @@
 		<logic:notEmpty name="contactToCreateBean" property="partyContactKind">
 			<logic:equal name="contactToCreateBean" property="partyContactKind.name" value="PHONE">
 				<fr:slot name="phoneType" key="module.contacts.domain.PhoneType.label" layout="menu-postback" >
+					<fr:validator name="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 				</fr:slot>
 			</logic:equal>
 		</logic:notEmpty>
 		</fr:schema>
 		<fr:destination name="postback" path="/contacts.do?method=chooseKindOfContactPostBack"/>
-		<fr:destination name="cancel" path="/contacts.do?method=createPartyContact"/>
+		<fr:destination name="cancel" path="/contacts.do?method=cancelContactOperation"/>
 		<fr:destination name="invalid" path="/contacts.do?method=createPartyContact"/>
+
+		<logic:notEmpty name="contactToCreateBean" property="partyContactKind">
+			<fr:layout name="tabular">
+				<fr:property name="requiredMarkShown" value="true" />
+				<fr:property name="requiredMessageShown" value="false" />
+			</fr:layout>
+		</logic:notEmpty>
+		
+		<logic:empty name="contactToCreateBean" property="partyContactKind">
+			<fr:layout name="tabular">
+				<fr:property name="requiredMarkShown" value="true" />
+				<fr:property name="requiredMessageShown" value="true" />
+			</fr:layout>
+		</logic:empty>
+		
 		<%-- 
 		<fr:destination name="invalid" path="/x"/>
 		--%>
@@ -54,18 +70,51 @@
 				</logic:equal>
    			</fr:slot>
    		</fr:schema>
+   		
+   		<logic:notEqual name="contactToCreateBean" property="partyContactKind.name" value="PHONE">
+  			<fr:layout name="tabular">
+				<fr:property name="requiredMarkShown" value="true" />
+				<fr:property name="requiredMessageShown" value="false" />
+			</fr:layout>
+   		</logic:notEqual>
+   		
+   		<logic:equal name="contactToCreateBean" property="partyContactKind.name" value="PHONE">
+   			<logic:notEmpty name="contactToCreateBean" property="phoneType">
+				<fr:layout name="tabular">
+					<fr:property name="requiredMarkShown" value="true" />
+					<fr:property name="requiredMessageShown" value="false" />
+				</fr:layout>
+			</logic:notEmpty>
+		
+			<logic:empty name="contactToCreateBean" property="phoneType">
+				<fr:layout name="tabular">
+					<fr:property name="requiredMarkShown" value="true" />
+					<fr:property name="requiredMessageShown" value="true" />
+				</fr:layout>
+			</logic:empty>
+   		</logic:equal>
+   		
+   		
    	</fr:edit>
 	<%-- *END* The type of contact i.e. Institutional, Work, etc *END* --%>
 	<logic:equal name="contactToCreateBean" property="partyContactKind.name" value="PHONE">
 		<logic:notEmpty name="contactToCreateBean" property="phoneType" >
 			<bean:define id="schemaSuffix" name="contactToCreateBean" property="schemaSuffix"/>
 			<fr:edit id="contactToCreateBean" nested="true"  name="contactToCreateBean" schema="<%="myorg.modules.contacts.CreateContact" + schemaSuffix.toString()%>">
+				<fr:layout name="tabular">
+					<fr:property name="requiredMarkShown" value="true" />
+					<fr:property name="requiredMessageShown" value="true" />
+				</fr:layout>
 			</fr:edit>
 		</logic:notEmpty>
 	</logic:equal>
 <logic:equal name="contactToCreateBean" property="partyContactKind.name" value="WEB_ADDRESS">
 			<bean:define id="schemaSuffix" name="contactToCreateBean" property="schemaSuffix"/>
 			<fr:edit name="contactToCreateBean" nested="true" schema="<%="myorg.modules.contacts.CreateContact" + schemaSuffix.toString()%>">
+				<fr:layout name="tabular">
+					<fr:property name="requiredMarkShown" value="true" />
+					<fr:property name="requiredMessageShown" value="true" />
+				</fr:layout>
 			</fr:edit>
 </logic:equal>
 <logic:equal name="contactToCreateBean" property="partyContactKind.name" value="PHYSICAL_ADDRESS">
@@ -81,6 +130,11 @@
 				</fr:slot>
 			</fr:schema>
 			<fr:destination name="postback" path="/contacts.do?method=chooseGeographicLevelPostBack"/>
+	
+			<fr:layout name="tabular">
+				<fr:property name="requiredMarkShown" value="true" />
+				<fr:property name="requiredMessageShown" value="true" />
+			</fr:layout>
 		</fr:edit>
 	<logic:present name="contactToCreateBean" property="physicalAddressBean.country">
 	<%-- If we indeed have a country already selected--%>
@@ -97,6 +151,7 @@
 								 <fr:property name="providerClass" value="module.contacts.presentationTier.renderers.providers.GeographicLocationsProvider"/> 
 								 <fr:property name="eachSchema" value="myorg.modules.contacts.GeographicLocation"/>
 								 <fr:property name="format" value="${name}"/>
+								 <fr:validator name="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 							</fr:slot>
 						</fr:schema>
 						<fr:layout name="matrix">
@@ -108,6 +163,11 @@
 						
 						</fr:layout>
 						<fr:destination name="postback" path="/contacts.do?method=chooseGeographicLevelPostBack"/>
+					
+						<fr:layout name="tabular">
+							<fr:property name="requiredMarkShown" value="true" />
+							<fr:property name="requiredMessageShown" value="true" />
+						</fr:layout>
 					</fr:edit>
 				</td>
 			</tr>
@@ -127,8 +187,14 @@
         		<fr:property name="eachLayout" value="values"/>
         		<fr:property name="classes" value="nobullet noindent"/>
         		<fr:property name="sortBy" value="name"/>
+        		<fr:validator name="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 	  		  </fr:slot>
 			</fr:schema>
+			
+			<fr:layout name="tabular">
+				<fr:property name="requiredMarkShown" value="true" />
+				<fr:property name="requiredMessageShown" value="true" />
+			</fr:layout>
 		</fr:edit>
 	</logic:notEmpty>
 	</logic:present>
@@ -137,9 +203,15 @@
 <logic:equal name="contactToCreateBean" property="partyContactKind.name" value="EMAIL_ADDRESS">
 			<bean:define id="schemaSuffix" name="contactToCreateBean" property="schemaSuffix"/>
 			<fr:edit id="contactToCreateSpecific" name="contactToCreateBean" schema="<%="myorg.modules.contacts.CreateContact" + schemaSuffix.toString()%>">
+				<fr:layout name="tabular">
+					<fr:property name="requiredMarkShown" value="true" />
+					<fr:property name="requiredMessageShown" value="true" />
+				</fr:layout>
 			</fr:edit>
 </logic:equal>
 </logic:notEmpty>
+
+<br>
 	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/></html:submit>
 	<html:cancel styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/></html:cancel>
 </fr:form>

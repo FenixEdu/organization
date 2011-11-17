@@ -7,7 +7,6 @@ import java.util.Set;
 
 import module.organization.domain.Party;
 import module.organization.domain.Person;
-import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 import myorg.domain.groups.PersistentGroup;
@@ -33,14 +32,28 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     }
 
     static protected void validateUser(User userCreatingTheContact, Party partyThatWillOwnTheContact, PartyContactType type) {
-	//joantune: for now the validation isn't done at this level!
-	//	if (isOwner(userCreatingTheContact, partyThatWillOwnTheContact) && !type.equals(PartyContactType.IMMUTABLE))
-	//	    // if he is the owner and the contact isn't immutable, then it can
-	//	    // edit it
-	//	    return;
-	//	if (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(userCreatingTheContact))
-	//	    return;
-	//	throw new DomainException("manage.contacts.edit.denied.nouser");
+	if (!type.equals(PartyContactType.IMMUTABLE)) {
+	    return;
+	}
+
+	// TODO: Tornar esta validacao parametrizavel
+
+	// if (isOwner(userCreatingTheContact, partyThatWillOwnTheContact) &&
+	// !type.equals(PartyContactType.IMMUTABLE))
+	// // if he is the owner and the contact isn't immutable, then it can
+	// // edit it
+	// return;
+	// if
+	// (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(userCreatingTheContact))
+	// return;
+	//
+	// // Enterprises do not have users and NPE members can edit the
+	// contacts!
+	// if (JobBankSystem.getInstance().isNPEMember(userCreatingTheContact)
+	// && Enterprise.isEnterprise(partyThatWillOwnTheContact))
+	// return;
+
+	throw new DomainException("manage.contacts.edit.denied.nouser");
 
     }
 
@@ -117,10 +130,12 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      */
     @Service
     public void setContactValue(String value) {
-	if (UserView.getCurrentUser() != null && !isEditableBy(UserView.getCurrentUser())) {
-		throw new DomainException("manage.contacts.edit.denied", "resources.ContactsResources", UserView.getCurrentUser()
-			.getUsername());
-	}
+	// if (UserView.getCurrentUser() != null /*&&
+	// !isEditableBy(UserView.getCurrentUser())*/) {
+	// throw new DomainException("manage.contacts.edit.denied",
+	// "resources.ContactsResources", UserView.getCurrentUser()
+	// .getUsername());
+	// }
 	setValue(value);
     }
 
@@ -285,8 +300,11 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 
     @Service
     public void deleteByUser(User currentUser) {
-	if (!isEditableBy(currentUser))
-	    throw new DomainException("manage.contacts.edit.denied", UserView.getCurrentUser().getUsername());
+	// Confirmations not done here anymore
+
+	// if (!isEditableBy(currentUser))
+	// throw new DomainException("manage.contacts.edit.denied",
+	// UserView.getCurrentUser().getUsername());
 	delete();
     }
 

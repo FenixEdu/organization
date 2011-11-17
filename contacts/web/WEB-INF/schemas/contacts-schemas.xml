@@ -302,13 +302,15 @@
 <schema name="myorg.modules.contacts.CreateContact.WebAddress.regular" bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.ContactToCreateBean">
 			<slot name="value" key="module.contacts.domain.WebAddress">
 				<property name="size" value="50" />
-        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-        			<!--  
-        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
-        			<property name="regexp" value="(http|https):\\/\\/(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&amp;%@!\\-\\/]))?" />
-        			<property name="message" value="manage.contacts.edit.error.generic.invalidFormat" />
-        		</validator>
-        			-->
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+<!--         		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator"> -->
+<!--         			<property name="regexp" value="((http|https):\\/\\/)?(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?" /> -->
+<!--         			<property name="message" value="manage.contacts.edit.error.generic.invalidFormat" /> -->
+<!--         		</validator> -->
+        	    <validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        			<property name="bundle" value="CONTACTS_RESOURCES"/>
+           	 		<property name="regexp" value="((http|https):\/\/)?(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/(.*))?" />
+          		  	<property name="message" value="manage.contacts.CommonAddressBean.city.invalidFormat" />
         		</validator>
    			</slot>
    			<!-- 
@@ -328,13 +330,15 @@
 <schema name="myorg.modules.contacts.CreateContact.WebAddress.superEditor" bundle="CONTACTS_RESOURCES" type="module.contacts.presentationTier.action.bean.ContactToCreateBean">
 			<slot name="value" key="module.contacts.domain.WebAddress">
 				<property name="size" value="50" />
-        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
-        		<!--  
-        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
-        			<property name="regexp" value="(http|https):\\/\\/(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&amp;%@!\\-\\/]))?" />
-        			<property name="message" value="manage.contacts.edit.error.generic.invalidFormat" />
-        		</validator>
-        			-->
+        		<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+<!--         		<validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator"> -->
+<!--         			<property name="regexp" value="((http|https):\\/\\/)?(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?" /> -->
+<!--         			<property name="message" value="manage.contacts.edit.error.generic.invalidFormat" /> -->
+<!--         		</validator> -->
+        	    <validator class="pt.ist.fenixWebFramework.renderers.validators.RegexpValidator">
+        			<property name="bundle" value="CONTACTS_RESOURCES"/>
+           	 		<property name="regexp" value="((http|https):\/\/)?(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/(.*))?" />
+          		  	<property name="message" value="manage.contacts.CommonAddressBean.city.invalidFormat" />
         		</validator>
    			</slot>
    			<!-- 

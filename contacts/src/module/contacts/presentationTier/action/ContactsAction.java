@@ -50,6 +50,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
+import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 import pt.utl.ist.fenix.tools.util.CollectionPager;
@@ -81,7 +82,8 @@ public class ContactsAction extends ContextBaseAction {
 	ContactBean emailBean = getRenderedObject("xpto");
 	Person person = UserView.getCurrentUser().getPerson();
 
-	//	EmailAddress.createNewEmailAddress(emailBean.getValue(), person, false, PartyContactType.PERSONAL,);
+	// EmailAddress.createNewEmailAddress(emailBean.getValue(), person,
+	// false, PartyContactType.PERSONAL,);
 
 	return frontPage(mapping, form, request, response);
 
@@ -115,8 +117,9 @@ public class ContactsAction extends ContextBaseAction {
 	 */
 	// physical address TODO improve it
 
-	//	PhysicalAddress.createNewPhysicalAddress(Country.getPortugal(), "none", person, true, PartyContactType.PERSONAL)
-	//		.setVisibleTo(existingVisbilityGroups);
+	// PhysicalAddress.createNewPhysicalAddress(Country.getPortugal(),
+	// "none", person, true, PartyContactType.PERSONAL)
+	// .setVisibleTo(existingVisbilityGroups);
 
 	/*
 	 * WebAddress.createNewWebAddress("http://johndoerulez.com", person,
@@ -169,7 +172,13 @@ public class ContactsAction extends ContextBaseAction {
 
 	GroupAliasBean groupAliasBean = new GroupAliasBean();
 	groupAliasBean.setGroupToEdit(persistentGroup);
-	groupAliasBean.setAlias(persistentGroup.getGroupAlias().getGroupAlias());
+	GroupAlias groupAlias = persistentGroup.getGroupAlias();
+	if (groupAlias == null) {
+	    groupAliasBean.setAlias(null);
+	} else {
+	    groupAliasBean.setAlias(persistentGroup.getGroupAlias().getGroupAlias());
+	}
+
 	request.setAttribute("groupAliasBean", groupAliasBean);
 
 	return forward(request, "/contacts/configure/setPersistentGroupAlias.jsp");
@@ -363,10 +372,28 @@ public class ContactsAction extends ContextBaseAction {
 
     }
 
+    public final ActionForward cancelContactOperation(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	String redirectPath = getRedirectPath(request);
+
+	if (redirectPath != null) {
+	    return redirect(request, redirectPath);
+	}
+
+	return frontPage(mapping, form, request, response);
+    }
+
     // Edit contact info
 
     public final ActionForward editContacts(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
+
+	String redirectPath = getRedirectPath(request);
+
+	if (redirectPath != null) {
+	    return redirect(request, redirectPath);
+	}
+
 	final PersistentGroup persistentGroup = AbstractDomainObject.fromExternalId(request.getParameter("groupId"));
 
 	Person person = null;
@@ -412,19 +439,40 @@ public class ContactsAction extends ContextBaseAction {
 
     }
 
+    // Usefull if other modules use the interfaces to create contacts!
+    private String getRedirectPath(HttpServletRequest request) {
+	ContactToEditBean bean = getRenderedObject();
+	if (bean != null && bean.getForwardPath() != null && !bean.getForwardPath().equals("")) {
+	    return bean.getForwardPathWithParameters();
+	}
+
+	String forwardActionPath = request.getParameter("forwardToAction");
+	String forwardMethodPath = request.getParameter("forwardToMethod");
+
+	if (forwardMethodPath != null && forwardActionPath != null) {
+	    String path = "/" + forwardActionPath + "?method=" + forwardMethodPath;
+	    return ContactToEditBean.getForwardPathFor(path, request);
+	}
+
+	return null;
+    }
+
     public final ActionForward deletePartyContact(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
-	PartyContact contactToDelete = getDomainObject(request, "partyContactOid");
-	// check if the contact can be edited or not by the user
-	if (!contactToDelete.isEditableBy(UserView.getCurrentUser()))
-	    throw new DomainException("manage.contacts.edit.denied", UserView.getCurrentUser().getUsername());
+	// NOTE: this confirmations should not be done here!
+
+	// // check if the contact can be edited or not by the user
+	// if (!contactToDelete.isEditableBy(UserView.getCurrentUser()))
+	// throw new DomainException("manage.contacts.edit.denied",
+	// UserView.getCurrentUser().getUsername());
 
 	// let's set the personEId so that it is caught by the editContacts and
 	// we continue to edit the contacts of who we have been editing
-	request.setAttribute("personEId", contactToDelete.getOwner().getExternalId());
+	// request.setAttribute("personEId",
+	// contactToDelete.getOwner().getExternalId());
 
+	PartyContact contactToDelete = getDomainObject(request, "partyContactOid");
 	contactToDelete.deleteByUser(UserView.getCurrentUser());
-
 	return editContacts(mapping, form, request, response);
 
     }
@@ -454,6 +502,14 @@ public class ContactsAction extends ContextBaseAction {
 	    request.setAttribute("contactToEditBean", contactToEditBean);
 	} else
 	    contactToEdit = contactToEditBean.getWrappedContact();
+
+	String forwardActionPath = request.getParameter("forwardToAction");
+	String forwardMethodPath = request.getParameter("forwardToMethod");
+
+	if (forwardMethodPath != null && forwardActionPath != null) {
+	    String path = "/" + forwardActionPath + "?method=" + forwardMethodPath;
+	    contactToEditBean.setForwardPathAndParameters(path, request);
+	}
 
 	// create the group selector bean
 	GroupsSelectorBean visibilityGroupsConcededBean = new GroupsSelectorBean();
@@ -501,6 +557,10 @@ public class ContactsAction extends ContextBaseAction {
 	if (contactToEdit instanceof Phone)
 	    ((Phone) contactToEdit).changePhoneType(contactToEditBean.getPhoneType());
 
+	// change the type
+
+	setPartyContactType(contactToEdit, contactToEditBean.getPartyContactType());
+
 	// change the visibility
 
 	contactToEdit.setVisibleTo(contactToEditBean.getVisibilityGroups());
@@ -509,10 +569,17 @@ public class ContactsAction extends ContextBaseAction {
 
 	Person owner = contactToEdit.getOwner();
 
-	request.setAttribute("personEId", owner.getExternalId());
+	if (owner != null) {
+	    request.setAttribute("personEId", owner.getExternalId());
+	}
 
 	// return frontPage(mapping, form, request, response);
 	return editContacts(mapping, form, request, response);
+    }
+
+    @Service
+    private void setPartyContactType(PartyContact contactToEdit, PartyContactType partyContactType) {
+	contactToEdit.setType(partyContactType);
     }
 
     public final ActionForward applyPartyContactCreate(final ActionMapping mapping, final ActionForm form,
@@ -526,9 +593,9 @@ public class ContactsAction extends ContextBaseAction {
 	PartyContactType partyContactType = contactToCreateBean.getPartyContactType();
 	PhysicalAddressBean addressBean = contactToCreateBean.getPhysicalAddressBean();
 
-	//take care of the visibility groups associated with the contact
+	// take care of the visibility groups associated with the contact
 	ArrayList<PersistentGroup> visibilityGroups = new ArrayList<PersistentGroup>(contactToCreateBean.getVisibilityGroups());
-
+	
 	switch (contactToCreateBean.getPartyContactKind()) {
 	case EMAIL_ADDRESS:
 	    EmailAddress.createNewEmailAddress(value, party, isDefaultContact, partyContactType, userCreatingTheContact,
@@ -550,14 +617,22 @@ public class ContactsAction extends ContextBaseAction {
 	}
 
 	return editContacts(mapping, form, request, response);
-
     }
 
     public final ActionForward createPartyContact(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 
-	Person personToCreateContact = (Person) getDomainObject(request.getParameter("personOid"));
+	String forwardActionPath = request.getParameter("forwardToAction");
+	String forwardMethodPath = request.getParameter("forwardToMethod");
+
+	Party personToCreateContact = (Party) getDomainObject(request.getParameter("personOid"));
 	ContactToCreateBean contactToCreateBean = new ContactToCreateBean();
+
+	if (forwardMethodPath != null && forwardActionPath != null) {
+	    String path = "/" + forwardActionPath + "?method=" + forwardMethodPath;
+	    contactToCreateBean.setForwardPathAndParameters(path, request);
+	}
+
 	contactToCreateBean.setParty(personToCreateContact);
 	request.setAttribute("contactToCreateBean", contactToCreateBean);
 
@@ -628,7 +703,8 @@ public class ContactsAction extends ContextBaseAction {
 			geographicLevels.put(nextSubdivision.getName().getContent(), null);
 		    } else {
 			AddressBean physicalAddressBean = AddressBeanFactory.createAddressBean(country);
-			//get the last geographicLocation out of the levels and add it to the Bean
+			// get the last geographicLocation out of the levels and
+			// add it to the Bean
 			physicalAddressBean
 				.setGeographicLocation(geographicLevelsOrdered.get(geographicLevelsOrdered.size() - 1));
 			contactToCreateBean.getPhysicalAddressBean().setAddressBean(physicalAddressBean);
