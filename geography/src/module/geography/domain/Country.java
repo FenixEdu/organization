@@ -39,6 +39,7 @@ import myorg.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -50,6 +51,7 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 public class Country extends Country_Base implements GeographicConstants {
 
     public static final Comparator<Country> COMPARATOR_BY_NAME = new Comparator<Country>() {
+	@Override
 	public int compare(final Country country1, Country country2) {
 	    final String name1 = country1.getName().getContent();
 	    final String name2 = country2.getName().getContent();
@@ -105,13 +107,27 @@ public class Country extends Country_Base implements GeographicConstants {
 	return StringsUtil.makeName("País", COUNTRY_PARTYTYPE_NAME);
     }
 
+    @Service
     public AddressPrinter getAddressPrinter() {
+	if (super.getIAddressPrinter() == null) {
+	    setIAddressPrinter(AddressPrinter.class);
+	}
+
+	AddressPrinter ap = null;
 	try {
-	    return (AddressPrinter) super.getIAddressPrinter().getConstructor().newInstance();
+	    ap = (AddressPrinter) super.getIAddressPrinter().getConstructor().newInstance();
 	} catch (Exception e) {
 	    throw new DomainException("error.instance.iaddressprinter", e);
 	}
 
+	return ap;
+	// try {
+	// return (AddressPrinter)
+	// super.getIAddressPrinter().getConstructor().newInstance();
+	// } catch (Exception e) {
+	// setIAddressPrinter(GeneralIAddressPrinter.class);
+	// throw new DomainException("error.instance.iaddressprinter", e);
+	// }
     }
 
     /**
