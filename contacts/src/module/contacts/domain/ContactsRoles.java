@@ -14,12 +14,11 @@ public enum ContactsRoles implements IRoleEnum {
 
     @Override
     public String getRoleName() {
-	return getClass().getName() + "." + name();
+	return name();
     }
-    
-    public String getLocalizedName()
-    {
-    	return getRoleName();
+
+    public String getLocalizedName() {
+	return getRoleName();
     }
 
 }
