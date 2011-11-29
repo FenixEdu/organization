@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import myorg.domain.MyOrg;
 import myorg.domain.groups.PersistentGroup;
-
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 
@@ -36,7 +35,7 @@ public class PersistentGroupsProvider implements DataProvider {
      */
     @Override
     public Object provide(Object source, Object currentValue) {
-	final ArrayList<PersistentGroup> listOfGroups = new ArrayList<PersistentGroup>(MyOrg.getInstance().getPersistentGroups());
+	final ArrayList<PersistentGroup> listOfGroups = new ArrayList<PersistentGroup>(MyOrg.getInstance().getSystemGroups());
 	return listOfGroups;
     }
 
