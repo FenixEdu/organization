@@ -73,6 +73,7 @@
    		
    		<logic:notEqual name="contactToCreateBean" property="partyContactKind.name" value="PHONE">
   			<fr:layout name="tabular">
+			<fr:property name="classes" value="tview-middle" />
 				<fr:property name="requiredMarkShown" value="true" />
 				<fr:property name="requiredMessageShown" value="false" />
 			</fr:layout>
@@ -81,6 +82,7 @@
    		<logic:equal name="contactToCreateBean" property="partyContactKind.name" value="PHONE">
    			<logic:notEmpty name="contactToCreateBean" property="phoneType">
 				<fr:layout name="tabular">
+					<fr:property name="classes" value="tview-middle" />
 					<fr:property name="requiredMarkShown" value="true" />
 					<fr:property name="requiredMessageShown" value="false" />
 				</fr:layout>
@@ -88,6 +90,7 @@
 		
 			<logic:empty name="contactToCreateBean" property="phoneType">
 				<fr:layout name="tabular">
+					<fr:property name="classes" value="tview-middle" />
 					<fr:property name="requiredMarkShown" value="true" />
 					<fr:property name="requiredMessageShown" value="true" />
 				</fr:layout>
