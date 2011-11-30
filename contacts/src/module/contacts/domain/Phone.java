@@ -1,6 +1,6 @@
 package module.contacts.domain;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import module.organization.domain.Party;
 import myorg.domain.User;
@@ -14,7 +14,7 @@ import pt.ist.fenixWebFramework.services.Service;
 public class Phone extends Phone_Base {
 
     public Phone(PhoneType phoneType, String number, Party party, Boolean defaultContact, PartyContactType partyContactType,
-	    ArrayList<PersistentGroup> visibilityGroups) {
+	    List<PersistentGroup> visibilityGroups) {
 	super();
 
 	super.setVisibleTo(visibilityGroups);
@@ -30,17 +30,22 @@ public class Phone extends Phone_Base {
     /**
      * Creates, returns and associates a Phone with the given party
      * 
-     * @param phoneType the phoneType {@link PhoneType}
-     * @param number the telephone number
-     * @param party the party to which this phone belongs
-     * @param defaultContact if it is the default contact for this party
-     * @param partyContactType the type of contact {@link PartyContactType}
+     * @param phoneType
+     *            the phoneType {@link PhoneType}
+     * @param number
+     *            the telephone number
+     * @param party
+     *            the party to which this phone belongs
+     * @param defaultContact
+     *            if it is the default contact for this party
+     * @param partyContactType
+     *            the type of contact {@link PartyContactType}
      * @param visibilityGroups
      * @return a Phone with the given parameters
      */
     @Service
     public static Phone createNewPhone(PhoneType phoneType, String number, Party party, Boolean defaultContact,
-	    PartyContactType partyContactType, User userCreatingTheContact, ArrayList<PersistentGroup> visibilityGroups) {
+	    PartyContactType partyContactType, User userCreatingTheContact, List<PersistentGroup> visibilityGroups) {
 
 	// validate that the user can actually create this contact
 	validateUser(userCreatingTheContact, party, partyContactType);

@@ -1,6 +1,6 @@
 package module.contacts.domain;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import module.organization.domain.Party;
 import myorg.domain.User;
@@ -14,7 +14,7 @@ import pt.ist.fenixWebFramework.services.Service;
 public class WebAddress extends WebAddress_Base {
 
     public WebAddress(String url, Party party, Boolean defaultContact, PartyContactType type,
-	    ArrayList<PersistentGroup> visibilityGroups) {
+	    List<PersistentGroup> visibilityGroups) {
 	super();
 
 	super.setVisibleTo(visibilityGroups);
@@ -30,17 +30,22 @@ public class WebAddress extends WebAddress_Base {
      * 
      * Creates, returns and associates a WebAddress with the given party
      * 
-     * @param url the URL of the web address
-     * @param party the party to which the contact belongs
-     * @param defaultContact if it is the default contact for this party
-     * @param type the type of contact {@link PartyContactType}
-     * @param visibilityGroups the visibility groups that the user defined to
-     *            make the contact visible to
+     * @param url
+     *            the URL of the web address
+     * @param party
+     *            the party to which the contact belongs
+     * @param defaultContact
+     *            if it is the default contact for this party
+     * @param type
+     *            the type of contact {@link PartyContactType}
+     * @param visibilityGroups
+     *            the visibility groups that the user defined to make the
+     *            contact visible to
      * @return an WebAddress with the given parameters
      */
     @Service
     public static WebAddress createNewWebAddress(String url, Party party, Boolean defaultContact, PartyContactType type,
-	    User userCreatingTheContact, ArrayList<PersistentGroup> visibilityGroups) {
+	    User userCreatingTheContact, List<PersistentGroup> visibilityGroups) {
 	// validate that the user can actually create this contact
 	validateUser(userCreatingTheContact, party, type);
 
