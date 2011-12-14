@@ -26,7 +26,7 @@
    			 -->
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -60,7 +60,7 @@
    			 -->
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -88,7 +88,7 @@
    			-->
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -119,7 +119,7 @@
    			</slot>
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -156,7 +156,7 @@
    			</slot>
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -185,7 +185,7 @@
    			 -->
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -219,7 +219,7 @@
    			 -->
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -256,7 +256,7 @@
    			-->
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -287,7 +287,7 @@
    			 -->
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -320,7 +320,7 @@
 			 -->
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -346,7 +346,7 @@
    			 -->
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -366,7 +366,7 @@
    			 -->
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -382,7 +382,7 @@
    			<!-- <slot name="partyContactType" key="manage.contacts.edit.partyContactType.label"/>  -->
    			<slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>
@@ -393,7 +393,7 @@
 <schema name="myorg.modules.contacts.ListVisibilityGroups" type="module.contacts.presentationTier.action.bean.GroupsSelectorBean" bundle="CONTACTS_RESOURCES">
 	<slot name="groups" bundle="CONTACTS_RESOURCES" key="manage.contacts.visibility.groups.label" layout="option-select">
         <property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        <property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        <property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         <property name="eachLayout" value="values"/>
         <property name="classes" value="nobullet noindent"/>
         <property name="sortBy" value="name"/>
@@ -442,6 +442,10 @@
 
 <schema name="myorg.modules.contacts.Groups.selectItem" type="myorg.domain.groups.PersistentGroup">
 	<slot name="name"/>
+</schema>
+
+<schema name="myorg.modules.contacts.Groups.selectItemByAlias" type="myorg.domain.groups.PersistentGroup">
+	<slot name="groupAlias.groupAlias"/>
 </schema>
 
 <schema name="myorg.modules.contacts.PhysicalAddress.countryList" type="module.geography.domain.Country">
@@ -537,7 +541,7 @@
      </slot>
      <slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<property name="eachLayout" value="values"/>
         		<property name="classes" value="nobullet noindent"/>
         		<property name="sortBy" value="name"/>

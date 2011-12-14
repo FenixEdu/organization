@@ -6,7 +6,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
-
+asdf
 <html:xhtml/>
 <bean:define id="contactToEditClassName" name="contactToEditBean" property="className"/>
 <bean:define id="personEId" name="contactToEditBean" property="wrappedContact.party.OID"/>
@@ -47,7 +47,7 @@
    			</fr:slot>
    			<fr:slot name="visibilityGroups" bundle="CONTACTS_RESOURCES" key="manage.contacts.edit.visibilityGroups.label" layout="option-select">
         		<fr:property name="providerClass" value="module.contacts.presentationTier.renderers.providers.VisibilityGroupsProvider" />
-        		<fr:property name="eachSchema" value="myorg.modules.contacts.Groups.selectItem"/>
+        		<fr:property name="eachSchema" value="myorg.modules.contacts.Groups.selectItemByAlias"/>
         		<fr:property name="eachLayout" value="values"/>
         		<fr:property name="classes" value="nobullet noindent"/>
         		<fr:property name="sortBy" value="name"/>

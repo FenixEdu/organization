@@ -18,7 +18,7 @@
 <logic:notEmpty name="sortedContacts" >
 <%-- Visibility of the contacts--%>
 <h2><bean:message key="edit.person.information.and.contacts.visibility.label" bundle="CONTACTS_RESOURCES"/></h2>
-
+qwe
 <table class="tstyle3">
 	<tr>
 		<th/>

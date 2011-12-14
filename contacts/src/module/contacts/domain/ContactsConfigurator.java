@@ -9,12 +9,13 @@ import myorg.domain.User;
 import myorg.domain.groups.PersistentGroup;
 import myorg.domain.groups.Role;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 import dml.runtime.Relation;
 import dml.runtime.RelationListener;
 
 public class ContactsConfigurator extends ContactsConfigurator_Base {
-	
-	public static final int SEARCH_MAXELEMENTS_PER_PAGE = 10;
+
+    public static final int SEARCH_MAXELEMENTS_PER_PAGE = 10;
 
     // TODO validate this singleton implementation
     private ContactsConfigurator() {
@@ -105,6 +106,9 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
 	// add the ones on the groups to the list of existing
 	for (PersistentGroup persistentGroup : groups) {
 	    if (!existingGroups.contains(persistentGroup)) {
+		if (persistentGroup.getGroupAlias() == null) {
+		    GroupAlias.create(persistentGroup, new MultiLanguageString(persistentGroup.getName()));
+		}
 		addVisibilityGroups(persistentGroup);
 	    }
 	}
@@ -143,13 +147,11 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
 	Role.getRole(getContactsRoles().MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).removeUsers(user);
     }
 
-
     public List<Person> getPersonsByDetails(User userSearching, String searchName, String searchUsername, String searchPhone,
 	    PhoneType searchPhoneType, String searchAddress, String searchWebAddress, String searchEmailAddress) {
 	return ContactsConfiguratorAux.getPersonsByDetailsV2(userSearching, searchName, searchUsername, searchPhone,
 		searchPhoneType, searchAddress, searchWebAddress, searchEmailAddress);
     }
-
 
     /**
      * 
@@ -217,7 +219,6 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
     //
     // return searchByNameResult;
     // }
-
 
     //
     // private boolean hasMatch(final String[] input, final String
