@@ -40,13 +40,11 @@
 <schema name="organization.PartyTypeConnectionRuleBean" type="module.organization.domain.connectionRules.PartyTypeConnectionRule$PartyTypeConnectionRuleBean" bundle="ORGANIZATION_RESOURCES">
 	<slot name="parent" layout="menu-select" key="label.PartyTypeConnectionRule.allowed.parent.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
-		<property name="choiceType" value="module.organization.domain.PartyType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
 	</slot>
 	<slot name="child" layout="menu-select" key="label.PartyTypeConnectionRule.allowed.child.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
-		<property name="choiceType" value="module.organization.domain.PartyType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
 	</slot>
@@ -76,7 +74,6 @@
 	</slot>
 	<slot name="partyType" layout="menu-select" key="label.unit.party.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
-		<property name="choiceType" value="module.organization.domain.PartyType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
 	</slot>
@@ -94,13 +91,11 @@
 	</slot>
 	<slot name="partyType" layout="menu-select" key="label.unit.party.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
-		<property name="choiceType" value="module.organization.domain.PartyType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
-		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
 		<property name="saveOptions" value="true"/>
@@ -124,7 +119,6 @@
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
-		<property name="choiceType" value="module.organization.domain.AccountabilityType" />
 		<property name="format" value="${name}" />
 		<property name="sortBy" value="name" />
 		<property name="saveOptions" value="true"/>
@@ -256,7 +250,6 @@
 
 <schema name="module.organization.domain.OrganizationalModel.accountabilityTypes" type="module.organization.domain.OrganizationalModel" bundle="ORGANIZATION_RESOURCES">
 	<slot name="accountabilityTypes" layout="option-select" key="label.unit.accountability.type">
-		<property name="choiceType" value="module.organization.domain.AccountabilityType"/>
 		<property name="eachLayout" value="values-dash"/>
         <property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
         <property name="classes" value="nobullet noindent"/>
@@ -267,7 +260,6 @@
 
 <schema name="module.organization.domain.Party.partyTypes" type="module.organization.domain.Party" bundle="ORGANIZATION_RESOURCES">
 	<slot name="partyTypes" layout="option-select" key="label.unit.party.type">
-		<property name="choiceType" value="module.organization.domain.PartyType"/>
 		<property name="eachLayout" value="values-dash"/>
         <property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
         <property name="classes" value="nobullet noindent"/>
