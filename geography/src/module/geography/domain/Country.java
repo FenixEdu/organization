@@ -40,6 +40,7 @@ import myorg.domain.exceptions.DomainException;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -173,7 +174,8 @@ public class Country extends Country_Base implements GeographicConstants {
 
     /**
      * 
-     * @param level the level to get
+     * @param level
+     *            the level to get
      * @return returns the {@link CountrySubdivisionLevelName} associated with
      *         the given level or null if it doesn't exist
      */
@@ -200,7 +202,8 @@ public class Country extends Country_Base implements GeographicConstants {
 
     /**
      * 
-     * @param date the date which they should have been active
+     * @param date
+     *            the date which they should have been active
      * @return a {@link Collection} with the {@link CountrySubdivision} that
      *         were active on the given date and of the
      */
@@ -250,6 +253,33 @@ public class Country extends Country_Base implements GeographicConstants {
 	for (Country country : MyOrg.getInstance().getCountriesSet()) {
 	    if (country.getAcronym().equalsIgnoreCase(acronym))
 		return country;
+	}
+	return null;
+    }
+
+    public static Country findByIso3166alpha2Code(String code) {
+	for (Country country : MyOrg.getInstance().getCountriesSet()) {
+	    if (country.getIso3166alpha2Code().equalsIgnoreCase(code))
+		return country;
+	}
+	return null;
+    }
+
+    public static Country findByIso3166alpha3Code(String code) {
+	for (Country country : MyOrg.getInstance().getCountriesSet()) {
+	    if (country.getIso3166alpha3Code().equalsIgnoreCase(code))
+		return country;
+	}
+	return null;
+    }
+
+    public static Country findByName(String name) {
+	for (Country country : MyOrg.getInstance().getCountriesSet()) {
+	    for (Language language : country.getName().getAllLanguages()) {
+		if (country.getName().getContent(language).equalsIgnoreCase(name)) {
+		    return country;
+		}
+	    }
 	}
 	return null;
     }
