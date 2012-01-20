@@ -15,6 +15,7 @@ public class PersonGroup extends PersonGroup_Base {
 
     public PersonGroup() {
 	super();
+	setSystemGroupMyOrg(MyOrg.getInstance());
     }
 
     @Service
