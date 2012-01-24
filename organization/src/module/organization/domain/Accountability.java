@@ -271,13 +271,15 @@ public class Accountability extends Accountability_Base {
      *            the new begin date
      * @param end
      *            the new end date
+     * @return the new Accountability that was just created
      */
     @Service
-    public void editDates(final LocalDate begin, final LocalDate end) {
+    public Accountability editDates(final LocalDate begin, final LocalDate end) {
 	check(begin, "error.Accountability.invalid.begin");
 	checkDates(getParent(), begin, end);
-	new Accountability(getParent(), getChild(), getAccountabilityType(), begin, end);
+	Accountability accToReturn = new Accountability(getParent(), getChild(), getAccountabilityType(), begin, end);
 	setInactive();
+	return accToReturn;
     }
 
     /**
