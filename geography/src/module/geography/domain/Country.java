@@ -49,7 +49,7 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  * 
  * @author Pedro Santos (pedro.miguel.santos@ist.utl.pt)
  */
-public class Country extends Country_Base implements GeographicConstants {
+public class Country extends Country_Base {
 
     public static final Comparator<Country> COMPARATOR_BY_NAME = new Comparator<Country>() {
 	@Override
@@ -71,7 +71,7 @@ public class Country extends Country_Base implements GeographicConstants {
     };
 
     public Country(Planet parent, String iso3166alpha2Code, String iso3166alpha3Code, Integer iso3166numericCode,
-	    MultiLanguageString name, MultiLanguageString nationality, Class iAddressPrinter) {
+	    MultiLanguageString name, MultiLanguageString nationality, Class<AddressPrinter> iAddressPrinter) {
 	super();
 	setMyOrg(MyOrg.getInstance());
 	setUnit(Unit.create(parent.getUnit(), name, iso3166alpha3Code, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
@@ -237,9 +237,8 @@ public class Country extends Country_Base implements GeographicConstants {
 		if (codes.length > 1) {
 		    return geographicLocation
 			    .getChildByCode(Arrays.asList(codes).subList(1, codes.length).toArray(new String[0]));
-		} else {
-		    return geographicLocation;
 		}
+		return geographicLocation;
 	    }
 	}
 	return null;
@@ -298,5 +297,30 @@ public class Country extends Country_Base implements GeographicConstants {
 	    countrySubdivisionLevelNameToAlter.setName(levelName);
 	}
 
+    }
+
+    public void update(Planet parent, String iso3166alpha2Code, String iso3166alpha3Code, Integer iso3166numericCode,
+	    MultiLanguageString name, MultiLanguageString nationality, Class<AddressPrinter> iAddressPrinter) {
+	if (!same(getIso3166alpha2Code(), iso3166alpha2Code) || !same(getIso3166alpha3Code(), iso3166alpha3Code)
+		|| !same(getIso3166numericCode(), iso3166numericCode) || !same(getName(), name)
+		|| !same(getNationality(), nationality) || !same(getIAddressPrinter(), iAddressPrinter)) {
+	    for (Accountability accountability : getUnit().getParentAccountabilities(getOrCreateAccountabilityType())) {
+		accountability.editDates(new LocalDate(), null);
+	    }
+	    setUnit(Unit.create(parent.getUnit(), name, iso3166alpha3Code, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
+		    getOrCreateAccountabilityType(), new LocalDate(), null));
+	    setIso3166alpha2Code(iso3166alpha2Code);
+	    setIAddressPrinter(iAddressPrinter);
+	    setIso3166alpha3Code(iso3166alpha3Code);
+	    setIso3166numericCode(iso3166numericCode);
+	    setNationality(nationality);
+	}
+    }
+
+    private static boolean same(Object one, Object two) {
+	if (one == null) {
+	    return two == null;
+	}
+	return one.equals(two);
     }
 }
