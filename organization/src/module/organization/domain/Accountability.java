@@ -88,10 +88,10 @@ public class Accountability extends Accountability_Base {
 
     protected Accountability() {
 	super();
-	//	setCreationDate(new DateTime()); FENIX-331
+	super.setCreationDate(new DateTime()); //FENIX-331
 	setMyOrg(MyOrg.getInstance());
-	//	super.setBeginDate(new LocalDate());
-	//	setCreatorUser(myorg.applicationTier.Authenticate.UserView.getCurrentUser());
+	super.setBeginDate(new LocalDate());
+	super.setCreatorUser(myorg.applicationTier.Authenticate.UserView.getCurrentUser());
     }
 
     protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
