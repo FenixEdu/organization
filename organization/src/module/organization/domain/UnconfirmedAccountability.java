@@ -35,9 +35,7 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
 
 	canCreate(parent, child, type);
 
-	setParent(parent);
-	setChild(child);
-	setAccountabilityType(readAccountabilityType());
+	init(parent, child, readAccountabilityType());
 	setUnconfirmedAccountabilityType(type);
 	createDates(begin, end);
     }
@@ -73,11 +71,15 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
     }
 
     @Override
-    void delete() {
+    public void delete() {
 	final Party child = getChild();
 	removeUnconfirmedAccountabilityType();
 	removeUser();
-	super.delete();
+	removeAccountabilityVersion();
+	removeParent();
+	removeChild();
+	removeCreatorUser();
+	removeMyOrg();
 	if (child.getParentAccountabilitiesCount() == 0) {
 	    child.delete();
 	}

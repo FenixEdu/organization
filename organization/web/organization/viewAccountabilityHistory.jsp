@@ -98,7 +98,7 @@ text-decoration: line-through;
 	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.party.parent" /></th>
 	  </tr>
 	  <logic:iterate  name="accItemsToDisplay" id="accItem">
-	  <%if (showDeletedAccountabilities || !((Accountability)accItem).isHistoricItem()) { %>
+	  <%if (showDeletedAccountabilities || !((Accountability)accItem).isErased()) { %>
 	  <%-- Taking care of the class of the row --%>
 		  <logic:equal value="false" name="accItem" property="activeNow" >
 		  	<logic:equal value="true" name="accItem" property="historicItem">
@@ -119,7 +119,6 @@ text-decoration: line-through;
 		    <td><bean:write name="accItem" property="endDate"/></td>
 		    <td><bean:write name="accItem" property="accountabilityType.name.content"/></td>
 		    <%-- Printing the parents based on if the Accoutability is deleted or not --%>
-		    <logic:equal value="false" name="accItem" property="historicItem">
 			    <logic:present name="accItem" property="child">
 			    	<td><bean:write name="accItem" property="child.partyName"/></td>
 			    </logic:present>
@@ -132,21 +131,6 @@ text-decoration: line-through;
 			    <logic:notPresent name="accItem" property="parent">
 			    	<td>-</td>
 			    </logic:notPresent>
-			</logic:equal>
-		    <logic:equal value="true" name="accItem" property="historicItem">
-			    <logic:present name="accItem" property="inactiveChild">
-			    	<td><bean:write name="accItem" property="inactiveChild.partyName"/></td>
-			    </logic:present>
-			    <logic:notPresent name="accItem" property="inactiveChild">
-			    	<td>-</td>
-			    </logic:notPresent>
-			    <logic:present name="accItem" property="inactiveParent">
-			    	<td><bean:write name="accItem" property="inactiveParent.partyName"/></td>
-			    </logic:present>
-			    <logic:notPresent name="accItem" property="inactiveParent">
-			    	<td>-</td>
-			    </logic:notPresent>
-			</logic:equal>
 		    <%-- Printing the parents based on if the Accoutability is deleted or not : END--%>
 	  </tr>
 	  <% } %>

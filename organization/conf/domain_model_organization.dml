@@ -41,9 +41,16 @@ class module.organization.domain.AccountabilityType {
 }
 
 class module.organization.domain.Accountability {
-	DateTime creationDate;
-	LocalDate beginDate;
-	LocalDate endDate;
+	DateTime creationDate; //FENIX-337 to comment
+	LocalDate beginDate; //FENIX-337 to comment
+	LocalDate endDate; //FENIX-337 to comment
+}
+
+class module.organization.domain.AccountabilityVersion {
+	DateTime creationDate; //FENIX-337 new
+	LocalDate beginDate; //FENIX-337 new
+	LocalDate endDate; //FENIX-337 new
+	boolean erased;
 }
 
 	class module.organization.domain.UnconfirmedAccountability extends module.organization.domain.Accountability {
@@ -179,19 +186,51 @@ relation AccountabilityUser {
 	}
 }
 
-relation PartyParentAccountabilityHistory {
-	module.organization.domain.Party playsRole inactiveChild;
-	module.organization.domain.Accountability playsRole parentAccountabilityHistoryItems {
+//FENIX-331 refacorization, relation not needed anymore
+//relation PartyParentAccountabilityHistory { 
+//	module.organization.domain.Party playsRole inactiveChild;
+//	module.organization.domain.Accountability playsRole parentAccountabilityHistoryItems {
+//		multiplicity *;
+//	}
+//}
+
+//FENIX-331 refacorization, relation not needed anymore
+//relation PartyChildAccountabilityHistory {
+//	module.organization.domain.Party playsRole inactiveParent;
+//	module.organization.domain.Accountability playsRole childAccountabilityHistoryItems {
+//		multiplicity *;
+//	}
+//}
+
+//FENIX-331 - needed relation
+relation AccountabilityAccountabilityVersion {
+	module.organization.domain.Accountability playsRole accountability {
+		multiplicity 1;
+	}
+	module.organization.domain.AccountabilityVersion playsRole accountabilityVersion {
+		multiplicity 1;
+	}
+}
+
+relation AccountabilityVersionAccountabilityVersion {
+	module.organization.domain.AccountabilityVersion playsRole previousAccVersion {
+		multiplicity 0..1;
+	}
+	module.organization.domain.AccountabilityVersion playsRole nextAccVersion {
+		multiplicity 0..1;
+	}
+}
+
+relation AccountabilityVersionUser {
+	myorg.domain.User playsRole userWhoCreated {
+		multiplicity 1;
+	}
+	module.organization.domain.AccountabilityVersion playsRole accountabilityVersionItems {
 		multiplicity *;
 	}
 }
 
-relation PartyChildAccountabilityHistory {
-	module.organization.domain.Party playsRole inactiveParent;
-	module.organization.domain.Accountability playsRole childAccountabilityHistoryItems {
-		multiplicity *;
-	}
-}
+
 relation PartyParentAccountabilities {
 	module.organization.domain.Party playsRole child;
 	module.organization.domain.Accountability playsRole parentAccountabilities {

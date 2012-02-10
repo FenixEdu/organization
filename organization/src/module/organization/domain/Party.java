@@ -25,9 +25,11 @@
 
 package module.organization.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -83,6 +85,10 @@ abstract public class Party extends Party_Base implements Presentable {
 	}
     }
 
+    /**
+     * 
+     * @return gets all of immediately above parents
+     */
     public Collection<Party> getParents() {
 	return getParents(new TruePartyPredicate());
     }
@@ -111,6 +117,79 @@ abstract public class Party extends Party_Base implements Presentable {
 	return getParents(new PartyByPartyType(Unit.class, type));
     }
 
+    // Overriden methods to hide the erased accs: 
+    @Override
+    public List<Accountability> getParentAccountabilities() {
+	ArrayList<Accountability> accsToReturn = new ArrayList<Accountability>();
+	for (Accountability acc : super.getParentAccountabilities()) {
+	    if (!acc.isErased())
+		accsToReturn.add(acc);
+	}
+	return accsToReturn;
+    }
+
+    @Override
+    public int getParentAccountabilitiesCount() {
+	return getParentAccountabilities().size();
+    }
+
+    @Override
+    public Set<Accountability> getParentAccountabilitiesSet() {
+	return new HashSet<Accountability>(getParentAccountabilities());
+    }
+
+    @Override
+    public Iterator<Accountability> getParentAccountabilitiesIterator() {
+	return super.getParentAccountabilities().iterator();
+    }
+
+    @Override
+    public List<Accountability> getChildAccountabilities() {
+	ArrayList<Accountability> accsToReturn = new ArrayList<Accountability>();
+	for (Accountability acc : super.getChildAccountabilities()) {
+	    if (!acc.isErased())
+		accsToReturn.add(acc);
+	}
+	return accsToReturn;
+    }
+
+    @Override
+    public int getChildAccountabilitiesCount() {
+	return getChildAccountabilities().size();
+    }
+
+    @Override
+    public Set<Accountability> getChildAccountabilitiesSet() {
+	return new HashSet<Accountability>(getChildAccountabilities());
+    }
+
+    @Override
+    public Iterator<Accountability> getChildAccountabilitiesIterator() {
+	return getChildAccountabilities().iterator();
+    }
+
+    @Override
+    public void removeChildAccountabilities(Accountability childAccountabilities) {
+	throw new UnsupportedOperationException("dont.use.this.api");
+    }
+
+    @Override
+    public void removeParentAccountabilities(Accountability parentAccountabilities) {
+	throw new UnsupportedOperationException("dont.use.this.api");
+    }
+
+    @Override
+    public void addChildAccountabilities(Accountability childAccountabilities) {
+	throw new UnsupportedOperationException("dont.use.this.api");
+    }
+
+    @Override
+    public void addParentAccountabilities(Accountability parentAccountabilities) {
+	throw new UnsupportedOperationException("dont.use.this.api");
+    }
+
+    //end of overriden methods
+
     @SuppressWarnings("unchecked")
     public <T extends Party> Collection<T> getParents(final PartyPredicate predicate) {
 	final Collection<Party> result = new LinkedList<Party>();
@@ -132,16 +211,6 @@ abstract public class Party extends Party_Base implements Presentable {
 	return getParentAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, accTypes));
     }
 
-    public Collection<Accountability> getParentAccountabilitiesHistory(final LocalDate startDate, final LocalDate endDate,
-	    final AccountabilityType... types) {
-	return getParentAccountabilitiesHistory(new PartyByAccTypeAndDates(startDate, endDate, types));
-    }
-
-    public Collection<? extends Accountability> getParentAccountabilitiesHistory(LocalDate startDate, LocalDate endDate,
-	    List<AccountabilityType> accTypes) {
-	return getParentAccountabilitiesHistory(new PartyByAccTypeAndDates(startDate, endDate, accTypes));
-    }
-
     public Collection<Accountability> getChildrenAccountabilities(final LocalDate startDate, final LocalDate endDate,
 	    final AccountabilityType... types) {
 	return getChildrenAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, types));
@@ -150,16 +219,6 @@ abstract public class Party extends Party_Base implements Presentable {
     private Collection<? extends Accountability> getChildrenAccountabilities(LocalDate startDate, LocalDate endDate,
 	    List<AccountabilityType> accTypes) {
 	return getChildrenAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, accTypes));
-    }
-
-    public Collection<Accountability> getChildrenAccountabilitiesHistory(final LocalDate startDate, final LocalDate endDate,
-	    final AccountabilityType... types) {
-	return getChildrenAccountabilitiesHistory(new PartyByAccTypeAndDates(startDate, endDate, types));
-    }
-
-    public Collection<? extends Accountability> getChildrenAccountabilitiesHistory(LocalDate startDate, LocalDate endDate,
-	    List<AccountabilityType> accTypes) {
-	return getChildrenAccountabilitiesHistory(new PartyByAccTypeAndDates(startDate, endDate, accTypes));
     }
 
     public Collection<Accountability> getParentAccountabilities(final Collection<AccountabilityType> types) {
@@ -181,24 +240,6 @@ abstract public class Party extends Party_Base implements Presentable {
 	return (List<T>) result;
     }
 
-    public Collection<Accountability> getParentAccountabilitiesHistory(final Collection<AccountabilityType> types) {
-	return getParentAccountabilitiesHistory(new PartyByAccountabilityType(types));
-    }
-
-    public Collection<Accountability> getParentAccountabilitiesHistory(final AccountabilityType... types) {
-	return getParentAccountabilitiesHistory(new PartyByAccountabilityType(types));
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <T extends Accountability> Collection<T> getParentAccountabilitiesHistory(final PartyPredicate predicate) {
-	final Collection<Accountability> result = new LinkedList<Accountability>();
-	for (final Accountability accountability : getParentAccountabilityHistoryItems()) {
-	    if (predicate.eval(accountability.getParent(), accountability)) {
-		result.add(accountability);
-	    }
-	}
-	return (List<T>) result;
-    }
     public Collection<Party> getChildren() {
 	return getChildren(new TruePartyPredicate());
     }
@@ -282,17 +323,6 @@ abstract public class Party extends Party_Base implements Presentable {
 	return (List<T>) result;
     }
 
-    @SuppressWarnings("unchecked")
-    protected <T extends Accountability> Collection<T> getChildrenAccountabilitiesHistory(final PartyPredicate predicate) {
-	final Collection<Accountability> result = new LinkedList<Accountability>();
-	for (final Accountability accountability : getChildAccountabilityHistoryItems()) {
-	    if (predicate.eval(accountability.getChild(), accountability)) {
-		result.add(accountability);
-	    }
-	}
-	return (List<T>) result;
-    }
-
     public Collection<Party> getAncestors() {
 	final PartyResultCollection result = new PartyResultCollection(new TruePartyPredicate());
 	getAncestors(result);
@@ -329,6 +359,11 @@ abstract public class Party extends Party_Base implements Presentable {
 	return result.getResult();
     }
 
+    /**
+     * 
+     * @param result
+     *            all of the ancestors (recursively)
+     */
     protected void getAncestors(final PartyResultCollection result) {
 	for (final Accountability accountability : getParentAccountabilities()) {
 	    result.conditionalAddParty(accountability.getParent(), accountability);
@@ -462,7 +497,7 @@ abstract public class Party extends Party_Base implements Presentable {
 	    if (begin == null
 		    || (begin != null && intersectingAccountability.getBeginDate() != null && begin
 			    .isBefore(intersectingAccountability.getBeginDate()))) {
-		intersectingAccountability.editDates(begin, intersectingAccountability.getEndDate());
+		intersectingAccountability.setBeginDate(begin);
 	    }
 	    if (end == null
 		    || (end != null && intersectingAccountability.getEndDate() != null && end.isAfter(intersectingAccountability
@@ -678,10 +713,6 @@ abstract public class Party extends Party_Base implements Presentable {
 
 	accountabilities.addAll(getParentAccountabilities(dateOfStart, dateOfEnd, accTypes));
 	accountabilities.addAll(getChildrenAccountabilities(dateOfStart, dateOfEnd, accTypes));
-
-	//get the historic items
-	accountabilities.addAll(getParentAccountabilitiesHistory(dateOfStart, dateOfEnd, accTypes));
-	accountabilities.addAll(getChildrenAccountabilitiesHistory(dateOfStart, dateOfEnd, accTypes));
 
 	return accountabilities;
 

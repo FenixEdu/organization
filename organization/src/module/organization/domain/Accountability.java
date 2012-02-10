@@ -34,6 +34,7 @@ import jvstm.cps.ConsistencyPredicate;
 import module.organization.domain.predicates.PartyPredicate.PartyByAccTypeAndDates;
 import module.organization.domain.util.OrganizationConsistencyException;
 import myorg.domain.MyOrg;
+import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
 
 import org.joda.time.DateTime;
@@ -87,10 +88,10 @@ public class Accountability extends Accountability_Base {
 
     protected Accountability() {
 	super();
-	setCreationDate(new DateTime());
+	//	setCreationDate(new DateTime()); FENIX-331
 	setMyOrg(MyOrg.getInstance());
-	super.setBeginDate(new LocalDate());
-	setCreatorUser(myorg.applicationTier.Authenticate.UserView.getCurrentUser());
+	//	super.setBeginDate(new LocalDate());
+	//	setCreatorUser(myorg.applicationTier.Authenticate.UserView.getCurrentUser());
     }
 
     protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
@@ -105,11 +106,14 @@ public class Accountability extends Accountability_Base {
 
 	canCreate(parent, child, type);
 
-	setParent(parent);
-	setChild(child);
-	setAccountabilityType(type);
-	super.setBeginDate(begin);
-	super.setEndDate(end);
+	init(parent, child, type);
+	editDates(begin, end);
+    }
+    
+    protected void init(Party parent, Party child, AccountabilityType type) {
+	super.setParent(parent);
+	super.setChild(child);
+	super.setAccountabilityType(type);
     }
 
     protected void checkDates(final Party parent, final LocalDate begin, final LocalDate end) {
@@ -162,20 +166,19 @@ public class Accountability extends Accountability_Base {
     }
 
     public boolean isActive(final LocalDate date) {
-	return contains(date) && !isHistoricItem();
+	return contains(date) && !isErased();
     }
 
     /**
      * 
-     * @return true if it only has AccountabilityHistory relations, false
+     * @return true if the {@link AccountabilityHistory} item is inactive, false
      *         otherwise
      */
-    public boolean isHistoricItem() {
-	if (getParent() != null || getChild() != null)
+    public boolean isErased() {
+	//TODO FENIX-337 
+	if (getAccountabilityVersion() == null)
 	    return false;
-	if (getInactiveParent() != null || getInactiveChild() != null)
-	    return true;
-	throw new DomainException("accountability.object.illegal.state.either.active.or.inactive.please");
+	return getAccountabilityVersion().getErased();
     }
 
     public boolean isActiveNow() {
@@ -219,29 +222,11 @@ public class Accountability extends Accountability_Base {
 	return stringBuilder.toString();
     }
 
-    /**
-     * temporarily possible to delete the acc. untill refactor SIADAP-168 is
-     * done
-     */
-    @Deprecated
-    public void obliviateIt() {
-	removeAccountabilityImportRegister();
-	removeAccountabilityType();
-	removeChild();
-	removeCreatorUser();
-	removeFunctionDelegationDelegator();
-	removeInactiveChild();
-	removeInactiveParent();
-	removeMyOrg();
-	removeParent();
-	deleteDomainObject();
-    }
-
     @Service
     /**
      * It doesn't actually delete the accountability as it actually marks it as an accountability history item
      */
-    void delete() {
+    public void delete() {
 	setInactive();
     }
 
@@ -255,14 +240,30 @@ public class Accountability extends Accountability_Base {
 
     @Override
     @Deprecated
-    public void setBeginDate(LocalDate beginDate) {
-	throw new DomainException("should.not.use.this.method.use.editDates.instead");
+    public void setParent(Party parent) {
+	throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
     }
 
     @Override
     @Deprecated
+    public void setChild(Party child) {
+	throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
+    }
+
+    @Override
+    @Deprecated
+    public void setAccountabilityType(AccountabilityType accountabilityType) {
+	throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
+    }
+
+    @Override
+    public void setBeginDate(LocalDate beginDate) {
+	editDates(beginDate, getEndDate());
+    }
+
+    @Override
     public void setEndDate(LocalDate endDate) {
-	throw new DomainException("should.not.use.this.method.use.editDates.instead");
+	editDates(getBeginDate(), endDate);
     }
 
     /**
@@ -295,23 +296,32 @@ public class Accountability extends Accountability_Base {
      * @return the new Accountability that was just created
      */
     @Service
-    public Accountability editDates(final LocalDate begin, final LocalDate end) {
+    public void editDates(final LocalDate begin, final LocalDate end) {
 	check(begin, "error.Accountability.invalid.begin");
 	checkDates(getParent(), begin, end);
-	Accountability accToReturn = new Accountability(getParent(), getChild(), getAccountabilityType(), begin, end);
-	setInactive();
-	return accToReturn;
+	//let's create the new AccountabilityHistory which is active
+	AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false);
+
+	//FENIX-337 - and still make this change the other slots for now (untill they are removed)
+	super.setBeginDate(begin);
+	super.setEndDate(end);
     }
 
-    /**
-     * Removes its regular connections with its parties and assigns the other
-     * connections to it
+    /*
+     * NOTE: this method returns the interval between the 00:00 of the StartDate
+     * and 23:59:59 of the EndDate
+     * 
+     * @return the Interval between the begin and end date, or today if end date
+     * is unspecified (null) public Interval getCurrentScope() { DateTime
+     * endDate = (getEndDate() == null) ? new
+     * LocalDate().plusDays(1).toDateTimeAtStartOfDay() : getEndDate().plusDays(
+     * 1).toDateTimeAtStartOfDay(); DateTime beginDate =
+     * getBeginDate().toDateTimeAtStartOfDay(); return new Interval(endDate,
+     * beginDate); }
      */
+
     private void setInactive() {
-	setInactiveChild(getChild());
-	setInactiveParent(getInactiveParent());
-	setChild(null);
-	setParent(null);
+	AccountabilityVersion.insertAccountabilityVersion(getBeginDate(), getEndDate(), this, true);
 
     }
 
@@ -352,6 +362,21 @@ public class Accountability extends Accountability_Base {
 
 	return accountabilities;
 
+    }
+
+    public LocalDate getBeginDate2() {
+	return getAccountabilityVersion().getBeginDate();
+    }
+    public LocalDate getEndDate2() {
+	return getAccountabilityVersion().getEndDate();
+    }
+
+    public DateTime getCreationDate2() {
+	return getAccountabilityVersion().getCreationDate();
+    }
+
+    public User getCreatorUser2() {
+	return getAccountabilityVersion().getUserWhoCreated();
     }
 
 }

@@ -174,7 +174,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	final LocalDate now = new LocalDate();
 	for (final Accountability accountability : getParentAccountabilitiesSet()) {
 	    if (accountability.getEndDate() == null || accountability.getEndDate().isAfter(now)) {
-		accountability.editDates(accountability.getBeginDate(), now);
+		accountability.setEndDate(now);
 	    }
 	}
     }
