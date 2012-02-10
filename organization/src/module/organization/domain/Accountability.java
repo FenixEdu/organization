@@ -25,10 +25,10 @@
 
 package module.organization.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import jvstm.cps.ConsistencyPredicate;
 import module.organization.domain.predicates.PartyPredicate.PartyByAccTypeAndDates;
@@ -78,7 +78,9 @@ public class Accountability extends Accountability_Base {
 	    if (o2CreationDate == null) {
 		o2CreationDate = o2.getBeginDate().toDateTimeAtStartOfDay();
 	    }
-	    return o1CreationDate.compareTo(o2CreationDate);
+	    
+	    return (o1CreationDate.compareTo(o2CreationDate)) == 0 ? (o1.getExternalId().compareTo(o2.getExternalId()))
+		    : (o1CreationDate.compareTo(o2CreationDate));
 	};
 
     };
@@ -168,7 +170,7 @@ public class Accountability extends Accountability_Base {
      * @return true if it only has AccountabilityHistory relations, false
      *         otherwise
      */
-    private boolean isHistoricItem() {
+    public boolean isHistoricItem() {
 	if (getParent() != null || getChild() != null)
 	    return false;
 	if (getInactiveParent() != null || getInactiveChild() != null)
@@ -202,6 +204,7 @@ public class Accountability extends Accountability_Base {
 	return getAccountabilityType().equals(type);
     }
 
+
     public String getDetailsString() {
 	final StringBuilder stringBuilder = new StringBuilder();
 	stringBuilder.append(getAccountabilityType().getName().getContent());
@@ -214,6 +217,24 @@ public class Accountability extends Accountability_Base {
 	    stringBuilder.append(getEndDate().toString(LOCAL_DATE_FORMAT));
 	}
 	return stringBuilder.toString();
+    }
+
+    /**
+     * temporarily possible to delete the acc. untill refactor SIADAP-168 is
+     * done
+     */
+    @Deprecated
+    public void obliviateIt() {
+	removeAccountabilityImportRegister();
+	removeAccountabilityType();
+	removeChild();
+	removeCreatorUser();
+	removeFunctionDelegationDelegator();
+	removeInactiveChild();
+	removeInactiveParent();
+	removeMyOrg();
+	removeParent();
+	deleteDomainObject();
     }
 
     @Service
@@ -298,14 +319,19 @@ public class Accountability extends Accountability_Base {
 	return !isAfter(getBeginDate(), end) && !isAfter(begin, getEndDate());
     }
 
+    /**
+     * 
+     * @param localDate1
+     * @param localDate2
+     * @return TODO
+     */
     private static boolean isAfter(final LocalDate localDate1, final LocalDate localDate2) {
 	return localDate1 != null && localDate2 != null && localDate2.isBefore(localDate1);
     }
 
-    public static SortedSet<Accountability> getActiveAndInactiveAccountabilities(List<AccountabilityType> accTypes,
+    public static List<Accountability> getActiveAndInactiveAccountabilities(List<AccountabilityType> accTypes,
 	    List<Party> parties, LocalDate startDate, LocalDate endDate) {
-	SortedSet<Accountability> accountabilities = new TreeSet<Accountability>(
-		Accountability.COMPARATOR_BY_CREATION_DATE_FALLBACK_TO_START_DATE);
+	List<Accountability> accountabilities = new ArrayList<Accountability>();
 
 	//let's iterate through the parties
 	for (Party party : parties) {
@@ -321,6 +347,8 @@ public class Accountability extends Accountability_Base {
 
 	    }
 	}
+
+	Collections.sort(accountabilities, COMPARATOR_BY_CREATION_DATE_FALLBACK_TO_START_DATE);
 
 	return accountabilities;
 

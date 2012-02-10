@@ -45,7 +45,10 @@ if (startDateYear != null && startDateMonth != null && startDateDay != null)
     startDate = new LocalDate(Integer.parseInt(startDateYear), Integer.parseInt(startDateMonth), Integer.parseInt(startDateDay));
 }
 
-request.setAttribute("startDate", startDate.toString());
+if (startDate != null)
+ {
+    request.setAttribute("startDate", startDate.toString());
+ }
 
 String endDateYear = request.getParameter("endDateYear");
 String endDateMonth = request.getParameter("endDateMonth");
@@ -58,7 +61,13 @@ if (endDateYear != null && endDateMonth != null && endDateDay != null)
     endDate = new LocalDate(Integer.parseInt(endDateYear), Integer.parseInt(endDateMonth), Integer.parseInt(endDateDay));
 }
 
-request.setAttribute("endDate", endDate.toString());
+if (endDate != null)
+{
+	request.setAttribute("endDate", endDate.toString());
+}
+
+ boolean showDeletedAccountabilities = Boolean.parseBoolean(request.getParameter("showDeletedAccountabilities"));
+ request.setAttribute("showDeletedAccountabilities", showDeletedAccountabilities);
 
 //retrieve the ordered accountabilities
 Object accItemsToDisplay = Accountability.getActiveAndInactiveAccountabilities(accountabilities, parties, startDate, endDate);
@@ -69,7 +78,13 @@ request.setAttribute("accItemsToDisplay", accItemsToDisplay);
 tr.disabled {
 color: #999;
 }
+
+tr.deleted {
+color: #999;
+text-decoration: line-through;
+}
 </style> 
+
 
 <logic:notEmpty name="accItemsToDisplay">
 	<table class="tstyle2 mvert1">
@@ -83,30 +98,58 @@ color: #999;
 	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.party.parent" /></th>
 	  </tr>
 	  <logic:iterate  name="accItemsToDisplay" id="accItem">
-	  <logic:equal value="false" name="accItem" property="activeNow" >
-	  	<tr class="disabled">
-	  </logic:equal>
-	  <logic:notEqual value="false" name="accItem" property="activeNow" >
-	  	<tr>
-	  </logic:notEqual>
-	    <td><bean:write name="accItem" property="creationDate"/></td>
-	    <td><bean:write name="accItem" property="creatorUser"/></td>
-	    <td><bean:write name="accItem" property="beginDate"/></td>
-	    <td><bean:write name="accItem" property="endDate"/></td>
-	    <td><bean:write name="accItem" property="accountabilityType.name.content"/></td>
-	    <logic:present name="accItem" property="child">
-	    	<td><bean:write name="accItem" property="child.partyName"/></td>
-	    </logic:present>
-	    <logic:notPresent name="accItem" property="child">
-	    	<td>-</td>
-	    </logic:notPresent>
-	    <logic:present name="accItem" property="parent">
-	    	<td><bean:write name="accItem" property="parent.partyName"/></td>
-	    </logic:present>
-	    <logic:notPresent name="accItem" property="parent">
-	    	<td>-</td>
-	    </logic:notPresent>
+	  <%if (showDeletedAccountabilities || !((Accountability)accItem).isHistoricItem()) { %>
+	  <%-- Taking care of the class of the row --%>
+		  <logic:equal value="false" name="accItem" property="activeNow" >
+		  	<logic:equal value="true" name="accItem" property="historicItem">
+		  		<tr class="deleted">
+		  	</logic:equal>
+		  	<logic:equal value="false" name="accItem" property="historicItem">
+		  		<tr class="disabled">
+		  	</logic:equal>
+		  </logic:equal>
+		  <logic:notEqual value="false" name="accItem" property="activeNow" >
+		  	<tr>
+		  </logic:notEqual>
+	  <%-- Taking care of the class of the row : END--%>
+	  
+		    <td><bean:write name="accItem" property="creationDate"/></td>
+		    <td><bean:write name="accItem" property="creatorUser"/></td>
+		    <td><bean:write name="accItem" property="beginDate"/></td>
+		    <td><bean:write name="accItem" property="endDate"/></td>
+		    <td><bean:write name="accItem" property="accountabilityType.name.content"/></td>
+		    <%-- Printing the parents based on if the Accoutability is deleted or not --%>
+		    <logic:equal value="false" name="accItem" property="historicItem">
+			    <logic:present name="accItem" property="child">
+			    	<td><bean:write name="accItem" property="child.partyName"/></td>
+			    </logic:present>
+			    <logic:notPresent name="accItem" property="child">
+			    	<td>-</td>
+			    </logic:notPresent>
+			    <logic:present name="accItem" property="parent">
+			    	<td><bean:write name="accItem" property="parent.partyName"/></td>
+			    </logic:present>
+			    <logic:notPresent name="accItem" property="parent">
+			    	<td>-</td>
+			    </logic:notPresent>
+			</logic:equal>
+		    <logic:equal value="true" name="accItem" property="historicItem">
+			    <logic:present name="accItem" property="inactiveChild">
+			    	<td><bean:write name="accItem" property="inactiveChild.partyName"/></td>
+			    </logic:present>
+			    <logic:notPresent name="accItem" property="inactiveChild">
+			    	<td>-</td>
+			    </logic:notPresent>
+			    <logic:present name="accItem" property="inactiveParent">
+			    	<td><bean:write name="accItem" property="inactiveParent.partyName"/></td>
+			    </logic:present>
+			    <logic:notPresent name="accItem" property="inactiveParent">
+			    	<td>-</td>
+			    </logic:notPresent>
+			</logic:equal>
+		    <%-- Printing the parents based on if the Accoutability is deleted or not : END--%>
 	  </tr>
+	  <% } %>
 	  
 	  </logic:iterate>
 	</table>

@@ -682,7 +682,7 @@ abstract public class Party extends Party_Base implements Presentable {
 	//get the historic items
 	accountabilities.addAll(getParentAccountabilitiesHistory(dateOfStart, dateOfEnd, accTypes));
 	accountabilities.addAll(getChildrenAccountabilitiesHistory(dateOfStart, dateOfEnd, accTypes));
-	
+
 	return accountabilities;
 
     }
