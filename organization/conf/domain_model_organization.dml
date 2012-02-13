@@ -41,9 +41,9 @@ class module.organization.domain.AccountabilityType {
 }
 
 class module.organization.domain.Accountability {
-	DateTime creationDate; //FENIX-337 to comment
-	LocalDate beginDate; //FENIX-337 to comment
-	LocalDate endDate; //FENIX-337 to comment
+	//DateTime creationDate; //FENIX-337 to comment
+	//LocalDate beginDate; //FENIX-337 to comment
+	//LocalDate endDate; //FENIX-337 to comment
 }
 
 class module.organization.domain.AccountabilityVersion {
@@ -179,12 +179,13 @@ relation PartyTypeParty {
 }
 
 
-relation AccountabilityUser {
-	myorg.domain.User playsRole creatorUser;
-	module.organization.domain.Accountability playsRole accountabilitiesCreated {
-		multiplicity *;
-	}
-}
+//FENIX-331 refacorization, relation not needed anymore
+//relation AccountabilityUser {
+//	myorg.domain.User playsRole creatorUser;
+//	module.organization.domain.Accountability playsRole accountabilitiesCreated {
+//		multiplicity *;
+//	}
+//}
 
 //FENIX-331 refacorization, relation not needed anymore
 //relation PartyParentAccountabilityHistory { 

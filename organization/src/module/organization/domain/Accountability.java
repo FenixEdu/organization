@@ -88,10 +88,7 @@ public class Accountability extends Accountability_Base {
 
     protected Accountability() {
 	super();
-	super.setCreationDate(new DateTime()); //FENIX-331
 	setMyOrg(MyOrg.getInstance());
-	super.setBeginDate(new LocalDate());
-	super.setCreatorUser(myorg.applicationTier.Authenticate.UserView.getCurrentUser());
     }
 
     protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
@@ -256,33 +253,12 @@ public class Accountability extends Accountability_Base {
 	throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
     }
 
-    @Override
     public void setBeginDate(LocalDate beginDate) {
 	editDates(beginDate, getEndDate());
     }
 
-    @Override
     public void setEndDate(LocalDate endDate) {
 	editDates(getBeginDate(), endDate);
-    }
-
-    /**
-     * sets the dates of the current accountability to the ones given. It does
-     * not mark this accountability as an historic one or creates new ones like
-     * editDates does {@link #editDates(LocalDate, LocalDate)} * NOTE * this
-     * should only be invoked by constructors that create new accountabilities
-     * and does not check the dates as the constructors are responsible for
-     * doing that
-     * 
-     * @param begin
-     *            the new begin date one)
-     * @param end
-     *            the new end date one)
-     */
-    protected void createDates(final LocalDate begin, final LocalDate end) {
-	super.setEndDate(end);
-	super.setBeginDate(begin);
-
     }
 
     /**
@@ -302,9 +278,6 @@ public class Accountability extends Accountability_Base {
 	//let's create the new AccountabilityHistory which is active
 	AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false);
 
-	//FENIX-337 - and still make this change the other slots for now (untill they are removed)
-	super.setBeginDate(begin);
-	super.setEndDate(end);
     }
 
     /*
@@ -333,7 +306,8 @@ public class Accountability extends Accountability_Base {
      * 
      * @param localDate1
      * @param localDate2
-     * @return TODO
+     * @return false if any of the dates are null, or if localDate1 isn't after
+     *         localDate2, true otherwise
      */
     private static boolean isAfter(final LocalDate localDate1, final LocalDate localDate2) {
 	return localDate1 != null && localDate2 != null && localDate2.isBefore(localDate1);
@@ -364,18 +338,19 @@ public class Accountability extends Accountability_Base {
 
     }
 
-    public LocalDate getBeginDate2() {
+    public LocalDate getBeginDate() {
 	return getAccountabilityVersion().getBeginDate();
     }
-    public LocalDate getEndDate2() {
+
+    public LocalDate getEndDate() {
 	return getAccountabilityVersion().getEndDate();
     }
 
-    public DateTime getCreationDate2() {
+    public DateTime getCreationDate() {
 	return getAccountabilityVersion().getCreationDate();
     }
 
-    public User getCreatorUser2() {
+    public User getCreatorUser() {
 	return getAccountabilityVersion().getUserWhoCreated();
     }
 

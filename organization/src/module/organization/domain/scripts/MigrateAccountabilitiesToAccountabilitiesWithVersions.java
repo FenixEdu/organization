@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import module.organization.domain.Accountability;
-import module.organization.domain.AccountabilityVersion;
 import myorg.domain.MyOrg;
 import myorg.domain.scheduler.ReadCustomTask;
 import myorg.domain.scheduler.TransactionalThread;
@@ -23,7 +22,7 @@ public class MigrateAccountabilitiesToAccountabilitiesWithVersions extends ReadC
 
     Set<Accountability> accountabilitiesToMigrate;
 
-    private int migratedAccs = 0;
+    private final int migratedAccs = 0;
     /* (non-Javadoc)
      * @see jvstm.TransactionalCommand#doIt()
      */
@@ -91,9 +90,10 @@ public class MigrateAccountabilitiesToAccountabilitiesWithVersions extends ReadC
 		    boolean erased = false;
 		    if (acc.getParent() == null && acc.getChild() == null)
 			erased = true;
-		    new AccountabilityVersion(acc.getBeginDate(), acc.getEndDate(), acc, erased, acc.getCreatorUser(),
-			    acc.getCreationDate());
-		    migratedAccs++;
+		    //joantune: uncompilable code ATM as migration FENIX-337 was made, just here for historic purposes only
+		    //		    new AccountabilityVersion(acc.getBeginDate(), acc.getEndDate(), acc, erased, acc.getCreatorUser(),
+		    //			    acc.getCreationDate());
+		    //		    migratedAccs++;
 		}
 	    }
 

@@ -11,31 +11,49 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
     private AccountabilityVersion(LocalDate beginDate, LocalDate endDate,
  Accountability acc, boolean erased) {
         super();
-	setAccountability(acc);
-	setErased(erased);
-	setBeginDate(beginDate);
-	setEndDate(endDate);
-	setCreationDate(new DateTime());
-	setUserWhoCreated(myorg.applicationTier.Authenticate.UserView.getCurrentUser());
+	super.setAccountability(acc);
+	super.setErased(erased);
+	super.setBeginDate(beginDate);
+	super.setEndDate(endDate);
+	super.setCreationDate(new DateTime());
+	super.setUserWhoCreated(myorg.applicationTier.Authenticate.UserView.getCurrentUser());
     }
     
-    /**
-     * FENIX-337 - temporary constructor used only for migration
-     * 
-     * @param beginDate
-     * @param endDate
-     * @param acc
-     * @param erased
-     */
-    public AccountabilityVersion(LocalDate beginDate, LocalDate endDate, Accountability acc, boolean erased,
-	    User userWhoCreatedThis, DateTime timeWhenItWasCreated) {
-	super();
-	setAccountability(acc);
-	setErased(erased);
-	setBeginDate(beginDate);
-	setEndDate(endDate);
-	setCreationDate(timeWhenItWasCreated);
-	setUserWhoCreated(userWhoCreatedThis);
+    //let's protect all of the methods that could compromise the workings of the Acc. Version
+    @Deprecated
+    @Override
+    public void setAccountability(Accountability accountability) {
+	throw new UnsupportedOperationException("this.slot.shouldn't.be.editable.make.new.object.instead");
+    }
+
+    @Deprecated
+    @Override
+    public void setErased(boolean erased) {
+	throw new UnsupportedOperationException("this.slot.shouldn't.be.editable.make.new.object.instead");
+    }
+
+    @Deprecated
+    @Override
+    public void setBeginDate(LocalDate beginDate) {
+	throw new UnsupportedOperationException("this.slot.shouldn't.be.editable.make.new.object.instead");
+    }
+
+    @Deprecated
+    @Override
+    public void setEndDate(LocalDate endDate) {
+	throw new UnsupportedOperationException("this.slot.shouldn't.be.editable.make.new.object.instead");
+    }
+
+    @Deprecated
+    @Override
+    public void setCreationDate(DateTime creationDate) {
+	throw new UnsupportedOperationException("this.slot.shouldn't.be.editable.make.new.object.instead");
+    }
+
+    @Deprecated
+    @Override
+    public void setUserWhoCreated(User userWhoCreated) {
+	throw new UnsupportedOperationException("this.slot.shouldn't.be.editable.make.new.object.instead");
     }
 
     @ConsistencyPredicate
@@ -63,10 +81,9 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
      *            active, if it is false it is equivalent of deleting the new
      *            AccountabilityHistory
      * 
-     *            //TODO FENIX-337 after migration put this back to protected
      * 
      */
-    public static void insertAccountabilityVersion(LocalDate beginDate,
+    protected static void insertAccountabilityVersion(LocalDate beginDate,
  LocalDate endDate, Accountability acc, boolean erased) {
 	if (acc == null)
 	    throw new IllegalArgumentException("cant.provide.a.null.accountability");

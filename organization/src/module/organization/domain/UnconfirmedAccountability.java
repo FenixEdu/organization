@@ -37,7 +37,7 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
 
 	init(parent, child, readAccountabilityType());
 	setUnconfirmedAccountabilityType(type);
-	createDates(begin, end);
+	AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false);
     }
 
     @Service
@@ -78,7 +78,6 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
 	removeAccountabilityVersion();
 	removeParent();
 	removeChild();
-	removeCreatorUser();
 	removeMyOrg();
 	if (child.getParentAccountabilitiesCount() == 0) {
 	    child.delete();
