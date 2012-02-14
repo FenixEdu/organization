@@ -30,9 +30,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import jvstm.cps.ConsistencyPredicate;
 import module.organization.domain.predicates.PartyPredicate.PartyByAccTypeAndDates;
-import module.organization.domain.util.OrganizationConsistencyException;
 import myorg.domain.MyOrg;
 import myorg.domain.User;
 import myorg.domain.exceptions.DomainException;
@@ -65,7 +63,7 @@ public class Accountability extends Accountability_Base {
 	}
 
     };
-    
+
     public static final Comparator<Accountability> COMPARATOR_BY_CREATION_DATE_FALLBACK_TO_START_DATE = new Comparator<Accountability>() {
 
 	@Override
@@ -79,7 +77,7 @@ public class Accountability extends Accountability_Base {
 	    if (o2CreationDate == null) {
 		o2CreationDate = o2.getBeginDate().toDateTimeAtStartOfDay();
 	    }
-	    
+
 	    return (o1CreationDate.compareTo(o2CreationDate)) == 0 ? (o1.getExternalId().compareTo(o2.getExternalId()))
 		    : (o1CreationDate.compareTo(o2CreationDate));
 	};
@@ -106,7 +104,7 @@ public class Accountability extends Accountability_Base {
 	init(parent, child, type);
 	editDates(begin, end);
     }
-    
+
     protected void init(Party parent, Party child, AccountabilityType type) {
 	super.setParent(parent);
 	super.setChild(child);
@@ -157,11 +155,6 @@ public class Accountability extends Accountability_Base {
 	return hasParent() && hasChild() && getAccountabilityType().isValid(getParent(), getChild());
     }
 
-    @ConsistencyPredicate(OrganizationConsistencyException.class)
-    protected boolean checkDateInterval() {
-	return hasBeginDate() && (!hasEndDate() || !getBeginDate().isAfter(getEndDate()));
-    }
-
     public boolean isActive(final LocalDate date) {
 	return contains(date) && !isErased();
     }
@@ -172,7 +165,7 @@ public class Accountability extends Accountability_Base {
      *         otherwise
      */
     public boolean isErased() {
-	//TODO FENIX-337 
+	// TODO FENIX-337
 	if (getAccountabilityVersion() == null)
 	    return false;
 	return getAccountabilityVersion().getErased();
@@ -204,7 +197,6 @@ public class Accountability extends Accountability_Base {
 	return getAccountabilityType().equals(type);
     }
 
-
     public String getDetailsString() {
 	final StringBuilder stringBuilder = new StringBuilder();
 	stringBuilder.append(getAccountabilityType().getName().getContent());
@@ -229,9 +221,11 @@ public class Accountability extends Accountability_Base {
 
     static Accountability create(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
 	    final LocalDate end) {
-	//TODO Fenix-133: allow the access control to be done in a more dynamic way, see issue for more info
-	//	return parent.isAuthorizedToManage() ? new Accountability(parent, child, type, begin, end)
-	//		: new UnconfirmedAccountability(parent, child, type, begin, end);
+	// TODO Fenix-133: allow the access control to be done in a more dynamic
+	// way, see issue for more info
+	// return parent.isAuthorizedToManage() ? new Accountability(parent,
+	// child, type, begin, end)
+	// : new UnconfirmedAccountability(parent, child, type, begin, end);
 	return new Accountability(parent, child, type, begin, end);
     }
 
@@ -275,7 +269,7 @@ public class Accountability extends Accountability_Base {
     public void editDates(final LocalDate begin, final LocalDate end) {
 	check(begin, "error.Accountability.invalid.begin");
 	checkDates(getParent(), begin, end);
-	//let's create the new AccountabilityHistory which is active
+	// let's create the new AccountabilityHistory which is active
 	AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false);
 
     }
@@ -317,11 +311,12 @@ public class Accountability extends Accountability_Base {
 	    List<Party> parties, LocalDate startDate, LocalDate endDate) {
 	List<Accountability> accountabilities = new ArrayList<Accountability>();
 
-	//let's iterate through the parties
+	// let's iterate through the parties
 	for (Party party : parties) {
 	    accountabilities.addAll(party.getAccountabilitiesAndHistoricItems(accTypes, startDate, endDate));
 	}
-	//if no parties have been specified, we will get all of the accountabilities!!
+	// if no parties have been specified, we will get all of the
+	// accountabilities!!
 	if (parties == null || parties.isEmpty()) {
 	    final PartyByAccTypeAndDates typeAndDates = new PartyByAccTypeAndDates(startDate, endDate, accTypes);
 	    for (final Accountability accountability : MyOrg.getInstance().getAccountabilities()) {

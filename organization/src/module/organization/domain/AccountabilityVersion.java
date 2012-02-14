@@ -1,16 +1,16 @@
 package module.organization.domain;
 
 import jvstm.cps.ConsistencyPredicate;
+import module.organization.domain.util.OrganizationConsistencyException;
 import myorg.domain.User;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 public class AccountabilityVersion extends AccountabilityVersion_Base {
-    
-    private AccountabilityVersion(LocalDate beginDate, LocalDate endDate,
- Accountability acc, boolean erased) {
-        super();
+
+    private AccountabilityVersion(LocalDate beginDate, LocalDate endDate, Accountability acc, boolean erased) {
+	super();
 	super.setAccountability(acc);
 	super.setErased(erased);
 	super.setBeginDate(beginDate);
@@ -18,8 +18,9 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 	super.setCreationDate(new DateTime());
 	super.setUserWhoCreated(myorg.applicationTier.Authenticate.UserView.getCurrentUser());
     }
-    
-    //let's protect all of the methods that could compromise the workings of the Acc. Version
+
+    // let's protect all of the methods that could compromise the workings of
+    // the Acc. Version
     @Deprecated
     @Override
     public void setAccountability(Accountability accountability) {
@@ -66,6 +67,11 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 
     }
 
+    @ConsistencyPredicate(OrganizationConsistencyException.class)
+    protected boolean checkDateInterval() {
+	return getBeginDate() != null && (getEndDate() == null || !getBeginDate().isAfter(getEndDate()));
+    }
+
     /**
      * It creates a new AccountabilityHistory item and pushes the others (if
      * they exist)
@@ -83,25 +89,28 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
      * 
      * 
      */
-    protected static void insertAccountabilityVersion(LocalDate beginDate,
- LocalDate endDate, Accountability acc, boolean erased) {
+    protected static void insertAccountabilityVersion(LocalDate beginDate, LocalDate endDate, Accountability acc, boolean erased) {
 	if (acc == null)
 	    throw new IllegalArgumentException("cant.provide.a.null.accountability");
-	//let's check on the first case i.e. when the given acc does not have an AccountabilityHistory associated
+	// let's check on the first case i.e. when the given acc does not have
+	// an AccountabilityHistory associated
 	AccountabilityVersion firstAccHistory = acc.getAccountabilityVersion();
 	AccountabilityVersion newAccountabilityHistory = new AccountabilityVersion(beginDate, endDate, acc, erased);
 	if (firstAccHistory == null) {
-	    //we are the first ones, let's just create ourselves
-	    //TODO uncomment FENIX-337 this verification doesn't make sense untill all of the Accountabilities are migrated
-	    //	    if (erased)
-	    //		throw new IllegalArgumentException("creating.a.deleted.acc.does.not.make.sense"); //we shouldn't be creating a deleted accountability to start with!
+	    // we are the first ones, let's just create ourselves
+	    // TODO uncomment FENIX-337 this verification doesn't make sense
+	    // untill all of the Accountabilities are migrated
+	    // if (erased)
+	    // throw new
+	    // IllegalArgumentException("creating.a.deleted.acc.does.not.make.sense");
+	    // //we shouldn't be creating a deleted accountability to start
+	    // with!
 	} else {
-	    //let's push all of the next accHistories into their rightful position
+	    // let's push all of the next accHistories into their rightful
+	    // position
 	    firstAccHistory.setPreviousAccVersion(newAccountabilityHistory);
 	    newAccountabilityHistory.setNextAccVersion(firstAccHistory);
 	}
     }
-
-
 
 }
