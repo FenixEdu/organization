@@ -97,14 +97,9 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 	AccountabilityVersion firstAccHistory = acc.getAccountabilityVersion();
 	AccountabilityVersion newAccountabilityHistory = new AccountabilityVersion(beginDate, endDate, acc, erased);
 	if (firstAccHistory == null) {
-	    // we are the first ones, let's just create ourselves
-	    // TODO uncomment FENIX-337 this verification doesn't make sense
-	    // untill all of the Accountabilities are migrated
-	    // if (erased)
-	    // throw new
-	    // IllegalArgumentException("creating.a.deleted.acc.does.not.make.sense");
-	    // //we shouldn't be creating a deleted accountability to start
-	    // with!
+	    //we are the first ones, let's just create ourselves
+	    if (erased)
+		throw new IllegalArgumentException("creating.a.deleted.acc.does.not.make.sense"); //we shouldn't be creating a deleted accountability to start with!
 	} else {
 	    // let's push all of the next accHistories into their rightful
 	    // position

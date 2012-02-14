@@ -101,10 +101,10 @@ text-decoration: line-through;
 	  <%if (showDeletedAccountabilities || !((Accountability)accItem).isErased()) { %>
 	  <%-- Taking care of the class of the row --%>
 		  <logic:equal value="false" name="accItem" property="activeNow" >
-		  	<logic:equal value="true" name="accItem" property="historicItem">
+		  	<logic:equal value="true" name="accItem" property="erased">
 		  		<tr class="deleted">
 		  	</logic:equal>
-		  	<logic:equal value="false" name="accItem" property="historicItem">
+		  	<logic:equal value="false" name="accItem" property="erased">
 		  		<tr class="disabled">
 		  	</logic:equal>
 		  </logic:equal>

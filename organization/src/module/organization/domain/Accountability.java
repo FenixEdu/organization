@@ -165,7 +165,6 @@ public class Accountability extends Accountability_Base {
      *         otherwise
      */
     public boolean isErased() {
-	// TODO FENIX-337
 	if (getAccountabilityVersion() == null)
 	    return false;
 	return getAccountabilityVersion().getErased();
