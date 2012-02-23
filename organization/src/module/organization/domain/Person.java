@@ -249,7 +249,12 @@ public class Person extends Person_Base implements Searchable, Indexable {
     public Set<Indexable> getObjectsToIndex() {
 	return Collections.singleton((Indexable) this);
     }
-    
+
+    @Override
+    public IndexMode getIndexMode() {
+	return IndexMode.MANUAL;
+    }
+
     @Override
     public String getPresentationName() {
 	return hasUser() ? getUser().getPresentationName() : getName();

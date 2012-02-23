@@ -104,7 +104,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	    throw new DomainException("error.Unit.invalid.name");
 	}
 
-	if (acronym == null /* || acronym.isEmpty() */ ) {
+	if (acronym == null /* || acronym.isEmpty() */) {
 	    throw new DomainException("error.Unit.invalid.acronym");
 	}
     }
@@ -167,7 +167,8 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
     @Override
     public String getPresentationName() {
-	return getAcronym() == null || getAcronym().isEmpty() ? super.getPresentationName() : super.getPresentationName() + " (" + getAcronym() + ')';
+	return getAcronym() == null || getAcronym().isEmpty() ? super.getPresentationName() : super.getPresentationName() + " ("
+		+ getAcronym() + ')';
     }
 
     public void closeAllParentAccountabilitiesByType(final AccountabilityType accountabilityType) {
@@ -187,7 +188,8 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	}
 	for (final Accountability accountability : getChildAccountabilitiesSet()) {
 	    if (accountability.getAccountabilityType() == accountabilityType) {
-		final Party party = accountability.getChild().findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(accountabilityType, partyType, acronym);
+		final Party party = accountability.getChild().findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(
+			accountabilityType, partyType, acronym);
 		if (party != null) {
 		    return party;
 		}
@@ -246,7 +248,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	    }
 	}
     }
-    
+
     /**
      * Enum used for the values of the indexes that are used for the lucene
      * plugin
@@ -277,4 +279,8 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 	return Collections.singleton((Indexable) this);
     }
 
+    @Override
+    public IndexMode getIndexMode() {
+	return IndexMode.MANUAL;
+    }
 }
