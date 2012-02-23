@@ -115,6 +115,11 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 	return document;
     }
 
+    @Override
+    public IndexMode getIndexMode() {
+	return IndexMode.MANUAL;
+    }
+
     public Person getPerson() {
 	if (this.getParty() instanceof Person)
 	    return (Person) this.getParty();
@@ -126,7 +131,8 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      * Sets the contact value making sure that the user that called this method
      * has permissions to do it
      * 
-     * @param value the value to set
+     * @param value
+     *            the value to set
      */
     @Service
     public void setContactValue(String value) {
@@ -163,7 +169,8 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     }
 
     /**
-     * @param value the value to set on the contact.
+     * @param value
+     *            the value to set on the contact.
      */
     protected abstract void setValue(String value);
 
@@ -183,7 +190,8 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      * {@link ContactsConfigurator}, otherwise it throws an exception
      * automaticly due to the listener
      * 
-     * @param groups the groups to which this PartyContact will be visibile to
+     * @param groups
+     *            the groups to which this PartyContact will be visibile to
      */
     @Service
     public void setVisibleTo(List<PersistentGroup> groups) {
@@ -227,8 +235,9 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     // DEPENDENCY
     /**
      * 
-     * @param currentUser the User to assert if it is the owner of this
-     *            partycontact or not
+     * @param currentUser
+     *            the User to assert if it is the owner of this partycontact or
+     *            not
      * @return true if the currentUser is the owner of this PartyContact, false
      *         otherwise
      */
@@ -242,10 +251,11 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 
     /**
      * 
-     * @param currentUser the User to assert if it is the owner of this
-     *            partycontact or not
-     * @param partyFutureContactOwner the {@link Party} that will have the
-     *            contact
+     * @param currentUser
+     *            the User to assert if it is the owner of this partycontact or
+     *            not
+     * @param partyFutureContactOwner
+     *            the {@link Party} that will have the contact
      * @return true if the currentUser is the owner of this PartyContact, false
      *         otherwise
      */
