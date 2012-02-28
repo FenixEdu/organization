@@ -27,11 +27,11 @@ package module.geography.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import module.geography.util.StringsUtil;
 import module.organization.domain.Unit;
 
 import org.joda.time.LocalDate;
 
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -50,7 +50,7 @@ public class Planet extends Planet_Base {
 
     @Override
     public MultiLanguageString getType() {
-	return StringsUtil.makeName("Planeta", PLANET_PARTYTYPE_NAME);
+	return new MultiLanguageString().with(Language.pt, "Planeta").with(Language.en, PLANET_PARTYTYPE_NAME);
     }
 
     public Galaxy getParent() {

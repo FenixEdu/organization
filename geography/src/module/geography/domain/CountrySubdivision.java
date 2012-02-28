@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 
-import module.geography.util.StringsUtil;
 import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
 import myorg.domain.exceptions.DomainException;
@@ -37,6 +36,7 @@ import myorg.domain.exceptions.DomainException;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -68,9 +68,9 @@ public class CountrySubdivision extends CountrySubdivision_Base {
 
     private CountrySubdivision(Unit parent, Integer level, String name, String acronym, String code) {
 	this();
-	setUnit(Unit.create(parent, StringsUtil.makeName(name, name), acronym,
-		getPartyType("Subdivisão de País",
-		COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(), new LocalDate(), null));
+	setUnit(Unit.create(parent, new MultiLanguageString().with(Language.pt, name).with(Language.en, name), acronym,
+		getPartyType("Subdivisão de País", COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(),
+		new LocalDate(), null));
 	setLevel(level);
 	setCode(code);
     }

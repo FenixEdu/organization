@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import module.geography.domain.Country;
 import module.geography.domain.CountrySubdivision;
-import module.geography.util.StringsUtil;
 import module.organization.domain.Accountability;
 import myorg._development.PropertiesManager;
 
@@ -35,7 +34,8 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
 
     protected int touches = 0;
 
-    private final MultiLanguageString municipalityLevelName = StringsUtil.makeName("Concelho", "Municipality");
+    private final MultiLanguageString municipalityLevelName = new MultiLanguageString().with(Language.pt, "Concelho").with(
+	    Language.en, "Municipality");
 
     private static PortugueseMunicipalitiesImportAuxiliaryServices singletonHolder;
 
@@ -73,13 +73,14 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
 		    CountrySubdivision district = portugal.getChildByCode(districtCode);
 		    CountrySubdivision municipality = null;
 		    if (district == null) {
-			//abort the transaction!! throw some kind of exception and warn the user of the outcome
+			// abort the transaction!! throw some kind of exception
+			// and warn the user of the outcome
 			originalTask.auxLogInfo("Script aborted because the district with code: " + districtCode
 				+ " couldn't be found");
 			throw new RuntimeException("Script aborted because the district with code: " + districtCode
 				+ " couldn't be found");
 		    } else {
-			//get the municipality
+			// get the municipality
 			municipality = district.getChildByCode(municipalityCode);
 			if (municipality == null) {
 			    municipality = createMunicipality(district, municipalityCode, municipalityName, lastReview);

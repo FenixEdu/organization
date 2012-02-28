@@ -28,11 +28,10 @@ import java.text.Collator;
 import java.util.Collection;
 import java.util.Comparator;
 
-import module.geography.util.StringsUtil;
 import module.organization.domain.AccountabilityType;
+import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
 import module.organization.domain.PartyType;
 import module.organization.domain.Unit;
-import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
 import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
@@ -47,6 +46,7 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 public abstract class GeographicLocation extends GeographicLocation_Base implements GeographicConstants {
 
     public static final Comparator<GeographicLocation> COMPARATOR_BY_NAME = new Comparator<GeographicLocation>() {
+	@Override
 	public int compare(final GeographicLocation location1, GeographicLocation location2) {
 	    final String name1 = location1.getName().getContent();
 	    final String name2 = location2.getName().getContent();
@@ -63,6 +63,7 @@ public abstract class GeographicLocation extends GeographicLocation_Base impleme
 	    return c;
 	}
     };
+
     public GeographicLocation() {
 	super();
     }
@@ -114,19 +115,18 @@ public abstract class GeographicLocation extends GeographicLocation_Base impleme
 	    }
 	}
 	if (geographic == null) {
-	    geographic = AccountabilityType.create(new AccountabilityTypeBean(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME, StringsUtil
-		    .makeName(
-		    "Geográfico", GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME)));
+	    geographic = AccountabilityType.create(new AccountabilityTypeBean(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME,
+		    new MultiLanguageString().with(Language.pt, "Geográfico").with(Language.en,
+			    GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME)));
 	}
 	return geographic;
     }
-
 
     protected static PartyType getPartyType(String pt, String en) {
 	for (PartyType partyType : MyOrg.getInstance().getPartyTypesSet()) {
 	    if (partyType.getType().equals(en))
 		return partyType;
 	}
-	return new PartyType(en, StringsUtil.makeName(pt, en));
+	return new PartyType(en, new MultiLanguageString().with(Language.pt, pt).with(Language.en, en));
     }
 }

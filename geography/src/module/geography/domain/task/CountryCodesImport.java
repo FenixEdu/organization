@@ -91,10 +91,10 @@ public class CountryCodesImport extends CountryCodesImport_Base {
 	if (pt != null || en != null) {
 	    MultiLanguageString name = new MultiLanguageString();
 	    if (pt != null) {
-		name.setContent(Language.pt, WordUtils.capitalizeFully(pt));
+		name = name.with(Language.pt, WordUtils.capitalizeFully(pt));
 	    }
 	    if (en != null) {
-		name.setContent(Language.en, WordUtils.capitalizeFully(en));
+		name = name.with(Language.en, WordUtils.capitalizeFully(en));
 	    }
 	    return name;
 	}

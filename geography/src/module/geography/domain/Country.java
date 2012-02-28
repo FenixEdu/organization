@@ -31,7 +31,6 @@ import java.util.Collection;
 import java.util.Comparator;
 
 import module.geography.util.AddressPrinter;
-import module.geography.util.StringsUtil;
 import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
 import myorg.domain.MyOrg;
@@ -105,7 +104,7 @@ public class Country extends Country_Base {
 
     @Override
     public MultiLanguageString getType() {
-	return StringsUtil.makeName("País", COUNTRY_PARTYTYPE_NAME);
+	return new MultiLanguageString().with(Language.pt, "País").with(Language.en, COUNTRY_PARTYTYPE_NAME);
     }
 
     @Service

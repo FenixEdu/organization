@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import module.geography.domain.Country;
 import module.geography.domain.CountrySubdivision;
-import module.geography.util.StringsUtil;
 import module.organization.domain.Accountability;
 import myorg._development.PropertiesManager;
 
@@ -35,7 +34,8 @@ public class PortugueseDistrictImportAuxiliaryServices {
 
     protected int touches = 0;
 
-    private final MultiLanguageString districtLevelName = StringsUtil.makeName("Distrito", "District");;
+    private final MultiLanguageString districtLevelName = new MultiLanguageString().with(Language.pt, "Distrito").with(
+	    Language.en, "District");;
 
     private static PortugueseDistrictImportAuxiliaryServices singletonHolder;
 
@@ -81,7 +81,8 @@ public class PortugueseDistrictImportAuxiliaryServices {
 
 		// getting all of the existing districts
 		for (CountrySubdivision countrySubdivision : portugal.getChildren()) {
-		    if (countrySubdivision.getLevelName().getContent(Language.pt).equalsIgnoreCase(districtLevelName.getContent(Language.pt))) {
+		    if (countrySubdivision.getLevelName().getContent(Language.pt)
+			    .equalsIgnoreCase(districtLevelName.getContent(Language.pt))) {
 			existingDistricts.add(countrySubdivision);
 		    }
 		} // let's assert
@@ -110,7 +111,6 @@ public class PortugueseDistrictImportAuxiliaryServices {
 	    }
 	}
     }
-
 
     /**
      * It modifies the data or touches (sets the last review date to the date

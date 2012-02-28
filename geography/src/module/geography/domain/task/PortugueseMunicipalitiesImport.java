@@ -1,9 +1,9 @@
 package module.geography.domain.task;
 
 import module.geography.domain.Country;
-import module.geography.util.StringsUtil;
 import myorg.util.BundleUtil;
 import pt.ist.fenixWebFramework.services.Service;
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 public class PortugueseMunicipalitiesImport extends PortugueseDistrictImport_Base {
@@ -20,7 +20,8 @@ public class PortugueseMunicipalitiesImport extends PortugueseDistrictImport_Bas
 
     protected int touches = 0;
 
-    private final MultiLanguageString municipalityLevelName = StringsUtil.makeName("Concelho", "Municipality");
+    private final MultiLanguageString municipalityLevelName = new MultiLanguageString().with(Language.pt, "Concelho").with(
+	    Language.en, "Municipality");
 
     public PortugueseMunicipalitiesImport() {
 	super();

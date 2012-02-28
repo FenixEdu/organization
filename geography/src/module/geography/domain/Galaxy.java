@@ -27,11 +27,11 @@ package module.geography.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import module.geography.util.StringsUtil;
 import module.organization.domain.Unit;
 
 import org.joda.time.LocalDate;
 
+import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -48,7 +48,7 @@ public class Galaxy extends Galaxy_Base {
 
     @Override
     public MultiLanguageString getType() {
-	return StringsUtil.makeName("Galáxia", GALAXY_PARTYTYPE_NAME);
+	return new MultiLanguageString().with(Language.pt, "Galáxia").with(Language.en, GALAXY_PARTYTYPE_NAME);
     }
 
     public Universe getParent() {

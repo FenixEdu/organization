@@ -46,26 +46,22 @@ public class Magrathea implements GeographicConstants {
     public static Planet buildEarth() {
 	Universe universe = Universe.getMultiverseZero();
 	if (universe == null) {
-	    universe = new Universe(makeName("Multiverso Zero", "Multiverse Zero"), MULTIVERSE_UNIT_ACRONYM);
+	    universe = new Universe(new MultiLanguageString().with(Language.pt, "Multiverso Zero").with(Language.en,
+		    "Multiverse Zero"), MULTIVERSE_UNIT_ACRONYM);
 	}
 
 	Galaxy galaxy = universe.getChildByAcronym(MILKY_WAY_UNIT_ACRONYM);
 	if (galaxy == null) {
-	    galaxy = new Galaxy(universe, makeName("Via Láctea", "Milky Way"), MILKY_WAY_UNIT_ACRONYM);
+	    galaxy = new Galaxy(universe, new MultiLanguageString().with(Language.pt, "Via Láctea")
+		    .with(Language.en, "Milky Way"), MILKY_WAY_UNIT_ACRONYM);
 	}
 
 	Planet planet = galaxy.getChildByAcronym(EARTH_UNIT_ACRONYM);
 	if (planet == null) {
-	    planet = new Planet(galaxy, makeName("Terra", "Earth"), EARTH_UNIT_ACRONYM);
+	    planet = new Planet(galaxy, new MultiLanguageString().with(Language.pt, "Terra").with(Language.en, "Earth"),
+		    EARTH_UNIT_ACRONYM);
 	}
 
 	return planet;
-    }
-
-    private static MultiLanguageString makeName(String pt, String en) {
-	MultiLanguageString name = new MultiLanguageString();
-	name.setContent(Language.pt, pt);
-	name.setContent(Language.en, en);
-	return name;
     }
 }
