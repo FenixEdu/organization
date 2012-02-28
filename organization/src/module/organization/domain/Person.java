@@ -135,9 +135,7 @@ public class Person extends Person_Base implements Searchable, Indexable {
 
     @Service
     public void edit(final PersonBean bean) {
-	final MultiLanguageString name = getPartyName();
-	name.setContent(bean.getName());
-	setPartyName(name);
+	setPartyName(getPartyName().withDefault(bean.getName()));
     }
 
     public String getName() {
