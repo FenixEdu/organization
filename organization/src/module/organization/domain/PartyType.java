@@ -2,16 +2,16 @@
  * @(#)PartyType.java
  *
  * Copyright 2009 Instituto Superior Tecnico
- * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
+ * Founding Authors: João Figueiredo, Luis Cruz
  * 
  *      https://fenix-ashes.ist.utl.pt/
  * 
- *   This file is part of the Organization Module for the MyOrg web application.
+ *   This file is part of the Organization Module.
  *
- *   The Organization Module is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published
- *   by the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.*
+ *   The Organization Module is free software: you can
+ *   redistribute it and/or modify it under the terms of the GNU Lesser General
+ *   Public License as published by the Free Software Foundation, either version 
+ *   3 of the License, or (at your option) any later version.
  *
  *   The Organization Module is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,7 +22,6 @@
  *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-
 package module.organization.domain;
 
 import java.io.Serializable;
@@ -32,6 +31,13 @@ import myorg.domain.exceptions.DomainException;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
+/**
+ * 
+ * @author Pedro Santos
+ * @author Paulo Abrantes
+ * @author Luis Cruz
+ * 
+ */
 public class PartyType extends PartyType_Base implements Comparable<PartyType> {
 
     static public class PartyTypeBean implements Serializable {

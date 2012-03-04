@@ -1,11 +1,31 @@
-/**
+/*
+ * @(#)VerifyAccountabilitiesMigration.java
+ *
+ * Copyright 2012 Instituto Superior Tecnico
+ * Founding Authors: João Figueiredo, Luis Cruz
+ * 
+ *      https://fenix-ashes.ist.utl.pt/
+ * 
+ *   This file is part of the Organization Module.
+ *
+ *   The Organization Module is free software: you can
+ *   redistribute it and/or modify it under the terms of the GNU Lesser General
+ *   Public License as published by the Free Software Foundation, either version 
+ *   3 of the License, or (at your option) any later version.
+ *
+ *   The Organization Module is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
 package module.organization.domain.scripts;
 
 
 /**
- * @author João Antunes (joao.antunes@tagus.ist.utl.pt) - 9 de Fev de 2012
  * 
  *         FENIX-337 - Script to verify the correct migration of the
  *         Accountabilities
@@ -13,6 +33,8 @@ package module.organization.domain.scripts;
  * 
  *         All commented out because it has methods that stopped working due to
  *         the migration being done
+ * 
+ * @author João Antunes
  * 
  public class VerifyAccountabilitiesMigration extends ReadCustomTask {
 

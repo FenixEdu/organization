@@ -1,4 +1,25 @@
-/**
+/*
+ * @(#)MigrateAccountabilitiesToAccountabilitiesWithVersions.java
+ *
+ * Copyright 2012 Instituto Superior Tecnico
+ * Founding Authors: João Figueiredo, Luis Cruz
+ * 
+ *      https://fenix-ashes.ist.utl.pt/
+ * 
+ *   This file is part of the Organization Module.
+ *
+ *   The Organization Module is free software: you can
+ *   redistribute it and/or modify it under the terms of the GNU Lesser General
+ *   Public License as published by the Free Software Foundation, either version 
+ *   3 of the License, or (at your option) any later version.
+ *
+ *   The Organization Module is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
 package module.organization.domain.scripts;
@@ -12,10 +33,12 @@ import myorg.domain.scheduler.ReadCustomTask;
 import myorg.domain.scheduler.TransactionalThread;
 
 /**
- * @author João Antunes (joao.antunes@tagus.ist.utl.pt) - 9 de Fev de 2012
  * 
- *         FENIX-337 - Script to migrate the Accountabilities to make them have
- *         AccountabilitiVersion
+ * FENIX-337 - Script to migrate the Accountabilities to make them have
+ * AccountabilitiVersion
+ * 
+ * 
+ * @author João Antunes
  * 
  */
 public class MigrateAccountabilitiesToAccountabilitiesWithVersions extends ReadCustomTask {
@@ -23,14 +46,17 @@ public class MigrateAccountabilitiesToAccountabilitiesWithVersions extends ReadC
     Set<Accountability> accountabilitiesToMigrate;
 
     private final int migratedAccs = 0;
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see jvstm.TransactionalCommand#doIt()
      */
     @Override
     public void doIt() {
 	accountabilitiesToMigrate = new HashSet<Accountability>();
 
-	//let's get the list of all Accountabilities without Versions
+	// let's get the list of all Accountabilities without Versions
 
 	for (Accountability acc : MyOrg.getInstance().getAccountabilities()) {
 	    if (acc.getAccountabilityVersion() == null) {
@@ -45,8 +71,7 @@ public class MigrateAccountabilitiesToAccountabilitiesWithVersions extends ReadC
 	for (Accountability acc : accountabilitiesToMigrate) {
 	    counter++;
 	    oneKAccsBatch.add(acc);
-	    if (counter >= 1000)
-	    {
+	    if (counter >= 1000) {
 		WorkerMigraterThread workerMigraterThread = new WorkerMigraterThread(oneKAccsBatch);
 		workerMigraterThread.start();
 		try {
@@ -60,7 +85,7 @@ public class MigrateAccountabilitiesToAccountabilitiesWithVersions extends ReadC
 	}
 
 	if (oneKAccsBatch.size() > 0) {
-	    //let's do the rest of them
+	    // let's do the rest of them
 	    WorkerMigraterThread workerMigraterThread = new WorkerMigraterThread(oneKAccsBatch);
 	    workerMigraterThread.start();
 	    try {
@@ -73,9 +98,9 @@ public class MigrateAccountabilitiesToAccountabilitiesWithVersions extends ReadC
 	out.println("Migrated accs: " + migratedAccs);
 
     }
-    
+
     class WorkerMigraterThread extends TransactionalThread {
-	
+
 	public final Set<Accountability> accsToMigrate;
 
 	public WorkerMigraterThread(Set<Accountability> accsToMigrate) {
@@ -90,16 +115,17 @@ public class MigrateAccountabilitiesToAccountabilitiesWithVersions extends ReadC
 		    boolean erased = false;
 		    if (acc.getParent() == null && acc.getChild() == null)
 			erased = true;
-		    //joantune: uncompilable code ATM as migration FENIX-337 was made, just here for historic purposes only
-		    //		    new AccountabilityVersion(acc.getBeginDate(), acc.getEndDate(), acc, erased, acc.getCreatorUser(),
-		    //			    acc.getCreationDate());
-		    //		    migratedAccs++;
+		    // joantune: uncompilable code ATM as migration FENIX-337
+		    // was made, just here for historic purposes only
+		    // new AccountabilityVersion(acc.getBeginDate(),
+		    // acc.getEndDate(), acc, erased, acc.getCreatorUser(),
+		    // acc.getCreationDate());
+		    // migratedAccs++;
 		}
 	    }
 
-	    	    
 	}
-	
+
     }
 
 }
