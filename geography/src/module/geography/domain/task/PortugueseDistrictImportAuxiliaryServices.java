@@ -1,3 +1,27 @@
+/*
+ * @(#)PortugueseDistrictImportAuxiliaryServices.java
+ *
+ * Copyright 2010 Instituto Superior Tecnico
+ * Founding Authors: Pedro Santos
+ * 
+ *      https://fenix-ashes.ist.utl.pt/
+ * 
+ *   This file is part of the Geography Module.
+ *
+ *   The Geography Module is free software: you can
+ *   redistribute it and/or modify it under the terms of the GNU Lesser General
+ *   Public License as published by the Free Software Foundation, either version 
+ *   3 of the License, or (at your option) any later version.
+ *
+ *   The Geography Module is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with the Geography Module. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ */
 package module.geography.domain.task;
 
 import java.io.File;
@@ -20,6 +44,12 @@ import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
+/**
+ * 
+ * @author Pedro Santos
+ * @author João Antunes
+ * 
+ */
 public class PortugueseDistrictImportAuxiliaryServices {
 
     private static final String CTT_DISTRICTFILE = "/distritos.txt";
