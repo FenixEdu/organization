@@ -1,28 +1,27 @@
 /*
- * @(#)PersonalInformationBean.java
+ * @(#)IdentificationDocument.java
  *
  * Copyright 2009 Instituto Superior Tecnico
- * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
+ * Founding Authors: João Figueiredo
  * 
  *      https://fenix-ashes.ist.utl.pt/
  * 
- *   This file is part of the PersonalInformation Module for the MyOrg web application.
+ *   This file is part of the Personal Information Module.
  *
- *   The Organization Module is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published
- *   by the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.*
+ *   The Personal Information Module is free software: you can
+ *   redistribute it and/or modify it under the terms of the GNU Lesser General
+ *   Public License as published by the Free Software Foundation, either version 
+ *   3 of the License, or (at your option) any later version.
  *
- *   The Organization Module is distributed in the hope that it will be useful,
+ *   The Personal Information Module is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *   GNU Lesser General Public License for more details.
  *
  *   You should have received a copy of the GNU Lesser General Public License
- *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
+ *   along with the Personal Information Module. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-
 package module.personalinformation.domain;
 
 import java.io.Serializable;
@@ -31,6 +30,11 @@ import myorg.domain.MyOrg;
 import myorg.domain.exceptions.DomainException;
 import pt.ist.fenixframework.pstm.Transaction;
 
+/**
+ * 
+ * @author João Figueiredo
+ * 
+ */
 public class IdentificationDocument extends IdentificationDocument_Base {
 
     static public class IdentificationDocumentBean implements Serializable {
