@@ -127,6 +127,10 @@ abstract public class Party extends Party_Base implements Presentable {
 	return getParents(new PartyByPartyType(Unit.class, type));
     }
 
+    public List<Accountability> getAllParentAccountabilities() {
+	return super.getParentAccountabilities();
+    }
+
     // Overriden methods to hide the erased accs: 
     @Override
     public List<Accountability> getParentAccountabilities() {
@@ -488,8 +492,8 @@ abstract public class Party extends Party_Base implements Presentable {
     }
 
     protected void disconnect() {
-	while (hasAnyParentAccountabilities()) {
-	    getParentAccountabilities().get(0).delete();
+	while (super.hasAnyParentAccountabilities()) {
+	    super.getParentAccountabilities().get(0).delete();
 	}
 	getPartyTypes().clear();
 	removeMyOrg();

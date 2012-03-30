@@ -357,4 +357,8 @@ public class Accountability extends Accountability_Base {
 	return getAccountabilityVersion().getUserWhoCreated();
     }
 
+    public void switchChild(final Party newChild) {
+	super.setChild(newChild);
+    }
+
 }
