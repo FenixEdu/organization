@@ -230,7 +230,7 @@ abstract public class Party extends Party_Base implements Presentable {
 	return getChildrenAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, types));
     }
 
-    private Collection<? extends Accountability> getChildrenAccountabilities(LocalDate startDate, LocalDate endDate,
+    public Collection<? extends Accountability> getChildrenAccountabilities(LocalDate startDate, LocalDate endDate,
 	    List<AccountabilityType> accTypes) {
 	return getChildrenAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, accTypes));
     }
