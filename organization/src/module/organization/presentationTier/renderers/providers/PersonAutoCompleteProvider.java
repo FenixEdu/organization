@@ -51,11 +51,11 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider {
 	final String trimmedValue = value.trim();
 	String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
 
-	for (final Person person : MyOrg.getInstance().getPersonsSet()) {
+	for (final Person person : getPersons(argsMap, value)) {
 	    final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
 	    if (hasMatch(values, normalizedName)) {
-		    persons.add(person);
-		}
+		persons.add(person);
+	    }
 	    if (person.getUser().getUsername().indexOf(value) >= 0) {
 		persons.add(person);
 	    }
@@ -67,6 +67,13 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider {
 	Collections.sort(persons, Party.COMPARATOR_BY_NAME);
 
 	return persons;
+    }
+
+    /**
+     * Should be overridden by subclasses to allow filtering of the Search Results
+     */
+    protected Collection<Person> getPersons(Map<String, String> argsMap, String value) {
+	return MyOrg.getInstance().getPersonsSet();
     }
 
     private boolean hasMatch(final String[] input, final String unitNameParts) {
