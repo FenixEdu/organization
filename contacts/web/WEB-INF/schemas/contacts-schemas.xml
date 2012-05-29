@@ -412,7 +412,7 @@
 
 <!-- Auto complete for the Persons -->
 <schema name="myorg.modules.contacts.configure.SuperEditorRole.listPersons" type="module.contacts.presentationTier.action.bean.PersonsBean" bundle="CONTACTS_RESOURCES">
-	<slot name="person" layout="autoComplete" key="manage.supereditor.role.person.label" bundle="CONTACTS_RESOURCES" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+	<slot name="person" layout="autoComplete" key="manage.supereditor.role.person.label" bundle="CONTACTS_RESOURCES" required="true">
         <property name="labelField" value="name"/>
 		<property name="format" value="${presentationName}"/>
 		<property name="minChars" value="3"/>		

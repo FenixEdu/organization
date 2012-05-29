@@ -28,7 +28,7 @@
 	<%-- 
 	<fr:edit name="emailBean" id="xpto" action="/contacts.do?method=createCustomEmail">
 		<fr:schema type="module.contacts.presentationTier.action.bean.ContactBean" bundle="CONTACTS_RESOURCES">
-			<fr:slot name="value" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+			<fr:slot name="value" required="true">
 				<fr:property name="value" value="256"/>
 			</fr:slot>
 		</fr:schema> 
@@ -50,7 +50,7 @@
 <fr:form action="/mobility.do?method=frontPage">
 	<fr:edit id="offerSearch" name="offerSearch">
 		<fr:schema type="module.mobility.domain.util.OfferSearch" bundle="MOBILITY_RESOURCES">
-			<fr:slot name="processNumber" key="label.mobility.processIdentification" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
+			<fr:slot name="processNumber" key="label.mobility.processIdentification" required="true">
 				<fr:property name="size" value="10"/>
 			</fr:slot>
 		</fr:schema>
