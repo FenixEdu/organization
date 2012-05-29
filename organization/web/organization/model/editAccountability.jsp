@@ -41,7 +41,7 @@
 	<bean:define id="urlEdit">/organizationModel.do?method=prepareManageChildAccountabilities&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 	<fr:edit id="accountability" name="accountability" action="<%= urlEdit %>">
 		<fr:schema type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
-			<fr:slot name="beginDate" key="label.begin" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator"/>
+			<fr:slot name="beginDate" key="label.begin" required="true"/>
 			<fr:slot name="endDate" key="label.end"/>
 		</fr:schema>
 		<fr:layout name="tabular">
