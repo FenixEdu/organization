@@ -300,6 +300,29 @@ public class Accountability extends Accountability_Base {
 
     }
 
+    /**
+     * 
+     * @param start
+     * @param end
+     * @return true if the given start and end date overlap in more than one day
+     *         with this accountability (exclusively, i.e. if the end date of
+     *         this accountability equals the begin date passed as argument, it
+     *         returns false)
+     */
+    public boolean overlaps(final LocalDate start, final LocalDate end) {
+	LocalDate startDateToUse = start == null ? start : start.plusDays(1);
+	LocalDate endDateToUse = end == null ? end : end.minusDays(1);
+	return intersects(startDateToUse, endDateToUse);
+    }
+
+    /**
+     * 
+     * @param begin
+     * @param end
+     * @return true if it intersects i.e. (TODO a better explanation of what it
+     *         means) it works inclusively e.g. if the end day and the start day
+     *         of the accountability are the same, it returns true
+     */
     public boolean intersects(final LocalDate begin, final LocalDate end) {
 	return !isAfter(getBeginDate(), end) && !isAfter(begin, getEndDate());
     }
