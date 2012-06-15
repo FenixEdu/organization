@@ -81,7 +81,7 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
 	return true;
     }
 
-    protected Set<Party> getParties(Map<String, String> argsMap, String value) {
+    protected Set<? extends Party> getParties(Map<String, String> argsMap, String value) {
 	return MyOrg.getInstance().getPartiesSet();
     }
 }
