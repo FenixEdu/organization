@@ -33,11 +33,10 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 /**
  * 
  * @author Pedro Santos
- * @author João Neves
  * @author João Antunes
  * 
  */
-public class PortugueseMunicipalitiesImport extends PortugueseDistrictImport_Base {
+public class PortugueseMunicipalitiesImport extends PortugueseMunicipalitiesImport_Base {
 
     private static final String CTT_MUNICIPALITIESFILE = "/concelhos.txt";
 
