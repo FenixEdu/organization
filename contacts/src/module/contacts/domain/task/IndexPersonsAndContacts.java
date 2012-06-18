@@ -24,20 +24,19 @@
  */
 package module.contacts.domain.task;
 
-import pt.ist.fenixWebFramework.services.Service;
 import module.contacts.domain.ContactsConfigurator;
 import module.contacts.domain.PartyContact;
 import module.organization.domain.Person;
 import myorg.domain.MyOrg;
-import myorg.domain.scheduler.Task;
 import myorg.util.BundleUtil;
+import pt.ist.fenixWebFramework.services.Service;
 
 /**
  * 
  * @author João Antunes
  * 
  */
-public class IndexPersonsAndContacts extends Task {
+public class IndexPersonsAndContacts extends IndexPersonsAndContacts_Base {
 
     private static int personsTouched = 0;
 
