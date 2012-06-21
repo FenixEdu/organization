@@ -620,21 +620,27 @@ abstract public class Party extends Party_Base implements Presentable {
 
     public boolean hasChildAccountabilityIncludingAncestry(final Collection<AccountabilityType> accountabilityTypes,
 	    final Party party) {
-	return hasChildAccountabilityIncludingAncestry(new HashSet<Party>(), accountabilityTypes, party);
+	return hasActiveChildAccountabilityIncludingAncestry(new HashSet<Party>(), accountabilityTypes, party);
     }
 
-    private boolean hasChildAccountabilityIncludingAncestry(final Set<Party> processed,
+    private boolean hasActiveChildAccountabilityIncludingAncestry(final Set<Party> processed,
 	    final Collection<AccountabilityType> accountabilityTypes, final Party party) {
 	if (!processed.contains(this)) {
 	    processed.add(this);
-	    for (final Party child : getChildren(accountabilityTypes)) {
-		if (child == party) {
-		    return true;
+	    for (final Accountability accountability : getChildAccountabilitiesSet()) {
+		if (accountability.isActiveNow() && accountabilityTypes.contains(accountability.getAccountabilityType())) {
+		    final Party child = accountability.getChild();
+		    if (child == party) {
+			return true;
+		    }
 		}
 	    }
-	    for (final Party parent : getParents(accountabilityTypes)) {
-		if (parent.hasChildAccountabilityIncludingAncestry(processed, accountabilityTypes, party)) {
-		    return true;
+	    for (final Accountability accountability : getParentAccountabilitiesSet()) {
+		if (accountability.isActiveNow() && accountabilityTypes.contains(accountability.getAccountabilityType())) {
+		    final Party parent = accountability.getParent();
+		    if (parent.hasActiveChildAccountabilityIncludingAncestry(processed, accountabilityTypes, party)) {
+			return true;
+		    }
 		}
 	    }
 	}
