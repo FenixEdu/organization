@@ -56,7 +56,7 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider {
 	    if (hasMatch(values, normalizedName)) {
 		persons.add(person);
 	    }
-	    if (person.getUser().getUsername().indexOf(value) >= 0) {
+	    if (person.getUser() != null && person.getUser().getUsername().indexOf(value) >= 0) {
 		persons.add(person);
 	    }
 	    if (persons.size() >= maxCount) {
@@ -70,7 +70,8 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider {
     }
 
     /**
-     * Should be overridden by subclasses to allow filtering of the Search Results
+     * Should be overridden by subclasses to allow filtering of the Search
+     * Results
      */
     protected Collection<Person> getPersons(Map<String, String> argsMap, String value) {
 	return MyOrg.getInstance().getPersonsSet();
