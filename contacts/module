@@ -1,2 +1,0 @@
-name=contacts
-depends=core,lucene,organization,geography
