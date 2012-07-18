@@ -30,8 +30,8 @@ import java.util.HashMap;
 import pt.ist.fenixWebFramework.services.Service;
 
 import module.geography.domain.Country;
-import myorg.domain.MyOrg;
-import myorg.util.BundleUtil;
+import pt.ist.bennu.core.domain.MyOrg;
+import pt.ist.bennu.core.util.BundleUtil;
 
 /**
  * 

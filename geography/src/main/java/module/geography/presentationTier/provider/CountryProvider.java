@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import module.geography.domain.Country;
-import myorg.domain.MyOrg;
+import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 

@@ -31,7 +31,7 @@ import java.util.Comparator;
 
 import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
-import myorg.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
 

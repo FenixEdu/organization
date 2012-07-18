@@ -29,7 +29,7 @@
 	externalizeWith {
 		String getName();
 	}
-	internalizeWith myorg.domain.util.ClassInternalizer.internalize();
+	internalizeWith pt.ist.bennu.core.domain.util.ClassInternalizer.internalize();
 }
 
 class module.geography.domain.GeographicLocation {
@@ -67,20 +67,20 @@ class module.geography.domain.PostalExtension extends module.geography.domain.Co
 	String postalBranch;
 }
 
-class module.geography.domain.task.CountryCodesImport extends myorg.domain.scheduler.Task {
+class module.geography.domain.task.CountryCodesImport extends pt.ist.bennu.core.domain.scheduler.Task {
 }
-class module.geography.domain.task.PortugueseDistrictImport extends myorg.domain.scheduler.Task {
+class module.geography.domain.task.PortugueseDistrictImport extends pt.ist.bennu.core.domain.scheduler.Task {
 }
-class module.geography.domain.task.CleanCountrySubLevels extends myorg.domain.scheduler.Task {
+class module.geography.domain.task.CleanCountrySubLevels extends pt.ist.bennu.core.domain.scheduler.Task {
 }
-class module.geography.domain.task.CountryCodesClean extends myorg.domain.scheduler.Task {
+class module.geography.domain.task.CountryCodesClean extends pt.ist.bennu.core.domain.scheduler.Task {
 }
-class module.geography.domain.task.PortugueseMunicipalitiesImport extends myorg.domain.scheduler.Task {
+class module.geography.domain.task.PortugueseMunicipalitiesImport extends pt.ist.bennu.core.domain.scheduler.Task {
 }
 
 
 relation MyOrgCountries {
-	myorg.domain.MyOrg playsRole myOrg;
+	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
 	module.geography.domain.Country playsRole countries {
 		multiplicity *;
 	}

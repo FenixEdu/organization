@@ -30,8 +30,8 @@ import java.util.HashMap;
 import module.geography.domain.Country;
 import module.geography.domain.CountrySubdivision;
 import module.geography.domain.CountrySubdivisionLevelName;
-import myorg.domain.MyOrg;
-import myorg.util.BundleUtil;
+import pt.ist.bennu.core.domain.MyOrg;
+import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.fenixWebFramework.services.Service;
 
 /**
@@ -47,7 +47,7 @@ import pt.ist.fenixWebFramework.services.Service;
 public class CleanCountrySubLevels extends CleanCountrySubLevels_Base {
 
     /* (non-Javadoc)
-     * @see myorg.domain.scheduler.Task#getLocalizedName()
+     * @see pt.ist.bennu.core.domain.scheduler.Task#getLocalizedName()
      */
     @Override
     public String getLocalizedName() {
@@ -60,7 +60,7 @@ public class CleanCountrySubLevels extends CleanCountrySubLevels_Base {
     private int countrySubDivisionDeletes = 0;
 
     /* (non-Javadoc)
-     * @see myorg.domain.scheduler.Task#executeTask()
+     * @see pt.ist.bennu.core.domain.scheduler.Task#executeTask()
      */
     @Override
     @Service

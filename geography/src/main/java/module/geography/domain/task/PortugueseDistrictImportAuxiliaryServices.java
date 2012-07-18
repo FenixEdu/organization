@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import module.geography.domain.Country;
 import module.geography.domain.CountrySubdivision;
 import module.organization.domain.Accountability;
-import myorg._development.PropertiesManager;
+import pt.ist.bennu.core._development.PropertiesManager;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;

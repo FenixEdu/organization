@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Map;
 
 import module.geography.domain.Country;
-import myorg.domain.MyOrg;
-import myorg.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import pt.ist.bennu.core.domain.MyOrg;
+import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
 import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 /**

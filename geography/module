@@ -1,2 +1,0 @@
-name=geography
-depends=core, organization, scheduler

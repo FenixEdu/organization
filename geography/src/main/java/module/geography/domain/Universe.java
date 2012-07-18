@@ -29,7 +29,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import module.organization.domain.Unit;
-import myorg.domain.MyOrg;
+import pt.ist.bennu.core.domain.MyOrg;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 

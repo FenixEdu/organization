@@ -32,8 +32,8 @@ import module.organization.domain.AccountabilityType;
 import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
 import module.organization.domain.PartyType;
 import module.organization.domain.Unit;
-import myorg.domain.MyOrg;
-import myorg.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.MyOrg;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 

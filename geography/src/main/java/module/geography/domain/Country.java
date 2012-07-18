@@ -33,8 +33,8 @@ import java.util.Comparator;
 import module.geography.util.AddressPrinter;
 import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
-import myorg.domain.MyOrg;
-import myorg.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.MyOrg;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
 

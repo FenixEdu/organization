@@ -27,7 +27,7 @@ package module.geography.domain;
 import java.text.Collator;
 import java.util.Comparator;
 
-import myorg.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
