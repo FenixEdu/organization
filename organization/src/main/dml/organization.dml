@@ -1,0 +1,367 @@
+/** package module.organization.domain; **/
+
+/*
+ * @(#)domain_model_organization.dml
+ *
+ * Copyright 2009 Instituto Superior Tecnico
+ * Founding Authors: João Figueiredo, Luis Cruz, Paulo Abrantes, Susana Fernandes
+ * 
+ *      https://fenix-ashes.ist.utl.pt/
+ * 
+ *   This file is part of the Organization Module for the MyOrg web application.
+ *
+ *   The Organization Module is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published
+ *   by the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.*
+ *
+ *   The Organization Module is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ */
+ 
+
+valueType pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString as MultiLanguageString {
+    externalizeWith {
+        String exportAsString();
+    }
+
+    internalizeWith importFromString();
+}
+
+
+class module.organization.domain.AccountabilityType {
+	String type;
+	MultiLanguageString name;
+}
+
+class module.organization.domain.Accountability {
+	//DateTime creationDate; //FENIX-337 to comment
+	//LocalDate beginDate; //FENIX-337 to comment
+	//LocalDate endDate; //FENIX-337 to comment
+}
+
+class module.organization.domain.AccountabilityVersion {
+	DateTime creationDate; //FENIX-337 new
+	LocalDate beginDate; //FENIX-337 new
+	LocalDate endDate; //FENIX-337 new
+	boolean erased;
+}
+
+	class module.organization.domain.UnconfirmedAccountability extends module.organization.domain.Accountability {
+		DateTime submited;
+	}
+	
+class module.organization.domain.PartyType {
+	String type;
+	MultiLanguageString name;
+}
+
+class module.organization.domain.Party {
+	String ojbConcreteClass;
+	MultiLanguageString partyName;
+}
+
+	class module.organization.domain.Person extends module.organization.domain.Party {
+	}
+
+	class module.organization.domain.Unit extends module.organization.domain.Party {
+		String acronym;
+	}
+
+class module.organization.domain.ConnectionRule {
+	String ojbConcreteClass;
+}
+
+	class module.organization.domain.connectionRules.PartyTypeConnectionRule extends module.organization.domain.ConnectionRule {
+	}
+	
+	class module.organization.domain.connectionRules.UniqueNameAndAcronymConnectionRule extends module.organization.domain.ConnectionRule {
+	}
+
+class module.organization.domain.OrganizationalModel {
+	MultiLanguageString name;
+}
+
+class module.organization.domain.groups.PersonGroup extends pt.ist.bennu.core.domain.groups.PersistentGroup {
+}
+
+class module.organization.domain.groups.UnitGroup extends pt.ist.bennu.core.domain.groups.PersistentGroup {
+}
+
+class module.organization.domain.FunctionDelegation {
+	Boolean canSubDelegate;
+}
+
+class module.organization.domain.FunctionDelegationLog {
+	DateTime operationInstant;
+	String executor;
+	String operation;
+}
+
+
+/** Relations **/
+
+relation UserPerson {
+	pt.ist.bennu.core.domain.User playsRole user;
+	module.organization.domain.Person playsRole person;
+}
+
+
+relation MyOrgAccountabilityType {
+	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	module.organization.domain.AccountabilityType playsRole accountabilityTypes {
+		multiplicity *;
+	}
+}
+
+relation MyOrgAccountability {
+	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	module.organization.domain.Accountability playsRole accountabilities {
+		multiplicity *;
+	}
+}
+
+relation MyOrgPartyType {
+	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	module.organization.domain.PartyType playsRole partyTypes {
+		multiplicity *;
+	}
+}
+
+relation AccountabilityAccountabilityType {
+	module.organization.domain.Accountability playsRole accountabilities {
+		multiplicity *;
+	}
+	module.organization.domain.AccountabilityType playsRole accountabilityType;
+}
+
+relation UnconfirmedAccountabilityAccountabilityType {
+	module.organization.domain.UnconfirmedAccountability playsRole unconfirmedAccountabilities {
+		multiplicity *;
+	}
+	module.organization.domain.AccountabilityType playsRole unconfirmedAccountabilityType;
+}
+
+relation MyOrgParty {
+	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	module.organization.domain.Party playsRole parties {
+		multiplicity *;
+	}
+}
+
+relation MyOrgTopUnit {
+	pt.ist.bennu.core.domain.MyOrg playsRole myOrgFromTopUnit;
+	module.organization.domain.Unit playsRole topUnits {
+		multiplicity *;
+	}
+}
+
+relation MyOrgWithPersons {
+	pt.ist.bennu.core.domain.MyOrg playsRole myOrgFromPerson;
+	module.organization.domain.Person playsRole persons {
+		multiplicity *;
+	}
+}
+
+relation PartyTypeParty {
+	module.organization.domain.PartyType playsRole partyTypes {
+		multiplicity *;
+	}
+	module.organization.domain.Party playsRole parties {
+		multiplicity *;
+	}
+}
+
+
+//FENIX-331 refacorization, relation not needed anymore
+//relation AccountabilityUser {
+//	pt.ist.bennu.core.domain.User playsRole creatorUser;
+//	module.organization.domain.Accountability playsRole accountabilitiesCreated {
+//		multiplicity *;
+//	}
+//}
+
+//FENIX-331 refacorization, relation not needed anymore
+//relation PartyParentAccountabilityHistory { 
+//	module.organization.domain.Party playsRole inactiveChild;
+//	module.organization.domain.Accountability playsRole parentAccountabilityHistoryItems {
+//		multiplicity *;
+//	}
+//}
+
+//FENIX-331 refacorization, relation not needed anymore
+//relation PartyChildAccountabilityHistory {
+//	module.organization.domain.Party playsRole inactiveParent;
+//	module.organization.domain.Accountability playsRole childAccountabilityHistoryItems {
+//		multiplicity *;
+//	}
+//}
+
+//FENIX-331 - needed relation
+relation AccountabilityAccountabilityVersion {
+	module.organization.domain.Accountability playsRole accountability {
+		multiplicity 1;
+	}
+	module.organization.domain.AccountabilityVersion playsRole accountabilityVersion {
+		multiplicity 1;
+	}
+}
+
+relation AccountabilityVersionAccountabilityVersion {
+	module.organization.domain.AccountabilityVersion playsRole previousAccVersion {
+		multiplicity 0..1;
+	}
+	module.organization.domain.AccountabilityVersion playsRole nextAccVersion {
+		multiplicity 0..1;
+	}
+}
+
+relation AccountabilityVersionUser {
+	pt.ist.bennu.core.domain.User playsRole userWhoCreated {
+		multiplicity 1;
+	}
+	module.organization.domain.AccountabilityVersion playsRole accountabilityVersionItems {
+		multiplicity *;
+	}
+}
+
+
+relation PartyParentAccountabilities {
+	module.organization.domain.Party playsRole child;
+	module.organization.domain.Accountability playsRole parentAccountabilities {
+		multiplicity *;
+	}
+}
+
+relation PartyChildAccountabilities {
+	module.organization.domain.Party playsRole parent;
+	module.organization.domain.Accountability playsRole childAccountabilities {
+		multiplicity *;
+	}
+}
+
+relation MyOrgConnectionRule {
+	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	module.organization.domain.ConnectionRule playsRole connectionRules {
+		multiplicity *;
+	}
+}
+
+relation ConnectionRuleAccountabilityType {
+	module.organization.domain.ConnectionRule playsRole connectionRules {
+		multiplicity *;
+	}
+	module.organization.domain.AccountabilityType playsRole accountabilityTypes {
+		multiplicity *;
+	}
+}
+
+relation PartyTypeConnectionRuleParentPartyType {
+	module.organization.domain.PartyType playsRole allowedParent;
+	module.organization.domain.connectionRules.PartyTypeConnectionRule playsRole childConnectionRules {
+		multiplicity *;
+	}
+}
+
+relation PartyTypeConnectionRuleChildPartyType {
+	module.organization.domain.PartyType playsRole allowedChild;
+	module.organization.domain.connectionRules.PartyTypeConnectionRule playsRole parentConnectionRules {
+		multiplicity *;
+	}
+}
+
+relation MyOrgOrganizationalModel {
+	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	module.organization.domain.OrganizationalModel playsRole organizationalModels {
+		multiplicity *;
+	}
+}
+
+relation OrganizationalModelParty {
+	module.organization.domain.OrganizationalModel playsRole organizationalModels {
+		multiplicity *;
+	}
+	module.organization.domain.Party playsRole parties {
+		multiplicity *;
+	}
+}
+
+relation OrganizationalModelAccountabilityType {
+	module.organization.domain.OrganizationalModel playsRole organizationalModels {
+		multiplicity *;
+	}
+	module.organization.domain.AccountabilityType playsRole accountabilityTypes {
+		multiplicity *;
+	}
+}
+
+relation UserUnconfirmedAccountability {
+	pt.ist.bennu.core.domain.User playsRole user;
+	module.organization.domain.UnconfirmedAccountability playsRole unconfirmedAccountabilities {
+		multiplicity *;
+	}
+}
+
+relation MyOrgFunctionDelegation {
+	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	module.organization.domain.FunctionDelegation playsRole functionDelegation {
+		multiplicity *;
+	}
+}
+
+relation FunctionDelegationAccountabilityDelegator {
+	module.organization.domain.FunctionDelegation playsRole functionDelegationDelegated {
+		multiplicity *;
+	}
+	module.organization.domain.Accountability playsRole accountabilityDelegator;
+}
+
+relation FunctionDelegationAccountabilityDelegatee {
+	module.organization.domain.FunctionDelegation playsRole functionDelegationDelegator;
+	module.organization.domain.Accountability playsRole accountabilityDelegatee;
+}
+
+relation MyOrgFunctionDelegationLog {
+	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	module.organization.domain.FunctionDelegationLog playsRole functionDelegationLogs {
+		multiplicity *;
+	}
+}
+
+relation FunctionDelegationFunctionDelegationLog {
+	module.organization.domain.FunctionDelegation playsRole functionDelegation;
+	module.organization.domain.FunctionDelegationLog playsRole functionDelegationLogs {
+		multiplicity *;
+	}
+}
+
+relation UnitGroupUnit {
+	module.organization.domain.Unit playsRole unit;
+	module.organization.domain.groups.UnitGroup playsRole unitGroup {
+		multiplicity *;
+	}
+}
+
+relation UnitGroupMemberAccountabilityTypes {
+	module.organization.domain.groups.UnitGroup playsRole unitGroupFromMemberAccountabilityType {
+		multiplicity *;
+	}
+	module.organization.domain.AccountabilityType playsRole memberAccountabilityType {
+		multiplicity *;
+	}
+}
+
+relation UnitGroupChildUnitAccountabilityTypes {
+	module.organization.domain.groups.UnitGroup playsRole unitGroupFromChildUnitAccountabilityType {
+		multiplicity *;
+	}
+	module.organization.domain.AccountabilityType playsRole childUnitAccountabilityType {
+		multiplicity *;
+	}
+}

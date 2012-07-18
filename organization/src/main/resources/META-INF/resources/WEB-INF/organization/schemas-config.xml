@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE schemas SYSTEM "../fenix-renderers-schemas.dtd" []>
+<schemas>
+<schema name="organization.PartyType.view" type="module.organization.domain.PartyType" bundle="ORGANIZATION_RESOURCES">
+	<slot name="type" key="label.type" read-only="true" />
+	<slot name="name" key="label.name" read-only="true" />
+</schema>
+
+<schema name="organization.PartyType.view.name" type="module.organization.domain.PartyType" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="label.name" read-only="true" />
+</schema>
+
+<schema name="organization.PartyTypeBean" type="module.organization.domain.PartyType$PartyTypeBean" 
+	bundle="ORGANIZATION_RESOURCES">
+	<slot name="type" key="label.type" required="true">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="name" key="label.name" required="true">
+		<property name="size" value="40"/>
+	</slot>
+</schema>
+
+<schema name="organization.AccountabilityType.view" type="module.organization.domain.AccountabilityType" 
+	bundle="ORGANIZATION_RESOURCES">
+	<slot name="type" key="label.type" read-only="true" />
+	<slot name="name" key="label.name" read-only="true" layout="null-as-label" />
+</schema>
+
+<schema name="organization.AccountabilityTypeBean" type="module.organization.domain.AccountabilityType$AccountabilityTypeBean" 
+	bundle="ORGANIZATION_RESOURCES">
+	<slot name="type" key="label.type" required="true">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="name" key="label.name">
+		<property name="size" value="40"/>
+	</slot>
+</schema>
+
+<schema name="organization.ConnectionRule.view" type="module.organization.domain.ConnectionRule" bundle="ORGANIZATION_RESOURCES">
+	<slot name="description" key="label.connection.rule.description" read-only="true" />
+</schema>
+
+<schema name="organization.PartyTypeConnectionRuleBean" type="module.organization.domain.connectionRules.PartyTypeConnectionRule$PartyTypeConnectionRuleBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="parent" layout="menu-select" key="label.PartyTypeConnectionRule.allowed.parent.type" required="true">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
+	</slot>
+	<slot name="child" layout="menu-select" key="label.PartyTypeConnectionRule.allowed.child.type" required="true">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
+	</slot>
+</schema>
+
+<schema name="organization.UniqueNameAndAcronymConnectionRuleBean" type="module.organization.domain.connectionRules.UniqueNameAndAcronymConnectionRule$UniqueNameAndAcronymConnectionRuleBean" bundle="ORGANIZATION_RESOURCES">
+</schema>
+
+<schema name="organization.Unit.view" type="module.organization.domain.Unit" bundle="ORGANIZATION_RESOURCES">
+	<slot name="partyName" key="label.unit.name">
+		<property name="classes" value="bold"/>
+	</slot>
+	<slot name="acronym" key="label.unit.acronym" />
+	<slot name="partyTypes" key="label.unit.party.type">
+		<property name="eachLayout" value="values-comma" />
+		<property name="eachSchema" value="organization.PartyType.view.name" />
+		<property name="classes" value="nobullet liinline"/>
+	</slot>
+</schema>
+
+<schema name="organization.UnitBean.create.top.unit" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="label.unit.name" required="true">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="acronym" key="label.unit.acronym" required="true">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="partyType" layout="menu-select" key="label.unit.party.type" required="true">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
+	</slot>
+</schema>
+
+<schema name="organization.UnitBean.create.unit" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="parent.partyName" key="label.unit.parent" read-only="true">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="name" key="label.unit.name" required="true">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="acronym" key="label.unit.acronym" required="true">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="partyType" layout="menu-select" key="label.unit.party.type" required="true">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
+	</slot>
+	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" required="true">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
+		<property name="saveOptions" value="true"/>
+	</slot>
+	<slot name="begin" key="label.begin" required="true" />
+	<slot name="end" key="label.end" />
+</schema>
+
+<schema name="organization.UnitBean.add.unit" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="child" layout="autoComplete" key="label.party" bundle="ORGANIZATION_RESOURCES" required="true">
+        <property name="labelField" value="partyName.content"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider"/>
+		<property name="size" value="60"/>
+		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+			<property name="message" value="label.pleaseSelectOne.unit"/>
+			<property name="bundle" value="ORGANIZATION_RESOURCES"/>
+			<property name="key" value="true"/>
+		</validator>
+	</slot>
+	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" required="true">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
+		<property name="saveOptions" value="true"/>
+	</slot>
+	<slot name="begin" key="label.begin" required="true" />
+	<slot name="end" key="label.end" />
+</schema>
+
+<schema name="organization.UnitBean.edit.unit" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="label.unit.name" required="true">
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="acronym" key="label.unit.acronym" required="true">
+		<property name="size" value="40"/>
+	</slot>
+</schema>
+
+<schema name="organization.Unit.view.parent.accountability" type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
+	<slot name="parent.partyName" key="label.unit.parent" />
+	<slot name="parent.acronym" key="label.unit.parent.acronym" />
+	<slot name="accountabilityType.name" key="label.unit.accountability.type" />
+	<slot name="beginDate" key="label.begin" />
+	<slot name="endDate" key="label.end" layout="null-as-label" />
+</schema>
+
+<schema name="organization.Unit.view.child.accountability" type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
+	<slot name="child.partyName" key="label.unit.child" />
+	<slot name="accountabilityType.name" key="label.unit.accountability.type" />
+	<slot name="beginDate" key="label.begin" />
+	<slot name="endDate" key="label.end" layout="null-as-label" />
+</schema>
+
+<schema name="organization.PartyBean.add.parent" type="module.organization.domain.PartyBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="parent" layout="autoComplete" key="label.unit.parent" required="true">
+		<property name="format" value="${partyNameWithSuffixType}" />
+		<property name="labelField" value="partyNameWithSuffixType" />
+		<property name="minChars" value="3" />
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider" />
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" required="true">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
+		<property name="saveOptions" value="true"/>
+	</slot>
+	<slot name="begin" key="label.begin" required="true" />
+	<slot name="end" key="label.end" />
+</schema>
+
+<schema name="organization.UnitBean.add.child" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="child" layout="autoComplete" key="label.child.party" required="true">
+		<property name="format" value="${partyNameWithSuffixType}" />
+		<property name="labelField" value="partyNameWithSuffixType" />
+		<property name="minChars" value="3" />
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider" />
+		<property name="size" value="40"/>
+	</slot>
+	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" required="true">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
+		<property name="format" value="${name}" />
+		<property name="sortBy" value="name" />
+		<property name="saveOptions" value="true"/>
+	</slot>
+	<slot name="begin" key="label.begin" required="true" />
+	<slot name="end" key="label.end" />
+</schema>
+
+<schema name="organization.domain.Person.view" type="module.organization.domain.Person" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="label.name">
+		<property name="classes" value="bold"/>
+	</slot>
+	<slot name="partyTypes" key="label.party.type">
+		<property name="eachLayout" value="values-comma" />
+		<property name="eachSchema" value="organization.PartyType.view.name" />
+		<property name="classes" value="nobullet liinline"/>
+	</slot>
+</schema>
+
+<schema name="organization.domain.Person.view.short" type="module.organization.domain.Person" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="label.name" />
+</schema>
+
+<schema name="organization.PersonBean.manage" type="module.organization.domain.Person$PersonBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name" key="label.name" required="true">
+		<property name="size" value="80" />
+		<property name="maxLength" value="250" />
+	</slot>
+</schema>
+
+<schema name="module.organization.domain.search.PartySearchBean" type="module.organization.domain.search.PartySearchBean"
+		bundle="ORGANIZATION_RESOURCES">
+	<slot name="party" layout="autoComplete" key="label.party" bundle="ORGANIZATION_RESOURCES">
+        <property name="labelField" value="partyName.content"/>
+		<property name="format" value="${presentationName}"/>
+		<property name="minChars" value="3"/>		
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.UnitAutoCompleteProvider"/>
+		<property name="size" value="60"/>
+		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+			<property name="message" value="label.pleaseSelectOne.unit"/>
+			<property name="bundle" value="ORGANIZATION_RESOURCES"/>
+			<property name="key" value="true"/>
+		</validator>
+	</slot>
+	<slot name="partySearchType" layout="radio" key="label.search.where" bundle="ORGANIZATION_RESOURCES" required="true">
+		<property name="classes" value="liinline nobullet"/>
+	</slot>
+</schema>
+
+<schema name="module.organization.domain.AccountabilityType.name" type="module.organization.domain.AccountabilityType">
+	<slot name="name"/>
+</schema>
+
+<schema name="module.organization.domain.dto.OrganizationalModelBean" type="module.organization.domain.dto.OrganizationalModelBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name">
+		<property name="size" value="40"/>
+	</slot>
+</schema>
+
+<schema name="module.organization.domain.OrganizationalModel.edit" type="module.organization.domain.OrganizationalModel" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name">
+		<property name="size" value="40"/>
+	</slot>
+</schema>
+
+<schema name="module.organization.domain.OrganizationalModel.name" type="module.organization.domain.OrganizationalModel" bundle="ORGANIZATION_RESOURCES">
+	<slot name="name"/>
+</schema>
+
+<schema name="module.organization.domain.OrganizationalModel.accountabilityTypes" type="module.organization.domain.OrganizationalModel" bundle="ORGANIZATION_RESOURCES">
+	<slot name="accountabilityTypes" layout="option-select" key="label.unit.accountability.type">
+		<property name="eachLayout" value="values-dash"/>
+        <property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
+        <property name="classes" value="nobullet noindent"/>
+        <property name="sortBy" value="name"/>
+        <property name="saveOptions" value="true"/>
+    </slot>
+</schema>
+
+<schema name="module.organization.domain.Party.partyTypes" type="module.organization.domain.Party" bundle="ORGANIZATION_RESOURCES">
+	<slot name="partyTypes" layout="option-select" key="label.unit.party.type">
+		<property name="eachLayout" value="values-dash"/>
+        <property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
+        <property name="classes" value="nobullet noindent"/>
+        <property name="sortBy" value="name"/>
+    </slot>
+</schema>
+
+<schema name="module.organization.domain.UnconfirmedAccountability" type="module.organization.domain.UnconfirmedAccountability" bundle="ORGANIZATION_RESOURCES">
+	<slot name="unconfirmedAccountabilityType.name" key="label.unconfirmed.accountability.type"/>
+	<slot name="beginDate" key="label.begin"/>
+	<slot name="endDate" key="label.end" />
+</schema>
+
+<schema name="module.organization.domain.Accountability.with.child.info" type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
+	<slot name="child.partyName" key="label.name"/>
+	<slot name="accountabilityType.type" key="label.type"/>
+	<slot name="beginDate" key="label.begin"/>
+	<slot name="endDate" key="label.end" />
+</schema>
+
+<schema name="module.organization.domain.Party.view.short.name" type="module.organization.domain.Party" bundle="ORGANIZATION_RESOURCES">
+	<slot name="partyName"/>
+</schema>
+
+<schema name="module.organization.domain.Party.view.presentationName" type="module.organization.domain.Party" bundle="ORGANIZATION_RESOURCES">
+	<slot name="presentationName"/>
+</schema></schemas>
