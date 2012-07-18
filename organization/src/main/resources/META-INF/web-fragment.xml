@@ -9,11 +9,11 @@
 		<after>
 			<!-- [START OF BENNU GENERATED FRAGMENT] -->
    <name>bennu-core</name>
+   <name>fenix-web-framework</name>
    <name>lucene</name>
    <name>scheduler</name>
    <name>file-support</name>
    <name>scheduler-plugin</name>
-   <name>fenix-web-framework</name>
    <name>lucene-indexing-plugin</name>
    <name>file-support-plugin</name>
    <!-- [END OF BENNU GENERATED FRAGMENT] -->
