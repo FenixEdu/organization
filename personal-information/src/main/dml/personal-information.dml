@@ -77,19 +77,19 @@ class IdentificationDocument {
 /** Relations **/
 
 relation MyOrgPersonalInformationSystem {
-	.myorg.domain.MyOrg playsRole myOrg;
+	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
 	PersonalInformationSystem playsRole personalInformationSystem;
 }
 
 relation MyOrgPersonalInformation {
-	.myorg.domain.MyOrg playsRole myOrg;
+	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
 	PersonalInformation playsRole personalInformations {
 		multiplicity *;
 	}
 }
 
 relation MyOrgIdentificationDocument {
-	.myorg.domain.MyOrg playsRole myOrg;
+	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
 	IdentificationDocument playsRole identificationDocuments {
 		multiplicity *;
 	}

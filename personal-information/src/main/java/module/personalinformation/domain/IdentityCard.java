@@ -26,7 +26,7 @@ package module.personalinformation.domain;
 
 import java.io.Serializable;
 
-import myorg.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
 

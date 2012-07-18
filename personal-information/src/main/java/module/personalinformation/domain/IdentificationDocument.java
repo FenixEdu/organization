@@ -26,8 +26,8 @@ package module.personalinformation.domain;
 
 import java.io.Serializable;
 
-import myorg.domain.MyOrg;
-import myorg.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.MyOrg;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.fenixframework.pstm.Transaction;
 
 /**

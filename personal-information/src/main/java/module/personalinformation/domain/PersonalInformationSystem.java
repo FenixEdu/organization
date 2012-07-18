@@ -26,8 +26,8 @@ package module.personalinformation.domain;
 
 import module.organization.presentationTier.actions.OrganizationModelAction;
 import module.personalinformation.presentationTier.actions.PersonalInformationManagementAction.PersonalInformationView;
-import myorg.domain.ModuleInitializer;
-import myorg.domain.MyOrg;
+import pt.ist.bennu.core.domain.ModuleInitializer;
+import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.fenixWebFramework.services.Service;
 
 /**
