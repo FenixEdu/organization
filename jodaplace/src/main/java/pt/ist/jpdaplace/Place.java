@@ -9,9 +9,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Place<P
-	extends Place<?, ? extends Place<P, C>>, C extends Place<? extends Place<P, C>, ?>>
-	implements Serializable {
+public abstract class Place<P extends Place<?, ? extends Place<P, C>>, C extends Place<? extends Place<P, C>, ?>> implements
+	Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,7 +31,7 @@ public abstract class Place<P
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void addPlace(final String key, Place place) {
+    void addPlace(final String key, Place place) {
 	containedPlaces.put(key, (C) place);
     }
 
@@ -74,7 +73,7 @@ public abstract class Place<P
 	return importFrom(string, 0);
     }
 
-    private Place importFrom(final String string, final int i) {
+    Place importFrom(final String string, final int i) {
 	if (i == string.length()) {
 	    return this;
 	}
