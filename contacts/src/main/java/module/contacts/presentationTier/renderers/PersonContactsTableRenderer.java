@@ -29,27 +29,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.html.dom.HTMLHeadElementImpl;
-
-import pt.ist.fenixWebFramework.renderers.OutputRenderer;
-import pt.ist.fenixWebFramework.renderers.components.Face;
-import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
-import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
-import pt.ist.fenixWebFramework.renderers.components.HtmlImage;
-import pt.ist.fenixWebFramework.renderers.components.HtmlInlineContainer;
-import pt.ist.fenixWebFramework.renderers.components.HtmlLink;
-import pt.ist.fenixWebFramework.renderers.components.HtmlTable;
-import pt.ist.fenixWebFramework.renderers.components.HtmlTableCell;
-import pt.ist.fenixWebFramework.renderers.components.HtmlTableRow;
-import pt.ist.fenixWebFramework.renderers.components.HtmlText;
-import pt.ist.fenixWebFramework.renderers.components.HtmlTableCell.CellType;
-import pt.ist.fenixWebFramework.renderers.components.tags.HtmlTag;
-import pt.ist.fenixWebFramework.renderers.layouts.Layout;
-import pt.ist.fenixWebFramework.renderers.model.MetaObject;
-import pt.ist.fenixWebFramework.renderers.model.MetaObjectFactory;
-import pt.ist.fenixWebFramework.renderers.utils.RenderKit;
-import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-
 import module.contacts.domain.EmailAddress;
 import module.contacts.domain.PartyContact;
 import module.contacts.domain.Phone;
@@ -59,6 +38,22 @@ import module.contacts.domain.WebAddress;
 import module.organization.domain.Person;
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
+import pt.ist.fenixWebFramework.renderers.OutputRenderer;
+import pt.ist.fenixWebFramework.renderers.components.Face;
+import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
+import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
+import pt.ist.fenixWebFramework.renderers.components.HtmlInlineContainer;
+import pt.ist.fenixWebFramework.renderers.components.HtmlLink;
+import pt.ist.fenixWebFramework.renderers.components.HtmlTable;
+import pt.ist.fenixWebFramework.renderers.components.HtmlTableCell;
+import pt.ist.fenixWebFramework.renderers.components.HtmlTableCell.CellType;
+import pt.ist.fenixWebFramework.renderers.components.HtmlTableRow;
+import pt.ist.fenixWebFramework.renderers.components.HtmlText;
+import pt.ist.fenixWebFramework.renderers.layouts.Layout;
+import pt.ist.fenixWebFramework.renderers.model.MetaObject;
+import pt.ist.fenixWebFramework.renderers.model.MetaObjectFactory;
+import pt.ist.fenixWebFramework.renderers.utils.RenderKit;
+import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 
 /**
  * Renders the contacts as a table suitable to be the output of the find persons
@@ -206,15 +201,15 @@ public class PersonContactsTableRenderer extends OutputRenderer {
 			// DATA cellType and append the new stuff there we will
 			// also add the delimiter to it
 			for (HtmlTableCell cell : row.getCells()) {
-			    if (cell.getType().equals(CellType.DATA))
-			    {
+			    if (cell.getType().equals(CellType.DATA)) {
 				HtmlInlineContainer dataCell = (HtmlInlineContainer) cell.getBody();
 				/*
 				 * please ignore the following comments :) only
 				 * there because the code might be useful to
 				 * access the previous text element
 				 */
-				// let's get the type span which is inside this span to add the character
+				// let's get the type span which is inside this
+				// span to add the character
 				// (which is the last element!!)
 				// HtmlInlineContainer lastSpan =
 				// (HtmlInlineContainer)
@@ -234,12 +229,11 @@ public class PersonContactsTableRenderer extends OutputRenderer {
 				// typeOfContactSpan.getChildren().get(
 				// typeOfContactSpan.getChildren().size() - 1);
 				// typeText.setText(typeText.getText() + ",");
-				
-				
+
 				dataCell.addChild(getValue((PartyContact) contactMeta.getObject(), firstElement));
 				cell.setBody(dataCell);
 			    }
-			    
+
 			}
 		    }
 		}
@@ -323,7 +317,6 @@ public class PersonContactsTableRenderer extends OutputRenderer {
 	}
 	return contacts;
     }
-
 
     /**
      * @return the editLinkKey
