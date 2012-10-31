@@ -33,7 +33,6 @@
 }
 
 class module.geography.domain.GeographicLocation {
-	String ojbConcreteClass;
 	DateTime lastReview;
 }
 
