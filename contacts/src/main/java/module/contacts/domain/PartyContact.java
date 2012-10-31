@@ -57,7 +57,6 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 
     public PartyContact() {
 	super();
-	setOjbConcreteClass(getClass().getName());
 	ContactsConfigurator.getInstance().addPartyContact(this);
 	this.PersistentGroupPartyContact.addListener(new ValidVisibilityGroupsEnforcer());
     }
