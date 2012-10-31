@@ -63,7 +63,6 @@ class module.organization.domain.PartyType {
 }
 
 class module.organization.domain.Party {
-	String ojbConcreteClass;
 	MultiLanguageString partyName;
 }
 
@@ -75,7 +74,6 @@ class module.organization.domain.Party {
 	}
 
 class module.organization.domain.ConnectionRule {
-	String ojbConcreteClass;
 }
 
 	class module.organization.domain.connectionRules.PartyTypeConnectionRule extends module.organization.domain.ConnectionRule {
