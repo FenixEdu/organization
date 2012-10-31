@@ -62,7 +62,6 @@ class PersonalInformation extends  PartyInformation {
 }
 
 class IdentificationDocument {
-	String ojbConcreteClass;
 	IDDocumentType type;
 	String number;
 }

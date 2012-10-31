@@ -64,7 +64,6 @@ public class IdentificationDocument extends IdentificationDocument_Base {
 
     protected IdentificationDocument() {
 	super();
-	setOjbConcreteClass(getClass().getName());
 	setMyOrg(MyOrg.getInstance());
     }
 
