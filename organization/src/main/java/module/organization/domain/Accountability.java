@@ -29,14 +29,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import jvstm.cps.ConsistencyPredicate;
 import module.organization.domain.predicates.PartyPredicate.PartyByAccTypeAndDates;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.MyOrg;
+import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.fenixWebFramework.services.Service;
 
 /**
@@ -362,6 +363,16 @@ public class Accountability extends Accountability_Base {
 
 	return accountabilities;
 
+    }
+
+    @ConsistencyPredicate
+    public boolean checkHasChild() {
+	return hasChild();
+    }
+
+    @ConsistencyPredicate
+    public boolean checkHasParent() {
+	return hasParent();
     }
 
     public LocalDate getBeginDate() {
