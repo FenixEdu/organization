@@ -135,6 +135,11 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 	} else {
 	    // let's push all of the next accHistories into their rightful
 	    // position
+	    if (firstAccHistory.getBeginDate().equals(beginDate) && firstAccHistory.getEndDate().equals(endDate)
+		    && firstAccHistory.getErased() == erased) {
+		// do not create a new version with exactly the same data
+		return;
+	    }
 	    firstAccHistory.setPreviousAccVersion(newAccountabilityHistory);
 	    newAccountabilityHistory.setNextAccVersion(firstAccHistory);
 	}
