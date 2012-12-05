@@ -26,10 +26,11 @@ package module.organization.domain;
 
 import jvstm.cps.ConsistencyPredicate;
 import module.organization.domain.util.OrganizationConsistencyException;
-import pt.ist.bennu.core.domain.User;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+
+import pt.ist.bennu.core.domain.User;
 
 /**
  * 
@@ -88,13 +89,13 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
     }
 
     @ConsistencyPredicate
-    public boolean checkListBehaviour() {
-	if (hasPreviousAccVersion() && hasAccountability())
-	    return false;
-	if (!hasPreviousAccVersion() && !hasAccountability())
-	    return false;
-	return true;
+    public boolean checkIsConnectedToList() {
+	return (hasPreviousAccVersion() && !hasAccountability()) || (!hasPreviousAccVersion() && hasAccountability());
+    }
 
+    @ConsistencyPredicate
+    public boolean checkErasedAsFinalVersion() {
+	return !getErased() || hasAccountability();
     }
 
     @ConsistencyPredicate(OrganizationConsistencyException.class)
@@ -128,8 +129,9 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 	AccountabilityVersion newAccountabilityHistory = new AccountabilityVersion(beginDate, endDate, acc, erased);
 	if (firstAccHistory == null) {
 	    //we are the first ones, let's just create ourselves
-	    if (erased)
+	    if (erased) {
 		throw new IllegalArgumentException("creating.a.deleted.acc.does.not.make.sense"); //we shouldn't be creating a deleted accountability to start with!
+	    }
 	} else {
 	    // let's push all of the next accHistories into their rightful
 	    // position
