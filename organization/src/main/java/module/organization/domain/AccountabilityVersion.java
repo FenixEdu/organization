@@ -136,8 +136,8 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 	    // let's push all of the next accHistories into their rightful
 	    // position
 	    if (firstAccHistory.getBeginDate().equals(beginDate)
-		    && (firstAccHistory.getEndDate() == endDate || (firstAccHistory.getEndDate() != null && firstAccHistory
-			    .getEndDate().equals(endDate))) && firstAccHistory.getErased() == erased) {
+		    && firstAccHistory.getErased() == erased
+		    && matchingDates(firstAccHistory.getEndDate(), endDate)) {
 		// do not create a new version with exactly the same data
 		return;
 	    }
@@ -145,5 +145,11 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 	    newAccountabilityHistory.setNextAccVersion(firstAccHistory);
 	}
     }
-
+    
+    private static boolean matchingDates(LocalDate date1, LocalDate date2) {
+	if (date1 == null) {
+	    return date2 == null;
+	}
+	return date1.equals(date2);
+    }
 }
