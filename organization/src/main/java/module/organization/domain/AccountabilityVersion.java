@@ -105,7 +105,7 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
     }
 
     public void delete() {
-	removeUserWhoCreated();
+	super.setUserWhoCreated(null);
 	deleteDomainObject();
     }
 
