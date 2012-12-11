@@ -35,6 +35,7 @@ import pt.ist.bennu.core.domain.User;
 /**
  * 
  * @author João Antunes
+ * @author João Neves
  * @author Susana Fernandes
  * 
  */
@@ -103,6 +104,11 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 	return getBeginDate() != null && (getEndDate() == null || !getBeginDate().isAfter(getEndDate()));
     }
 
+    public void delete() {
+	removeUserWhoCreated();
+	deleteDomainObject();
+    }
+
     /**
      * It creates a new AccountabilityHistory item and pushes the others (if
      * they exist)
@@ -144,6 +150,11 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 	    firstAccHistory.setPreviousAccVersion(newAccountabilityHistory);
 	    newAccountabilityHistory.setNextAccVersion(firstAccHistory);
 	}
+    }
+
+    public static boolean redundantInfo(AccountabilityVersion av1, AccountabilityVersion av2) {
+	return ((av1.getBeginDate().equals(av2.getBeginDate())) && (av1.getErased() == av2.getErased()) && matchingDates(
+		av1.getEndDate(), av2.getEndDate()));
     }
     
     private static boolean matchingDates(LocalDate date1, LocalDate date2) {
