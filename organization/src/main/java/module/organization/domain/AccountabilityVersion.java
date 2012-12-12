@@ -145,9 +145,8 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 		    && firstAccHistory.getErased() == erased
 		    && matchingDates(firstAccHistory.getEndDate(), endDate)) {
 		// do not create a new version with exactly the same data
-		return;
+		throw new IllegalArgumentException("creating.a.redundant.accountability.version.does.not.make.sense");
 	    }
-	    firstAccHistory.setPreviousAccVersion(newAccountabilityHistory);
 	    newAccountabilityHistory.setNextAccVersion(firstAccHistory);
 	}
     }
