@@ -131,23 +131,24 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 	    throw new IllegalArgumentException("cant.provide.a.null.accountability");
 	// let's check on the first case i.e. when the given acc does not have
 	// an AccountabilityHistory associated
-	AccountabilityVersion firstAccHistory = acc.getAccountabilityVersion();
-	AccountabilityVersion newAccountabilityHistory = new AccountabilityVersion(beginDate, endDate, acc, erased);
-	if (firstAccHistory == null) {
+	AccountabilityVersion firstAccVersion = acc.getAccountabilityVersion();
+	if (firstAccVersion == null) {
 	    //we are the first ones, let's just create ourselves
 	    if (erased) {
 		throw new IllegalArgumentException("creating.a.deleted.acc.does.not.make.sense"); //we shouldn't be creating a deleted accountability to start with!
 	    }
+	    new AccountabilityVersion(beginDate, endDate, acc, erased);
 	} else {
 	    // let's push all of the next accHistories into their rightful
 	    // position
-	    if (firstAccHistory.getBeginDate().equals(beginDate)
-		    && firstAccHistory.getErased() == erased
-		    && matchingDates(firstAccHistory.getEndDate(), endDate)) {
+	    if (firstAccVersion.getBeginDate().equals(beginDate)
+		    && firstAccVersion.getErased() == erased
+		    && matchingDates(firstAccVersion.getEndDate(), endDate)) {
 		// do not create a new version with exactly the same data
-		throw new IllegalArgumentException("creating.a.redundant.accountability.version.does.not.make.sense");
+		return;
 	    }
-	    newAccountabilityHistory.setNextAccVersion(firstAccHistory);
+	    AccountabilityVersion newAccountabilityHistory = new AccountabilityVersion(beginDate, endDate, acc, erased);
+	    newAccountabilityHistory.setNextAccVersion(firstAccVersion);
 	}
     }
 
