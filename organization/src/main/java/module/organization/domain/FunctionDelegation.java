@@ -27,11 +27,10 @@ package module.organization.domain;
 import java.util.Comparator;
 import java.util.ResourceBundle;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.MyOrg;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.DomainObject;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
@@ -124,5 +123,13 @@ public class FunctionDelegation extends FunctionDelegation_Base {
 	removeMyOrg();
 
 	deleteDomainObject();
+    }
+
+    public boolean checkHasAccountabilityDelegator() {
+	return hasAccountabilityDelegator();
+    }
+
+    public boolean checkHasAccountabilityDelegatee() {
+	return hasAccountabilityDelegatee();
     }
 }
