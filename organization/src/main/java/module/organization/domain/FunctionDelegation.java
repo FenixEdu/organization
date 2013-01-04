@@ -27,6 +27,8 @@ package module.organization.domain;
 import java.util.Comparator;
 import java.util.ResourceBundle;
 
+import jvstm.cps.ConsistencyPredicate;
+
 import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.MyOrg;
@@ -125,10 +127,12 @@ public class FunctionDelegation extends FunctionDelegation_Base {
 	deleteDomainObject();
     }
 
+    @ConsistencyPredicate
     public boolean checkHasAccountabilityDelegator() {
 	return hasAccountabilityDelegator();
     }
 
+    @ConsistencyPredicate
     public boolean checkHasAccountabilityDelegatee() {
 	return hasAccountabilityDelegatee();
     }
