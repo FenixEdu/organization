@@ -91,6 +91,8 @@
 								    accountabilityType = accountability.getAccountabilityType();
 								}
 								title = accountability.getDetailsString();
+								String creationUser = accountability.getCreatorUser() == null ? "" : " Creation user: " + accountability.getCreatorUser().getPresentationName();
+								title += " Creation date: " + accountability.getCreationDate() + creationUser;
 								
 								for (final Object at : sortedAccountabilityTypes) {
 								    accountabilityTypeIndex++;
