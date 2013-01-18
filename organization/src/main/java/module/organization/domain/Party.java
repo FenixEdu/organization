@@ -710,6 +710,19 @@ abstract public class Party extends Party_Base implements Presentable {
 	}
 	return false;
     }
+    
+    public boolean hasPartyAsAncestor(final Party party, final Set<AccountabilityType> accountabilityTypes, final LocalDate when) {
+	for (final Accountability accountability : getParentAccountabilitiesSet()) {
+	    final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+	    if (accountabilityTypes.contains(accountabilityType) && accountability.isActive(when)) {
+		final Party parent = accountability.getParent();
+		if (parent == party || parent.hasPartyAsAncestor(party, accountabilityTypes)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
 
     /**
      * 
