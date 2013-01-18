@@ -51,6 +51,7 @@ class module.organization.domain.AccountabilityVersion {
 	LocalDate beginDate; //FENIX-337 new
 	LocalDate endDate; //FENIX-337 new
 	boolean erased;
+	String justification;
 }
 
 	class module.organization.domain.UnconfirmedAccountability extends module.organization.domain.Accountability {
