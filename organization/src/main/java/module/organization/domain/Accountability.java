@@ -100,7 +100,7 @@ public class Accountability extends Accountability_Base {
     }
 
     protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
-	    final LocalDate end) {
+	    final LocalDate end, String justification) {
 	this();
 
 	check(parent, "error.Accountability.invalid.parent");
@@ -112,7 +112,7 @@ public class Accountability extends Accountability_Base {
 	canCreate(parent, child, type);
 
 	init(parent, child, type);
-	editDates(begin, end);
+	editDates(begin, end, justification);
     }
 
     protected void init(Party parent, Party child, AccountabilityType type) {
@@ -220,22 +220,33 @@ public class Accountability extends Accountability_Base {
 	return stringBuilder.toString();
     }
 
-    @Service
     /**
      * It doesn't actually delete the accountability as it actually marks it as an accountability history item
+     * 
+     * @deprecated use {@link #delete(String)} instead
      */
+    @Deprecated
     public void delete() {
-	setInactive();
+	setInactive(null);
+    }
+    
+    /**
+     * It doesn't actually delete the accountability as it actually marks it as an accountability history item
+     * @param justification an information justification/reason for the change of accountability, or null if there is none, or none is provided
+     */
+    @Service
+    public void delete(String justification) {
+    	setInactive(justification);
     }
 
     static Accountability create(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
-	    final LocalDate end) {
+	    final LocalDate end, String justification) {
 	// TODO Fenix-133: allow the access control to be done in a more dynamic
 	// way, see issue for more info
 	// return parent.isAuthorizedToManage() ? new Accountability(parent,
 	// child, type, begin, end)
 	// : new UnconfirmedAccountability(parent, child, type, begin, end);
-	return new Accountability(parent, child, type, begin, end);
+	return new Accountability(parent, child, type, begin, end, justification);
     }
 
     @Override
@@ -256,8 +267,26 @@ public class Accountability extends Accountability_Base {
 	throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
     }
 
+    /**
+     * 
+     * @param beginDate
+     * @param justification an information justification/reason for the change of accountability, or null if there is none, or none is provided
+     */
+    public void setBeginDate(LocalDate beginDate, String justification) {
+	editDates(beginDate, getEndDate(), justification);
+    }
+    
     public void setBeginDate(LocalDate beginDate) {
 	editDates(beginDate, getEndDate());
+    }
+    
+    /**
+     * 
+     * @param endDate 
+     * @param justification an information justification/reason for the change of accountability, or null if there is none, or none is provided
+     */
+    public void setEndDate(LocalDate endDate, String justification) {
+	editDates(getBeginDate(), endDate, justification);
     }
 
     public void setEndDate(LocalDate endDate) {
@@ -273,13 +302,31 @@ public class Accountability extends Accountability_Base {
      * @param end
      *            the new end date
      * @return the new Accountability that was just created
+     * @deprecated use the {@link #editDates(LocalDate, LocalDate, String)} instead
+     */
+    @Deprecated
+    public void editDates(final LocalDate begin, final LocalDate end) {
+    	editDates(begin, end, null);
+    }
+    
+    /**
+     * Marks the current accountability as an historic one and creates a new one
+     * based on the new dates
+     * 
+     * @param begin
+     *            the new begin date
+     * @param end
+     *            the new end date
+     * @param justification an information justification/reason for the change of accountability, or null if there is none, or none is provided
+     *            
+     * @return the new Accountability that was just created
      */
     @Service
-    public void editDates(final LocalDate begin, final LocalDate end) {
+    public void editDates(final LocalDate begin, final LocalDate end, String justification) {
 	check(begin, "error.Accountability.invalid.begin");
 	checkDates(getParent(), begin, end);
 	// let's create the new AccountabilityHistory which is active
-	AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false);
+	AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false, justification);
 
     }
 
@@ -296,8 +343,8 @@ public class Accountability extends Accountability_Base {
      * beginDate); }
      */
 
-    private void setInactive() {
-	AccountabilityVersion.insertAccountabilityVersion(getBeginDate(), getEndDate(), this, true);
+    private void setInactive(String justification) {
+	AccountabilityVersion.insertAccountabilityVersion(getBeginDate(), getEndDate(), this, true, justification );
 
     }
 
@@ -381,6 +428,10 @@ public class Accountability extends Accountability_Base {
 
     public LocalDate getEndDate() {
 	return getAccountabilityVersion().getEndDate();
+    }
+    
+    public String getJustification() {
+    	return getAccountabilityVersion().getJustification();
     }
 
     public DateTime getCreationDate() {

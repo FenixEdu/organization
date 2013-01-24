@@ -46,6 +46,8 @@ public class UnitBean extends PartyBean {
 
     private MultiLanguageString name;
     private String acronym;
+    
+    private String accountabilityJustification;
 
     public UnitBean() {
 	setBegin(new LocalDate());
@@ -132,5 +134,14 @@ public class UnitBean extends PartyBean {
     public void setOrganizationalModel(final OrganizationalModel organizationalModel) {
 	this.organizationalModel = organizationalModel;
     }
+
+	public String getAccountabilityJustification() {
+		return accountabilityJustification;
+	}
+
+	public void setAccountabilityJustification(
+			String accountabilityJustification) {
+		this.accountabilityJustification = accountabilityJustification;
+	}
 
 }

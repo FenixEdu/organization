@@ -41,9 +41,10 @@ import pt.ist.bennu.core.domain.User;
  */
 public class AccountabilityVersion extends AccountabilityVersion_Base {
 
-    private AccountabilityVersion(LocalDate beginDate, LocalDate endDate, Accountability acc, boolean erased) {
+    private AccountabilityVersion(LocalDate beginDate, LocalDate endDate, Accountability acc, boolean erased, String justification) {
 	super();
 	super.setAccountability(acc);
+	super.setJustification(justification);
 	super.setErased(erased);
 	super.setBeginDate(beginDate);
 	super.setEndDate(endDate);
@@ -123,10 +124,11 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
      *            if true, the new AccountabilityHistory will be marked as
      *            active, if it is false it is equivalent of deleting the new
      *            AccountabilityHistory
+     * @param justification an information justification/reason for the change of accountability, or null if there is none, or none is provided
      * 
      * 
      */
-    protected static void insertAccountabilityVersion(LocalDate beginDate, LocalDate endDate, Accountability acc, boolean erased) {
+    protected static void insertAccountabilityVersion(LocalDate beginDate, LocalDate endDate, Accountability acc, boolean erased, String justification) {
 	if (acc == null)
 	    throw new IllegalArgumentException("cant.provide.a.null.accountability");
 	// let's check on the first case i.e. when the given acc does not have
@@ -137,7 +139,7 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 	    if (erased) {
 		throw new IllegalArgumentException("creating.a.deleted.acc.does.not.make.sense"); //we shouldn't be creating a deleted accountability to start with!
 	    }
-	    new AccountabilityVersion(beginDate, endDate, acc, erased);
+	    new AccountabilityVersion(beginDate, endDate, acc, erased, justification);
 	} else {
 	    // let's push all of the next accHistories into their rightful
 	    // position
@@ -147,7 +149,7 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 		// do not create a new version with exactly the same data
 		return;
 	    }
-	    AccountabilityVersion newAccountabilityHistory = new AccountabilityVersion(beginDate, endDate, acc, erased);
+	    AccountabilityVersion newAccountabilityHistory = new AccountabilityVersion(beginDate, endDate, acc, erased, justification);
 	    newAccountabilityHistory.setNextAccVersion(firstAccVersion);
 	}
     }

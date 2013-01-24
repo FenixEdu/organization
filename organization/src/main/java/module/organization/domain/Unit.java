@@ -86,7 +86,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
     protected Unit(final Party parent, final MultiLanguageString name, final String acronym, final PartyType partyType,
 	    final AccountabilityType accountabilityType, final LocalDate begin, final LocalDate end,
-	    final OrganizationalModel organizationalModel) {
+	    final OrganizationalModel organizationalModel, String accJustification) {
 	this();
 
 	check(partyType, "error.Unit.invalid.party.type");
@@ -98,7 +98,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
 	if (parent != null) {
 	    check(accountabilityType, "error.Unit.invalid.accountability.type");
-	    Accountability.create(parent, this, accountabilityType, begin, end);
+	    Accountability.create(parent, this, accountabilityType, begin, end, accJustification);
 	} else {
 	    setMyOrgFromTopUnit(MyOrg.getInstance());
 	}
@@ -153,25 +153,77 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 		bean.getBegin(), bean.getEnd(), bean.getOrganizationalModel());
     }
 
+    @Deprecated
     public static Unit create(Party parent, MultiLanguageString name, String acronym, PartyType partyType,
 	    AccountabilityType accountabilityType, LocalDate begin, LocalDate end) {
-	return create(parent, name, acronym, partyType, accountabilityType, begin, end, null);
+    	return create(parent, name, acronym, partyType, accountabilityType, begin, end, null, null);
     }
+    
+    public static Unit create(Party parent, MultiLanguageString name, String acronym, PartyType partyType,
+	    AccountabilityType accountabilityType, LocalDate begin, LocalDate end, String accJustification) {
+	return create(parent, name, acronym, partyType, accountabilityType, begin, end, null, accJustification);
+    	
+    }
+    
 
-    @Service
+    /**
+     * 
+     * @param parent the parent unit, whose relation will be established using the provided accountabilityType
+     * @param name 
+     * @param acronym 
+     * @param partyType
+     * @param accountabilityType the accountabilityType to connect to the parent unit
+     * @param begin the begin date of the accountability
+     * @param end the end date, or null, if the accountability end date remains to be closed
+     * @param organizationalModel if provided, the newly created unit will be added as a top unit to the given organizationalModel.
+     * @deprecated use {@link #create(Party, MultiLanguageString, String, PartyType, AccountabilityType, LocalDate, LocalDate, OrganizationalModel, String)} instead
+     * @return
+     */
+    @Deprecated
     public static Unit create(Party parent, MultiLanguageString name, String acronym, PartyType partyType,
 	    AccountabilityType accountabilityType, LocalDate begin, LocalDate end, OrganizationalModel organizationalModel) {
-	return new Unit(parent, name, acronym, partyType, accountabilityType, begin, end, organizationalModel);
+	return Unit.create(parent,name,acronym, partyType, accountabilityType, begin, end, organizationalModel, null);
+    }
+    
+    /**
+     * @param parent the parent unit, whose relation will be established using the provided accountabilityType
+     * @param name 
+     * @param acronym 
+     * @param partyType
+     * @param accountabilityType the accountabilityType to connect to the parent unit
+     * @param begin the begin date of the accountability
+     * @param end the end date, or null, if the accountability end date remains to be closed
+     * @param organizationalModel if provided, the newly created unit will be added as a top unit to the given organizationalModel.
+     * @param justification an information justification/reason for the change of accountability, or null if there is none, or none is provided
+     * @return
+     */
+    @Service
+    public static Unit create(Party parent, MultiLanguageString name, String acronym, PartyType partyType,
+	    AccountabilityType accountabilityType, LocalDate begin, LocalDate end, OrganizationalModel organizationalModel, String justification) {
+	return new Unit(parent, name, acronym, partyType, accountabilityType, begin, end, organizationalModel, justification);
     }
 
     @Service
     static public Unit createRoot(final UnitBean bean) {
-	return createRoot(bean.getName(), bean.getAcronym(), bean.getPartyType());
+	return createRoot(bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityJustification());
     }
 
-    @Service
+    /**
+     * 
+     * @param name
+     * @param acronym
+     * @param partyType
+     * @deprecated use {@link #createRoot(MultiLanguageString, String, PartyType, String)} instead
+     * @return
+     */
+    @Deprecated
     static public Unit createRoot(final MultiLanguageString name, final String acronym, final PartyType partyType) {
-	return new Unit(null, name, acronym, partyType, null, new LocalDate(), null, null);
+	return new Unit(null, name, acronym, partyType, null, new LocalDate(), null, null, null);
+    }
+    
+    @Service
+    static public Unit createRoot(final MultiLanguageString name, final String acronym, final PartyType partyType, String accJustification) {
+	return new Unit(null, name, acronym, partyType, null, new LocalDate(), null, null, accJustification);
     }
 
     @Override

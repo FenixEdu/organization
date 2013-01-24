@@ -54,7 +54,7 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
         setUser(user);
     }
 
-    protected UnconfirmedAccountability(Party parent, Party child, AccountabilityType type, LocalDate begin, LocalDate end) {
+    protected UnconfirmedAccountability(Party parent, Party child, AccountabilityType type, LocalDate begin, LocalDate end, String justification) {
 	this();
 
 	check(parent, "error.Accountability.invalid.parent");
@@ -67,7 +67,7 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
 
 	init(parent, child, readAccountabilityType());
 	setUnconfirmedAccountabilityType(type);
-	AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false);
+	AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false, justification);
     }
 
     @Service
@@ -114,11 +114,22 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
 	}
     }
 
-    @Service
+    /**
+     * @deprecated use {@link #confirm(String)} instead
+     */
+    @Deprecated
     public void confirm() {
-	Accountability.create(getParent(), getChild(), getUnconfirmedAccountabilityType(), getBeginDate(), getEndDate());
+	confirm(null);
 	delete();
     }
+    
+    @Service
+    public void confirm(String justification) {
+	Accountability.create(getParent(), getChild(), getUnconfirmedAccountabilityType(), getBeginDate(), getEndDate(), justification);
+	delete();
+    }
+    
+    
 
     @Service
     public void reject() {

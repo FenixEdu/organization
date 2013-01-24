@@ -182,21 +182,25 @@ abstract public class Party extends Party_Base implements Presentable {
 	return getChildAccountabilities().iterator();
     }
 
+    @Deprecated
     @Override
     public void removeChildAccountabilities(Accountability childAccountabilities) {
 	throw new UnsupportedOperationException("dont.use.this.api");
     }
 
+    @Deprecated
     @Override
     public void removeParentAccountabilities(Accountability parentAccountabilities) {
 	throw new UnsupportedOperationException("dont.use.this.api");
     }
 
+    @Deprecated
     @Override
     public void addChildAccountabilities(Accountability childAccountabilities) {
 	throw new UnsupportedOperationException("dont.use.this.api");
     }
 
+    @Deprecated
     @Override
     public void addParentAccountabilities(Accountability parentAccountabilities) {
 	throw new UnsupportedOperationException("dont.use.this.api");
@@ -499,13 +503,60 @@ abstract public class Party extends Party_Base implements Presentable {
 	removeMyOrg();
     }
 
+    /**
+     * 
+     * @param parent
+     * @param type
+     * @param begin
+     * @param end
+     * @param justification an information justification/reason for the accountability change, or null if there is none, or none is provided
+     * @return
+     */
     @Service
+    public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin, final LocalDate end, String justification) {
+	return Accountability.create(parent, this, type, begin, end, justification);
+    }
+    
+    /**
+     * 
+     * @deprecated Use {@link #addParent(Party, AccountabilityType, LocalDate, LocalDate, String)} instead
+     * @param parent
+     * @param type
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Deprecated
     public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
-	return Accountability.create(parent, this, type, begin, end);
+    	return addParent(parent, type, begin, end, null);
+    	
     }
 
-    @Service
+    /**
+     * 
+     * @param child
+     * @param type
+     * @param begin
+     * @param end
+     * @return
+     * @deprecated Use {@link #addChild(Party, AccountabilityType, LocalDate, LocalDate, String)} instead
+     */
+    @Deprecated
     public Accountability addChild(final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
+	return addChild(child, type, begin, end, null);
+    }
+    
+    /**
+     * 
+     * @param child
+     * @param type
+     * @param begin
+     * @param end
+     * @param justification an information justification/reason for the change of accountability, or null if there is none, or none is provided
+     * @return
+     */
+    @Service
+    public Accountability addChild(final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end, String justification) {
 	Accountability intersectingAccountability = getIntersectingChildAccountability(child, type, begin, end);
 	if (intersectingAccountability != null) {
 	    if (begin == null
@@ -521,7 +572,7 @@ abstract public class Party extends Party_Base implements Presentable {
 	    return intersectingAccountability;
 	}
 
-	return Accountability.create(this, child, type, begin, end);
+	return Accountability.create(this, child, type, begin, end, justification);
     }
 
     public boolean hasAnyIntersectingChildAccountability(final Party child, final AccountabilityType type, final LocalDate begin,

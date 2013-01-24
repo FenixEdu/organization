@@ -96,6 +96,7 @@ text-decoration: line-through;
 	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.accountabilityType" /></th>
 	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.party.child" /></th>
 	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.party.parent" /></th>
+	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.accountabilityJustification" /></th>
 	  </tr>
 	  <logic:iterate  name="accItemsToDisplay" id="accItem">
 	  <%if (showDeletedAccountabilities || !((Accountability)accItem).isErased()) { %>
@@ -132,6 +133,7 @@ text-decoration: line-through;
 			    	<td>-</td>
 			    </logic:notPresent>
 		    <%-- Printing the parents based on if the Accoutability is deleted or not : END--%>
+		    <td><bean:write name="accItem" property="justification"/></td>
 	  </tr>
 	  <% } %>
 	  
