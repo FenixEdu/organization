@@ -53,10 +53,12 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider {
 
 	for (final Person person : getPersons(argsMap, value)) {
 	    final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
+	    if (person.getUser() == null)
+	        continue;
 	    if (hasMatch(values, normalizedName)) {
 		persons.add(person);
 	    }
-	    if (person.getUser() != null && person.getUser().getUsername().indexOf(value) >= 0) {
+	    if (person.getUser().getUsername().indexOf(value) >= 0) {
 		persons.add(person);
 	    }
 	    if (persons.size() >= maxCount) {
