@@ -17,6 +17,7 @@
    <name>lucene-indexing-plugin</name>
    <name>file-support-plugin</name>
    <name>organization</name>
+   <name>bennu-vaadin</name>
    <name>geography</name>
    <!-- [END OF BENNU GENERATED FRAGMENT] -->
 		</after>

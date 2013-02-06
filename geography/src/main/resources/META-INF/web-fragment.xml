@@ -14,6 +14,7 @@
    <name>lucene</name>
    <name>lucene-indexing-plugin</name>
    <name>file-support-plugin</name>
+   <name>bennu-vaadin</name>
    <name>scheduler</name>
    <name>file-support</name>
    <name>scheduler-plugin</name>
