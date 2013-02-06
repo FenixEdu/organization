@@ -34,8 +34,6 @@ import module.contacts.domain.PhysicalAddress;
 import module.contacts.presentationTier.renderers.PhysicalAddressBeanInputRendererWithPostBack;
 import module.geography.domain.Country;
 import module.geography.domain.CountrySubdivision;
-import module.geography.domain.CountrySubdivisionLevelName;
-import module.geography.domain.GeographicLocation;
 
 /**
  * Bean for the PhysicalAddress. Check the createContact.jsp for an example on
@@ -66,7 +64,7 @@ public class PhysicalAddressBean implements Serializable {
      * @return the country
      */
     public Country getCountry() {
-	return country;
+        return country;
     }
 
     /**
@@ -74,23 +72,23 @@ public class PhysicalAddressBean implements Serializable {
      *            the country to set
      */
     public void setCountry(Country country) {
-	this.country = country;
+        this.country = country;
     }
 
     public void setPhysicalAddress(PhysicalAddress physicalAddress) {
-	this.physicalAddress = physicalAddress;
+        this.physicalAddress = physicalAddress;
     }
 
     public PhysicalAddress getPhysicalAddress() {
-	return physicalAddress;
+        return physicalAddress;
     }
 
     public void setGeographicLevels(HashMap<String, CountrySubdivision> geographicLevels) {
-	this.geographicLevels = geographicLevels;
+        this.geographicLevels = geographicLevels;
     }
 
     public HashMap<String, CountrySubdivision> getGeographicLevels() {
-	return geographicLevels;
+        return geographicLevels;
     }
 
     /**
@@ -102,24 +100,24 @@ public class PhysicalAddressBean implements Serializable {
      *         objects
      */
     @SuppressWarnings("unchecked")
-    public static ArrayList<CountrySubdivision> getSubdivisionsOrderedArrayList(Collection<CountrySubdivision> originalCollection)
-    {
-	ArrayList<CountrySubdivision> geographicLevelsOrdered = new ArrayList<CountrySubdivision>();
-	for (CountrySubdivision countrySubdivision : originalCollection) {
-	    if (countrySubdivision != null)
-		geographicLevelsOrdered.add(countrySubdivision);
-	}
-	Collections.sort(geographicLevelsOrdered, CountrySubdivision.COMPARATOR_BY_LEVEL);
-	return geographicLevelsOrdered;
-	
+    public static ArrayList<CountrySubdivision> getSubdivisionsOrderedArrayList(Collection<CountrySubdivision> originalCollection) {
+        ArrayList<CountrySubdivision> geographicLevelsOrdered = new ArrayList<CountrySubdivision>();
+        for (CountrySubdivision countrySubdivision : originalCollection) {
+            if (countrySubdivision != null) {
+                geographicLevelsOrdered.add(countrySubdivision);
+            }
+        }
+        Collections.sort(geographicLevelsOrdered, CountrySubdivision.COMPARATOR_BY_LEVEL);
+        return geographicLevelsOrdered;
+
     }
 
     public void setAddressBean(AddressBean addressBean) {
-	this.addressBean = addressBean;
+        this.addressBean = addressBean;
     }
 
     public AddressBean getAddressBean() {
-	return addressBean;
+        return addressBean;
     }
 
 }

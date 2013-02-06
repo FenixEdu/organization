@@ -50,151 +50,153 @@ abstract public class PartyPredicate {
     abstract public boolean eval(final Party party, final Accountability accountability);
 
     protected boolean hasClass(final Class<? extends Party> clazz, final Party party) {
-	return clazz == null || clazz.isAssignableFrom(party.getClass());
+        return clazz == null || clazz.isAssignableFrom(party.getClass());
     }
 
     protected boolean hasPartyType(final PartyType type, final Party party) {
-	return type == null || party.hasPartyTypes(type);
+        return type == null || party.hasPartyTypes(type);
     }
 
     protected boolean hasAccountabilityType(final AccountabilityType type, final Accountability accountability) {
-	return type == null || accountability.hasAccountabilityType(type);
+        return type == null || accountability.hasAccountabilityType(type);
     }
 
     static public class TruePartyPredicate extends PartyPredicate {
-	@Override
-	public boolean eval(Party party, Accountability accountability) {
-	    return true;
-	}
+        @Override
+        public boolean eval(Party party, Accountability accountability) {
+            return true;
+        }
     }
 
     static public class PartyByClassType extends PartyPredicate {
-	protected Class<? extends Party> clazz;
+        protected Class<? extends Party> clazz;
 
-	public PartyByClassType(final Class<? extends Party> clazz) {
-	    this.clazz = clazz;
-	}
+        public PartyByClassType(final Class<? extends Party> clazz) {
+            this.clazz = clazz;
+        }
 
-	@Override
-	public boolean eval(Party party, Accountability accountability) {
-	    return hasClass(clazz, party);
-	}
+        @Override
+        public boolean eval(Party party, Accountability accountability) {
+            return hasClass(clazz, party);
+        }
     }
 
     static public class PartyByPartyType extends PartyByClassType {
-	private final PartyType type;
+        private final PartyType type;
 
-	public PartyByPartyType(final PartyType type) {
-	    this(null, type);
-	}
+        public PartyByPartyType(final PartyType type) {
+            this(null, type);
+        }
 
-	public PartyByPartyType(final Class<? extends Party> clazz) {
-	    this(clazz, null);
-	}
+        public PartyByPartyType(final Class<? extends Party> clazz) {
+            this(clazz, null);
+        }
 
-	public PartyByPartyType(final Class<? extends Party> clazz, final PartyType type) {
-	    super(clazz);
-	    this.type = type;
-	}
+        public PartyByPartyType(final Class<? extends Party> clazz, final PartyType type) {
+            super(clazz);
+            this.type = type;
+        }
 
-	@Override
-	public boolean eval(Party party, Accountability accountability) {
-	    return hasClass(clazz, party) && hasPartyType(type, party);
-	}
+        @Override
+        public boolean eval(Party party, Accountability accountability) {
+            return hasClass(clazz, party) && hasPartyType(type, party);
+        }
     }
 
     static public class PartyByAccTypeAndDates extends PartyPredicate {
-	
-	private final LocalDate dateOfStart;
-	private final LocalDate dateOfEnd;
-	List<AccountabilityType> types = new ArrayList<AccountabilityType>();
 
-	public PartyByAccTypeAndDates(final LocalDate dateOfStart, final LocalDate dateOfEnd, final AccountabilityType... types) {
-	    for (AccountabilityType type : types) {
-		this.types.add(type);
-	    }
-	    this.dateOfStart = dateOfStart;
-	    this.dateOfEnd = dateOfEnd;
-	}
+        private final LocalDate dateOfStart;
+        private final LocalDate dateOfEnd;
+        List<AccountabilityType> types = new ArrayList<AccountabilityType>();
 
-	public PartyByAccTypeAndDates(final LocalDate dateOfStart, final LocalDate dateOfEnd, List<AccountabilityType> types) {
-	    if (types != null)
-		this.types.addAll(types);
-	    this.dateOfStart = dateOfStart;
-	    this.dateOfEnd = dateOfEnd;
-	}
+        public PartyByAccTypeAndDates(final LocalDate dateOfStart, final LocalDate dateOfEnd, final AccountabilityType... types) {
+            for (AccountabilityType type : types) {
+                this.types.add(type);
+            }
+            this.dateOfStart = dateOfStart;
+            this.dateOfEnd = dateOfEnd;
+        }
 
-	@Override
-	public boolean eval(Party party, Accountability accountability) {
+        public PartyByAccTypeAndDates(final LocalDate dateOfStart, final LocalDate dateOfEnd, List<AccountabilityType> types) {
+            if (types != null) {
+                this.types.addAll(types);
+            }
+            this.dateOfStart = dateOfStart;
+            this.dateOfEnd = dateOfEnd;
+        }
 
-	    return accountability.intersects(dateOfStart, dateOfEnd) && hasMatchingOrNoAccountabilityType(accountability);
-	}
+        @Override
+        public boolean eval(Party party, Accountability accountability) {
 
-	public boolean wasActiveAtStartDate(Accountability accountability) {
-	    return dateOfStart == null || accountability.contains(dateOfStart);
-	}
+            return accountability.intersects(dateOfStart, dateOfEnd) && hasMatchingOrNoAccountabilityType(accountability);
+        }
 
-	public boolean wasActiveAtEndDate(Accountability accountability) {
-	    return dateOfEnd == null || accountability.contains(dateOfEnd);
-	}
+        public boolean wasActiveAtStartDate(Accountability accountability) {
+            return dateOfStart == null || accountability.contains(dateOfStart);
+        }
 
-	protected boolean hasMatchingOrNoAccountabilityType(final Accountability accountability) {
-	    if (types.isEmpty())
-		return true;
-	    for (final AccountabilityType type : types) {
-		if (hasAccountabilityType(type, accountability)) {
-		    return true;
-		}
-	    }
-	    return false;
-	}
+        public boolean wasActiveAtEndDate(Accountability accountability) {
+            return dateOfEnd == null || accountability.contains(dateOfEnd);
+        }
+
+        protected boolean hasMatchingOrNoAccountabilityType(final Accountability accountability) {
+            if (types.isEmpty()) {
+                return true;
+            }
+            for (final AccountabilityType type : types) {
+                if (hasAccountabilityType(type, accountability)) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
     }
 
     static public class PartyByAccountabilityType extends PartyByClassType {
-	private final Set<AccountabilityType> types = new HashSet<AccountabilityType>();
+        private final Set<AccountabilityType> types = new HashSet<AccountabilityType>();
 
-	public PartyByAccountabilityType(final AccountabilityType type) {
-	    this(null, type);
-	}
+        public PartyByAccountabilityType(final AccountabilityType type) {
+            this(null, type);
+        }
 
-	public PartyByAccountabilityType(final Collection<AccountabilityType> types) {
-	    this(null, types);
-	}
+        public PartyByAccountabilityType(final Collection<AccountabilityType> types) {
+            this(null, types);
+        }
 
-	public PartyByAccountabilityType(final AccountabilityType... types) {
-	    super(null);
-	    for (AccountabilityType type : types) {
-		this.types.add(type);
-	    }
-	}
+        public PartyByAccountabilityType(final AccountabilityType... types) {
+            super(null);
+            for (AccountabilityType type : types) {
+                this.types.add(type);
+            }
+        }
 
-	public PartyByAccountabilityType(final Class<? extends Party> clazz) {
-	    this(clazz, (AccountabilityType) null);
-	}
+        public PartyByAccountabilityType(final Class<? extends Party> clazz) {
+            this(clazz, (AccountabilityType) null);
+        }
 
-	public PartyByAccountabilityType(final Class<? extends Party> clazz, final AccountabilityType type) {
-	    super(clazz);
-	    types.add(type);
-	}
+        public PartyByAccountabilityType(final Class<? extends Party> clazz, final AccountabilityType type) {
+            super(clazz);
+            types.add(type);
+        }
 
-	public PartyByAccountabilityType(final Class<? extends Party> clazz, final Collection<AccountabilityType> types) {
-	    super(clazz);
-	    this.types.addAll(types);
-	}
+        public PartyByAccountabilityType(final Class<? extends Party> clazz, final Collection<AccountabilityType> types) {
+            super(clazz);
+            this.types.addAll(types);
+        }
 
-	@Override
-	public boolean eval(Party party, Accountability accountability) {
-	    return hasClass(clazz, party) && hasMatchingAccountabilityType(accountability);
-	}
+        @Override
+        public boolean eval(Party party, Accountability accountability) {
+            return hasClass(clazz, party) && hasMatchingAccountabilityType(accountability);
+        }
 
-	protected boolean hasMatchingAccountabilityType(final Accountability accountability) {
-	    for (final AccountabilityType type : types) {
-		if (hasAccountabilityType(type, accountability)) {
-		    return true;
-		}
-	    }
-	    return false;
-	}
+        protected boolean hasMatchingAccountabilityType(final Accountability accountability) {
+            for (final AccountabilityType type : types) {
+                if (hasAccountabilityType(type, accountability)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

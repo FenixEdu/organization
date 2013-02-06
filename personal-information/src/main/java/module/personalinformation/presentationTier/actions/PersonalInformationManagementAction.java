@@ -30,6 +30,11 @@ import javax.servlet.http.HttpServletResponse;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.presentationTier.actions.PartyViewHook;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import pt.ist.bennu.core.domain.RoleType;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.contents.ActionNode;
@@ -37,11 +42,6 @@ import pt.ist.bennu.core.domain.contents.Node;
 import pt.ist.bennu.core.domain.groups.Role;
 import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.bennu.core.util.BundleUtil;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-
 import pt.ist.fenixWebFramework.servlets.functionalities.CreateNodeAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
@@ -56,51 +56,55 @@ public class PersonalInformationManagementAction extends ContextBaseAction {
 
     public static class PersonalInformationView extends PartyViewHook {
 
-	@Override
-	public String hook(final HttpServletRequest request, final OrganizationalModel organizationalModel, final Party party) {
-	    return "/personalInformation/organizationModelView.jsp";
-	}
+        @Override
+        public String hook(final HttpServletRequest request, final OrganizationalModel organizationalModel, final Party party) {
+            return "/personalInformation/organizationModelView.jsp";
+        }
 
-	@Override
-	public String getViewName() {
-	    return "02_personalInformation";
-	}
+        @Override
+        public String getViewName() {
+            return "02_personalInformation";
+        }
 
-	@Override
-	public String getPresentationName() {
-	    return BundleUtil.getStringFromResourceBundle("resources.PersonalInformationResources", "label.personalInformationView");
-	}
+        @Override
+        public String getPresentationName() {
+            return BundleUtil.getStringFromResourceBundle("resources.PersonalInformationResources",
+                    "label.personalInformationView");
+        }
 
-	@Override
-	public boolean isAvailableFor(final Party party) {
-	    return party != null && party.isPerson();
-	}
+        @Override
+        public boolean isAvailableFor(final Party party) {
+            return party != null && party.isPerson();
+        }
     }
 
-    @CreateNodeAction(bundle = "PERSONAL_INFORMATION_RESOURCES", key = "add.node.manage.personal.information", groupKey = "label.module.personal.information")
+    @CreateNodeAction(bundle = "PERSONAL_INFORMATION_RESOURCES", key = "add.node.manage.personal.information",
+            groupKey = "label.module.personal.information")
     public final ActionForward createOrganizationNode(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+            final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
-	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
-	final Node parentOfNodes = getDomainObject(request, "parentOfNodesToManageId");
+        final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
+        final Node parentOfNodes = getDomainObject(request, "parentOfNodesToManageId");
 
-	final ActionNode topActionNode = ActionNode.createActionNode(virtualHost, parentOfNodes, "/personalInformation", "intro",
-		"resources.PersonalInformationResources", "label.module.personal.information", Role.getRole(RoleType.MANAGER));
+        final ActionNode topActionNode =
+                ActionNode.createActionNode(virtualHost, parentOfNodes, "/personalInformation", "intro",
+                        "resources.PersonalInformationResources", "label.module.personal.information",
+                        Role.getRole(RoleType.MANAGER));
 
-	ActionNode.createActionNode(virtualHost, topActionNode, "/personalInformation", "manage",
-		"resources.PersonalInformationResources", "label.manage.information", Role.getRole(RoleType.MANAGER));
+        ActionNode.createActionNode(virtualHost, topActionNode, "/personalInformation", "manage",
+                "resources.PersonalInformationResources", "label.manage.information", Role.getRole(RoleType.MANAGER));
 
-	return forwardToMuneConfiguration(request, virtualHost, topActionNode);
+        return forwardToMuneConfiguration(request, virtualHost, topActionNode);
     }
 
     public ActionForward intro(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws Exception {
-	return forward(request, "/personalInformation/intro.jsp");
+            final HttpServletResponse response) throws Exception {
+        return forward(request, "/personalInformation/intro.jsp");
     }
 
     public ActionForward manage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws Exception {
-	return forward(request, "/personalInformation/manage.jsp");
+            final HttpServletResponse response) throws Exception {
+        return forward(request, "/personalInformation/manage.jsp");
     }
 
 }

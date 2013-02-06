@@ -56,117 +56,118 @@ public class Accountability extends Accountability_Base {
 
     public static final Comparator<Accountability> COMPARATOR_BY_PARENT_PARTY_NAMES = new Comparator<Accountability>() {
 
-	@Override
-	public int compare(final Accountability o1, final Accountability o2) {
-	    final int c = Party.COMPARATOR_BY_NAME.compare(o1.getParent(), o2.getParent());
-	    return c == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : c;
-	}
+        @Override
+        public int compare(final Accountability o1, final Accountability o2) {
+            final int c = Party.COMPARATOR_BY_NAME.compare(o1.getParent(), o2.getParent());
+            return c == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : c;
+        }
 
     };
 
     public static final Comparator<Accountability> COMPARATOR_BY_CHILD_PARTY_NAMES = new Comparator<Accountability>() {
 
-	@Override
-	public int compare(final Accountability o1, final Accountability o2) {
-	    final int c = Party.COMPARATOR_BY_NAME.compare(o1.getChild(), o2.getChild());
-	    return c == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : c;
-	}
+        @Override
+        public int compare(final Accountability o1, final Accountability o2) {
+            final int c = Party.COMPARATOR_BY_NAME.compare(o1.getChild(), o2.getChild());
+            return c == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : c;
+        }
 
     };
 
-    public static final Comparator<Accountability> COMPARATOR_BY_CREATION_DATE_FALLBACK_TO_START_DATE = new Comparator<Accountability>() {
+    public static final Comparator<Accountability> COMPARATOR_BY_CREATION_DATE_FALLBACK_TO_START_DATE =
+            new Comparator<Accountability>() {
 
-	@Override
-	public int compare(final Accountability o1, final Accountability o2) {
-	    DateTime o1CreationDate = o1.getCreationDate();
-	    DateTime o2CreationDate = o2.getCreationDate();
+                @Override
+                public int compare(final Accountability o1, final Accountability o2) {
+                    DateTime o1CreationDate = o1.getCreationDate();
+                    DateTime o2CreationDate = o2.getCreationDate();
 
-	    if (o1CreationDate == null) {
-		o1CreationDate = o1.getBeginDate().toDateTimeAtStartOfDay();
-	    }
-	    if (o2CreationDate == null) {
-		o2CreationDate = o2.getBeginDate().toDateTimeAtStartOfDay();
-	    }
+                    if (o1CreationDate == null) {
+                        o1CreationDate = o1.getBeginDate().toDateTimeAtStartOfDay();
+                    }
+                    if (o2CreationDate == null) {
+                        o2CreationDate = o2.getBeginDate().toDateTimeAtStartOfDay();
+                    }
 
-	    return (o1CreationDate.compareTo(o2CreationDate)) == 0 ? (o1.getExternalId().compareTo(o2.getExternalId()))
-		    : (o1CreationDate.compareTo(o2CreationDate));
-	};
+                    return (o1CreationDate.compareTo(o2CreationDate)) == 0 ? (o1.getExternalId().compareTo(o2.getExternalId())) : (o1CreationDate
+                            .compareTo(o2CreationDate));
+                };
 
-    };
+            };
 
     protected Accountability() {
-	super();
-	setMyOrg(MyOrg.getInstance());
+        super();
+        setMyOrg(MyOrg.getInstance());
     }
 
     protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
-	    final LocalDate end, String justification) {
-	this();
+            final LocalDate end, String justification) {
+        this();
 
-	check(parent, "error.Accountability.invalid.parent");
-	check(child, "error.Accountability.invalid.child");
-	check(type, "error.Accountability.invalid.type");
-	check(begin, "error.Accountability.invalid.begin");
-	checkDates(parent, begin, end);
+        check(parent, "error.Accountability.invalid.parent");
+        check(child, "error.Accountability.invalid.child");
+        check(type, "error.Accountability.invalid.type");
+        check(begin, "error.Accountability.invalid.begin");
+        checkDates(parent, begin, end);
 
-	canCreate(parent, child, type);
+        canCreate(parent, child, type);
 
-	init(parent, child, type);
-	editDates(begin, end, justification);
+        init(parent, child, type);
+        editDates(begin, end, justification);
     }
 
     protected void init(Party parent, Party child, AccountabilityType type) {
-	super.setParent(parent);
-	super.setChild(child);
-	super.setAccountabilityType(type);
+        super.setParent(parent);
+        super.setChild(child);
+        super.setAccountabilityType(type);
     }
 
     protected void checkDates(final Party parent, final LocalDate begin, final LocalDate end) {
-	if (begin != null && end != null && begin.isAfter(end)) {
-	    throw new DomainException("error.Accountability.begin.is.after.end");
-	}
-	checkBeginFromOldestParentAccountability(parent, begin);
+        if (begin != null && end != null && begin.isAfter(end)) {
+            throw new DomainException("error.Accountability.begin.is.after.end");
+        }
+        checkBeginFromOldestParentAccountability(parent, begin);
     }
 
     private void checkBeginFromOldestParentAccountability(final Party parent, final LocalDate begin) throws DomainException {
-	Accountability oldest = null;
-	for (final Accountability accountability : parent.getParentAccountabilitiesSet()) {
-	    if (oldest == null || accountability.getBeginDate().isBefore(oldest.getBeginDate())) {
-		oldest = accountability;
-	    }
-	}
+        Accountability oldest = null;
+        for (final Accountability accountability : parent.getParentAccountabilitiesSet()) {
+            if (oldest == null || accountability.getBeginDate().isBefore(oldest.getBeginDate())) {
+                oldest = accountability;
+            }
+        }
 
-	if (oldest != null && begin.isBefore(oldest.getBeginDate())) {
-	    final String[] args = new String[] { oldest.getChild().getPartyName().getContent(),
-		    oldest.getBeginDate().toString("dd/MM/yyyy") };
-	    throw new DomainException("error.Accountability.begin.starts.before.oldest.parent.begin", args);
-	}
+        if (oldest != null && begin.isBefore(oldest.getBeginDate())) {
+            final String[] args =
+                    new String[] { oldest.getChild().getPartyName().getContent(), oldest.getBeginDate().toString("dd/MM/yyyy") };
+            throw new DomainException("error.Accountability.begin.starts.before.oldest.parent.begin", args);
+        }
     }
 
     protected void check(final Object obj, final String message) {
-	if (obj == null) {
-	    throw new DomainException(message);
-	}
+        if (obj == null) {
+            throw new DomainException(message);
+        }
     }
 
     protected void canCreate(final Party parent, final Party child, final AccountabilityType type) {
-	if (parent.equals(child)) {
-	    throw new DomainException("error.Accountability.parent.equals.child");
-	}
-	if (parent.ancestorsInclude(child, type)) {
-	    throw new DomainException("error.Accountability.parent.ancestors.include.child.with.type");
-	}
-	if (!type.isValid(parent, child)) {
-	    throw new DomainException("error.Accountability.type.doesnot.allow.parent.child");
-	}
+        if (parent.equals(child)) {
+            throw new DomainException("error.Accountability.parent.equals.child");
+        }
+        if (parent.ancestorsInclude(child, type)) {
+            throw new DomainException("error.Accountability.parent.ancestors.include.child.with.type");
+        }
+        if (!type.isValid(parent, child)) {
+            throw new DomainException("error.Accountability.type.doesnot.allow.parent.child");
+        }
     }
 
     public boolean isValid() {
-	return hasParent() && hasChild() && getAccountabilityType().isValid(getParent(), getChild());
+        return hasParent() && hasChild() && getAccountabilityType().isValid(getParent(), getChild());
     }
 
     public boolean isActive(final LocalDate date) {
-	return contains(date) && !isErased();
+        return contains(date) && !isErased();
     }
 
     /**
@@ -175,49 +176,50 @@ public class Accountability extends Accountability_Base {
      *         otherwise
      */
     public boolean isErased() {
-	if (getAccountabilityVersion() == null)
-	    return false;
-	return getAccountabilityVersion().getErased();
+        if (getAccountabilityVersion() == null) {
+            return false;
+        }
+        return getAccountabilityVersion().getErased();
     }
 
     public boolean isActiveNow() {
-	final LocalDate now = new LocalDate();
-	return isActive(now);
+        final LocalDate now = new LocalDate();
+        return isActive(now);
     }
 
     public boolean contains(final LocalDate date) {
-	return !getBeginDate().isAfter(date) && (!hasEndDate() || getEndDate().isAfter(date));
+        return !getBeginDate().isAfter(date) && (!hasEndDate() || getEndDate().isAfter(date));
     }
 
     public boolean contains(final LocalDate begin, final LocalDate end) {
-	check(begin, "error.Accountability.intercepts.invalid.begin");
-	return (end == null || !getBeginDate().isAfter(end)) && (!hasEndDate() || !begin.isAfter(getEndDate()));
+        check(begin, "error.Accountability.intercepts.invalid.begin");
+        return (end == null || !getBeginDate().isAfter(end)) && (!hasEndDate() || !begin.isAfter(getEndDate()));
     }
 
     private boolean hasBeginDate() {
-	return getBeginDate() != null;
+        return getBeginDate() != null;
     }
 
     private boolean hasEndDate() {
-	return getEndDate() != null;
+        return getEndDate() != null;
     }
 
     public boolean hasAccountabilityType(AccountabilityType type) {
-	return getAccountabilityType().equals(type);
+        return getAccountabilityType().equals(type);
     }
 
     public String getDetailsString() {
-	final StringBuilder stringBuilder = new StringBuilder();
-	stringBuilder.append(getAccountabilityType().getName().getContent());
-	stringBuilder.append(": ");
-	if (getBeginDate() != null) {
-	    stringBuilder.append(getBeginDate().toString(LOCAL_DATE_FORMAT));
-	}
-	stringBuilder.append(" - ");
-	if (getEndDate() != null) {
-	    stringBuilder.append(getEndDate().toString(LOCAL_DATE_FORMAT));
-	}
-	return stringBuilder.toString();
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getAccountabilityType().getName().getContent());
+        stringBuilder.append(": ");
+        if (getBeginDate() != null) {
+            stringBuilder.append(getBeginDate().toString(LOCAL_DATE_FORMAT));
+        }
+        stringBuilder.append(" - ");
+        if (getEndDate() != null) {
+            stringBuilder.append(getEndDate().toString(LOCAL_DATE_FORMAT));
+        }
+        return stringBuilder.toString();
     }
 
     /**
@@ -227,70 +229,74 @@ public class Accountability extends Accountability_Base {
      */
     @Deprecated
     public void delete() {
-	setInactive(null);
+        setInactive(null);
     }
-    
+
     /**
      * It doesn't actually delete the accountability as it actually marks it as an accountability history item
-     * @param justification an information justification/reason for the change of accountability, or null if there is none, or none is provided
+     * 
+     * @param justification an information justification/reason for the change of accountability, or null if there is none, or
+     *            none is provided
      */
     @Service
     public void delete(String justification) {
-    	setInactive(justification);
+        setInactive(justification);
     }
 
     static Accountability create(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
-	    final LocalDate end, String justification) {
-	// TODO Fenix-133: allow the access control to be done in a more dynamic
-	// way, see issue for more info
-	// return parent.isAuthorizedToManage() ? new Accountability(parent,
-	// child, type, begin, end)
-	// : new UnconfirmedAccountability(parent, child, type, begin, end);
-	return new Accountability(parent, child, type, begin, end, justification);
+            final LocalDate end, String justification) {
+        // TODO Fenix-133: allow the access control to be done in a more dynamic
+        // way, see issue for more info
+        // return parent.isAuthorizedToManage() ? new Accountability(parent,
+        // child, type, begin, end)
+        // : new UnconfirmedAccountability(parent, child, type, begin, end);
+        return new Accountability(parent, child, type, begin, end, justification);
     }
 
     @Override
     @Deprecated
     public void setParent(Party parent) {
-	throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
+        throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
     }
 
     @Override
     @Deprecated
     public void setChild(Party child) {
-	throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
+        throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
     }
 
     @Override
     @Deprecated
     public void setAccountabilityType(AccountabilityType accountabilityType) {
-	throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
+        throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
     }
 
     /**
      * 
      * @param beginDate
-     * @param justification an information justification/reason for the change of accountability, or null if there is none, or none is provided
+     * @param justification an information justification/reason for the change of accountability, or null if there is none, or
+     *            none is provided
      */
     public void setBeginDate(LocalDate beginDate, String justification) {
-	editDates(beginDate, getEndDate(), justification);
+        editDates(beginDate, getEndDate(), justification);
     }
-    
+
     public void setBeginDate(LocalDate beginDate) {
-	editDates(beginDate, getEndDate());
+        editDates(beginDate, getEndDate());
     }
-    
+
     /**
      * 
-     * @param endDate 
-     * @param justification an information justification/reason for the change of accountability, or null if there is none, or none is provided
+     * @param endDate
+     * @param justification an information justification/reason for the change of accountability, or null if there is none, or
+     *            none is provided
      */
     public void setEndDate(LocalDate endDate, String justification) {
-	editDates(getBeginDate(), endDate, justification);
+        editDates(getBeginDate(), endDate, justification);
     }
 
     public void setEndDate(LocalDate endDate) {
-	editDates(getBeginDate(), endDate);
+        editDates(getBeginDate(), endDate);
     }
 
     /**
@@ -306,9 +312,9 @@ public class Accountability extends Accountability_Base {
      */
     @Deprecated
     public void editDates(final LocalDate begin, final LocalDate end) {
-    	editDates(begin, end, null);
+        editDates(begin, end, null);
     }
-    
+
     /**
      * Marks the current accountability as an historic one and creates a new one
      * based on the new dates
@@ -317,16 +323,17 @@ public class Accountability extends Accountability_Base {
      *            the new begin date
      * @param end
      *            the new end date
-     * @param justification an information justification/reason for the change of accountability, or null if there is none, or none is provided
-     *            
+     * @param justification an information justification/reason for the change of accountability, or null if there is none, or
+     *            none is provided
+     * 
      * @return the new Accountability that was just created
      */
     @Service
     public void editDates(final LocalDate begin, final LocalDate end, String justification) {
-	check(begin, "error.Accountability.invalid.begin");
-	checkDates(getParent(), begin, end);
-	// let's create the new AccountabilityHistory which is active
-	AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false, justification);
+        check(begin, "error.Accountability.invalid.begin");
+        checkDates(getParent(), begin, end);
+        // let's create the new AccountabilityHistory which is active
+        AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false, justification);
 
     }
 
@@ -344,7 +351,7 @@ public class Accountability extends Accountability_Base {
      */
 
     private void setInactive(String justification) {
-	AccountabilityVersion.insertAccountabilityVersion(getBeginDate(), getEndDate(), this, true, justification );
+        AccountabilityVersion.insertAccountabilityVersion(getBeginDate(), getEndDate(), this, true, justification);
 
     }
 
@@ -358,9 +365,9 @@ public class Accountability extends Accountability_Base {
      *         returns false)
      */
     public boolean overlaps(final LocalDate start, final LocalDate end) {
-	LocalDate startDateToUse = start == null ? start : start.plusDays(1);
-	LocalDate endDateToUse = end == null ? end : end.minusDays(1);
-	return intersects(startDateToUse, endDateToUse);
+        LocalDate startDateToUse = start == null ? start : start.plusDays(1);
+        LocalDate endDateToUse = end == null ? end : end.minusDays(1);
+        return intersects(startDateToUse, endDateToUse);
     }
 
     /**
@@ -372,7 +379,7 @@ public class Accountability extends Accountability_Base {
      *         of the accountability are the same, it returns true
      */
     public boolean intersects(final LocalDate begin, final LocalDate end) {
-	return !isAfter(getBeginDate(), end) && !isAfter(begin, getEndDate());
+        return !isAfter(getBeginDate(), end) && !isAfter(begin, getEndDate());
     }
 
     /**
@@ -383,67 +390,67 @@ public class Accountability extends Accountability_Base {
      *         localDate2, true otherwise
      */
     private static boolean isAfter(final LocalDate localDate1, final LocalDate localDate2) {
-	return localDate1 != null && localDate2 != null && localDate2.isBefore(localDate1);
+        return localDate1 != null && localDate2 != null && localDate2.isBefore(localDate1);
     }
 
     public static List<Accountability> getActiveAndInactiveAccountabilities(List<AccountabilityType> accTypes,
-	    List<Party> parties, LocalDate startDate, LocalDate endDate) {
-	List<Accountability> accountabilities = new ArrayList<Accountability>();
+            List<Party> parties, LocalDate startDate, LocalDate endDate) {
+        List<Accountability> accountabilities = new ArrayList<Accountability>();
 
-	// let's iterate through the parties
-	for (Party party : parties) {
-	    accountabilities.addAll(party.getAccountabilitiesAndHistoricItems(accTypes, startDate, endDate));
-	}
-	// if no parties have been specified, we will get all of the
-	// accountabilities!!
-	if (parties == null || parties.isEmpty()) {
-	    final PartyByAccTypeAndDates typeAndDates = new PartyByAccTypeAndDates(startDate, endDate, accTypes);
-	    for (final Accountability accountability : MyOrg.getInstance().getAccountabilities()) {
-		if (typeAndDates.eval(null, accountability)) {
-		    accountabilities.add(accountability);
-		}
+        // let's iterate through the parties
+        for (Party party : parties) {
+            accountabilities.addAll(party.getAccountabilitiesAndHistoricItems(accTypes, startDate, endDate));
+        }
+        // if no parties have been specified, we will get all of the
+        // accountabilities!!
+        if (parties == null || parties.isEmpty()) {
+            final PartyByAccTypeAndDates typeAndDates = new PartyByAccTypeAndDates(startDate, endDate, accTypes);
+            for (final Accountability accountability : MyOrg.getInstance().getAccountabilities()) {
+                if (typeAndDates.eval(null, accountability)) {
+                    accountabilities.add(accountability);
+                }
 
-	    }
-	}
+            }
+        }
 
-	Collections.sort(accountabilities, COMPARATOR_BY_CREATION_DATE_FALLBACK_TO_START_DATE);
+        Collections.sort(accountabilities, COMPARATOR_BY_CREATION_DATE_FALLBACK_TO_START_DATE);
 
-	return accountabilities;
+        return accountabilities;
 
     }
 
     @ConsistencyPredicate
     public boolean checkHasChild() {
-	return hasChild();
+        return hasChild();
     }
 
     @ConsistencyPredicate
     public boolean checkHasParent() {
-	return hasParent();
+        return hasParent();
     }
 
     public LocalDate getBeginDate() {
-	return getAccountabilityVersion().getBeginDate();
+        return getAccountabilityVersion().getBeginDate();
     }
 
     public LocalDate getEndDate() {
-	return getAccountabilityVersion().getEndDate();
+        return getAccountabilityVersion().getEndDate();
     }
-    
+
     public String getJustification() {
-    	return getAccountabilityVersion().getJustification();
+        return getAccountabilityVersion().getJustification();
     }
 
     public DateTime getCreationDate() {
-	return getAccountabilityVersion().getCreationDate();
+        return getAccountabilityVersion().getCreationDate();
     }
 
     public User getCreatorUser() {
-	return getAccountabilityVersion().getUserWhoCreated();
+        return getAccountabilityVersion().getUserWhoCreated();
     }
 
     public void switchChild(final Party newChild) {
-	super.setChild(newChild);
+        super.setChild(newChild);
     }
 
 }

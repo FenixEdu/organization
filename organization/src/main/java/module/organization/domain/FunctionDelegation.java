@@ -47,93 +47,95 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
 public class FunctionDelegation extends FunctionDelegation_Base {
 
     public static Comparator<FunctionDelegation> COMPARATOR_BY_DELEGATEE_PARENT_UNIT_NAME = new Comparator<FunctionDelegation>() {
-	@Override
-	public int compare(FunctionDelegation delegation1, FunctionDelegation delegation2) {
-	    int nameComp = delegation1.getAccountabilityDelegatee().getParent().getPresentationName()
-		    .compareTo(delegation2.getAccountabilityDelegatee().getParent().getPresentationName());
-	    return (nameComp != 0) ? nameComp : COMPARATOR_BY_DELEGATEE_CHILD_PARTY_NAME.compare(delegation1, delegation2);
-	}
+        @Override
+        public int compare(FunctionDelegation delegation1, FunctionDelegation delegation2) {
+            int nameComp =
+                    delegation1.getAccountabilityDelegatee().getParent().getPresentationName()
+                            .compareTo(delegation2.getAccountabilityDelegatee().getParent().getPresentationName());
+            return (nameComp != 0) ? nameComp : COMPARATOR_BY_DELEGATEE_CHILD_PARTY_NAME.compare(delegation1, delegation2);
+        }
     };
 
     public static Comparator<FunctionDelegation> COMPARATOR_BY_DELEGATEE_CHILD_PARTY_NAME = new Comparator<FunctionDelegation>() {
-	@Override
-	public int compare(FunctionDelegation delegation1, FunctionDelegation delegation2) {
-	    int nameComp = delegation1.getAccountabilityDelegatee().getChild().getPresentationName()
-		    .compareTo(delegation2.getAccountabilityDelegatee().getChild().getPresentationName());
-	    return (nameComp != 0) ? nameComp : COMPARATOR_BY_EXTERNAL_ID.compare(delegation1, delegation2);
-	}
+        @Override
+        public int compare(FunctionDelegation delegation1, FunctionDelegation delegation2) {
+            int nameComp =
+                    delegation1.getAccountabilityDelegatee().getChild().getPresentationName()
+                            .compareTo(delegation2.getAccountabilityDelegatee().getChild().getPresentationName());
+            return (nameComp != 0) ? nameComp : COMPARATOR_BY_EXTERNAL_ID.compare(delegation1, delegation2);
+        }
     };
 
     //TODO: This should be moved to the AbstractDomainObject
     public static Comparator<DomainObject> COMPARATOR_BY_EXTERNAL_ID = new Comparator<DomainObject>() {
-	@Override
-	public int compare(DomainObject do1, DomainObject do2) {
-	    return do1.getExternalId().compareTo(do2.getExternalId());
-	}
+        @Override
+        public int compare(DomainObject do1, DomainObject do2) {
+            return do1.getExternalId().compareTo(do2.getExternalId());
+        }
     };
 
     public FunctionDelegation(final Accountability accountability, final Unit unit, final Person person,
-	    final LocalDate beginDate, final LocalDate endDate) {
-	super();
-	setMyOrg(MyOrg.getInstance());
-	setAccountabilityDelegator(accountability);
-	final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-	if (unit.hasAnyIntersectingChildAccountability(person, accountabilityType, beginDate, endDate)) {
-	    throw new DomainException("error.FunctionDelegation.already.assigned", ResourceBundle.getBundle(
-		    "resources/OrganizationResources", Language.getLocale()));
-	}
-	final Accountability delegatedAccountability = unit.addChild(person, accountabilityType, beginDate, endDate);
-	setAccountabilityDelegatee(delegatedAccountability);
-	new FunctionDelegationLog(this, "Create");
+            final LocalDate beginDate, final LocalDate endDate) {
+        super();
+        setMyOrg(MyOrg.getInstance());
+        setAccountabilityDelegator(accountability);
+        final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+        if (unit.hasAnyIntersectingChildAccountability(person, accountabilityType, beginDate, endDate)) {
+            throw new DomainException("error.FunctionDelegation.already.assigned", ResourceBundle.getBundle(
+                    "resources/OrganizationResources", Language.getLocale()));
+        }
+        final Accountability delegatedAccountability = unit.addChild(person, accountabilityType, beginDate, endDate);
+        setAccountabilityDelegatee(delegatedAccountability);
+        new FunctionDelegationLog(this, "Create");
     }
 
     @Service
     public static FunctionDelegation create(final Accountability accountability, final Unit unit, final Person person,
-	    final LocalDate beginDate, final LocalDate endDate) {
-	return new FunctionDelegation(accountability, unit, person, beginDate, endDate);
+            final LocalDate beginDate, final LocalDate endDate) {
+        return new FunctionDelegation(accountability, unit, person, beginDate, endDate);
     }
 
     @Service
     public void edit(final LocalDate beginDate, final LocalDate endDate) {
-	new FunctionDelegationLog(this, "Edit");
-	final Accountability accountabilityDelegatee = getAccountabilityDelegatee();
-	// This avoids detecting intersections with itself
-	accountabilityDelegatee.editDates(beginDate.minusDays(2), endDate.minusDays(1));
+        new FunctionDelegationLog(this, "Edit");
+        final Accountability accountabilityDelegatee = getAccountabilityDelegatee();
+        // This avoids detecting intersections with itself
+        accountabilityDelegatee.editDates(beginDate.minusDays(2), endDate.minusDays(1));
 
-	final Unit unit = (Unit) getAccountabilityDelegatee().getParent();
-	if (unit.hasAnyIntersectingChildAccountability(accountabilityDelegatee.getChild(),
-		accountabilityDelegatee.getAccountabilityType(), beginDate, endDate)) {
-	    throw new DomainException("error.FunctionDelegation.already.assigned", ResourceBundle.getBundle(
-		    "resources/OrganizationResources", Language.getLocale()));
-	}
+        final Unit unit = (Unit) getAccountabilityDelegatee().getParent();
+        if (unit.hasAnyIntersectingChildAccountability(accountabilityDelegatee.getChild(),
+                accountabilityDelegatee.getAccountabilityType(), beginDate, endDate)) {
+            throw new DomainException("error.FunctionDelegation.already.assigned", ResourceBundle.getBundle(
+                    "resources/OrganizationResources", Language.getLocale()));
+        }
 
-	accountabilityDelegatee.editDates(beginDate, endDate);
+        accountabilityDelegatee.editDates(beginDate, endDate);
     }
 
     @Service
     public void delete() {
-	new FunctionDelegationLog(this, "Delete");
-	for (FunctionDelegationLog log : getFunctionDelegationLogs()) {
-	    removeFunctionDelegationLogs(log);
-	}
+        new FunctionDelegationLog(this, "Delete");
+        for (FunctionDelegationLog log : getFunctionDelegationLogs()) {
+            removeFunctionDelegationLogs(log);
+        }
 
-	Accountability delegatedAccountability = getAccountabilityDelegatee();
-	removeAccountabilityDelegatee();
-	delegatedAccountability.delete();
+        Accountability delegatedAccountability = getAccountabilityDelegatee();
+        removeAccountabilityDelegatee();
+        delegatedAccountability.delete();
 
-	removeAccountabilityDelegator();
-	removeMyOrg();
+        removeAccountabilityDelegator();
+        removeMyOrg();
 
-	deleteDomainObject();
+        deleteDomainObject();
     }
 
     @ConsistencyPredicate
     public boolean checkHasAccountabilityDelegator() {
-	return hasAccountabilityDelegator();
+        return hasAccountabilityDelegator();
     }
 
     @ConsistencyPredicate
     public boolean checkHasAccountabilityDelegatee() {
-	return hasAccountabilityDelegatee();
+        return hasAccountabilityDelegatee();
     }
 }

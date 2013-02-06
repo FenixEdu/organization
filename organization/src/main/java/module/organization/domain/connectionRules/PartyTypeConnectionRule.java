@@ -46,117 +46,118 @@ public class PartyTypeConnectionRule extends PartyTypeConnectionRule_Base {
 
     static public class PartyTypeConnectionRuleBean extends ConnectionRuleBean {
 
-	static private final long serialVersionUID = -1173570520382412227L;
+        static private final long serialVersionUID = -1173570520382412227L;
 
-	private PartyType parent;
-	private PartyType child;
+        private PartyType parent;
+        private PartyType child;
 
-	public PartyTypeConnectionRuleBean() {
-	    super();
-	}
+        public PartyTypeConnectionRuleBean() {
+            super();
+        }
 
-	public PartyTypeConnectionRuleBean(final PartyTypeConnectionRule connectionRule) {
-	    super(connectionRule);
-	    setParent(connectionRule.getAllowedParent());
-	    setChild(connectionRule.getAllowedChild());
-	}
+        public PartyTypeConnectionRuleBean(final PartyTypeConnectionRule connectionRule) {
+            super(connectionRule);
+            setParent(connectionRule.getAllowedParent());
+            setChild(connectionRule.getAllowedChild());
+        }
 
-	public PartyType getParent() {
-	    return parent;
-	}
+        public PartyType getParent() {
+            return parent;
+        }
 
-	public void setParent(final PartyType parent) {
-	    this.parent = parent;
-	}
+        public void setParent(final PartyType parent) {
+            this.parent = parent;
+        }
 
-	public PartyType getChild() {
-	    return child;
-	}
+        public PartyType getChild() {
+            return child;
+        }
 
-	public void setChild(final PartyType child) {
-	    this.child = child;
-	}
+        public void setChild(final PartyType child) {
+            this.child = child;
+        }
 
-	@Override
-	public PartyTypeConnectionRule getConnectionRule() {
-	    return (PartyTypeConnectionRule) super.getConnectionRule();
-	}
+        @Override
+        public PartyTypeConnectionRule getConnectionRule() {
+            return (PartyTypeConnectionRule) super.getConnectionRule();
+        }
 
-	@Override
-	public PartyTypeConnectionRule create() {
-	    return PartyTypeConnectionRule.create(getParent(), getChild());
-	}
+        @Override
+        public PartyTypeConnectionRule create() {
+            return PartyTypeConnectionRule.create(getParent(), getChild());
+        }
     }
 
     @Service
     static public PartyTypeConnectionRule create(final PartyType allowedParent, final PartyType allowedChild) {
-	return new PartyTypeConnectionRule(allowedParent, allowedChild);
+        return new PartyTypeConnectionRule(allowedParent, allowedChild);
     }
 
     private PartyTypeConnectionRule() {
-	super();
+        super();
     }
 
     PartyTypeConnectionRule(final PartyType allowedParent, final PartyType allowedChild) {
-	this();
-	check(allowedParent, "error.PartyTypeConnectionRule.invalid.parent.type");
-	check(allowedChild, "error.PartyTypeConnectionRule.invalid.child.type");
-	if (allowedParent == allowedChild) {
-	    throw new DomainException("error.PartyTypeConnectionRule.parent.and.child.are.equals");
-	}
-	checkIfExistsRule(allowedParent, allowedChild);
-	setAllowedParent(allowedParent);
-	setAllowedChild(allowedChild);
+        this();
+        check(allowedParent, "error.PartyTypeConnectionRule.invalid.parent.type");
+        check(allowedChild, "error.PartyTypeConnectionRule.invalid.child.type");
+        if (allowedParent == allowedChild) {
+            throw new DomainException("error.PartyTypeConnectionRule.parent.and.child.are.equals");
+        }
+        checkIfExistsRule(allowedParent, allowedChild);
+        setAllowedParent(allowedParent);
+        setAllowedChild(allowedChild);
     }
 
     private void checkIfExistsRule(final PartyType allowedParent, final PartyType allowedChild) {
-	for (final ConnectionRule each : MyOrg.getInstance().getConnectionRulesSet()) {
-	    if (each != this && each instanceof PartyTypeConnectionRule) {
-		final PartyTypeConnectionRule rule = (PartyTypeConnectionRule) each;
-		if (rule.getAllowedParent().equals(allowedParent) && rule.getAllowedChild().equals(allowedChild)) {
-		    final String[] args = new String[] { allowedParent.getName().getContent(),
-			    allowedChild.getName().getContent() };
-		    throw new DomainException("error.PartyTypeConnectionRule.already.exists.with.same.parent.and.child", args);
-		}
-	    }
-	}
+        for (final ConnectionRule each : MyOrg.getInstance().getConnectionRulesSet()) {
+            if (each != this && each instanceof PartyTypeConnectionRule) {
+                final PartyTypeConnectionRule rule = (PartyTypeConnectionRule) each;
+                if (rule.getAllowedParent().equals(allowedParent) && rule.getAllowedChild().equals(allowedChild)) {
+                    final String[] args =
+                            new String[] { allowedParent.getName().getContent(), allowedChild.getName().getContent() };
+                    throw new DomainException("error.PartyTypeConnectionRule.already.exists.with.same.parent.and.child", args);
+                }
+            }
+        }
     }
 
     private void check(final Object obj, final String message) {
-	if (obj == null) {
-	    throw new DomainException(message);
-	}
+        if (obj == null) {
+            throw new DomainException(message);
+        }
     }
 
     @Override
     protected void disconnect() {
-	removeAllowedParent();
-	removeAllowedChild();
-	super.disconnect();
+        removeAllowedParent();
+        removeAllowedChild();
+        super.disconnect();
     }
 
     @Override
     public PartyTypeConnectionRuleBean buildBean() {
-	return new PartyTypeConnectionRuleBean(this);
+        return new PartyTypeConnectionRuleBean(this);
     }
 
     @Override
     public boolean isValid(final AccountabilityType accountabilityType, final Party parent, final Party child) {
-	return hasAllowedParent(parent) && hasAllowedChild(child);
+        return hasAllowedParent(parent) && hasAllowedChild(child);
     }
 
     boolean hasAllowedParent(final Party parent) {
-	return parent.hasPartyTypes(getAllowedParent());
+        return parent.hasPartyTypes(getAllowedParent());
     }
 
     boolean hasAllowedChild(final Party child) {
-	return child.hasPartyTypes(getAllowedChild());
+        return child.hasPartyTypes(getAllowedChild());
     }
 
     @Override
     public String getDescription() {
-	final String message = BundleUtil.getStringFromResourceBundle("resources/OrganizationResources",
-		"label.PartyTypeConnectionRule.description");
-	return MessageFormat.format(message, getAllowedParent().getName().getContent(), getAllowedChild().getName().getContent());
+        final String message =
+                BundleUtil.getStringFromResourceBundle("resources/OrganizationResources",
+                        "label.PartyTypeConnectionRule.description");
+        return MessageFormat.format(message, getAllowedParent().getName().getContent(), getAllowedChild().getName().getContent());
     }
 }

@@ -26,11 +26,8 @@ package module.contacts.presentationTier.renderers.providers;
 
 import java.util.ArrayList;
 
-import module.contacts.domain.ContactsConfigurator;
 import module.geography.domain.Country;
 import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
-
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 
@@ -48,7 +45,7 @@ public class CountriesProvider implements DataProvider {
      */
     @Override
     public Converter getConverter() {
-	return null;
+        return null;
     }
 
     /*
@@ -60,16 +57,16 @@ public class CountriesProvider implements DataProvider {
      */
     @Override
     public Object provide(Object source, Object currentValue) {
-	// TODO ?? add a check to see if the source the user that is set on the
-	// source bean has privileges to see the visibility information of this
-	// contact information
-	final ArrayList<Country> listOfCountries = new ArrayList<Country>(MyOrg.getInstance().getCountries());
-	return listOfCountries;
+        // TODO ?? add a check to see if the source the user that is set on the
+        // source bean has privileges to see the visibility information of this
+        // contact information
+        final ArrayList<Country> listOfCountries = new ArrayList<Country>(MyOrg.getInstance().getCountries());
+        return listOfCountries;
     }
 
     public static Object provideCountries() {
-	ArrayList<Country> listOfCountries = new ArrayList<Country>(MyOrg.getInstance().getCountries());
-	return listOfCountries;
+        ArrayList<Country> listOfCountries = new ArrayList<Country>(MyOrg.getInstance().getCountries());
+        return listOfCountries;
     }
 
 }

@@ -25,13 +25,13 @@
 package module.organization.domain;
 
 import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
+import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -54,64 +54,66 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
         setUser(user);
     }
 
-    protected UnconfirmedAccountability(Party parent, Party child, AccountabilityType type, LocalDate begin, LocalDate end, String justification) {
-	this();
+    protected UnconfirmedAccountability(Party parent, Party child, AccountabilityType type, LocalDate begin, LocalDate end,
+            String justification) {
+        this();
 
-	check(parent, "error.Accountability.invalid.parent");
-	check(child, "error.Accountability.invalid.child");
-	check(type, "error.Accountability.invalid.type");
-	check(begin, "error.Accountability.invalid.begin");
-	checkDates(parent, begin, end);
+        check(parent, "error.Accountability.invalid.parent");
+        check(child, "error.Accountability.invalid.child");
+        check(type, "error.Accountability.invalid.type");
+        check(begin, "error.Accountability.invalid.begin");
+        checkDates(parent, begin, end);
 
-	canCreate(parent, child, type);
+        canCreate(parent, child, type);
 
-	init(parent, child, readAccountabilityType());
-	setUnconfirmedAccountabilityType(type);
-	AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false, justification);
+        init(parent, child, readAccountabilityType());
+        setUnconfirmedAccountabilityType(type);
+        AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false, justification);
     }
 
     @Service
     public static AccountabilityType readAccountabilityType() {
-	final AccountabilityType accountabilityType = AccountabilityType.readBy(ACCOUNTABILITY_TYPE_TYPE);
+        final AccountabilityType accountabilityType = AccountabilityType.readBy(ACCOUNTABILITY_TYPE_TYPE);
         return accountabilityType == null ? createAccountabilityType() : accountabilityType;
     }
 
     private static MultiLanguageString getLocalizedName() {
-	return BundleUtil.getMultilanguageString(ACCOUNTABILITY_TYPE_NAME_BUNDLE, ACCOUNTABILITY_TYPE_NAME_KEY);
+        return BundleUtil.getMultilanguageString(ACCOUNTABILITY_TYPE_NAME_BUNDLE, ACCOUNTABILITY_TYPE_NAME_KEY);
     }
 
     private static AccountabilityType createAccountabilityType() {
-	final AccountabilityTypeBean accountabilityTypeBean = new AccountabilityTypeBean(ACCOUNTABILITY_TYPE_TYPE, getLocalizedName());
-	return AccountabilityType.create(accountabilityTypeBean);
+        final AccountabilityTypeBean accountabilityTypeBean =
+                new AccountabilityTypeBean(ACCOUNTABILITY_TYPE_TYPE, getLocalizedName());
+        return AccountabilityType.create(accountabilityTypeBean);
     }
 
     @Override
     public String getDetailsString() {
-	final StringBuilder stringBuilder = new StringBuilder();
-	stringBuilder.append(getUnconfirmedAccountabilityType().getName().getContent());
-	stringBuilder.append(": ");
-	if (getBeginDate() != null) {
-	    stringBuilder.append(getBeginDate().toString(LOCAL_DATE_FORMAT));
-	}
-	stringBuilder.append(" - ");
-	if (getEndDate() != null) {
-	    stringBuilder.append(getEndDate().toString(LOCAL_DATE_FORMAT));
-	}
-	return stringBuilder.toString();
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getUnconfirmedAccountabilityType().getName().getContent());
+        stringBuilder.append(": ");
+        if (getBeginDate() != null) {
+            stringBuilder.append(getBeginDate().toString(LOCAL_DATE_FORMAT));
+        }
+        stringBuilder.append(" - ");
+        if (getEndDate() != null) {
+            stringBuilder.append(getEndDate().toString(LOCAL_DATE_FORMAT));
+        }
+        return stringBuilder.toString();
     }
 
     @Override
     public void delete() {
-	final Party child = getChild();
-	removeUnconfirmedAccountabilityType();
-	removeUser();
-	removeAccountabilityVersion();
-	removeParent();
-	removeChild();
-	removeMyOrg();
-	if (child.getParentAccountabilitiesCount() == 0) {
-	    child.delete();
-	}
+        final Party child = getChild();
+        removeUnconfirmedAccountabilityType();
+        removeUser();
+        removeAccountabilityVersion();
+        removeParent();
+        removeChild();
+        removeMyOrg();
+        if (child.getParentAccountabilitiesCount() == 0) {
+            child.delete();
+        }
     }
 
     /**
@@ -119,21 +121,20 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
      */
     @Deprecated
     public void confirm() {
-	confirm(null);
-	delete();
+        confirm(null);
+        delete();
     }
-    
+
     @Service
     public void confirm(String justification) {
-	Accountability.create(getParent(), getChild(), getUnconfirmedAccountabilityType(), getBeginDate(), getEndDate(), justification);
-	delete();
+        Accountability.create(getParent(), getChild(), getUnconfirmedAccountabilityType(), getBeginDate(), getEndDate(),
+                justification);
+        delete();
     }
-    
-    
 
     @Service
     public void reject() {
-	delete();
+        delete();
     }
 
 }

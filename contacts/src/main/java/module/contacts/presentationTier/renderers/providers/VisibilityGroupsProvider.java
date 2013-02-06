@@ -27,9 +27,7 @@ package module.contacts.presentationTier.renderers.providers;
 import java.util.ArrayList;
 
 import module.contacts.domain.ContactsConfigurator;
-import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
-
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 
@@ -47,7 +45,7 @@ public class VisibilityGroupsProvider implements DataProvider {
      */
     @Override
     public Converter getConverter() {
-	return null;
+        return null;
     }
 
     /*
@@ -59,12 +57,12 @@ public class VisibilityGroupsProvider implements DataProvider {
      */
     @Override
     public Object provide(Object source, Object currentValue) {
-	// TODO ?? add a check to see if the source the user that is set on the
-	// source bean has privileges to see the visibility information of this
-	// contact information
-	final ArrayList<PersistentGroup> listOfGroups = new ArrayList<PersistentGroup>(ContactsConfigurator.getInstance()
-		.getVisibilityGroups());
-	return listOfGroups;
+        // TODO ?? add a check to see if the source the user that is set on the
+        // source bean has privileges to see the visibility information of this
+        // contact information
+        final ArrayList<PersistentGroup> listOfGroups =
+                new ArrayList<PersistentGroup>(ContactsConfigurator.getInstance().getVisibilityGroups());
+        return listOfGroups;
     }
 
 }

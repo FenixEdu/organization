@@ -37,6 +37,6 @@ public class OrganizationConsistencyException extends ConsistencyException {
 
     @Override
     public String getLocalizedMessage() {
-	return BundleUtil.getStringFromResourceBundle("resources/OrganizationResources", "error." + getMethodFullname());
+        return BundleUtil.getStringFromResourceBundle("resources/OrganizationResources", "error." + getMethodFullname());
     }
 }

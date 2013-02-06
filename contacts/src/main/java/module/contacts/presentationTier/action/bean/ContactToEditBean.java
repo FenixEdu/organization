@@ -74,168 +74,168 @@ public class ContactToEditBean implements Serializable {
     private String forwardPath;
 
     private TreeMap<String, String> parametersMap;
-    
+
     private final static String[] parametersToIgnore = { "forwardToAction", "forwardToMethod", "_request_checksum_", "method" };
 
-
     protected ContactToEditBean() {
-	setValue("");
-	setVisibilityGroups(new ArrayList<PersistentGroup>());
-	setSuperEditor(ContactsConfigurator.getInstance().isSuperEditor(UserView.getCurrentUser()));
+        setValue("");
+        setVisibilityGroups(new ArrayList<PersistentGroup>());
+        setSuperEditor(ContactsConfigurator.getInstance().isSuperEditor(UserView.getCurrentUser()));
     }
 
     public ContactToEditBean(String forwardPath) {
-	this();
-	setForwardPath(forwardPath);
+        this();
+        setForwardPath(forwardPath);
     }
 
     public ContactToEditBean(PartyContact contactToWrap) {
-	wrappedContact = contactToWrap;
-	value = getWrappedContact().getValue();
-	partyContactType = getWrappedContact().getType();
-	superEditor = ContactsConfigurator.getInstance().isSuperEditor(UserView.getCurrentUser());
+        wrappedContact = contactToWrap;
+        value = getWrappedContact().getValue();
+        partyContactType = getWrappedContact().getType();
+        superEditor = ContactsConfigurator.getInstance().isSuperEditor(UserView.getCurrentUser());
 
-	setVisibilityGroups(new ArrayList<PersistentGroup>());
-	getVisibilityGroups().addAll(getWrappedContact().getVisibilityGroups());
-	if (getWrappedContact() instanceof Phone)
-	    phoneType = ((Phone) getWrappedContact()).getPhoneType();
-	if (getWrappedContact() instanceof PhysicalAddress) {
-	    PhysicalAddress physicalAddress = (PhysicalAddress) getWrappedContact();
-	    // TODO make this actually get the country - talk with pedro
-	}
+        setVisibilityGroups(new ArrayList<PersistentGroup>());
+        getVisibilityGroups().addAll(getWrappedContact().getVisibilityGroups());
+        if (getWrappedContact() instanceof Phone) {
+            phoneType = ((Phone) getWrappedContact()).getPhoneType();
+        }
+        if (getWrappedContact() instanceof PhysicalAddress) {
+            PhysicalAddress physicalAddress = (PhysicalAddress) getWrappedContact();
+            // TODO make this actually get the country - talk with pedro
+        }
     }
 
     public void setForwardPathAndParameters(String path, HttpServletRequest request) {
-	setForwardPath(path);
-	setParametersMap(new TreeMap<String, String>());
+        setForwardPath(path);
+        setParametersMap(new TreeMap<String, String>());
 
-	ArrayList<String> toIgnore = new ArrayList<String>(Arrays.asList(parametersToIgnore));
+        ArrayList<String> toIgnore = new ArrayList<String>(Arrays.asList(parametersToIgnore));
 
-	Iterator<?> entries = request.getParameterMap().entrySet().iterator();
-	while (entries.hasNext()) {
-	    Entry<String, Object> thisEntry = (Entry<String, Object>) entries.next();
-	    String key = thisEntry.getKey();
-	    String value = request.getParameter(key);
+        Iterator<?> entries = request.getParameterMap().entrySet().iterator();
+        while (entries.hasNext()) {
+            Entry<String, Object> thisEntry = (Entry<String, Object>) entries.next();
+            String key = thisEntry.getKey();
+            String value = request.getParameter(key);
 
-	    if (!toIgnore.contains(key)) {
-		getParametersMap().put(key, value);
-	    }
-	}
+            if (!toIgnore.contains(key)) {
+                getParametersMap().put(key, value);
+            }
+        }
     }
 
     public String getClassName() {
-	return getWrappedContact().getClass().getName();
+        return getWrappedContact().getClass().getName();
     }
 
     public void setPhoneType(PhoneType phoneType) {
-	this.phoneType = phoneType;
+        this.phoneType = phoneType;
     }
 
     public PhoneType getPhoneType() {
-	return phoneType;
+        return phoneType;
     }
 
     public void setValue(String value) {
-	this.value = value;
+        this.value = value;
     }
 
     public String getValue() {
-	return value;
+        return value;
     }
 
     public PartyContact getWrappedContact() {
-	return wrappedContact;
+        return wrappedContact;
     }
 
     public void setPartyContactType(PartyContactType partyContactType) {
-	this.partyContactType = partyContactType;
+        this.partyContactType = partyContactType;
     }
 
     public PartyContactType getPartyContactType() {
-	return partyContactType;
+        return partyContactType;
     }
 
     public void setVisibilityGroups(ArrayList<PersistentGroup> visibilityGroups) {
-	this.visibilityGroups = visibilityGroups;
+        this.visibilityGroups = visibilityGroups;
     }
 
     public ArrayList<PersistentGroup> getVisibilityGroups() {
-	return visibilityGroups;
+        return visibilityGroups;
     }
 
     public void setSuperEditor(boolean superEditor) {
-	this.superEditor = superEditor;
+        this.superEditor = superEditor;
     }
 
     public boolean getSuperEditor() {
-	return superEditor;
+        return superEditor;
     }
 
     public void setPhysicalAddressBean(PhysicalAddressBean physicalAddressBean) {
-	this.physicalAddressBean = physicalAddressBean;
+        this.physicalAddressBean = physicalAddressBean;
     }
 
     public PhysicalAddressBean getPhysicalAddressBean() {
-	return physicalAddressBean;
+        return physicalAddressBean;
     }
 
     public void setDefaultContact(boolean defaultContact) {
-	this.defaultContact = defaultContact;
+        this.defaultContact = defaultContact;
     }
 
     public boolean isDefaultContact() {
-	return defaultContact;
+        return defaultContact;
     }
 
     public void setForwardPath(String forwardPath) {
-	this.forwardPath = forwardPath;
+        this.forwardPath = forwardPath;
     }
 
     public String getForwardPath() {
-	return forwardPath;
+        return forwardPath;
     }
 
     public String getForwardPathWithParameters() {
-	String ret = getForwardPath();
+        String ret = getForwardPath();
 
-	Iterator<?> entries = getParametersMap().entrySet().iterator();
-	while (entries.hasNext()) {
-	    Entry<String, String> thisEntry = (Entry<String, String>) entries.next();
-	    String key = thisEntry.getKey();
-	    Object value = thisEntry.getValue();
+        Iterator<?> entries = getParametersMap().entrySet().iterator();
+        while (entries.hasNext()) {
+            Entry<String, String> thisEntry = (Entry<String, String>) entries.next();
+            String key = thisEntry.getKey();
+            Object value = thisEntry.getValue();
 
-	    ret += (!ret.contains("?")) ? "?" : "&";
-	    ret += key + "=" + value;
-	}
+            ret += (!ret.contains("?")) ? "?" : "&";
+            ret += key + "=" + value;
+        }
 
-	return ret;
+        return ret;
     }
 
     public void setParametersMap(TreeMap<String, String> treeMap) {
-	this.parametersMap = treeMap;
+        this.parametersMap = treeMap;
     }
 
     public Map<String, String> getParametersMap() {
-	return parametersMap;
+        return parametersMap;
     }
 
     public static String getForwardPathFor(String path, HttpServletRequest request) {
-	String ret = path;
-	ArrayList<String> toIgnore = new ArrayList<String>(Arrays.asList(parametersToIgnore));
-	
-	Iterator<?> entries = request.getParameterMap().entrySet().iterator();
-	while (entries.hasNext()) {
-	    Entry<String, Object> thisEntry = (Entry<String, Object>) entries.next();
-	    String key = thisEntry.getKey();
-	    String value = request.getParameter(key);
+        String ret = path;
+        ArrayList<String> toIgnore = new ArrayList<String>(Arrays.asList(parametersToIgnore));
 
-	    if (!toIgnore.contains(key)) {
-		 ret += (!ret.contains("?")) ? "?" : "&";
-		 ret += key + "=" + value;
-	    }
-	}
-	
-	return ret;
+        Iterator<?> entries = request.getParameterMap().entrySet().iterator();
+        while (entries.hasNext()) {
+            Entry<String, Object> thisEntry = (Entry<String, Object>) entries.next();
+            String key = thisEntry.getKey();
+            String value = request.getParameter(key);
+
+            if (!toIgnore.contains(key)) {
+                ret += (!ret.contains("?")) ? "?" : "&";
+                ret += key + "=" + value;
+            }
+        }
+
+        return ret;
     }
 
 }

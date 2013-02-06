@@ -26,9 +26,8 @@ package module.contacts.presentationTier.action.bean;
 
 import java.io.Serializable;
 
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
-
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
+import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
  * 
@@ -47,19 +46,19 @@ public class GroupAliasBean implements Serializable {
     private PersistentGroup groupToEdit;
 
     public void setAlias(MultiLanguageString alias) {
-	this.alias = alias;
+        this.alias = alias;
     }
 
     public MultiLanguageString getAlias() {
-	return alias;
+        return alias;
     }
 
     public void setGroupToEdit(PersistentGroup groupToEdit) {
-	this.groupToEdit = groupToEdit;
+        this.groupToEdit = groupToEdit;
     }
 
     public PersistentGroup getGroupToEdit() {
-	return groupToEdit;
+        return groupToEdit;
     }
 
 }

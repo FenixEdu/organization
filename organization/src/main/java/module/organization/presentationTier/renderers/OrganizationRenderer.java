@@ -48,77 +48,86 @@ public class OrganizationRenderer extends OutputRenderer implements Organization
 
     private String viewPartyUrl = "/organization.do?method=viewParty&amp;partyOid=%s";
 
+    @Override
     public String getRootClasses() {
-	return rootClasses;
+        return rootClasses;
     }
 
     public void setRootClasses(String rootClasses) {
-	this.rootClasses = rootClasses;
+        this.rootClasses = rootClasses;
     }
 
+    @Override
     public String getChildListStyle() {
-	return childListStyle;
+        return childListStyle;
     }
 
     public void setChildListStyle(String childListStyle) {
-	this.childListStyle = childListStyle;
+        this.childListStyle = childListStyle;
     }
 
+    @Override
     public String getBlankImage() {
-	return blankImage;
+        return blankImage;
     }
 
     public void setBlankImage(String blankImage) {
-	this.blankImage = blankImage;
+        this.blankImage = blankImage;
     }
 
+    @Override
     public String getMinusImage() {
-	return minusImage;
+        return minusImage;
     }
 
     public void setMinusImage(String minusImage) {
-	this.minusImage = minusImage;
+        this.minusImage = minusImage;
     }
 
+    @Override
     public String getPlusImage() {
-	return plusImage;
+        return plusImage;
     }
 
     public void setPlusImage(String plusImage) {
-	this.plusImage = plusImage;
+        this.plusImage = plusImage;
     }
 
+    @Override
     public String getViewPartyUrl() {
-	return viewPartyUrl;
+        return viewPartyUrl;
     }
 
     public void setViewPartyUrl(String viewPartyUrl) {
-	this.viewPartyUrl = viewPartyUrl;
+        this.viewPartyUrl = viewPartyUrl;
     }
 
     protected OrganizationViewConfiguration getConfig() {
-	return OrganizationViewConfiguration.defaultConfiguration();
+        return OrganizationViewConfiguration.defaultConfiguration();
     }
 
     @Override
     protected Layout getLayout(Object object, Class type) {
-	return (Layout) getConfig().getLayout().saveView(this);
+        return (Layout) getConfig().getLayout().saveView(this);
     }
 
+    @Override
     public Comparator<Party> getSortBy() {
-	return getConfig().getSortBy();
+        return getConfig().getSortBy();
     }
 
+    @Override
     public PartyDecorator getDecorator() {
-	return getConfig().getDecorator();
+        return getConfig().getDecorator();
     }
 
+    @Override
     public PartyPredicate getPredicate() {
-	return getConfig().getPredicate();
+        return getConfig().getPredicate();
     }
 
     @Override
     public void setProperty(String name, Object value) {
-	throw new RuntimeException("do.not.use.this.method");
+        throw new RuntimeException("do.not.use.this.method");
     }
 }

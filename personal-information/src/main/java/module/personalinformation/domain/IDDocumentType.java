@@ -42,7 +42,7 @@ public enum IDDocumentType {
     MILITARY_IDENTITY_CARD;
 
     public String getName() {
-	return name();
+        return name();
     }
 
 }

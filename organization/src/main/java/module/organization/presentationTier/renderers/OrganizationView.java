@@ -54,6 +54,6 @@ public interface OrganizationView {
     public PartyDecorator getDecorator();
 
     public PartyPredicate getPredicate();
-    
+
     public void setProperty(final String name, final Object value);
 }

@@ -42,15 +42,15 @@ public class PartyBean implements Serializable {
     }
 
     public PartyBean(final Party party) {
-	setParty(party);
+        setParty(party);
     }
 
     public Party getParty() {
-	return party;
+        return party;
     }
 
     public void setParty(final Party party) {
-	this.party = party;
+        this.party = party;
     }
 
 }

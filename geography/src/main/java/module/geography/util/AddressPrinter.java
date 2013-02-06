@@ -43,16 +43,16 @@ public class AddressPrinter {
     }
 
     public AddressPrinter(Country country) {
-	this();
+        this();
 
     }
 
-    public static String getFormatedAddress(String complementarAddress, Country country,
- GeographicLocation geographicLocation) {
-	if (country.equals(Country.getPortugal())) {
-	    return complementarAddress;
-	} else
-	    return complementarAddress;
+    public static String getFormatedAddress(String complementarAddress, Country country, GeographicLocation geographicLocation) {
+        if (country.equals(Country.getPortugal())) {
+            return complementarAddress;
+        } else {
+            return complementarAddress;
+        }
     }
 
 }

@@ -24,7 +24,6 @@
  */
 package module.organization.domain.scripts;
 
-
 /**
  * 
  *         FENIX-337 - Script to verify the correct migration of the

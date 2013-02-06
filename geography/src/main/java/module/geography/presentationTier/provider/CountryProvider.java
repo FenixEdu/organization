@@ -20,17 +20,17 @@ public class CountryProvider implements DataProvider {
 
     @Override
     public Converter getConverter() {
-	return null;
+        return null;
     }
 
     @Override
     public Object provide(Object arg0, Object arg1) {
 
-	List<Country> countries = new ArrayList<Country>(MyOrg.getInstance().getCountries());
+        List<Country> countries = new ArrayList<Country>(MyOrg.getInstance().getCountries());
 
-	Collections.sort(countries, Country.COMPARATOR_BY_NAME);
+        Collections.sort(countries, Country.COMPARATOR_BY_NAME);
 
-	return countries;
+        return countries;
     }
 
 }

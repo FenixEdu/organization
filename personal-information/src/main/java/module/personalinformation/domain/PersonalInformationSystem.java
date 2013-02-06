@@ -42,34 +42,34 @@ public class PersonalInformationSystem extends PersonalInformationSystem_Base im
     private static ThreadLocal<PersonalInformationSystem> init = null;
 
     public static PersonalInformationSystem getInstance() {
-	if (init != null) {
-	    return init.get();
-	}
-	
-	if (!isInitialized) {
-	    initialize();
-	}
-	final MyOrg myOrg = MyOrg.getInstance();
-	return myOrg.getPersonalInformationSystem();
+        if (init != null) {
+            return init.get();
+        }
+
+        if (!isInitialized) {
+            initialize();
+        }
+        final MyOrg myOrg = MyOrg.getInstance();
+        return myOrg.getPersonalInformationSystem();
     }
 
     @Service
     public synchronized static void initialize() {
-	if (!isInitialized) {
-	    try {
-		final MyOrg myOrg = MyOrg.getInstance();
-		final PersonalInformationSystem initializer = myOrg.getPersonalInformationSystem();
-		if (initializer == null) {
-		    new PersonalInformationSystem();
-		}
-		init = new ThreadLocal<PersonalInformationSystem>();
-		init.set(myOrg.getPersonalInformationSystem());
+        if (!isInitialized) {
+            try {
+                final MyOrg myOrg = MyOrg.getInstance();
+                final PersonalInformationSystem initializer = myOrg.getPersonalInformationSystem();
+                if (initializer == null) {
+                    new PersonalInformationSystem();
+                }
+                init = new ThreadLocal<PersonalInformationSystem>();
+                init.set(myOrg.getPersonalInformationSystem());
 
-		isInitialized = true;
-	    } finally {
-		init = null;
-	    }
-	}
+                isInitialized = true;
+            } finally {
+                init = null;
+            }
+        }
     }
 
     private PersonalInformationSystem() {
@@ -79,7 +79,7 @@ public class PersonalInformationSystem extends PersonalInformationSystem_Base im
 
     @Override
     public void init(final MyOrg root) {
-	OrganizationModelAction.partyViewHookManager.register(new PersonalInformationView());
+        OrganizationModelAction.partyViewHookManager.register(new PersonalInformationView());
     }
 
 }

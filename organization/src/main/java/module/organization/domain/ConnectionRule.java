@@ -41,41 +41,41 @@ abstract public class ConnectionRule extends ConnectionRule_Base {
 
     static abstract public class ConnectionRuleBean implements Serializable {
 
-	private static final long serialVersionUID = -5549142750086201478L;
-	private ConnectionRule connectionRule;
+        private static final long serialVersionUID = -5549142750086201478L;
+        private ConnectionRule connectionRule;
 
-	protected ConnectionRuleBean() {
-	}
+        protected ConnectionRuleBean() {
+        }
 
-	protected ConnectionRuleBean(final ConnectionRule connectionRule) {
-	    setConnectionRule(connectionRule);
-	}
+        protected ConnectionRuleBean(final ConnectionRule connectionRule) {
+            setConnectionRule(connectionRule);
+        }
 
-	public ConnectionRule getConnectionRule() {
-	    return connectionRule;
-	}
+        public ConnectionRule getConnectionRule() {
+            return connectionRule;
+        }
 
-	public void setConnectionRule(final ConnectionRule connectionRule) {
-	    this.connectionRule = connectionRule;
-	}
+        public void setConnectionRule(final ConnectionRule connectionRule) {
+            this.connectionRule = connectionRule;
+        }
 
-	abstract public ConnectionRule create();
+        abstract public ConnectionRule create();
     }
 
     protected ConnectionRule() {
-	super();
-	setMyOrg(MyOrg.getInstance());
+        super();
+        setMyOrg(MyOrg.getInstance());
     }
 
     @Service
     public void delete() {
-	disconnect();
-	deleteDomainObject();
+        disconnect();
+        deleteDomainObject();
     }
 
     protected void disconnect() {
-	getAccountabilityTypes().clear();
-	removeMyOrg();
+        getAccountabilityTypes().clear();
+        removeMyOrg();
     }
 
     abstract public ConnectionRuleBean buildBean();

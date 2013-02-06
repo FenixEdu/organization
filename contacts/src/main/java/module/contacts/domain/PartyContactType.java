@@ -35,19 +35,16 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
  * 
  */
 public enum PartyContactType implements IPresentableEnum {
-	PERSONAL,
+    PERSONAL,
 
-	WORK,
+    WORK,
 
-	IMMUTABLE;
+    IMMUTABLE;
 
-	@Override
-	public String getLocalizedName() {
-		final ResourceBundle resourceBundle = ResourceBundle.getBundle(
-				"resources.ContactsResources", Language.getLocale());
-		return resourceBundle.getString(PartyContactType.class
-				.getSimpleName()
-				+ "." + name());
-	}
+    @Override
+    public String getLocalizedName() {
+        final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ContactsResources", Language.getLocale());
+        return resourceBundle.getString(PartyContactType.class.getSimpleName() + "." + name());
+    }
 
 }

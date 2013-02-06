@@ -44,25 +44,25 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  */
 public class PostalExtension extends PostalExtension_Base {
     public PostalExtension(CountrySubdivision parent, String acronym, String street, String postalCode, String postalBranch) {
-	super();
-	String name = StringUtils.isNotBlank(street) ? street : postalBranch;
-	setUnit(Unit.create(parent.getUnit(), new MultiLanguageString().with(Language.pt, name).with(Language.en, name), acronym,
-		getPartyType("Subdivisão de País", COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(),
-		new LocalDate(), null));
-	setLevel(parent.getLevel() + 1);
-	setCode(postalCode);
-	setStreetName(street);
-	setPostalCode(postalCode);
-	setPostalBranch(postalBranch);
+        super();
+        String name = StringUtils.isNotBlank(street) ? street : postalBranch;
+        setUnit(Unit.create(parent.getUnit(), new MultiLanguageString().with(Language.pt, name).with(Language.en, name), acronym,
+                getPartyType("Subdivisão de País", COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(),
+                new LocalDate(), null));
+        setLevel(parent.getLevel() + 1);
+        setCode(postalCode);
+        setStreetName(street);
+        setPostalCode(postalCode);
+        setPostalBranch(postalBranch);
     }
 
     @Override
     protected String getExtendedName() {
-	return "[" + getCode() + "-" + (getStreetName() != null ? getStreetName() : "") + ", " + getName().getContent() + "]";
+        return "[" + getCode() + "-" + (getStreetName() != null ? getStreetName() : "") + ", " + getName().getContent() + "]";
     }
 
     @Override
     public String toString() {
-	return getParentSubdivision().toString() + " " + getExtendedName();
+        return getParentSubdivision().toString() + " " + getExtendedName();
     }
 }

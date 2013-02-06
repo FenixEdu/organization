@@ -51,8 +51,8 @@ public class CleanCountrySubLevels extends CleanCountrySubLevels_Base {
      */
     @Override
     public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/GeographyResources",
-		"label.task.clean.country.sublevels.with.note");
+        return BundleUtil.getStringFromResourceBundle("resources/GeographyResources",
+                "label.task.clean.country.sublevels.with.note");
     }
 
     private int countrySubDivisionLevelNameDeletes = 0;
@@ -65,42 +65,42 @@ public class CleanCountrySubLevels extends CleanCountrySubLevels_Base {
     @Override
     @Service
     public void executeTask() {
-	// add to an array all of the countries one wants to clean the sublevels
-	ArrayList<Country> countriesToClean = new ArrayList<Country>();
-	countriesToClean.add(Country.getPortugal());
-	countriesToClean.addAll(MyOrg.getInstance().getCountries());
-	HashMap<String, ArrayList<Integer>> infoByCountry = new HashMap<String, ArrayList<Integer>>();
-	
-	for (Country country : countriesToClean) {
-	    ArrayList<CountrySubdivision> countrySubdivisions = new ArrayList<CountrySubdivision>();
-	    countrySubdivisions.addAll(country.getChildren());
-	    for (CountrySubdivision countrySubdivision : countrySubdivisions) {
-		// countrySubdivision.removePhysicalAddress(); TODO implement it
-		// in a listener in the Contacts module
-		countrySubdivision.delete();
-		countrySubDivisionDeletes++;
-	    }
-	    ArrayList<CountrySubdivisionLevelName> subdivisionLevelNames = new ArrayList<CountrySubdivisionLevelName>();
-	    subdivisionLevelNames.addAll(country.getLevelName());
+        // add to an array all of the countries one wants to clean the sublevels
+        ArrayList<Country> countriesToClean = new ArrayList<Country>();
+        countriesToClean.add(Country.getPortugal());
+        countriesToClean.addAll(MyOrg.getInstance().getCountries());
+        HashMap<String, ArrayList<Integer>> infoByCountry = new HashMap<String, ArrayList<Integer>>();
 
-	    for (CountrySubdivisionLevelName countrySubdivisionLevelName : subdivisionLevelNames) {
-		countrySubdivisionLevelName.removeCountry();
-		countrySubdivisionLevelName.delete();
-		countrySubDivisionLevelNameDeletes++;
-	    }
-	    ArrayList<Integer> integers = new ArrayList<Integer>();
-	    integers.add(new Integer(countrySubDivisionDeletes));
-	    integers.add(new Integer(countrySubDivisionLevelNameDeletes));
+        for (Country country : countriesToClean) {
+            ArrayList<CountrySubdivision> countrySubdivisions = new ArrayList<CountrySubdivision>();
+            countrySubdivisions.addAll(country.getChildren());
+            for (CountrySubdivision countrySubdivision : countrySubdivisions) {
+                // countrySubdivision.removePhysicalAddress(); TODO implement it
+                // in a listener in the Contacts module
+                countrySubdivision.delete();
+                countrySubDivisionDeletes++;
+            }
+            ArrayList<CountrySubdivisionLevelName> subdivisionLevelNames = new ArrayList<CountrySubdivisionLevelName>();
+            subdivisionLevelNames.addAll(country.getLevelName());
 
-	    infoByCountry.put(country.getName().getContent(), integers);
-	}
+            for (CountrySubdivisionLevelName countrySubdivisionLevelName : subdivisionLevelNames) {
+                countrySubdivisionLevelName.removeCountry();
+                countrySubdivisionLevelName.delete();
+                countrySubDivisionLevelNameDeletes++;
+            }
+            ArrayList<Integer> integers = new ArrayList<Integer>();
+            integers.add(new Integer(countrySubDivisionDeletes));
+            integers.add(new Integer(countrySubDivisionLevelNameDeletes));
 
-	for (String country : infoByCountry.keySet()) {
-	    logInfo("Cleaned the following registries for " + country + ":");
-	    ArrayList<Integer> integers = infoByCountry.get(country);
-	    logInfo("CountrySubDivision deletes: " + integers.get(0));
-	    logInfo("CountrySubDivisionLevelName deletes: " + integers.get(1));
-	}
+            infoByCountry.put(country.getName().getContent(), integers);
+        }
+
+        for (String country : infoByCountry.keySet()) {
+            logInfo("Cleaned the following registries for " + country + ":");
+            ArrayList<Integer> integers = infoByCountry.get(country);
+            logInfo("CountrySubDivision deletes: " + integers.get(0));
+            logInfo("CountrySubDivisionLevelName deletes: " + integers.get(1));
+        }
 
     }
 

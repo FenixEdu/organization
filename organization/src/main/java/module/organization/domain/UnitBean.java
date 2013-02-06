@@ -46,102 +46,101 @@ public class UnitBean extends PartyBean {
 
     private MultiLanguageString name;
     private String acronym;
-    
+
     private String accountabilityJustification;
 
     public UnitBean() {
-	setBegin(new LocalDate());
+        setBegin(new LocalDate());
     }
 
     public UnitBean(final Unit unit) {
-	this();
+        this();
 
-	setUnit(unit);
-	setName(unit.getPartyName());
-	setAcronym(unit.getAcronym());
+        setUnit(unit);
+        setName(unit.getPartyName());
+        setAcronym(unit.getAcronym());
     }
 
     public Party getChild() {
-	return child;
+        return child;
     }
 
     public void setChild(Party party) {
-	this.child = party;
+        this.child = party;
     }
 
     public Unit getUnit() {
-	return unit;
+        return unit;
     }
 
     public void setUnit(Unit unit) {
-	this.unit = unit;
+        this.unit = unit;
     }
 
     public boolean isTop() {
-	return getUnit().isTop();
+        return getUnit().isTop();
     }
 
     @Override
     public Party getParty() {
-	return getUnit();
+        return getUnit();
     }
 
     public MultiLanguageString getName() {
-	return name;
+        return name;
     }
 
     public void setName(MultiLanguageString name) {
-	this.name = name;
+        this.name = name;
     }
 
     public String getAcronym() {
-	return acronym;
+        return acronym;
     }
 
     public void setAcronym(String acronym) {
-	this.acronym = acronym;
+        this.acronym = acronym;
     }
 
     public PartyType getPartyType() {
-	return partyType;
+        return partyType;
     }
 
     public void setPartyType(PartyType partyType) {
-	this.partyType = partyType;
+        this.partyType = partyType;
     }
 
     public Unit createUnit() {
-	return Unit.create(this);
+        return Unit.create(this);
     }
 
     public Unit editUnit() {
-	return getUnit().edit(getName(), getAcronym());
+        return getUnit().edit(getName(), getAcronym());
     }
 
     @Override
     public void addParent() {
-	getUnit().addParent(getParent(), getAccountabilityType(), getBegin(), getEnd());
+        getUnit().addParent(getParent(), getAccountabilityType(), getBegin(), getEnd());
     }
 
     public void addChild() {
-	getParent().addChild(getChild(), getAccountabilityType(), getBegin(), getEnd());
+        getParent().addChild(getChild(), getAccountabilityType(), getBegin(), getEnd());
     }
 
     public OrganizationalModel getOrganizationalModel() {
-	return organizationalModel;
+        return organizationalModel;
     }
 
     public void setOrganizationalModel(final OrganizationalModel organizationalModel) {
-	this.organizationalModel = organizationalModel;
+        this.organizationalModel = organizationalModel;
     }
 
-	public String getAccountabilityJustification() {
-		return accountabilityJustification;
-	}
+    public String getAccountabilityJustification() {
+        return accountabilityJustification;
+    }
 
-	public void setAccountabilityJustification(
-			String accountabilityJustification) {
-		this.accountabilityJustification = accountabilityJustification;
-	}
+    public void setAccountabilityJustification(String accountabilityJustification) {
+        this.accountabilityJustification = accountabilityJustification;
+    }
 
 }

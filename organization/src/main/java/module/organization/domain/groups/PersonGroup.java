@@ -44,36 +44,36 @@ import pt.ist.fenixWebFramework.services.Service;
 public class PersonGroup extends PersonGroup_Base {
 
     public PersonGroup() {
-	super();
-	setSystemGroupMyOrg(MyOrg.getInstance());
+        super();
+        setSystemGroupMyOrg(MyOrg.getInstance());
     }
 
     @Service
     public static PersonGroup getInstance() {
-	final PersonGroup personGroup = (PersonGroup) PersistentGroup.getSystemGroup(PersonGroup.class);
-	return personGroup == null ? new PersonGroup() : personGroup;
+        final PersonGroup personGroup = (PersonGroup) PersistentGroup.getSystemGroup(PersonGroup.class);
+        return personGroup == null ? new PersonGroup() : personGroup;
     }
 
     @Override
     public Set<User> getMembers() {
-	Set<User> users = new HashSet<User>();
-	for (final Party party : MyOrg.getInstance().getPartiesSet()) {
-	    if (party.isPerson()) {
-		users.add(((Person) party).getUser());
-	    }
-	}
-	return users;
+        Set<User> users = new HashSet<User>();
+        for (final Party party : MyOrg.getInstance().getPartiesSet()) {
+            if (party.isPerson()) {
+                users.add(((Person) party).getUser());
+            }
+        }
+        return users;
     }
 
     @Override
     public String getName() {
-	return BundleUtil.getStringFromResourceBundle("resources/OrganizationResources",
-		"label.persistent.group.personGroup.name");
+        return BundleUtil.getStringFromResourceBundle("resources/OrganizationResources",
+                "label.persistent.group.personGroup.name");
     }
 
     @Override
     public boolean isMember(User user) {
-	return user != null && user.getPerson() != null;
+        return user != null && user.getPerson() != null;
     }
 
 }

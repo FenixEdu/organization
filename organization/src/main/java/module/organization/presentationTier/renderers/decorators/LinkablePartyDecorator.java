@@ -39,12 +39,12 @@ public class LinkablePartyDecorator implements PartyDecorator {
 
     @Override
     public HtmlComponent decorate(final Party party, final OrganizationLayout layout) {
-	final HtmlLink link = new HtmlLink();
-	link.setUrl(String.format(layout.getViewPartyUrl(), party.getExternalId()));
-	link.setModuleRelative(false);
-	link.setIndented(false);
-	link.setBody(new PartyNameDecorator().decorate(party, layout));
-	return link;
+        final HtmlLink link = new HtmlLink();
+        link.setUrl(String.format(layout.getViewPartyUrl(), party.getExternalId()));
+        link.setModuleRelative(false);
+        link.setIndented(false);
+        link.setBody(new PartyNameDecorator().decorate(party, layout));
+        return link;
     }
 
 }

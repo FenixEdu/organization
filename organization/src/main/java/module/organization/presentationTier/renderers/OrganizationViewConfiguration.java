@@ -49,31 +49,31 @@ public class OrganizationViewConfiguration {
     protected Comparator<Party> sortBy = null;
 
     public OrganizationLayout getLayout() {
-	return layout;
+        return layout;
     }
 
     public PartyDecorator getDecorator() {
-	return decorator;
+        return decorator;
     }
 
     public PartyPredicate getPredicate() {
-	return predicate;
+        return predicate;
     }
 
     public Comparator<Party> getSortBy() {
-	return sortBy;
+        return sortBy;
     }
 
     static private final OrganizationViewConfiguration DEFAULT = new OrganizationViewConfiguration() {
-	{
-	    this.layout = new TreeMenuOrganizationLayout();
-	    this.decorator = new LinkablePartyDecorator();
-	    this.predicate = new PartyPredicate.TruePartyPredicate();
-	    this.sortBy = Party.COMPARATOR_BY_NAME;
-	}
+        {
+            this.layout = new TreeMenuOrganizationLayout();
+            this.decorator = new LinkablePartyDecorator();
+            this.predicate = new PartyPredicate.TruePartyPredicate();
+            this.sortBy = Party.COMPARATOR_BY_NAME;
+        }
     };
 
     static public OrganizationViewConfiguration defaultConfiguration() {
-	return DEFAULT;
+        return DEFAULT;
     }
 }

@@ -52,7 +52,7 @@ public abstract class AddressBean implements Serializable {
      *         implementation of the bean bean
      */
     public final String getSchema() {
-	return this.getClass().getName();
+        return this.getClass().getName();
 //	return this.getClass().getPackage() + "." + nameCountry + this.getClass().getCanonicalName();
     }
 

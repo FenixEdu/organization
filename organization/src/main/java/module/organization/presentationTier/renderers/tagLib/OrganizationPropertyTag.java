@@ -41,42 +41,42 @@ public class OrganizationPropertyTag extends BodyTagSupport {
     private Object value;
 
     public String getName() {
-	return name;
+        return name;
     }
 
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
     }
 
     public Object getValue() {
-	return value;
+        return value;
     }
 
     public void setValue(Object value) {
-	this.value = value;
+        this.value = value;
     }
 
     private boolean hasValue() {
-	return getValue() != null;
+        return getValue() != null;
     }
 
     @Override
     public int doStartTag() throws JspException {
-	return hasValue() ? SKIP_BODY : EVAL_BODY_BUFFERED;
+        return hasValue() ? SKIP_BODY : EVAL_BODY_BUFFERED;
     }
 
     @Override
     public int doEndTag() throws JspException {
-	final OrganizationTagLib parent = (OrganizationTagLib) findAncestorWithClass(this, OrganizationTagLib.class);
-	if (parent != null) {
-	    if (getValue() != null) {
-		parent.setProperty(getName(), getValue());
-	    } else {
-		parent.setProperty(getName(), getBodyContent().getString());
-	    }
-	} else {
-	    throw new RuntimeException("could.not.find.correct.ancestor");
-	}
-	return super.doEndTag();
+        final OrganizationTagLib parent = (OrganizationTagLib) findAncestorWithClass(this, OrganizationTagLib.class);
+        if (parent != null) {
+            if (getValue() != null) {
+                parent.setProperty(getName(), getValue());
+            } else {
+                parent.setProperty(getName(), getBodyContent().getString());
+            }
+        } else {
+            throw new RuntimeException("could.not.find.correct.ancestor");
+        }
+        return super.doEndTag();
     }
 }

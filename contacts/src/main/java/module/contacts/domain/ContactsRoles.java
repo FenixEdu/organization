@@ -37,11 +37,12 @@ public enum ContactsRoles implements IRoleEnum {
 
     @Override
     public String getRoleName() {
-	return name();
+        return name();
     }
 
+    @Override
     public String getLocalizedName() {
-	return getRoleName();
+        return getRoleName();
     }
 
 }

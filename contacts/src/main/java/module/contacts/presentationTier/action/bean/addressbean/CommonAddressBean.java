@@ -44,7 +44,7 @@ public abstract class CommonAddressBean extends AddressBean {
      * @return the addressLineOne
      */
     public String getAddressLineOne() {
-	return addressLineOne;
+        return addressLineOne;
     }
 
     /**
@@ -52,14 +52,14 @@ public abstract class CommonAddressBean extends AddressBean {
      *            the addressLineOne to set
      */
     public void setAddressLineOne(String addressLineOne) {
-	this.addressLineOne = addressLineOne;
+        this.addressLineOne = addressLineOne;
     }
 
     /**
      * @return the addressLineTwo
      */
     public String getAddressLineTwo() {
-	return addressLineTwo;
+        return addressLineTwo;
     }
 
     /**
@@ -67,14 +67,14 @@ public abstract class CommonAddressBean extends AddressBean {
      *            the addressLineTwo to set
      */
     public void setAddressLineTwo(String addressLineTwo) {
-	this.addressLineTwo = addressLineTwo;
+        this.addressLineTwo = addressLineTwo;
     }
 
     /**
      * @return the city
      */
     public String getCity() {
-	return city;
+        return city;
     }
 
     /**
@@ -82,17 +82,17 @@ public abstract class CommonAddressBean extends AddressBean {
      *            the city to set
      */
     public void setCity(String city) {
-	this.city = city;
+        this.city = city;
     }
 
     @Override
     public GeographicLocation getGeographicLocation() {
-	return geographicLocation;
+        return geographicLocation;
     }
 
     @Override
     public void setGeographicLocation(GeographicLocation geographicLocation) {
-	this.geographicLocation = geographicLocation;
+        this.geographicLocation = geographicLocation;
     }
 
 }

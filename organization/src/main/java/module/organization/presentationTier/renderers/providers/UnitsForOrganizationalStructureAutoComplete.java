@@ -42,14 +42,14 @@ public class UnitsForOrganizationalStructureAutoComplete extends UnitAutoComplet
 
     @Override
     protected Set<Party> getParties(Map<String, String> argsMap, String value) {
-	String oid = argsMap.get("modelId");
-	if (oid == null) {
-	    return Collections.emptySet();
-	}
+        String oid = argsMap.get("modelId");
+        if (oid == null) {
+            return Collections.emptySet();
+        }
 
-	OrganizationalModel model = AbstractDomainObject.fromOID(Long.valueOf(oid));
-	Set<Party> parties = new HashSet<Party>();
-	parties.addAll(model.getAllUnits());
-	return parties;
+        OrganizationalModel model = AbstractDomainObject.fromOID(Long.valueOf(oid));
+        Set<Party> parties = new HashSet<Party>();
+        parties.addAll(model.getAllUnits());
+        return parties;
     }
 }

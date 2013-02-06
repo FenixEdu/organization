@@ -42,12 +42,12 @@ public class AccountabilityTypesProvider implements DataProvider {
 
     @Override
     public Converter getConverter() {
-	return null;
+        return null;
     }
 
     @Override
     public Object provide(Object source, Object currentValue) {
-	return new ArrayList<AccountabilityType>(MyOrg.getInstance().getAccountabilityTypes());
+        return new ArrayList<AccountabilityType>(MyOrg.getInstance().getAccountabilityTypes());
     }
 
 }

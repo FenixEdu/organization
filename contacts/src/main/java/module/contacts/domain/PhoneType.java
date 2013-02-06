@@ -46,13 +46,13 @@ public enum PhoneType implements IPresentableEnum, IndexableField {
 
     @Override
     public String getLocalizedName() {
-	final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ContactsResources", Language.getLocale());
-	return resourceBundle.getString(PhoneType.class.getSimpleName() + "." + name());
+        final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ContactsResources", Language.getLocale());
+        return resourceBundle.getString(PhoneType.class.getSimpleName() + "." + name());
     }
 
     @Override
     public String getFieldName() {
-	return Phone.class.getName() + "." + name();
+        return Phone.class.getName() + "." + name();
     }
 
 }

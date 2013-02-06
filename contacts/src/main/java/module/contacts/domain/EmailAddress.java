@@ -27,12 +27,12 @@ package module.contacts.domain;
 import java.util.List;
 
 import module.organization.domain.Party;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
 
 import org.joda.time.DateTime;
 
+import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.bennu.core.domain.groups.PersistentGroup;
 import pt.ist.fenixWebFramework.services.Service;
 
 /**
@@ -44,17 +44,17 @@ import pt.ist.fenixWebFramework.services.Service;
 public class EmailAddress extends EmailAddress_Base {
 
     public EmailAddress(String emailAddress, Party party, Boolean defaultContact, PartyContactType partyContactType,
-	    List<PersistentGroup> visibilityGroups) {
-	super();
+            List<PersistentGroup> visibilityGroups) {
+        super();
 
-	super.setVisibleTo(visibilityGroups);
+        super.setVisibleTo(visibilityGroups);
 
-	super.setValue(emailAddress);
-	super.setParty(party);
-	super.setDefaultContact(defaultContact);
-	super.setType(partyContactType);
+        super.setValue(emailAddress);
+        super.setParty(party);
+        super.setDefaultContact(defaultContact);
+        super.setType(partyContactType);
 
-	super.setLastModifiedDate(new DateTime());
+        super.setLastModifiedDate(new DateTime());
     }
 
     /**
@@ -71,27 +71,27 @@ public class EmailAddress extends EmailAddress_Base {
      */
     @Service
     public static EmailAddress createNewEmailAddress(String emailAddress, Party party, Boolean defaultContact,
-	    PartyContactType partyContactType, User userCreatingTheContact, List<PersistentGroup> visibilityGroups) {
-	// validate that the user can actually create this contact
-	validateUser(userCreatingTheContact, party, partyContactType);
+            PartyContactType partyContactType, User userCreatingTheContact, List<PersistentGroup> visibilityGroups) {
+        // validate that the user can actually create this contact
+        validateUser(userCreatingTheContact, party, partyContactType);
 
-	// making sure the list of visibility groups is a valid one
-	validateVisibilityGroups(visibilityGroups);
+        // making sure the list of visibility groups is a valid one
+        validateVisibilityGroups(visibilityGroups);
 
-	// make sure that this isn't a duplicate contact for this party
-	for (PartyContact partyContact : party.getPartyContacts()) {
-	    if (partyContact instanceof EmailAddress && partyContact.getValue() == emailAddress
-		    && partyContactType.equals(partyContact.getType())) {
-		throw new DomainException("error.duplicate.partyContact");
-	    }
-	}
+        // make sure that this isn't a duplicate contact for this party
+        for (PartyContact partyContact : party.getPartyContacts()) {
+            if (partyContact instanceof EmailAddress && partyContact.getValue() == emailAddress
+                    && partyContactType.equals(partyContact.getType())) {
+                throw new DomainException("error.duplicate.partyContact");
+            }
+        }
 
-	return new EmailAddress(emailAddress, party, defaultContact, partyContactType, visibilityGroups);
+        return new EmailAddress(emailAddress, party, defaultContact, partyContactType, visibilityGroups);
     }
 
     @Override
     public String getDescription() {
-	return getValue();
+        return getValue();
     }
 
 }

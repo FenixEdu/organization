@@ -24,10 +24,10 @@
  */
 package module.organization.domain;
 
+import org.joda.time.DateTime;
+
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
-
-import org.joda.time.DateTime;
 
 /**
  * 
@@ -38,13 +38,13 @@ import org.joda.time.DateTime;
 public class FunctionDelegationLog extends FunctionDelegationLog_Base {
 
     public FunctionDelegationLog(final FunctionDelegation functionDelegation, String operation) {
-	super();
-	setMyOrg(functionDelegation.getMyOrg());
-	setFunctionDelegation(functionDelegation);
-	final User user = UserView.getCurrentUser();
-	setExecutor(user == null ? null : user.getUsername());
-	setOperationInstant(new DateTime());
-	setOperation(operation);
+        super();
+        setMyOrg(functionDelegation.getMyOrg());
+        setFunctionDelegation(functionDelegation);
+        final User user = UserView.getCurrentUser();
+        setExecutor(user == null ? null : user.getUsername());
+        setOperationInstant(new DateTime());
+        setOperation(operation);
     }
 
 }

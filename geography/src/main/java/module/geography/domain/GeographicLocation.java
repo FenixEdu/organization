@@ -48,30 +48,30 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 public abstract class GeographicLocation extends GeographicLocation_Base implements GeographicConstants {
 
     public static final Comparator<GeographicLocation> COMPARATOR_BY_NAME = new Comparator<GeographicLocation>() {
-	@Override
-	public int compare(final GeographicLocation location1, GeographicLocation location2) {
-	    final String name1 = location1.getName().getContent();
-	    final String name2 = location2.getName().getContent();
-	    final int c = Collator.getInstance().compare(name1, name2);
-	    if (c == 0) {
-		final String acronym1 = location1.getAcronym();
-		final String acronym2 = location2.getAcronym();
-		if (acronym1 == null || acronym2 == null) {
-		    return location2.hashCode() - location1.hashCode();
-		}
-		final int a = Collator.getInstance().compare(acronym1, acronym2);
-		return a == 0 ? location2.hashCode() - location1.hashCode() : a;
-	    }
-	    return c;
-	}
+        @Override
+        public int compare(final GeographicLocation location1, GeographicLocation location2) {
+            final String name1 = location1.getName().getContent();
+            final String name2 = location2.getName().getContent();
+            final int c = Collator.getInstance().compare(name1, name2);
+            if (c == 0) {
+                final String acronym1 = location1.getAcronym();
+                final String acronym2 = location2.getAcronym();
+                if (acronym1 == null || acronym2 == null) {
+                    return location2.hashCode() - location1.hashCode();
+                }
+                final int a = Collator.getInstance().compare(acronym1, acronym2);
+                return a == 0 ? location2.hashCode() - location1.hashCode() : a;
+            }
+            return c;
+        }
     };
 
     public GeographicLocation() {
-	super();
+        super();
     }
 
     public MultiLanguageString getName() {
-	return getUnit().getPartyName();
+        return getUnit().getPartyName();
     }
 
     /**
@@ -80,55 +80,61 @@ public abstract class GeographicLocation extends GeographicLocation_Base impleme
      *         GeographicLocation or null if it has none
      */
     public Country getCountry() {
-	if (this instanceof Country)
-	    return (Country) this;
-	if (this instanceof CountrySubdivision || this instanceof PostalExtension)
-	    return ((CountrySubdivision) this).getCountry();
-	// recursively go and fetch the Country if it is indeed available
-	if (getParentLocation() != null)
-	    return getParentLocation().getCountry();
-	else
-	    return null;
+        if (this instanceof Country) {
+            return (Country) this;
+        }
+        if (this instanceof CountrySubdivision || this instanceof PostalExtension) {
+            return ((CountrySubdivision) this).getCountry();
+        }
+        // recursively go and fetch the Country if it is indeed available
+        if (getParentLocation() != null) {
+            return getParentLocation().getCountry();
+        } else {
+            return null;
+        }
 
     }
 
     public String getAcronym() {
-	return getUnit().getAcronym();
+        return getUnit().getAcronym();
     }
 
     public abstract MultiLanguageString getType();
 
     protected GeographicLocation getParentLocation() {
-	Collection<Unit> parents = getUnit().getParentUnits(AccountabilityType.readBy(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME));
-	if (parents.size() != 1)
-	    throw new DomainException("error.geography.invalid-organizational-structure");
-	return parents.iterator().next().getGeographicLocation();
+        Collection<Unit> parents = getUnit().getParentUnits(AccountabilityType.readBy(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME));
+        if (parents.size() != 1) {
+            throw new DomainException("error.geography.invalid-organizational-structure");
+        }
+        return parents.iterator().next().getGeographicLocation();
     }
 
     protected Collection<Unit> getChildUnits() {
-	return getUnit().getChildUnits(AccountabilityType.readBy(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME));
+        return getUnit().getChildUnits(AccountabilityType.readBy(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME));
     }
 
     public static AccountabilityType getOrCreateAccountabilityType() {
-	AccountabilityType geographic = null;
-	for (AccountabilityType accountability : MyOrg.getInstance().getAccountabilityTypesSet()) {
-	    if (accountability.getType().equals(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME)) {
-		geographic = accountability;
-	    }
-	}
-	if (geographic == null) {
-	    geographic = AccountabilityType.create(new AccountabilityTypeBean(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME,
-		    new MultiLanguageString().with(Language.pt, "Geográfico").with(Language.en,
-			    GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME)));
-	}
-	return geographic;
+        AccountabilityType geographic = null;
+        for (AccountabilityType accountability : MyOrg.getInstance().getAccountabilityTypesSet()) {
+            if (accountability.getType().equals(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME)) {
+                geographic = accountability;
+            }
+        }
+        if (geographic == null) {
+            geographic =
+                    AccountabilityType.create(new AccountabilityTypeBean(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME,
+                            new MultiLanguageString().with(Language.pt, "Geográfico").with(Language.en,
+                                    GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME)));
+        }
+        return geographic;
     }
 
     protected static PartyType getPartyType(String pt, String en) {
-	for (PartyType partyType : MyOrg.getInstance().getPartyTypesSet()) {
-	    if (partyType.getType().equals(en))
-		return partyType;
-	}
-	return new PartyType(en, new MultiLanguageString().with(Language.pt, pt).with(Language.en, en));
+        for (PartyType partyType : MyOrg.getInstance().getPartyTypesSet()) {
+            if (partyType.getType().equals(en)) {
+                return partyType;
+            }
+        }
+        return new PartyType(en, new MultiLanguageString().with(Language.pt, pt).with(Language.en, en));
     }
 }

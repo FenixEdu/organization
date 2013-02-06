@@ -46,29 +46,30 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider {
 
     @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
-	final List<Person> persons = new ArrayList<Person>();
+        final List<Person> persons = new ArrayList<Person>();
 
-	final String trimmedValue = value.trim();
-	String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
+        final String trimmedValue = value.trim();
+        String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
 
-	for (final Person person : getPersons(argsMap, value)) {
-	    final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
-	    if (person.getUser() == null)
-	        continue;
-	    if (hasMatch(values, normalizedName)) {
-		persons.add(person);
-	    }
-	    if (person.getUser().getUsername().indexOf(value) >= 0) {
-		persons.add(person);
-	    }
-	    if (persons.size() >= maxCount) {
-		break;
-	    }
-	}
+        for (final Person person : getPersons(argsMap, value)) {
+            final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
+            if (person.getUser() == null) {
+                continue;
+            }
+            if (hasMatch(values, normalizedName)) {
+                persons.add(person);
+            }
+            if (person.getUser().getUsername().indexOf(value) >= 0) {
+                persons.add(person);
+            }
+            if (persons.size() >= maxCount) {
+                break;
+            }
+        }
 
-	Collections.sort(persons, Party.COMPARATOR_BY_NAME);
+        Collections.sort(persons, Party.COMPARATOR_BY_NAME);
 
-	return persons;
+        return persons;
     }
 
     /**
@@ -76,16 +77,16 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider {
      * Results
      */
     protected Collection<Person> getPersons(Map<String, String> argsMap, String value) {
-	return MyOrg.getInstance().getPersonsSet();
+        return MyOrg.getInstance().getPersonsSet();
     }
 
     private boolean hasMatch(final String[] input, final String unitNameParts) {
-	for (final String namePart : input) {
-	    if (unitNameParts.indexOf(namePart) == -1) {
-		return false;
-	    }
-	}
-	return true;
+        for (final String namePart : input) {
+            if (unitNameParts.indexOf(namePart) == -1) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

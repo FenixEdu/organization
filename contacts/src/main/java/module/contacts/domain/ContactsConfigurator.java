@@ -50,17 +50,18 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
 
     // TODO validate this singleton implementation
     private ContactsConfigurator() {
-	super();
-	MyOrg.getInstance().setContactsConfigurator(this);
-	this.PersistentGroupContactsConfigurator.addListener(new VisibilityGroupsEnforcerListener());
+        super();
+        MyOrg.getInstance().setContactsConfigurator(this);
+        this.PersistentGroupContactsConfigurator.addListener(new VisibilityGroupsEnforcerListener());
     }
 
     @Service
     public static ContactsConfigurator getInstance() {
-	ContactsConfigurator contactsConfigurator = MyOrg.getInstance().getContactsConfigurator();
-	if (contactsConfigurator == null)
-	    return createInstance();
-	return contactsConfigurator;
+        ContactsConfigurator contactsConfigurator = MyOrg.getInstance().getContactsConfigurator();
+        if (contactsConfigurator == null) {
+            return createInstance();
+        }
+        return contactsConfigurator;
 
     }
 
@@ -71,12 +72,12 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
      * @return the JavaScript regular expression for the given className
      */
     public static String getJSRegExp(String className) {
-	if (className.equalsIgnoreCase(WebAddress.class.getName())) {
-	    return "((http|https):\\/\\/)?(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?";
-	} else if (className.equalsIgnoreCase(EmailAddress.class.getName())) {
-	    return "(\\w+(\\.\\w)*@(\\w+\\.\\w+)+){1}";
-	}
-	return "(.*)";
+        if (className.equalsIgnoreCase(WebAddress.class.getName())) {
+            return "((http|https):\\/\\/)?(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?";
+        } else if (className.equalsIgnoreCase(EmailAddress.class.getName())) {
+            return "(\\w+(\\.\\w)*@(\\w+\\.\\w+)+){1}";
+        }
+        return "(.*)";
 
     }
 
@@ -89,65 +90,67 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
      */
     final static class VisibilityGroupsEnforcerListener implements RelationListener<ContactsConfigurator, PersistentGroup> {
 
-	@Override
-	public void afterAdd(Relation<ContactsConfigurator, PersistentGroup> arg0, ContactsConfigurator arg1, PersistentGroup arg2) {
-	    // nothing needs to be done when adding a group to the list of the
-	    // possible visibility groups
-	}
+        @Override
+        public void afterAdd(Relation<ContactsConfigurator, PersistentGroup> arg0, ContactsConfigurator arg1, PersistentGroup arg2) {
+            // nothing needs to be done when adding a group to the list of the
+            // possible visibility groups
+        }
 
-	/**
-	 * Iterate through all of the contacts and remove the relation that it
-	 * might have with that group
-	 */
-	@Override
-	public void afterRemove(Relation<ContactsConfigurator, PersistentGroup> relation,
-		ContactsConfigurator contactsConfigurator, PersistentGroup persistentGroup) {
-	    for (PartyContact contact : ContactsConfigurator.getInstance().getPartyContact()) {
-		contact.removeVisibilityGroups(persistentGroup);
-	    }
-	}
+        /**
+         * Iterate through all of the contacts and remove the relation that it
+         * might have with that group
+         */
+        @Override
+        public void afterRemove(Relation<ContactsConfigurator, PersistentGroup> relation,
+                ContactsConfigurator contactsConfigurator, PersistentGroup persistentGroup) {
+            for (PartyContact contact : ContactsConfigurator.getInstance().getPartyContact()) {
+                contact.removeVisibilityGroups(persistentGroup);
+            }
+        }
 
-	@Override
-	public void beforeAdd(Relation<ContactsConfigurator, PersistentGroup> arg0, ContactsConfigurator arg1,
-		PersistentGroup arg2) {
-	    // nothing needs to be done when adding a group to the list of the
-	    // possible visibility groups
-	}
+        @Override
+        public void beforeAdd(Relation<ContactsConfigurator, PersistentGroup> arg0, ContactsConfigurator arg1,
+                PersistentGroup arg2) {
+            // nothing needs to be done when adding a group to the list of the
+            // possible visibility groups
+        }
 
-	@Override
-	public void beforeRemove(Relation<ContactsConfigurator, PersistentGroup> relation,
-		ContactsConfigurator contactsConfigurator, PersistentGroup persistentGroup) {
-	    // nothing needs to be done before removing the relation
+        @Override
+        public void beforeRemove(Relation<ContactsConfigurator, PersistentGroup> relation,
+                ContactsConfigurator contactsConfigurator, PersistentGroup persistentGroup) {
+            // nothing needs to be done before removing the relation
 
-	}
+        }
 
     }
 
     @Service
     private static ContactsConfigurator createInstance() {
-	return new ContactsConfigurator();
+        return new ContactsConfigurator();
     }
 
     @Service
     public void setVisibilityGroups(List<PersistentGroup> groups) {
 
-	if (groups == null)
-	    return;
-	List<PersistentGroup> existingGroups = getVisibilityGroups();
-	// add the ones on the groups to the list of existing
-	for (PersistentGroup persistentGroup : groups) {
-	    if (!existingGroups.contains(persistentGroup)) {
-		if (persistentGroup.getGroupAlias() == null) {
-		    GroupAlias.create(persistentGroup, new MultiLanguageString(persistentGroup.getName()));
-		}
-		addVisibilityGroups(persistentGroup);
-	    }
-	}
-	// remove the ones that aren't on the existing list
-	for (PersistentGroup persistentGroup : existingGroups) {
-	    if (!groups.contains(persistentGroup))
-		removeVisibilityGroups(persistentGroup);
-	}
+        if (groups == null) {
+            return;
+        }
+        List<PersistentGroup> existingGroups = getVisibilityGroups();
+        // add the ones on the groups to the list of existing
+        for (PersistentGroup persistentGroup : groups) {
+            if (!existingGroups.contains(persistentGroup)) {
+                if (persistentGroup.getGroupAlias() == null) {
+                    GroupAlias.create(persistentGroup, new MultiLanguageString(persistentGroup.getName()));
+                }
+                addVisibilityGroups(persistentGroup);
+            }
+        }
+        // remove the ones that aren't on the existing list
+        for (PersistentGroup persistentGroup : existingGroups) {
+            if (!groups.contains(persistentGroup)) {
+                removeVisibilityGroups(persistentGroup);
+            }
+        }
     }
 
     /**
@@ -161,27 +164,27 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
      */
     @Service
     public void assignSuperEditorToPersonsCurrentlyIn(PersistentGroup groupToUse) {
-	Set<User> groupMembers = groupToUse.getMembers();
-	for (User user : groupMembers) {
-	    user.addRoleType(getContactsRoles().MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR);
-	}
+        Set<User> groupMembers = groupToUse.getMembers();
+        for (User user : groupMembers) {
+            user.addRoleType(getContactsRoles().MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR);
+        }
     }
 
     @Service
     public void assignSuperEditorRole(User user) {
-	Role.getRole(getContactsRoles().MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).addUsers(user);
+        Role.getRole(getContactsRoles().MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).addUsers(user);
 
     }
 
     @Service
     public void removeSuperEditorRole(User user) {
-	Role.getRole(getContactsRoles().MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).removeUsers(user);
+        Role.getRole(getContactsRoles().MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).removeUsers(user);
     }
 
     public List<Person> getPersonsByDetails(User userSearching, String searchName, String searchUsername, String searchPhone,
-	    PhoneType searchPhoneType, String searchAddress, String searchWebAddress, String searchEmailAddress) {
-	return ContactsConfiguratorAux.getPersonsByDetailsV2(userSearching, searchName, searchUsername, searchPhone,
-		searchPhoneType, searchAddress, searchWebAddress, searchEmailAddress);
+            PhoneType searchPhoneType, String searchAddress, String searchWebAddress, String searchEmailAddress) {
+        return ContactsConfiguratorAux.getPersonsByDetailsV2(userSearching, searchName, searchUsername, searchPhone,
+                searchPhoneType, searchAddress, searchWebAddress, searchEmailAddress);
     }
 
     /**
@@ -274,14 +277,16 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
      *         can only edit the contacts if he is a super-editor or himself
      */
     public boolean isAllowedToEditContacts(User userEditor, Person personToEdit) {
-	if (personToEdit.getUser().equals(userEditor))
-	    return true;
-	if (isSuperEditor(userEditor))
-	    return true;
-	return false;
+        if (personToEdit.getUser().equals(userEditor)) {
+            return true;
+        }
+        if (isSuperEditor(userEditor)) {
+            return true;
+        }
+        return false;
     }
 
     public boolean isSuperEditor(User user) {
-	return (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(user));
+        return (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(user));
     }
 }

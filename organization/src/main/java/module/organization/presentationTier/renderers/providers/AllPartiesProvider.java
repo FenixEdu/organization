@@ -42,20 +42,20 @@ public class AllPartiesProvider implements DataProvider {
 
     @Override
     public Converter getConverter() {
-	return new DomainObjectKeyConverter();
+        return new DomainObjectKeyConverter();
     }
 
     @Override
     public Object provide(Object source, Object currentValue) {
 
-	// TODO: check method performance
+        // TODO: check method performance
 
-	final Set<Party> result = new TreeSet<Party>(Party.COMPARATOR_BY_TYPE_AND_NAME);
-	for (final Party party : MyOrg.getInstance().getPartiesSet()) {
-	    result.add(party);
-	    result.addAll(party.getDescendents());
-	}
-	return result;
+        final Set<Party> result = new TreeSet<Party>(Party.COMPARATOR_BY_TYPE_AND_NAME);
+        for (final Party party : MyOrg.getInstance().getPartiesSet()) {
+            result.add(party);
+            result.addAll(party.getDescendents());
+        }
+        return result;
     }
 
 }

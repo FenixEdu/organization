@@ -58,137 +58,137 @@ public class TreeMenuOrganizationLayout extends Layout implements OrganizationLa
 
     @Override
     public TreeMenuOrganizationLayout saveView(final OrganizationView view) {
-	this.view = view;
-	return this;
+        this.view = view;
+        return this;
     }
 
     @Override
     public HtmlComponent createComponent(final Object object, final Class type) {
-	final HtmlBlockContainer container = new HtmlBlockContainer();
-	container.addChild(generateScript());
+        final HtmlBlockContainer container = new HtmlBlockContainer();
+        container.addChild(generateScript());
 
-	if (object instanceof MyOrg) {
-	    container.addChild(drawOrganization((MyOrg) object));
-	} else if (object instanceof Party) {
-	    container.addChild(drawOrganization((Party) object));
-	} else {
-	    throw new IllegalArgumentException();
-	}
+        if (object instanceof MyOrg) {
+            container.addChild(drawOrganization((MyOrg) object));
+        } else if (object instanceof Party) {
+            container.addChild(drawOrganization((Party) object));
+        } else {
+            throw new IllegalArgumentException();
+        }
 
-	return container;
+        return container;
     }
 
     private HtmlScript generateScript() {
-	final HtmlScript script = new HtmlScript();
-	script.setContentType("text/javascript");
-	script.setConditional(true);
+        final HtmlScript script = new HtmlScript();
+        script.setContentType("text/javascript");
+        script.setConditional(true);
 
-	final HtmlLink minusLink = new HtmlLink();
-	minusLink.setModuleRelative(false);
-	minusLink.setUrl(this.view.getMinusImage());
+        final HtmlLink minusLink = new HtmlLink();
+        minusLink.setModuleRelative(false);
+        minusLink.setUrl(this.view.getMinusImage());
 
-	final HtmlLink plusLink = new HtmlLink();
-	plusLink.setModuleRelative(false);
-	plusLink.setUrl(this.view.getPlusImage());
+        final HtmlLink plusLink = new HtmlLink();
+        plusLink.setModuleRelative(false);
+        plusLink.setUrl(this.view.getPlusImage());
 
-	script.setScript("\n" + " function change(parentId, subId) {\n" + "   var v = document.getElementById(parentId);\n"
-		+ "   var e = document.getElementById(subId);\n" + "   if (e.style.display == \"none\") {\n"
-		+ "     e.style.display = \"\";\n" + "     v.src = \"" + minusLink.calculateUrl() + "\";\n" + "   } else {\n"
-		+ "     e.style.display = \"none\";\n" + "     v.src = \"" + plusLink.calculateUrl() + "\";\n" + "   }\n"
-		+ " }\n\n");
-	return script;
+        script.setScript("\n" + " function change(parentId, subId) {\n" + "   var v = document.getElementById(parentId);\n"
+                + "   var e = document.getElementById(subId);\n" + "   if (e.style.display == \"none\") {\n"
+                + "     e.style.display = \"\";\n" + "     v.src = \"" + minusLink.calculateUrl() + "\";\n" + "   } else {\n"
+                + "     e.style.display = \"none\";\n" + "     v.src = \"" + plusLink.calculateUrl() + "\";\n" + "   }\n"
+                + " }\n\n");
+        return script;
     }
 
     private HtmlComponent drawOrganization(final MyOrg myOrg) {
-	final HtmlList list = new HtmlList();
-	list.setClasses(this.view.getRootClasses());
+        final HtmlList list = new HtmlList();
+        list.setClasses(this.view.getRootClasses());
 
-	final List<Unit> topUnits = new ArrayList<Unit>(myOrg.getTopUnits());
-	Collections.sort(topUnits, this.view.getSortBy());
+        final List<Unit> topUnits = new ArrayList<Unit>(myOrg.getTopUnits());
+        Collections.sort(topUnits, this.view.getSortBy());
 
-	for (final Unit unit : topUnits) {
-	    drawParty(list, unit);
-	}
+        for (final Unit unit : topUnits) {
+            drawParty(list, unit);
+        }
 
-	return list;
+        return list;
     }
 
     private HtmlComponent drawOrganization(final Party party) {
-	final HtmlList list = new HtmlList();
-	list.setClasses(this.view.getRootClasses());
+        final HtmlList list = new HtmlList();
+        list.setClasses(this.view.getRootClasses());
 
-	drawParty(list, party);
-	return list;
+        drawParty(list, party);
+        return list;
     }
 
     private void drawParty(final HtmlList list, final Party party) {
-	final HtmlImage image = new HtmlImage();
-	final HtmlListItem item = createItem(list, image, party);
+        final HtmlImage image = new HtmlImage();
+        final HtmlListItem item = createItem(list, image, party);
 
-	final HtmlList childHtmlList = createChildHtmlList(party);
-	drawPartyChildren(childHtmlList, party);
+        final HtmlList childHtmlList = createChildHtmlList(party);
+        drawPartyChildren(childHtmlList, party);
 
-	if (!childHtmlList.getChildren().isEmpty()) {
-	    item.addChild(childHtmlList);
-	    calculateImageUrl(image, this.view.getPlusImage());
-	    generateImageOid(party, image);
-	    generateImageOnClick(party, image, childHtmlList);
-	} else {
-	    calculateImageUrl(image, this.view.getBlankImage());
-	}
+        if (!childHtmlList.getChildren().isEmpty()) {
+            item.addChild(childHtmlList);
+            calculateImageUrl(image, this.view.getPlusImage());
+            generateImageOid(party, image);
+            generateImageOnClick(party, image, childHtmlList);
+        } else {
+            calculateImageUrl(image, this.view.getBlankImage());
+        }
     }
 
     private void calculateImageUrl(final HtmlImage image, final String imagePath) {
-	final HtmlLink link = new HtmlLink();
-	link.setModuleRelative(false);
-	link.setUrl(imagePath);
-	image.setSource(link.calculateUrl());
+        final HtmlLink link = new HtmlLink();
+        link.setModuleRelative(false);
+        link.setUrl(imagePath);
+        image.setSource(link.calculateUrl());
     }
 
     private void generateImageOid(final Party party, final HtmlImage image) {
-	image.setId(IMG_PREFIX + party.getExternalId());
+        image.setId(IMG_PREFIX + party.getExternalId());
     }
 
     private void generateImageOnClick(final Party party, final HtmlImage image, final HtmlList childHtmlList) {
-	image.setOnClick(String.format("change('%s', '%s');return false;", IMG_PREFIX + party.getExternalId(), childHtmlList
-		.getId()));
+        image.setOnClick(String.format("change('%s', '%s');return false;", IMG_PREFIX + party.getExternalId(),
+                childHtmlList.getId()));
     }
 
     private HtmlList createChildHtmlList(final Party parent) {
-	final HtmlList list = new HtmlList();
-	list.setId(IMG_PREFIX + parent.getExternalId() + "chd");
-	list.setStyle(this.view.getChildListStyle());
-	return list;
+        final HtmlList list = new HtmlList();
+        list.setId(IMG_PREFIX + parent.getExternalId() + "chd");
+        list.setStyle(this.view.getChildListStyle());
+        return list;
     }
 
     private HtmlListItem createItem(final HtmlList list, final HtmlImage image, final Party party) {
-	final HtmlListItem item = list.createItem();
-	item.addChild(image);
-	item.addChild(getDecorator(party));
-	return item;
+        final HtmlListItem item = list.createItem();
+        item.addChild(image);
+        item.addChild(getDecorator(party));
+        return item;
     }
 
     private HtmlComponent getDecorator(final Party party) {
-	return this.view.getDecorator().decorate(party, this);
+        return this.view.getDecorator().decorate(party, this);
     }
 
     protected void drawPartyChildren(final HtmlList childHtmlList, final Party parent) {
-	final List<Party> children = new ArrayList<Party>(parent.getChildAccountabilitiesCount());
+        final List<Party> children = new ArrayList<Party>(parent.getChildAccountabilitiesCount());
 
-	for (final Accountability accountability : parent.getChildAccountabilitiesSet()) {
-	    if (this.view.getPredicate().eval(accountability.getChild(), accountability)) {
-		children.add(accountability.getChild());
-	    }
-	}
+        for (final Accountability accountability : parent.getChildAccountabilitiesSet()) {
+            if (this.view.getPredicate().eval(accountability.getChild(), accountability)) {
+                children.add(accountability.getChild());
+            }
+        }
 
-	Collections.sort(children, this.view.getSortBy());
-	for (final Party party : children) {
-	    drawParty(childHtmlList, party);
-	}
+        Collections.sort(children, this.view.getSortBy());
+        for (final Party party : children) {
+            drawParty(childHtmlList, party);
+        }
     }
 
     @Override
     public String getViewPartyUrl() {
-	return this.view.getViewPartyUrl();
+        return this.view.getViewPartyUrl();
     }
 }

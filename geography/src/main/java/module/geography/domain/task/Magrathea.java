@@ -44,24 +44,28 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 public class Magrathea implements GeographicConstants {
     @Service
     public static Planet buildEarth() {
-	Universe universe = Universe.getMultiverseZero();
-	if (universe == null) {
-	    universe = new Universe(new MultiLanguageString().with(Language.pt, "Multiverso Zero").with(Language.en,
-		    "Multiverse Zero"), MULTIVERSE_UNIT_ACRONYM);
-	}
+        Universe universe = Universe.getMultiverseZero();
+        if (universe == null) {
+            universe =
+                    new Universe(new MultiLanguageString().with(Language.pt, "Multiverso Zero").with(Language.en,
+                            "Multiverse Zero"), MULTIVERSE_UNIT_ACRONYM);
+        }
 
-	Galaxy galaxy = universe.getChildByAcronym(MILKY_WAY_UNIT_ACRONYM);
-	if (galaxy == null) {
-	    galaxy = new Galaxy(universe, new MultiLanguageString().with(Language.pt, "Via Láctea")
-		    .with(Language.en, "Milky Way"), MILKY_WAY_UNIT_ACRONYM);
-	}
+        Galaxy galaxy = universe.getChildByAcronym(MILKY_WAY_UNIT_ACRONYM);
+        if (galaxy == null) {
+            galaxy =
+                    new Galaxy(universe,
+                            new MultiLanguageString().with(Language.pt, "Via Láctea").with(Language.en, "Milky Way"),
+                            MILKY_WAY_UNIT_ACRONYM);
+        }
 
-	Planet planet = galaxy.getChildByAcronym(EARTH_UNIT_ACRONYM);
-	if (planet == null) {
-	    planet = new Planet(galaxy, new MultiLanguageString().with(Language.pt, "Terra").with(Language.en, "Earth"),
-		    EARTH_UNIT_ACRONYM);
-	}
+        Planet planet = galaxy.getChildByAcronym(EARTH_UNIT_ACRONYM);
+        if (planet == null) {
+            planet =
+                    new Planet(galaxy, new MultiLanguageString().with(Language.pt, "Terra").with(Language.en, "Earth"),
+                            EARTH_UNIT_ACRONYM);
+        }
 
-	return planet;
+        return planet;
     }
 }

@@ -35,7 +35,7 @@ import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 public interface OrganizationLayout {
 
     public HtmlComponent createComponent(final Object object, final Class type);
-    
+
     public OrganizationLayout saveView(final OrganizationView view);
 
     public String getViewPartyUrl();

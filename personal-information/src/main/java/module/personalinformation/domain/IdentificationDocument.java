@@ -39,70 +39,70 @@ public class IdentificationDocument extends IdentificationDocument_Base {
 
     static public class IdentificationDocumentBean implements Serializable {
 
-	static private final long serialVersionUID = -6239097801967805232L;
+        static private final long serialVersionUID = -6239097801967805232L;
 
-	private IDDocumentType type;
-	private String number;
+        private IDDocumentType type;
+        private String number;
 
-	public IDDocumentType getType() {
-	    return type;
-	}
+        public IDDocumentType getType() {
+            return type;
+        }
 
-	public void setType(IDDocumentType type) {
-	    this.type = type;
-	}
+        public void setType(IDDocumentType type) {
+            this.type = type;
+        }
 
-	public String getNumber() {
-	    return number;
-	}
+        public String getNumber() {
+            return number;
+        }
 
-	public void setNumber(String number) {
-	    this.number = number;
-	}
+        public void setNumber(String number) {
+            this.number = number;
+        }
 
     }
 
     protected IdentificationDocument() {
-	super();
-	setMyOrg(MyOrg.getInstance());
+        super();
+        setMyOrg(MyOrg.getInstance());
     }
 
     private IdentificationDocument(final PersonalInformation information, final IdentificationDocumentBean bean) {
-	this();
-	init(information, bean);
+        this();
+        init(information, bean);
     }
 
     protected void init(final PersonalInformation information, final IdentificationDocumentBean bean) {
-	if (information == null) {
-	    throw new DomainException("error.IdentificationDocument.invalid.personal.information");
-	}
-	if (bean.getType() == null) {
-	    throw new DomainException("error.IdentificationDocument.invalid.type");
-	}
-	if (bean.getNumber() == null || bean.getNumber().isEmpty()) {
-	    throw new DomainException("error.IdentificationDocument.invalid.number");
-	}
-	setPersonalInformation(information);
-	setType(bean.getType());
-	setNumber(bean.getNumber());
+        if (information == null) {
+            throw new DomainException("error.IdentificationDocument.invalid.personal.information");
+        }
+        if (bean.getType() == null) {
+            throw new DomainException("error.IdentificationDocument.invalid.type");
+        }
+        if (bean.getNumber() == null || bean.getNumber().isEmpty()) {
+            throw new DomainException("error.IdentificationDocument.invalid.number");
+        }
+        setPersonalInformation(information);
+        setType(bean.getType());
+        setNumber(bean.getNumber());
     }
 
     public void delete() {
-	disconnect();
-	Transaction.deleteObject(this);
+        disconnect();
+        Transaction.deleteObject(this);
     }
 
     protected void disconnect() {
-	removeMyOrg();
-	removePersonalInformation();
+        removeMyOrg();
+        removePersonalInformation();
     }
 
     static IdentificationDocument create(final PersonalInformation information, final IdentificationDocumentBean bean) {
-	switch (bean.getType()) {
-	case IDENTITY_CARD:
-	    return new IdentityCard(information, bean);
-	default:
-	    return new IdentificationDocument(information, bean);
-	}
+        switch (bean.getType()) {
+        case IDENTITY_CARD:
+            return new IdentityCard(information, bean);
+        default:
+            return new IdentificationDocument(information, bean);
+        }
     }
 }

@@ -37,7 +37,7 @@ public class PartySearchBean extends PartyBean {
     private PartySearchType partySearchType = PartySearchType.LOCAL_TREE;
 
     public PartySearchBean(final Party party) {
-	super(party);
+        super(party);
     }
 
     public PartySearchType getPartySearchType() {

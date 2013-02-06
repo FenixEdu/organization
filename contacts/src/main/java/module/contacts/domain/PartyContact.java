@@ -31,13 +31,13 @@ import java.util.Set;
 
 import module.organization.domain.Party;
 import module.organization.domain.Person;
+
+import org.apache.commons.lang.StringUtils;
+
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
 import pt.ist.bennu.core.domain.groups.Role;
-
-import org.apache.commons.lang.StringUtils;
-
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
@@ -56,41 +56,41 @@ import dml.runtime.RelationListener;
 public abstract class PartyContact extends PartyContact_Base implements Indexable, Searchable, IndexableField {
 
     public PartyContact() {
-	super();
-	ContactsConfigurator.getInstance().addPartyContact(this);
-	this.PersistentGroupPartyContact.addListener(new ValidVisibilityGroupsEnforcer());
+        super();
+        ContactsConfigurator.getInstance().addPartyContact(this);
+        this.PersistentGroupPartyContact.addListener(new ValidVisibilityGroupsEnforcer());
     }
 
     static protected void validateUser(User userCreatingTheContact, Party partyThatWillOwnTheContact, PartyContactType type) {
-	if (!type.equals(PartyContactType.IMMUTABLE)) {
-	    return;
-	}
+        if (!type.equals(PartyContactType.IMMUTABLE)) {
+            return;
+        }
 
-	// TODO: Tornar esta validacao parametrizavel
+        // TODO: Tornar esta validacao parametrizavel
 
-	// if (isOwner(userCreatingTheContact, partyThatWillOwnTheContact) &&
-	// !type.equals(PartyContactType.IMMUTABLE))
-	// // if he is the owner and the contact isn't immutable, then it can
-	// // edit it
-	// return;
-	// if
-	// (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(userCreatingTheContact))
-	// return;
-	//
-	// // Enterprises do not have users and NPE members can edit the
-	// contacts!
-	// if (JobBankSystem.getInstance().isNPEMember(userCreatingTheContact)
-	// && Enterprise.isEnterprise(partyThatWillOwnTheContact))
-	// return;
+        // if (isOwner(userCreatingTheContact, partyThatWillOwnTheContact) &&
+        // !type.equals(PartyContactType.IMMUTABLE))
+        // // if he is the owner and the contact isn't immutable, then it can
+        // // edit it
+        // return;
+        // if
+        // (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(userCreatingTheContact))
+        // return;
+        //
+        // // Enterprises do not have users and NPE members can edit the
+        // contacts!
+        // if (JobBankSystem.getInstance().isNPEMember(userCreatingTheContact)
+        // && Enterprise.isEnterprise(partyThatWillOwnTheContact))
+        // return;
 
-	throw new DomainException("manage.contacts.edit.denied.nouser");
+        throw new DomainException("manage.contacts.edit.denied.nouser");
 
     }
 
     static protected void validateVisibilityGroups(List<PersistentGroup> visibilityGroups) {
-	if (!ContactsConfigurator.getInstance().getVisibilityGroups().containsAll(visibilityGroups)) {
-	    throw new DomainException("manage.contacts.wrong.visibility.groups.defined");
-	}
+        if (!ContactsConfigurator.getInstance().getVisibilityGroups().containsAll(visibilityGroups)) {
+            throw new DomainException("manage.contacts.wrong.visibility.groups.defined");
+        }
 
     }
 
@@ -104,57 +104,59 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      */
     final static class ValidVisibilityGroupsEnforcer implements RelationListener<PartyContact, PersistentGroup> {
 
-	@Override
-	public void beforeAdd(Relation<PartyContact, PersistentGroup> relation, PartyContact partyContact,
-		PersistentGroup persistentGroup) {
-	    if (!ContactsConfigurator.getInstance().hasVisibilityGroups(persistentGroup))
-		throw new DomainException("error.adding.contact.invalid.visibility.group",
-			DomainException.getResourceFor("resources/ContactsResources"));
-	}
+        @Override
+        public void beforeAdd(Relation<PartyContact, PersistentGroup> relation, PartyContact partyContact,
+                PersistentGroup persistentGroup) {
+            if (!ContactsConfigurator.getInstance().hasVisibilityGroups(persistentGroup)) {
+                throw new DomainException("error.adding.contact.invalid.visibility.group",
+                        DomainException.getResourceFor("resources/ContactsResources"));
+            }
+        }
 
-	@Override
-	public void afterAdd(Relation<PartyContact, PersistentGroup> rel, PartyContact o1, PersistentGroup o2) {
-	    // nothing needs to be done after as we don't have to worry about
-	    // concurrency issues
-	}
+        @Override
+        public void afterAdd(Relation<PartyContact, PersistentGroup> rel, PartyContact o1, PersistentGroup o2) {
+            // nothing needs to be done after as we don't have to worry about
+            // concurrency issues
+        }
 
-	@Override
-	public void beforeRemove(Relation<PartyContact, PersistentGroup> rel, PartyContact o1, PersistentGroup o2) {
-	}
+        @Override
+        public void beforeRemove(Relation<PartyContact, PersistentGroup> rel, PartyContact o1, PersistentGroup o2) {
+        }
 
-	@Override
-	public void afterRemove(Relation<PartyContact, PersistentGroup> rel, PartyContact o1, PersistentGroup o2) {
-	}
+        @Override
+        public void afterRemove(Relation<PartyContact, PersistentGroup> rel, PartyContact o1, PersistentGroup o2) {
+        }
 
     }
 
     @Override
     public String getFieldName() {
-	return this.getClass().getName();
+        return this.getClass().getName();
     }
 
     @Override
     public Set<Indexable> getObjectsToIndex() {
-	return Collections.singleton((Indexable) this);
+        return Collections.singleton((Indexable) this);
     }
 
     @Override
     public IndexDocument getDocumentToIndex() {
-	IndexDocument document = new IndexDocument(this);
-	document.indexField(this, getValue());
-	return document;
+        IndexDocument document = new IndexDocument(this);
+        document.indexField(this, getValue());
+        return document;
     }
 
     @Override
     public IndexMode getIndexMode() {
-	return IndexMode.MANUAL;
+        return IndexMode.MANUAL;
     }
 
     public Person getPerson() {
-	if (this.getParty() instanceof Person)
-	    return (Person) this.getParty();
-	else
-	    return null;
+        if (this.getParty() instanceof Person) {
+            return (Person) this.getParty();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -166,13 +168,13 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      */
     @Service
     public void setContactValue(String value) {
-	// if (UserView.getCurrentUser() != null /*&&
-	// !isEditableBy(UserView.getCurrentUser())*/) {
-	// throw new DomainException("manage.contacts.edit.denied",
-	// "resources.ContactsResources", UserView.getCurrentUser()
-	// .getUsername());
-	// }
-	setValue(value);
+        // if (UserView.getCurrentUser() != null /*&&
+        // !isEditableBy(UserView.getCurrentUser())*/) {
+        // throw new DomainException("manage.contacts.edit.denied",
+        // "resources.ContactsResources", UserView.getCurrentUser()
+        // .getUsername());
+        // }
+        setValue(value);
     }
 
     /**
@@ -185,17 +187,19 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      */
     @Service
     public void forceChangeContactValue(String value) {
-	setValue(value);
+        setValue(value);
     }
 
     public boolean isEditableBy(User user) {
-	if (isOwner(user) && !getType().equals(PartyContactType.IMMUTABLE))
-	    // if he is the owner and the contact isn't immutable, then it can
-	    // edit it
-	    return true;
-	if (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(user))
-	    return true;
-	return false;
+        if (isOwner(user) && !getType().equals(PartyContactType.IMMUTABLE)) {
+            // if he is the owner and the contact isn't immutable, then it can
+            // edit it
+            return true;
+        }
+        if (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(user)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -205,7 +209,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     protected abstract void setValue(String value);
 
     public String getValue() {
-	return getDescription();
+        return getDescription();
     }
 
     /**
@@ -216,8 +220,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 
     /**
      * Sets the contact visible to the given groups if they are all contained in
-     * the list of visibility groups of the ContactsConfigurator
-     * {@link ContactsConfigurator}, otherwise it throws an exception
+     * the list of visibility groups of the ContactsConfigurator {@link ContactsConfigurator}, otherwise it throws an exception
      * automaticly due to the listener
      * 
      * @param groups
@@ -225,40 +228,41 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      */
     @Service
     public void setVisibleTo(List<PersistentGroup> groups) {
-	// add all of the groups that are on the groups but not on the current
-	// list of visibility groups
-	if (groups != null) {
-	    for (PersistentGroup persistentGroup : groups) {
-		if (!getVisibilityGroups().contains(persistentGroup)) {
-		    addVisibilityGroups(persistentGroup);
-		}
-	    }
-	}
-	List<PersistentGroup> currentSurplusGroups = new ArrayList<PersistentGroup>(getVisibilityGroups());
-	if (groups != null) {
-	    currentSurplusGroups.removeAll(groups);
-	}
-	if (!currentSurplusGroups.isEmpty()) {
-	    for (PersistentGroup persistentGroup : currentSurplusGroups) {
-		removeVisibilityGroups(persistentGroup);
-	    }
-	}
+        // add all of the groups that are on the groups but not on the current
+        // list of visibility groups
+        if (groups != null) {
+            for (PersistentGroup persistentGroup : groups) {
+                if (!getVisibilityGroups().contains(persistentGroup)) {
+                    addVisibilityGroups(persistentGroup);
+                }
+            }
+        }
+        List<PersistentGroup> currentSurplusGroups = new ArrayList<PersistentGroup>(getVisibilityGroups());
+        if (groups != null) {
+            currentSurplusGroups.removeAll(groups);
+        }
+        if (!currentSurplusGroups.isEmpty()) {
+            for (PersistentGroup persistentGroup : currentSurplusGroups) {
+                removeVisibilityGroups(persistentGroup);
+            }
+        }
 
     }
 
     public boolean isVisibleTo(User currentUser) {
-	if (isOwner(currentUser)) {
-	    return true;
-	}
-	for (PersistentGroup group : getVisibilityGroups()) {
-	    if (group.isMember(currentUser))
-		return true;
-	}
-	return false;
+        if (isOwner(currentUser)) {
+            return true;
+        }
+        for (PersistentGroup group : getVisibilityGroups()) {
+            if (group.isMember(currentUser)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isVisibleTo(PersistentGroup group) {
-	return (getVisibilityGroups().contains(group));
+        return (getVisibilityGroups().contains(group));
     }
 
     // FIXME (?) dependency of the structure of the Organization!!
@@ -272,11 +276,11 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      *         otherwise
      */
     private boolean isOwner(User currentUser) {
-	Party correspondingParty = getParty();
-	if (correspondingParty instanceof Person) {
-	    return (((Person) correspondingParty).getUser().equals(currentUser));
-	}
-	return false;
+        Party correspondingParty = getParty();
+        if (correspondingParty instanceof Person) {
+            return (((Person) correspondingParty).getUser().equals(currentUser));
+        }
+        return false;
     }
 
     /**
@@ -290,11 +294,11 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      *         otherwise
      */
     static private boolean isOwner(User currentUser, Party partyFutureContactOwner) {
-	Party correspondingParty = partyFutureContactOwner;
-	if (correspondingParty instanceof Person) {
-	    return (((Person) correspondingParty).getUser().equals(currentUser));
-	}
-	return false;
+        Party correspondingParty = partyFutureContactOwner;
+        if (correspondingParty instanceof Person) {
+            return (((Person) correspondingParty).getUser().equals(currentUser));
+        }
+        return false;
     }
 
     /**
@@ -303,65 +307,65 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      *         exist
      */
     public Person getOwner() {
-	Party correspondingParty = getParty();
-	if (correspondingParty instanceof Person) {
-	    return (Person) correspondingParty;
-	}
-	return null;
+        Party correspondingParty = getParty();
+        if (correspondingParty instanceof Person) {
+            return (Person) correspondingParty;
+        }
+        return null;
     }
 
     @Override
     public String toString() {
-	return getDescription();
+        return getDescription();
     }
 
     public void delete() {
-	removeParty();
-	removeContactsConfigurator();
-	for (PersistentGroup group : getVisibilityGroups()) {
-	    removeVisibilityGroups(group);
-	}
-	deleteDomainObject();
+        removeParty();
+        removeContactsConfigurator();
+        for (PersistentGroup group : getVisibilityGroups()) {
+            removeVisibilityGroups(group);
+        }
+        deleteDomainObject();
     }
 
     @Override
     public void setDefaultContact(Boolean defaultContact) {
-	if (defaultContact != null && defaultContact.booleanValue()) {
-	    // remove the other default contacts of this type so that there is
-	    // only one for each type
-	    for (PartyContact partyContact : getParty().getPartyContacts()) {
-		if (partyContact.getClass().isInstance(this.getClass()) && partyContact.getDefaultContact().booleanValue()) {
-		    partyContact.setDefaultContact(Boolean.FALSE);
-		}
-	    }
-	}
-	super.setDefaultContact(defaultContact);
+        if (defaultContact != null && defaultContact.booleanValue()) {
+            // remove the other default contacts of this type so that there is
+            // only one for each type
+            for (PartyContact partyContact : getParty().getPartyContacts()) {
+                if (partyContact.getClass().isInstance(this.getClass()) && partyContact.getDefaultContact().booleanValue()) {
+                    partyContact.setDefaultContact(Boolean.FALSE);
+                }
+            }
+        }
+        super.setDefaultContact(defaultContact);
     }
 
     @Service
     public void deleteByUser(User currentUser) {
-	// Confirmations not done here anymore
+        // Confirmations not done here anymore
 
-	// if (!isEditableBy(currentUser))
-	// throw new DomainException("manage.contacts.edit.denied",
-	// UserView.getCurrentUser().getUsername());
-	delete();
+        // if (!isEditableBy(currentUser))
+        // throw new DomainException("manage.contacts.edit.denied",
+        // UserView.getCurrentUser().getUsername());
+        delete();
     }
 
     public static EmailAddress getEmailAddressForSendingEmails(Party party) {
-	for (PartyContact contact : party.getPartyContactsSet()) {
-	    if (contact instanceof EmailAddress) {
-		EmailAddress email = (EmailAddress) contact;
-		if (email.getType().equals(PartyContactType.IMMUTABLE)) {
-		    return email;
-		}
-	    }
-	}
-	return null;
+        for (PartyContact contact : party.getPartyContactsSet()) {
+            if (contact instanceof EmailAddress) {
+                EmailAddress email = (EmailAddress) contact;
+                if (email.getType().equals(PartyContactType.IMMUTABLE)) {
+                    return email;
+                }
+            }
+        }
+        return null;
     }
 
     public static String getEmailForSendingEmails(Party party) {
-	EmailAddress email = getEmailAddressForSendingEmails(party);
-	return email != null ? email.getValue() : StringUtils.EMPTY;
+        EmailAddress email = getEmailAddressForSendingEmails(party);
+        return email != null ? email.getValue() : StringUtils.EMPTY;
     }
 }

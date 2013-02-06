@@ -47,7 +47,7 @@ public class IndexPersonsAndContacts extends IndexPersonsAndContacts_Base {
      */
     @Override
     public String getLocalizedName() {
-	return BundleUtil.getStringFromResourceBundle("resources/ContactsResources", "label.task.index.persons.and.contacts");
+        return BundleUtil.getStringFromResourceBundle("resources/ContactsResources", "label.task.index.persons.and.contacts");
     }
 
     /* (non-Javadoc)
@@ -56,18 +56,18 @@ public class IndexPersonsAndContacts extends IndexPersonsAndContacts_Base {
     @Override
     @Service
     public void executeTask() {
-	for (Person person : MyOrg.getInstance().getPersons()) {
-	    person.setPartyName(person.getPartyName());
-	    personsTouched++;
-	}
+        for (Person person : MyOrg.getInstance().getPersons()) {
+            person.setPartyName(person.getPartyName());
+            personsTouched++;
+        }
 
-	for (PartyContact contact : ContactsConfigurator.getInstance().getPartyContact()) {
-	    contact.setContactValue(contact.getValue());
-	    contactsTouched++;
-	}
+        for (PartyContact contact : ContactsConfigurator.getInstance().getPartyContact()) {
+            contact.setContactValue(contact.getValue());
+            contactsTouched++;
+        }
 
-	logInfo("Touched " + personsTouched + " persons");
-	logInfo("Touched " + contactsTouched + " contacts");
+        logInfo("Touched " + personsTouched + " persons");
+        logInfo("Touched " + contactsTouched + " contacts");
 
     }
 

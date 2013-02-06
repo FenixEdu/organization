@@ -43,7 +43,7 @@ public class ContactBean implements Serializable {
      * @return the value
      */
     public String getValue() {
-	return value;
+        return value;
     }
 
     /**
@@ -51,7 +51,7 @@ public class ContactBean implements Serializable {
      *            the value to set
      */
     public void setValue(String value) {
-	this.value = value;
+        this.value = value;
     }
 
 }

@@ -24,9 +24,9 @@
  */
 package module.contacts.presentationTier.action.bean;
 
+import module.contacts.presentationTier.action.bean.addressbean.ForeignAddressBean;
+import module.contacts.presentationTier.action.bean.addressbean.PortugalAddressBean;
 import module.geography.domain.Country;
-import module.geography.domain.GeographicLocation;
-import module.contacts.presentationTier.action.bean.addressbean.*;
 
 /**
  * 
@@ -34,7 +34,7 @@ import module.contacts.presentationTier.action.bean.addressbean.*;
  * 
  */
 public class AddressBeanFactory {
-  
+
     private AddressBeanFactory() {
     }
 
@@ -46,16 +46,16 @@ public class AddressBeanFactory {
      *         result of this method
      */
     public static AddressBean createAddressBean(Country country) {
-	// let's return an AbstractAddressBean taking into account the country
-	// of the given geographic location
-	if (country.equals(Country.getPortugal())) {
-	    return new PortugalAddressBean();
+        // let's return an AbstractAddressBean taking into account the country
+        // of the given geographic location
+        if (country.equals(Country.getPortugal())) {
+            return new PortugalAddressBean();
 
-	} else {
+        } else {
 
-	    return new ForeignAddressBean();
+            return new ForeignAddressBean();
 
-	}
+        }
 
     }
 

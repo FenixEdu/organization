@@ -28,7 +28,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
 
 /**
@@ -48,14 +47,13 @@ public class GroupsSelectorBean implements Serializable {
      */
     private List<PersistentGroup> groups;
 
-
     public void setGroups(List<PersistentGroup> groups) {
-	this.groups = new ArrayList<PersistentGroup>();
-	this.groups.addAll(groups);
+        this.groups = new ArrayList<PersistentGroup>();
+        this.groups.addAll(groups);
     }
 
     public List<PersistentGroup> getGroups() {
-	return groups;
+        return groups;
     }
 
 }

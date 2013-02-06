@@ -46,40 +46,40 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 public class Universe extends Universe_Base implements GeographicConstants {
 
     public Universe(MultiLanguageString name, String acronym) {
-	super();
-	setUnit(Unit.createRoot(name, acronym, getPartyType("Universo", UNIVERSE_PARTYTYPE_NAME)));
+        super();
+        setUnit(Unit.createRoot(name, acronym, getPartyType("Universo", UNIVERSE_PARTYTYPE_NAME)));
     }
 
     @Override
     public MultiLanguageString getType() {
-	return new MultiLanguageString().with(Language.pt, "Universo").with(Language.en, UNIVERSE_PARTYTYPE_NAME);
+        return new MultiLanguageString().with(Language.pt, "Universo").with(Language.en, UNIVERSE_PARTYTYPE_NAME);
     }
 
     public Collection<Galaxy> getChildren() {
-	Collection<Unit> units = getChildUnits();
-	Collection<Galaxy> children = new ArrayList<Galaxy>();
-	for (Unit unit : units) {
-	    children.add((Galaxy) unit.getGeographicLocation());
-	}
-	return children;
+        Collection<Unit> units = getChildUnits();
+        Collection<Galaxy> children = new ArrayList<Galaxy>();
+        for (Unit unit : units) {
+            children.add((Galaxy) unit.getGeographicLocation());
+        }
+        return children;
     }
 
     public Galaxy getChildByAcronym(String acronym) {
-	for (Unit unit : getChildUnits()) {
-	    if (unit.getAcronym().equals(acronym)) {
-		return (Galaxy) unit.getGeographicLocation();
-	    }
-	}
-	return null;
+        for (Unit unit : getChildUnits()) {
+            if (unit.getAcronym().equals(acronym)) {
+                return (Galaxy) unit.getGeographicLocation();
+            }
+        }
+        return null;
     }
 
     public static Universe getMultiverseZero() {
-	Set<Unit> tops = MyOrg.getInstance().getTopUnitsSet();
-	for (Unit unit : tops) {
-	    if (unit.getAcronym().equals(MULTIVERSE_UNIT_ACRONYM)) {
-		return (Universe) unit.getGeographicLocation();
-	    }
-	}
-	return null;
+        Set<Unit> tops = MyOrg.getInstance().getTopUnitsSet();
+        for (Unit unit : tops) {
+            if (unit.getAcronym().equals(MULTIVERSE_UNIT_ACRONYM)) {
+                return (Universe) unit.getGeographicLocation();
+            }
+        }
+        return null;
     }
 }

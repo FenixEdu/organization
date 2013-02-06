@@ -33,11 +33,11 @@ import java.util.Comparator;
 import module.geography.util.AddressPrinter;
 import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.MyOrg;
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
@@ -56,83 +56,84 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 public class Country extends Country_Base {
 
     public static final Comparator<Country> COMPARATOR_BY_NAME = new Comparator<Country>() {
-	@Override
-	public int compare(final Country country1, Country country2) {
-	    final String name1 = country1.getName().getContent();
-	    final String name2 = country2.getName().getContent();
-	    final int c = Collator.getInstance().compare(name1, name2);
-	    if (c == 0) {
-		final String acronym1 = country1.getAcronym();
-		final String acronym2 = country2.getAcronym();
-		if (acronym1 == null || acronym2 == null) {
-		    return country2.hashCode() - country1.hashCode();
-		}
-		final int a = Collator.getInstance().compare(acronym1, acronym2);
-		return a == 0 ? country2.hashCode() - country1.hashCode() : a;
-	    }
-	    return c;
-	}
+        @Override
+        public int compare(final Country country1, Country country2) {
+            final String name1 = country1.getName().getContent();
+            final String name2 = country2.getName().getContent();
+            final int c = Collator.getInstance().compare(name1, name2);
+            if (c == 0) {
+                final String acronym1 = country1.getAcronym();
+                final String acronym2 = country2.getAcronym();
+                if (acronym1 == null || acronym2 == null) {
+                    return country2.hashCode() - country1.hashCode();
+                }
+                final int a = Collator.getInstance().compare(acronym1, acronym2);
+                return a == 0 ? country2.hashCode() - country1.hashCode() : a;
+            }
+            return c;
+        }
     };
 
     public Country(Planet parent, String iso3166alpha2Code, String iso3166alpha3Code, Integer iso3166numericCode,
-	    MultiLanguageString name, MultiLanguageString nationality, Class<AddressPrinter> iAddressPrinter) {
-	super();
-	setMyOrg(MyOrg.getInstance());
-	setUnit(Unit.create(parent.getUnit(), name, iso3166alpha3Code, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
-		getOrCreateAccountabilityType(), new LocalDate(), null));
-	setIso3166alpha2Code(iso3166alpha2Code);
-	setIAddressPrinter(iAddressPrinter);
-	setIso3166alpha3Code(iso3166alpha3Code);
-	setIso3166numericCode(iso3166numericCode);
-	setNationality(nationality);
+            MultiLanguageString name, MultiLanguageString nationality, Class<AddressPrinter> iAddressPrinter) {
+        super();
+        setMyOrg(MyOrg.getInstance());
+        setUnit(Unit.create(parent.getUnit(), name, iso3166alpha3Code, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
+                getOrCreateAccountabilityType(), new LocalDate(), null));
+        setIso3166alpha2Code(iso3166alpha2Code);
+        setIAddressPrinter(iAddressPrinter);
+        setIso3166alpha3Code(iso3166alpha3Code);
+        setIso3166numericCode(iso3166numericCode);
+        setNationality(nationality);
     }
 
     public Country(Planet parent, MultiLanguageString name, String acronym, Class iAddressPrinter,
-	    CountrySubdivisionLevelName... subdivisionNames) {
-	super();
-	setMyOrg(MyOrg.getInstance());
+            CountrySubdivisionLevelName... subdivisionNames) {
+        super();
+        setMyOrg(MyOrg.getInstance());
 
-	setIAddressPrinter(iAddressPrinter);
-	setUnit(Unit.create(parent.getUnit(), name, acronym, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
-		getOrCreateAccountabilityType(), new LocalDate(), null));
-	for (CountrySubdivisionLevelName subdivisionName : subdivisionNames) {
-	    addLevelName(subdivisionName);
-	}
+        setIAddressPrinter(iAddressPrinter);
+        setUnit(Unit.create(parent.getUnit(), name, acronym, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
+                getOrCreateAccountabilityType(), new LocalDate(), null));
+        for (CountrySubdivisionLevelName subdivisionName : subdivisionNames) {
+            addLevelName(subdivisionName);
+        }
     }
 
     @Override
     public void setIAddressPrinter(Class iAddressPrinter) {
-	if (!AddressPrinter.class.isAssignableFrom(iAddressPrinter))
-	    throw new DomainException("error.invalid.iaddressprinter");
-	super.setIAddressPrinter(iAddressPrinter);
+        if (!AddressPrinter.class.isAssignableFrom(iAddressPrinter)) {
+            throw new DomainException("error.invalid.iaddressprinter");
+        }
+        super.setIAddressPrinter(iAddressPrinter);
     }
 
     @Override
     public MultiLanguageString getType() {
-	return new MultiLanguageString().with(Language.pt, "País").with(Language.en, COUNTRY_PARTYTYPE_NAME);
+        return new MultiLanguageString().with(Language.pt, "País").with(Language.en, COUNTRY_PARTYTYPE_NAME);
     }
 
     @Service
     public AddressPrinter getAddressPrinter() {
-	if (super.getIAddressPrinter() == null) {
-	    setIAddressPrinter(AddressPrinter.class);
-	}
+        if (super.getIAddressPrinter() == null) {
+            setIAddressPrinter(AddressPrinter.class);
+        }
 
-	AddressPrinter ap = null;
-	try {
-	    ap = (AddressPrinter) super.getIAddressPrinter().getConstructor().newInstance();
-	} catch (Exception e) {
-	    throw new DomainException("error.instance.iaddressprinter", e);
-	}
+        AddressPrinter ap = null;
+        try {
+            ap = (AddressPrinter) super.getIAddressPrinter().getConstructor().newInstance();
+        } catch (Exception e) {
+            throw new DomainException("error.instance.iaddressprinter", e);
+        }
 
-	return ap;
-	// try {
-	// return (AddressPrinter)
-	// super.getIAddressPrinter().getConstructor().newInstance();
-	// } catch (Exception e) {
-	// setIAddressPrinter(GeneralIAddressPrinter.class);
-	// throw new DomainException("error.instance.iaddressprinter", e);
-	// }
+        return ap;
+        // try {
+        // return (AddressPrinter)
+        // super.getIAddressPrinter().getConstructor().newInstance();
+        // } catch (Exception e) {
+        // setIAddressPrinter(GeneralIAddressPrinter.class);
+        // throw new DomainException("error.instance.iaddressprinter", e);
+        // }
     }
 
     /**
@@ -141,39 +142,40 @@ public class Country extends Country_Base {
      * @return the number.
      */
     public int getSubdivisionDepth() {
-	return getLevelNameCount();
+        return getLevelNameCount();
     }
 
     // TODO check to see if the part of removing the PhysicalAddress and
     // everything which this module doesn't depend is required
     @Deprecated
     public void delete() {
-	Unit unit = this.getUnit();
-	removeUnit();
-	removeMyOrg();
-	unit.delete();
-	deleteDomainObject();
+        Unit unit = this.getUnit();
+        removeUnit();
+        removeMyOrg();
+        unit.delete();
+        deleteDomainObject();
     }
 
     public MultiLanguageString getSubdivisionLevelName(Integer level) {
-	for (CountrySubdivisionLevelName levelName : getLevelNameSet()) {
-	    if (levelName.getLevel().equals(level))
-		return levelName.getName();
-	}
-	return null;
+        for (CountrySubdivisionLevelName levelName : getLevelNameSet()) {
+            if (levelName.getLevel().equals(level)) {
+                return levelName.getName();
+            }
+        }
+        return null;
     }
 
     public Planet getParent() {
-	return (Planet) getParentLocation();
+        return (Planet) getParentLocation();
     }
 
     public Collection<CountrySubdivision> getChildren() {
-	Collection<Unit> units = getChildUnits();
-	Collection<CountrySubdivision> children = new ArrayList<CountrySubdivision>();
-	for (Unit unit : units) {
-	    children.add((CountrySubdivision) unit.getGeographicLocation());
-	}
-	return children;
+        Collection<Unit> units = getChildUnits();
+        Collection<CountrySubdivision> children = new ArrayList<CountrySubdivision>();
+        for (Unit unit : units) {
+            children.add((CountrySubdivision) unit.getGeographicLocation());
+        }
+        return children;
     }
 
     /**
@@ -184,11 +186,12 @@ public class Country extends Country_Base {
      *         the given level or null if it doesn't exist
      */
     public CountrySubdivisionLevelName getCountrySubdivisionLevel(int level) {
-	for (CountrySubdivisionLevelName countrySubdivisionLevelName : getLevelName()) {
-	    if (countrySubdivisionLevelName.getLevel() == level)
-		return countrySubdivisionLevelName;
-	}
-	return null;
+        for (CountrySubdivisionLevelName countrySubdivisionLevelName : getLevelName()) {
+            if (countrySubdivisionLevelName.getLevel() == level) {
+                return countrySubdivisionLevelName;
+            }
+        }
+        return null;
 
     }
 
@@ -201,7 +204,7 @@ public class Country extends Country_Base {
      * 
      */
     public Collection<CountrySubdivision> getCurrentChildren() {
-	return getChildrenValidAt(new LocalDate());
+        return getChildrenValidAt(new LocalDate());
     }
 
     /**
@@ -212,119 +215,122 @@ public class Country extends Country_Base {
      *         were active on the given date and of the
      */
     public Collection<CountrySubdivision> getChildrenValidAt(LocalDate date) {
-	Collection<Unit> units = getChildUnits();
-	Collection<CountrySubdivision> children = new ArrayList<CountrySubdivision>();
-	for (Unit unit : units) {
-	    for (Accountability accountability : unit.getParentAccountabilities(getOrCreateAccountabilityType())) {
-		if (accountability.isActive(date)) {
-		    children.add((CountrySubdivision) unit.getGeographicLocation());
-		}
-	    }
-	}
-	return children;
+        Collection<Unit> units = getChildUnits();
+        Collection<CountrySubdivision> children = new ArrayList<CountrySubdivision>();
+        for (Unit unit : units) {
+            for (Accountability accountability : unit.getParentAccountabilities(getOrCreateAccountabilityType())) {
+                if (accountability.isActive(date)) {
+                    children.add((CountrySubdivision) unit.getGeographicLocation());
+                }
+            }
+        }
+        return children;
     }
 
     public CountrySubdivision getChildByAcronym(String acronym) {
-	for (Unit unit : getChildUnits()) {
-	    if (unit.getAcronym().equals(acronym)) {
-		return (CountrySubdivision) unit.getGeographicLocation();
-	    }
-	}
-	return null;
+        for (Unit unit : getChildUnits()) {
+            if (unit.getAcronym().equals(acronym)) {
+                return (CountrySubdivision) unit.getGeographicLocation();
+            }
+        }
+        return null;
     }
 
     public CountrySubdivision getChildByCode(String... codes) {
-	String code = codes[0];
-	for (Unit subdivision : getChildUnits()) {
-	    CountrySubdivision geographicLocation = (CountrySubdivision) subdivision.getGeographicLocation();
-	    if (geographicLocation.getCode().equals(code)) {
-		if (codes.length > 1) {
-		    return geographicLocation
-			    .getChildByCode(Arrays.asList(codes).subList(1, codes.length).toArray(new String[0]));
-		}
-		return geographicLocation;
-	    }
-	}
-	return null;
+        String code = codes[0];
+        for (Unit subdivision : getChildUnits()) {
+            CountrySubdivision geographicLocation = (CountrySubdivision) subdivision.getGeographicLocation();
+            if (geographicLocation.getCode().equals(code)) {
+                if (codes.length > 1) {
+                    return geographicLocation
+                            .getChildByCode(Arrays.asList(codes).subList(1, codes.length).toArray(new String[0]));
+                }
+                return geographicLocation;
+            }
+        }
+        return null;
     }
 
     public static Country getPortugal() {
-	return findByAcronym(PORTUGAL_UNIT_ACRONYM);
+        return findByAcronym(PORTUGAL_UNIT_ACRONYM);
     }
 
     public static Country findByAcronym(String acronym) {
-	for (Country country : MyOrg.getInstance().getCountriesSet()) {
-	    if (country.getAcronym().equalsIgnoreCase(acronym))
-		return country;
-	}
-	return null;
+        for (Country country : MyOrg.getInstance().getCountriesSet()) {
+            if (country.getAcronym().equalsIgnoreCase(acronym)) {
+                return country;
+            }
+        }
+        return null;
     }
 
     public static Country findByIso3166alpha2Code(String code) {
-	for (Country country : MyOrg.getInstance().getCountriesSet()) {
-	    if (country.getIso3166alpha2Code().equalsIgnoreCase(code))
-		return country;
-	}
-	return null;
+        for (Country country : MyOrg.getInstance().getCountriesSet()) {
+            if (country.getIso3166alpha2Code().equalsIgnoreCase(code)) {
+                return country;
+            }
+        }
+        return null;
     }
 
     public static Country findByIso3166alpha3Code(String code) {
-	for (Country country : MyOrg.getInstance().getCountriesSet()) {
-	    if (country.getIso3166alpha3Code().equalsIgnoreCase(code))
-		return country;
-	}
-	return null;
+        for (Country country : MyOrg.getInstance().getCountriesSet()) {
+            if (country.getIso3166alpha3Code().equalsIgnoreCase(code)) {
+                return country;
+            }
+        }
+        return null;
     }
 
     public static Country findByName(String name) {
-	for (Country country : MyOrg.getInstance().getCountriesSet()) {
-	    for (Language language : country.getName().getAllLanguages()) {
-		if (country.getName().getContent(language).equalsIgnoreCase(name)) {
-		    return country;
-		}
-	    }
-	}
-	return null;
+        for (Country country : MyOrg.getInstance().getCountriesSet()) {
+            for (Language language : country.getName().getAllLanguages()) {
+                if (country.getName().getContent(language).equalsIgnoreCase(name)) {
+                    return country;
+                }
+            }
+        }
+        return null;
     }
 
     public void setSubdivisionLevelName(Integer level, MultiLanguageString levelName, Boolean isLabel) {
-	CountrySubdivisionLevelName countrySubdivisionLevelNameToAlter = null;
-	for (CountrySubdivisionLevelName subdivisionLevel : getLevelNameSet()) {
-	    if (subdivisionLevel.getLevel() == level) {
-		countrySubdivisionLevelNameToAlter = subdivisionLevel;
-	    }
-	}
-	if (countrySubdivisionLevelNameToAlter == null) {
-	    countrySubdivisionLevelNameToAlter = new CountrySubdivisionLevelName(level, levelName);
-	    this.addLevelName(countrySubdivisionLevelNameToAlter);
-	} else {
-	    countrySubdivisionLevelNameToAlter.setName(levelName);
-	}
+        CountrySubdivisionLevelName countrySubdivisionLevelNameToAlter = null;
+        for (CountrySubdivisionLevelName subdivisionLevel : getLevelNameSet()) {
+            if (subdivisionLevel.getLevel() == level) {
+                countrySubdivisionLevelNameToAlter = subdivisionLevel;
+            }
+        }
+        if (countrySubdivisionLevelNameToAlter == null) {
+            countrySubdivisionLevelNameToAlter = new CountrySubdivisionLevelName(level, levelName);
+            this.addLevelName(countrySubdivisionLevelNameToAlter);
+        } else {
+            countrySubdivisionLevelNameToAlter.setName(levelName);
+        }
 
     }
 
     public void update(Planet parent, String iso3166alpha2Code, String iso3166alpha3Code, Integer iso3166numericCode,
-	    MultiLanguageString name, MultiLanguageString nationality, Class<AddressPrinter> iAddressPrinter) {
-	if (!same(getIso3166alpha2Code(), iso3166alpha2Code) || !same(getIso3166alpha3Code(), iso3166alpha3Code)
-		|| !same(getIso3166numericCode(), iso3166numericCode) || !same(getName(), name)
-		|| !same(getNationality(), nationality) || !same(getIAddressPrinter(), iAddressPrinter)) {
-	    for (Accountability accountability : getUnit().getParentAccountabilities(getOrCreateAccountabilityType())) {
-		accountability.editDates(new LocalDate(), null);
-	    }
-	    setUnit(Unit.create(parent.getUnit(), name, iso3166alpha3Code, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
-		    getOrCreateAccountabilityType(), new LocalDate(), null));
-	    setIso3166alpha2Code(iso3166alpha2Code);
-	    setIAddressPrinter(iAddressPrinter);
-	    setIso3166alpha3Code(iso3166alpha3Code);
-	    setIso3166numericCode(iso3166numericCode);
-	    setNationality(nationality);
-	}
+            MultiLanguageString name, MultiLanguageString nationality, Class<AddressPrinter> iAddressPrinter) {
+        if (!same(getIso3166alpha2Code(), iso3166alpha2Code) || !same(getIso3166alpha3Code(), iso3166alpha3Code)
+                || !same(getIso3166numericCode(), iso3166numericCode) || !same(getName(), name)
+                || !same(getNationality(), nationality) || !same(getIAddressPrinter(), iAddressPrinter)) {
+            for (Accountability accountability : getUnit().getParentAccountabilities(getOrCreateAccountabilityType())) {
+                accountability.editDates(new LocalDate(), null);
+            }
+            setUnit(Unit.create(parent.getUnit(), name, iso3166alpha3Code, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
+                    getOrCreateAccountabilityType(), new LocalDate(), null));
+            setIso3166alpha2Code(iso3166alpha2Code);
+            setIAddressPrinter(iAddressPrinter);
+            setIso3166alpha3Code(iso3166alpha3Code);
+            setIso3166numericCode(iso3166numericCode);
+            setNationality(nationality);
+        }
     }
 
     private static boolean same(Object one, Object two) {
-	if (one == null) {
-	    return two == null;
-	}
-	return one.equals(two);
+        if (one == null) {
+            return two == null;
+        }
+        return one.equals(two);
     }
 }

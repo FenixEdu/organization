@@ -73,124 +73,132 @@ public class PersonsBean implements Serializable {
     private Boolean resultsByDetails;
 
     public void setPerson(Person person) {
-	if (person != this.person)
-	    setPageNumber(new Integer(1));
-	this.person = person;
+        if (person != this.person) {
+            setPageNumber(new Integer(1));
+        }
+        this.person = person;
     }
 
     public Person getPerson() {
-	return person;
+        return person;
     }
 
     public void setUsers(ArrayList<User> users) {
-	this.users = users;
+        this.users = users;
     }
 
     public ArrayList<User> getUsers() {
-	return users;
+        return users;
     }
 
     public void setSearchName(String searchName) {
-	if (searchName != this.searchName)
-	    setPageNumber(new Integer(1));
-	this.searchName = searchName;
+        if (searchName != this.searchName) {
+            setPageNumber(new Integer(1));
+        }
+        this.searchName = searchName;
     }
 
     public String getSearchName() {
-	return searchName;
+        return searchName;
     }
 
     public void setSearchEmail(String searchEmail) {
-	if (searchEmail != this.searchEmail)
-	    setPageNumber(new Integer(1));
-	this.searchEmail = searchEmail;
+        if (searchEmail != this.searchEmail) {
+            setPageNumber(new Integer(1));
+        }
+        this.searchEmail = searchEmail;
     }
 
     public String getSearchEmail() {
-	return searchEmail;
+        return searchEmail;
     }
 
     public void setSearchUsername(String searchUsername) {
-	if (searchUsername != this.searchUsername)
-	    setPageNumber(new Integer(1));
-	this.searchUsername = searchUsername;
+        if (searchUsername != this.searchUsername) {
+            setPageNumber(new Integer(1));
+        }
+        this.searchUsername = searchUsername;
     }
 
     public String getSearchUsername() {
-	return searchUsername;
+        return searchUsername;
     }
 
     public void setSearchAddress(String searchAddress) {
-	if (searchAddress != this.searchAddress)
-	    setPageNumber(new Integer(1));
-	this.searchAddress = searchAddress;
+        if (searchAddress != this.searchAddress) {
+            setPageNumber(new Integer(1));
+        }
+        this.searchAddress = searchAddress;
     }
 
     public String getSearchAddress() {
-	return searchAddress;
+        return searchAddress;
     }
 
     public void setSearchPhone(String searchPhone) {
-	if (searchPhone != this.searchPhone)
-	    setPageNumber(new Integer(1));
-	this.searchPhone = searchPhone;
+        if (searchPhone != this.searchPhone) {
+            setPageNumber(new Integer(1));
+        }
+        this.searchPhone = searchPhone;
     }
 
     public String getSearchPhone() {
-	return searchPhone;
+        return searchPhone;
     }
 
     public void setSearchWebAddress(String searchWebAddress) {
-	if (searchWebAddress != this.searchWebAddress)
-	    setPageNumber(new Integer(1));
-	this.searchWebAddress = searchWebAddress;
+        if (searchWebAddress != this.searchWebAddress) {
+            setPageNumber(new Integer(1));
+        }
+        this.searchWebAddress = searchWebAddress;
     }
 
     public String getSearchWebAddress() {
-	return searchWebAddress;
+        return searchWebAddress;
     }
 
     public void setSearchPhoneType(PhoneType searchPhoneType) {
-	if (searchPhoneType != null && searchPhoneType != this.searchPhoneType)
-	    setPageNumber(new Integer(1));
-	this.searchPhoneType = searchPhoneType;
+        if (searchPhoneType != null && searchPhoneType != this.searchPhoneType) {
+            setPageNumber(new Integer(1));
+        }
+        this.searchPhoneType = searchPhoneType;
     }
 
     public PhoneType getSearchPhoneType() {
-	return searchPhoneType;
+        return searchPhoneType;
     }
 
     public void setResultsByDetails(Boolean resultsByDetails) {
-	this.resultsByDetails = resultsByDetails;
+        this.resultsByDetails = resultsByDetails;
     }
 
     public Boolean getResultsByDetails() {
-	return resultsByDetails;
+        return resultsByDetails;
     }
 
     public void setPageNumber(Integer pageNumber) {
-	this.pageNumber = pageNumber;
+        this.pageNumber = pageNumber;
     }
 
     public Integer getPageNumber() {
-	return pageNumber;
+        return pageNumber;
     }
 
     public void setSearchResult(ArrayList<Person> persons) {
-	searchResult = new ArrayList(persons);
+        searchResult = new ArrayList(persons);
 
     }
 
     public ArrayList<Person> getSearchResult() {
-	return searchResult;
+        return searchResult;
     }
 
     public void setNumberOfPages(Integer numberOfPages) {
-	this.numberOfPages = numberOfPages;
+        this.numberOfPages = numberOfPages;
     }
 
     public Integer getNumberOfPages() {
-	return numberOfPages;
+        return numberOfPages;
     }
 
 }

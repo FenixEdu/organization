@@ -31,10 +31,10 @@ import java.util.Comparator;
 
 import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
@@ -51,57 +51,59 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  */
 public class CountrySubdivision extends CountrySubdivision_Base {
     protected CountrySubdivision() {
-	super();
+        super();
     }
 
     public static final Comparator COMPARATOR_BY_LEVEL = new Comparator<CountrySubdivision>() {
-	@Override
-	public int compare(final CountrySubdivision location1, CountrySubdivision location2) {
-	    return location1.getLevel().compareTo(location2.getLevel());
-	}
+        @Override
+        public int compare(final CountrySubdivision location1, CountrySubdivision location2) {
+            return location1.getLevel().compareTo(location2.getLevel());
+        }
     };
 
     public CountrySubdivision(Country parent, String name, String acronym, String code) {
-	this(parent.getUnit(), 1, name, acronym, code);
+        this(parent.getUnit(), 1, name, acronym, code);
     }
 
     public CountrySubdivision(CountrySubdivision parent, String name, String acronym, String code) {
-	this(parent.getUnit(), parent.getLevel() + 1, name, acronym, code);
+        this(parent.getUnit(), parent.getLevel() + 1, name, acronym, code);
     }
 
     private CountrySubdivision(Unit parent, Integer level, String name, String acronym, String code) {
-	this();
-	setUnit(Unit.create(parent, new MultiLanguageString().with(Language.pt, name).with(Language.en, name), acronym,
-		getPartyType("Subdivisão de País", COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(),
-		new LocalDate(), null));
-	setLevel(level);
-	setCode(code);
+        this();
+        setUnit(Unit.create(parent, new MultiLanguageString().with(Language.pt, name).with(Language.en, name), acronym,
+                getPartyType("Subdivisão de País", COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(),
+                new LocalDate(), null));
+        setLevel(level);
+        setCode(code);
     }
 
     @Override
     public MultiLanguageString getType() {
-	return getLevelName();
+        return getLevelName();
     }
 
     public MultiLanguageString getLevelName() {
-	return getCountry().getSubdivisionLevelName(getLevel());
+        return getCountry().getSubdivisionLevelName(getLevel());
     }
 
     public void setLevelName(MultiLanguageString levelName, Boolean isLabel) {
-	getCountry().setSubdivisionLevelName(getLevel(), levelName, isLabel);
+        getCountry().setSubdivisionLevelName(getLevel(), levelName, isLabel);
     }
 
     @Override
     public Country getCountry() {
-	if (getLevel() == 1)
-	    return (Country) getParentLocation();
-	return getParentSubdivision().getCountry();
+        if (getLevel() == 1) {
+            return (Country) getParentLocation();
+        }
+        return getParentSubdivision().getCountry();
     }
 
     public CountrySubdivision getParentSubdivision() {
-	if (getLevel() == 1)
-	    throw new DomainException("error.geography.requesting-parent-subdivision-at-level-one");
-	return (CountrySubdivision) getParentLocation();
+        if (getLevel() == 1) {
+            throw new DomainException("error.geography.requesting-parent-subdivision-at-level-one");
+        }
+        return (CountrySubdivision) getParentLocation();
     }
 
     /**
@@ -110,10 +112,11 @@ public class CountrySubdivision extends CountrySubdivision_Base {
      *         are on the same level and that are currently active
      */
     public Collection<CountrySubdivision> getCurrentSiblings() {
-	if (getLevel() > 1)
-	    return getParentSubdivision().getCurrentChildren();
-	else
-	    return getCountry().getCurrentChildren();
+        if (getLevel() > 1) {
+            return getParentSubdivision().getCurrentChildren();
+        } else {
+            return getCountry().getCurrentChildren();
+        }
 
     }
 
@@ -121,7 +124,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
      * @return the children which are currently active
      */
     public Collection<CountrySubdivision> getCurrentChildren() {
-	return getChildren(new LocalDate());
+        return getChildren(new LocalDate());
 
     }
 
@@ -130,43 +133,42 @@ public class CountrySubdivision extends CountrySubdivision_Base {
      * 
      * @param date
      *            the date where they should be vaild to be returned
-     * @return a collection with the active children at the given time
-     *         {@link Accountability}
+     * @return a collection with the active children at the given time {@link Accountability}
      */
     public Collection<CountrySubdivision> getChildren(LocalDate date) {
-	Collection<Unit> units = getChildUnits();
-	Collection<CountrySubdivision> children = new ArrayList<CountrySubdivision>();
-	for (Unit unit : units) {
-	    for (Accountability accountability : unit.getParentAccountabilities(getOrCreateAccountabilityType())) {
-		if (accountability.isActive(date)) {
-		    children.add((CountrySubdivision) unit.getGeographicLocation());
-		}
-	    }
-	}
-	return children;
+        Collection<Unit> units = getChildUnits();
+        Collection<CountrySubdivision> children = new ArrayList<CountrySubdivision>();
+        for (Unit unit : units) {
+            for (Accountability accountability : unit.getParentAccountabilities(getOrCreateAccountabilityType())) {
+                if (accountability.isActive(date)) {
+                    children.add((CountrySubdivision) unit.getGeographicLocation());
+                }
+            }
+        }
+        return children;
     }
 
     public CountrySubdivision getChildByAcronym(String acronym) {
-	for (Unit unit : getChildUnits()) {
-	    if (unit.getAcronym().equals(acronym)) {
-		return (CountrySubdivision) unit.getGeographicLocation();
-	    }
-	}
-	return null;
+        for (Unit unit : getChildUnits()) {
+            if (unit.getAcronym().equals(acronym)) {
+                return (CountrySubdivision) unit.getGeographicLocation();
+            }
+        }
+        return null;
     }
 
     public CountrySubdivision getChildByCode(String... codes) {
-	String code = codes[0];
-	for (CountrySubdivision subdivision : getCurrentChildren()) {
-	    if (subdivision.getCode().equals(code)) {
-		if (codes.length > 1) {
-		    return subdivision.getChildByCode(Arrays.asList(codes).subList(1, codes.length).toArray(new String[0]));
-		} else {
-		    return subdivision;
-		}
-	    }
-	}
-	return null;
+        String code = codes[0];
+        for (CountrySubdivision subdivision : getCurrentChildren()) {
+            if (subdivision.getCode().equals(code)) {
+                if (codes.length > 1) {
+                    return subdivision.getChildByCode(Arrays.asList(codes).subList(1, codes.length).toArray(new String[0]));
+                } else {
+                    return subdivision;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -174,30 +176,32 @@ public class CountrySubdivision extends CountrySubdivision_Base {
      */
     @Service
     public void delete() {
-	Unit unit = this.getUnit();
-	removeUnit();
-	for (Accountability accountability : unit.getChildAccountabilities()) {
-	    unit.removeChildAccountabilities(accountability);
-	}
-	unit.delete();
-	this.deleteDomainObject();
+        Unit unit = this.getUnit();
+        removeUnit();
+        for (Accountability accountability : unit.getChildAccountabilities()) {
+            unit.removeChildAccountabilities(accountability);
+        }
+        unit.delete();
+        this.deleteDomainObject();
 
     }
 
     public MultiLanguageString getFullName() {
-	if (getLevel() == 1)
-	    return getName();
-	return getName().append(", ").append(getParentSubdivision().getFullName());
+        if (getLevel() == 1) {
+            return getName();
+        }
+        return getName().append(", ").append(getParentSubdivision().getFullName());
     }
 
     protected String getExtendedName() {
-	return "[" + getCode() + "-" + getName().getContent() + "]";
+        return "[" + getCode() + "-" + getName().getContent() + "]";
     }
 
     @Override
     public String toString() {
-	if (getLevel() == 1)
-	    return getExtendedName();
-	return getParentSubdivision().toString() + " " + getExtendedName();
+        if (getLevel() == 1) {
+            return getExtendedName();
+        }
+        return getParentSubdivision().toString() + " " + getExtendedName();
     }
 }

@@ -46,6 +46,6 @@ public enum MaritalStatus {
     UNKNOWN;
 
     public String getName() {
-	return name();
+        return name();
     }
 }

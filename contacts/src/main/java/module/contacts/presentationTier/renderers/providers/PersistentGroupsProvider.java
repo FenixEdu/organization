@@ -46,7 +46,7 @@ public class PersistentGroupsProvider implements DataProvider {
      */
     @Override
     public Converter getConverter() {
-	return null;
+        return null;
     }
 
     /*
@@ -58,8 +58,8 @@ public class PersistentGroupsProvider implements DataProvider {
      */
     @Override
     public Object provide(Object source, Object currentValue) {
-	final ArrayList<PersistentGroup> listOfGroups = new ArrayList<PersistentGroup>(MyOrg.getInstance().getSystemGroups());
-	return listOfGroups;
+        final ArrayList<PersistentGroup> listOfGroups = new ArrayList<PersistentGroup>(MyOrg.getInstance().getSystemGroups());
+        return listOfGroups;
     }
 
 }

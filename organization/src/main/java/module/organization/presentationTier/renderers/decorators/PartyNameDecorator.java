@@ -38,6 +38,6 @@ public class PartyNameDecorator implements PartyDecorator {
 
     @Override
     public HtmlComponent decorate(final Party party, final OrganizationLayout layout) {
-	return new HtmlText(party.getPartyName().getContent());
+        return new HtmlText(party.getPartyName().getContent());
     }
 }

@@ -59,7 +59,7 @@ public class PhysicalAddressBean implements Serializable {
      * @return the country
      */
     public Country getCountry() {
-	return country;
+        return country;
     }
 
     /**
@@ -67,14 +67,14 @@ public class PhysicalAddressBean implements Serializable {
      *            the country to set
      */
     public void setCountry(Country country) {
-	this.country = country;
+        this.country = country;
     }
 
     /**
      * @return the physicalAddressLocation
      */
     public GeographicLocation getPhysicalAddressLocation() {
-	return physicalAddressLocation;
+        return physicalAddressLocation;
     }
 
     /**
@@ -82,14 +82,14 @@ public class PhysicalAddressBean implements Serializable {
      *            the physicalAddressLocation to set
      */
     public void setPhysicalAddressLocation(GeographicLocation physicalAddressLocation) {
-	this.physicalAddressLocation = physicalAddressLocation;
+        this.physicalAddressLocation = physicalAddressLocation;
     }
 
     /**
      * @return the complementarAddress
      */
     public String getComplementarAddress() {
-	return complementarAddress;
+        return complementarAddress;
     }
 
     /**
@@ -97,7 +97,7 @@ public class PhysicalAddressBean implements Serializable {
      *            the complementarAddress to set
      */
     public void setComplementarAddress(String complementarAddress) {
-	this.complementarAddress = complementarAddress;
+        this.complementarAddress = complementarAddress;
     }
 
 }

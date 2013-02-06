@@ -53,54 +53,55 @@ public class CountryCodesImport extends CountryCodesImport_Base {
 
     @Override
     public void executeTask() {
-	InputStream stream = getClass().getResourceAsStream(ISO3166_FILE);
-	try {
-	    List<String> lines = IOUtils.readLines(stream);
-	    Planet planet = Magrathea.buildEarth();
-	    for (String line : lines) {
-		String[] parts = line.split(";");
-		String shortCode = parts[0];
-		String longCode = parts[1];
-		String numericCode = parts[2];
-		String countryNameEn = parts[3];
-		String countryNamePt = parts.length > 5 && StringUtils.isNotEmpty(parts[5]) ? parts[5] : null;
-		String nationalityEn = parts.length > 6 && StringUtils.isNotEmpty(parts[6]) ? parts[6] : null;
-		String nationalityPt = parts.length > 7 && StringUtils.isNotEmpty(parts[7]) ? parts[7] : null;
-		Country country = planet.getChildByAcronym(longCode);
-		if (country == null) {
-		    country = new Country(planet, shortCode, longCode, Integer.parseInt(numericCode), makeName(countryNamePt,
-			    countryNameEn), makeName(nationalityPt, nationalityEn), AddressPrinter.class);
-		} else {
-		    country.update(planet, shortCode, longCode, Integer.parseInt(numericCode),
-			    makeName(countryNamePt, countryNameEn), makeName(nationalityPt, nationalityEn), AddressPrinter.class);
-		}
-	    }
-	} catch (IOException e) {
-	    e.printStackTrace();
-	} finally {
-	    try {
-		stream.close();
-	    } catch (IOException e) {
-	    }
-	}
+        InputStream stream = getClass().getResourceAsStream(ISO3166_FILE);
+        try {
+            List<String> lines = IOUtils.readLines(stream);
+            Planet planet = Magrathea.buildEarth();
+            for (String line : lines) {
+                String[] parts = line.split(";");
+                String shortCode = parts[0];
+                String longCode = parts[1];
+                String numericCode = parts[2];
+                String countryNameEn = parts[3];
+                String countryNamePt = parts.length > 5 && StringUtils.isNotEmpty(parts[5]) ? parts[5] : null;
+                String nationalityEn = parts.length > 6 && StringUtils.isNotEmpty(parts[6]) ? parts[6] : null;
+                String nationalityPt = parts.length > 7 && StringUtils.isNotEmpty(parts[7]) ? parts[7] : null;
+                Country country = planet.getChildByAcronym(longCode);
+                if (country == null) {
+                    country =
+                            new Country(planet, shortCode, longCode, Integer.parseInt(numericCode), makeName(countryNamePt,
+                                    countryNameEn), makeName(nationalityPt, nationalityEn), AddressPrinter.class);
+                } else {
+                    country.update(planet, shortCode, longCode, Integer.parseInt(numericCode),
+                            makeName(countryNamePt, countryNameEn), makeName(nationalityPt, nationalityEn), AddressPrinter.class);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                stream.close();
+            } catch (IOException e) {
+            }
+        }
     }
 
     @Override
     public String getLocalizedName() {
-	return getClass().getName();
+        return getClass().getName();
     }
 
     private static MultiLanguageString makeName(String pt, String en) {
-	if (pt != null || en != null) {
-	    MultiLanguageString name = new MultiLanguageString();
-	    if (pt != null) {
-		name = name.with(Language.pt, WordUtils.capitalizeFully(pt));
-	    }
-	    if (en != null) {
-		name = name.with(Language.en, WordUtils.capitalizeFully(en));
-	    }
-	    return name;
-	}
-	return null;
+        if (pt != null || en != null) {
+            MultiLanguageString name = new MultiLanguageString();
+            if (pt != null) {
+                name = name.with(Language.pt, WordUtils.capitalizeFully(pt));
+            }
+            if (en != null) {
+                name = name.with(Language.en, WordUtils.capitalizeFully(en));
+            }
+            return name;
+        }
+        return null;
     }
 }

@@ -41,16 +41,16 @@ public class PartyResultCollection {
     private Collection<Party> result;
 
     public PartyResultCollection(final PartyPredicate predicate) {
-	this(new HashSet<Party>(), predicate);
+        this(new HashSet<Party>(), predicate);
     }
 
     public PartyResultCollection(final Collection<Party> result, final PartyPredicate predicate) {
-	this.predicate = predicate;
-	this.result = result;
+        this.predicate = predicate;
+        this.result = result;
     }
 
     public boolean candAddParty(final Party party, final Accountability accountability) {
-	return predicate.eval(party, accountability);
+        return predicate.eval(party, accountability);
     }
 
     /**
@@ -59,11 +59,11 @@ public class PartyResultCollection {
      * 
      */
     public boolean conditionalAddParty(final Party party, final Accountability accountability) {
-	return candAddParty(party, accountability) && result.add(party);
+        return candAddParty(party, accountability) && result.add(party);
     }
 
     @SuppressWarnings("unchecked")
     public <T extends Party> Collection<T> getResult() {
-	return Collections.unmodifiableCollection((Collection<T>) result);
+        return Collections.unmodifiableCollection((Collection<T>) result);
     }
 }

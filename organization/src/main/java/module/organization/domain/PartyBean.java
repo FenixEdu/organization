@@ -44,39 +44,39 @@ abstract public class PartyBean implements Serializable {
     private LocalDate end;
 
     public Party getParent() {
-	return parent;
+        return parent;
     }
 
     public void setParent(Party parent) {
-	this.parent = parent;
+        this.parent = parent;
     }
 
     public boolean hasParent() {
-	return getParent() != null;
+        return getParent() != null;
     }
 
     public AccountabilityType getAccountabilityType() {
-	return accountabilityType;
+        return accountabilityType;
     }
 
     public void setAccountabilityType(AccountabilityType accountabilityType) {
-	this.accountabilityType = accountabilityType;
+        this.accountabilityType = accountabilityType;
     }
 
     public LocalDate getBegin() {
-	return begin;
+        return begin;
     }
 
     public void setBegin(LocalDate begin) {
-	this.begin = begin;
+        this.begin = begin;
     }
 
     public LocalDate getEnd() {
-	return end;
+        return end;
     }
 
     public void setEnd(LocalDate end) {
-	this.end = end;
+        this.end = end;
     }
 
     abstract public Party getParty();

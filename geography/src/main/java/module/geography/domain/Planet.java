@@ -44,40 +44,40 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  */
 public class Planet extends Planet_Base {
     public Planet(Galaxy parent, MultiLanguageString name, String acronym) {
-	super();
-	setUnit(Unit.create(parent.getUnit(), name, acronym, getPartyType("Planeta", PLANET_PARTYTYPE_NAME),
-		getOrCreateAccountabilityType(), new LocalDate(), null));
+        super();
+        setUnit(Unit.create(parent.getUnit(), name, acronym, getPartyType("Planeta", PLANET_PARTYTYPE_NAME),
+                getOrCreateAccountabilityType(), new LocalDate(), null));
 
     }
 
     @Override
     public MultiLanguageString getType() {
-	return new MultiLanguageString().with(Language.pt, "Planeta").with(Language.en, PLANET_PARTYTYPE_NAME);
+        return new MultiLanguageString().with(Language.pt, "Planeta").with(Language.en, PLANET_PARTYTYPE_NAME);
     }
 
     public Galaxy getParent() {
-	return (Galaxy) getParentLocation();
+        return (Galaxy) getParentLocation();
     }
 
     public Collection<Country> getChildren() {
-	Collection<Unit> units = getChildUnits();
-	Collection<Country> children = new ArrayList<Country>();
-	for (Unit unit : units) {
-	    children.add((Country) unit.getGeographicLocation());
-	}
-	return children;
+        Collection<Unit> units = getChildUnits();
+        Collection<Country> children = new ArrayList<Country>();
+        for (Unit unit : units) {
+            children.add((Country) unit.getGeographicLocation());
+        }
+        return children;
     }
 
     public Country getChildByAcronym(String acronym) {
-	for (Unit unit : getChildUnits()) {
-	    if (unit.getAcronym().equals(acronym)) {
-		return (Country) unit.getGeographicLocation();
-	    }
-	}
-	return null;
+        for (Unit unit : getChildUnits()) {
+            if (unit.getAcronym().equals(acronym)) {
+                return (Country) unit.getGeographicLocation();
+            }
+        }
+        return null;
     }
 
     public static Planet getEarth() {
-	return Galaxy.getMilkyWay().getChildByAcronym(EARTH_UNIT_ACRONYM);
+        return Galaxy.getMilkyWay().getChildByAcronym(EARTH_UNIT_ACRONYM);
     }
 }
