@@ -28,7 +28,7 @@ import module.organization.presentationTier.actions.OrganizationModelAction;
 import module.personalinformation.presentationTier.actions.PersonalInformationManagementAction.PersonalInformationView;
 import pt.ist.bennu.core.domain.ModuleInitializer;
 import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -53,7 +53,7 @@ public class PersonalInformationSystem extends PersonalInformationSystem_Base im
         return myOrg.getPersonalInformationSystem();
     }
 
-    @Service
+    @Atomic
     public synchronized static void initialize() {
         if (!isInitialized) {
             try {
