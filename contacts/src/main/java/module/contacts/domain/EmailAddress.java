@@ -33,7 +33,7 @@ import org.joda.time.DateTime;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -69,7 +69,7 @@ public class EmailAddress extends EmailAddress_Base {
      *            going to be visible to.
      * @return an EmailAddress with the given parameters
      */
-    @Service
+    @Atomic
     public static EmailAddress createNewEmailAddress(String emailAddress, Party party, Boolean defaultContact,
             PartyContactType partyContactType, User userCreatingTheContact, List<PersistentGroup> visibilityGroups) {
         // validate that the user can actually create this contact

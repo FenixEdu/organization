@@ -38,13 +38,13 @@ import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
 import pt.ist.bennu.core.domain.groups.Role;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.dml.runtime.Relation;
+import pt.ist.fenixframework.dml.runtime.RelationListener;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
-import dml.runtime.Relation;
-import dml.runtime.RelationListener;
 
 /**
  * 
@@ -166,7 +166,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      * @param value
      *            the value to set
      */
-    @Service
+    @Atomic
     public void setContactValue(String value) {
         // if (UserView.getCurrentUser() != null /*&&
         // !isEditableBy(UserView.getCurrentUser())*/) {
@@ -185,7 +185,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      * @param value
      *            the value to set
      */
-    @Service
+    @Atomic
     public void forceChangeContactValue(String value) {
         setValue(value);
     }
@@ -226,7 +226,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      * @param groups
      *            the groups to which this PartyContact will be visibile to
      */
-    @Service
+    @Atomic
     public void setVisibleTo(List<PersistentGroup> groups) {
         // add all of the groups that are on the groups but not on the current
         // list of visibility groups
@@ -342,7 +342,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
         super.setDefaultContact(defaultContact);
     }
 
-    @Service
+    @Atomic
     public void deleteByUser(User currentUser) {
         // Confirmations not done here anymore
 

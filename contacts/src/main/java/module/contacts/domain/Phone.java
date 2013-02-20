@@ -33,7 +33,7 @@ import org.joda.time.DateTime;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -74,7 +74,7 @@ public class Phone extends Phone_Base {
      * @param visibilityGroups
      * @return a Phone with the given parameters
      */
-    @Service
+    @Atomic
     public static Phone createNewPhone(PhoneType phoneType, String number, Party party, Boolean defaultContact,
             PartyContactType partyContactType, User userCreatingTheContact, List<PersistentGroup> visibilityGroups) {
 
@@ -100,7 +100,7 @@ public class Phone extends Phone_Base {
         return getPhoneType().getFieldName();
     };
 
-    @Service
+    @Atomic
     public void changePhoneType(PhoneType phoneType) {
         setPhoneType(phoneType);
     }

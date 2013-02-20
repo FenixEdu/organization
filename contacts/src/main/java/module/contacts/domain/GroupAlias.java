@@ -25,7 +25,7 @@
 package module.contacts.domain;
 
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -42,7 +42,7 @@ public class GroupAlias extends GroupAlias_Base {
         groupToEdit.setGroupAlias(this);
     }
 
-    @Service
+    @Atomic
     public static GroupAlias create(PersistentGroup groupToEdit, MultiLanguageString alias) {
         GroupAlias thisNewObject = new GroupAlias(groupToEdit, alias);
 

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -71,9 +71,9 @@ import pt.ist.bennu.core.domain.groups.PersistentGroup;
 import pt.ist.bennu.core.domain.groups.Role;
 import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
-import pt.ist.fenixframework.pstm.AbstractDomainObject;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.FenixFramework;
 import pt.utl.ist.fenix.tools.util.CollectionPager;
 
 /**
@@ -120,7 +120,7 @@ public class ContactsAction extends ContextBaseAction {
         // for now let's create the multiple contacts with default values
         // TODO make it interpret a form to edit/create the new contact info
 
-        List<PersistentGroup> existingVisbilityGroups = ContactsConfigurator.getInstance().getVisibilityGroups();
+        Set<PersistentGroup> existingVisbilityGroups = ContactsConfigurator.getInstance().getVisibilityGroups();
         /*
          * (EmailAddress.createNewEmailAddress("johnDoe@VisibleToAll.com",
          * person, true, PartyContactType.PERSONAL))
@@ -191,7 +191,7 @@ public class ContactsAction extends ContextBaseAction {
 
     public final ActionForward editAlias(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
-        final PersistentGroup persistentGroup = AbstractDomainObject.fromExternalId(request.getParameter("groupId"));
+        final PersistentGroup persistentGroup = FenixFramework.getDomainObject(request.getParameter("groupId"));
 
         GroupAliasBean groupAliasBean = new GroupAliasBean();
         groupAliasBean.setGroupToEdit(persistentGroup);
@@ -249,7 +249,7 @@ public class ContactsAction extends ContextBaseAction {
 
     public final ActionForward removeUserFromSuperEditorRole(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        final User user = AbstractDomainObject.fromExternalId(request.getParameter("userId"));
+        final User user = FenixFramework.getDomainObject(request.getParameter("userId"));
 
         ContactsConfigurator.getInstance().removeSuperEditorRole(user);
 
@@ -259,7 +259,7 @@ public class ContactsAction extends ContextBaseAction {
 
     public final ActionForward searchContacts(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        final PersistentGroup persistentGroup = AbstractDomainObject.fromExternalId(request.getParameter("groupId"));
+        final PersistentGroup persistentGroup = FenixFramework.getDomainObject(request.getParameter("groupId"));
 
         PersonsBean personSearchBean = new PersonsBean();
         request.setAttribute("personSearchBean", personSearchBean);
@@ -422,7 +422,7 @@ public class ContactsAction extends ContextBaseAction {
             return redirect(request, redirectPath);
         }
 
-        final PersistentGroup persistentGroup = AbstractDomainObject.fromExternalId(request.getParameter("groupId"));
+        final PersistentGroup persistentGroup = FenixFramework.getDomainObject(request.getParameter("groupId"));
 
         Person person = null;
         // let's assert if we are editing our own info or not, depending if the
@@ -430,7 +430,7 @@ public class ContactsAction extends ContextBaseAction {
         if (request.getParameter("personEId") != null) {
             // let's assert that the person is either the owner or the super
             // editor - if it can edit the contacts
-            person = AbstractDomainObject.fromExternalId(request.getParameter("personEId"));
+            person = FenixFramework.getDomainObject(request.getParameter("personEId"));
             if (person == null) {
                 throw new DomainException("manage.contacts.edit.error.noPerson", "resources.ContactsResources");
             }
@@ -610,7 +610,7 @@ public class ContactsAction extends ContextBaseAction {
         return editContacts(mapping, form, request, response);
     }
 
-    @Service
+    @Atomic
     private void setPartyContactType(PartyContact contactToEdit, PartyContactType partyContactType) {
         contactToEdit.setType(partyContactType);
     }

@@ -33,7 +33,7 @@ import org.joda.time.DateTime;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -74,7 +74,7 @@ public class WebAddress extends WebAddress_Base {
      *            contact visible to
      * @return an WebAddress with the given parameters
      */
-    @Service
+    @Atomic
     public static WebAddress createNewWebAddress(String url, Party party, Boolean defaultContact, PartyContactType type,
             User userCreatingTheContact, List<PersistentGroup> visibilityGroups) {
         // validate that the user can actually create this contact

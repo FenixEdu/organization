@@ -24,6 +24,7 @@
  */
 package module.contacts.domain;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -32,10 +33,10 @@ import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
 import pt.ist.bennu.core.domain.groups.Role;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.dml.runtime.Relation;
+import pt.ist.fenixframework.dml.runtime.RelationListener;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
-import dml.runtime.Relation;
-import dml.runtime.RelationListener;
 
 /**
  * 
@@ -55,7 +56,7 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
         this.PersistentGroupContactsConfigurator.addListener(new VisibilityGroupsEnforcerListener());
     }
 
-    @Service
+    @Atomic
     public static ContactsConfigurator getInstance() {
         ContactsConfigurator contactsConfigurator = MyOrg.getInstance().getContactsConfigurator();
         if (contactsConfigurator == null) {
@@ -124,18 +125,18 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
 
     }
 
-    @Service
+    @Atomic
     private static ContactsConfigurator createInstance() {
         return new ContactsConfigurator();
     }
 
-    @Service
-    public void setVisibilityGroups(List<PersistentGroup> groups) {
+    @Atomic
+    public void setVisibilityGroups(Collection<PersistentGroup> groups) {
 
         if (groups == null) {
             return;
         }
-        List<PersistentGroup> existingGroups = getVisibilityGroups();
+        Set<PersistentGroup> existingGroups = getVisibilityGroups();
         // add the ones on the groups to the list of existing
         for (PersistentGroup persistentGroup : groups) {
             if (!existingGroups.contains(persistentGroup)) {
@@ -162,7 +163,7 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
      *            the group to which all of the current members will be assigned
      *            the super-editor role
      */
-    @Service
+    @Atomic
     public void assignSuperEditorToPersonsCurrentlyIn(PersistentGroup groupToUse) {
         Set<User> groupMembers = groupToUse.getMembers();
         for (User user : groupMembers) {
@@ -170,13 +171,13 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
         }
     }
 
-    @Service
+    @Atomic
     public void assignSuperEditorRole(User user) {
         Role.getRole(getContactsRoles().MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).addUsers(user);
 
     }
 
-    @Service
+    @Atomic
     public void removeSuperEditorRole(User user) {
         Role.getRole(getContactsRoles().MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).removeUsers(user);
     }
