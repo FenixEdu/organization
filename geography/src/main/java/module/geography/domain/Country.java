@@ -38,7 +38,7 @@ import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -113,7 +113,7 @@ public class Country extends Country_Base {
         return new MultiLanguageString().with(Language.pt, "País").with(Language.en, COUNTRY_PARTYTYPE_NAME);
     }
 
-    @Service
+    @Atomic
     public AddressPrinter getAddressPrinter() {
         if (super.getIAddressPrinter() == null) {
             setIAddressPrinter(AddressPrinter.class);

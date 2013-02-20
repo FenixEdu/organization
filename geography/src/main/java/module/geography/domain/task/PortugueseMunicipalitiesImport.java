@@ -26,7 +26,7 @@ package module.geography.domain.task;
 
 import module.geography.domain.Country;
 import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -67,8 +67,8 @@ public class PortugueseMunicipalitiesImport extends PortugueseMunicipalitiesImpo
         logInfo(message);
     }
 
+    @Atomic
     @Override
-    @Service
     public void executeTask() {
         // let's initialize the auxiliary class due to the the nasty injector
         // errors

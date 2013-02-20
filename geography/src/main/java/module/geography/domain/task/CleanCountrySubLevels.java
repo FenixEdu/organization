@@ -32,7 +32,7 @@ import module.geography.domain.CountrySubdivision;
 import module.geography.domain.CountrySubdivisionLevelName;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * *WARNING* This task shouldn't be called to delete the districts as it removes
@@ -62,8 +62,8 @@ public class CleanCountrySubLevels extends CleanCountrySubLevels_Base {
     /* (non-Javadoc)
      * @see pt.ist.bennu.core.domain.scheduler.Task#executeTask()
      */
+    @Atomic
     @Override
-    @Service
     public void executeTask() {
         // add to an array all of the countries one wants to clean the sublevels
         ArrayList<Country> countriesToClean = new ArrayList<Country>();

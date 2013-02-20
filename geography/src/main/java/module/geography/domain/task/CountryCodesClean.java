@@ -30,7 +30,7 @@ import java.util.HashMap;
 import module.geography.domain.Country;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -50,8 +50,8 @@ public class CountryCodesClean extends CountryCodesClean_Base {
         return BundleUtil.getStringFromResourceBundle("resources/GeographyResources", "label.task.clean.country.codes.with.note");
     }
 
+    @Atomic
     @Override
-    @Service
     public void executeTask() {
         ArrayList<Country> countriesToClean = new ArrayList<Country>();
         countriesToClean.add(Country.getPortugal());

@@ -35,7 +35,7 @@ import module.organization.domain.Unit;
 import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -174,7 +174,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
     /**
      * Deletes this element implementing the domain rules
      */
-    @Service
+    @Atomic
     public void delete() {
         Unit unit = this.getUnit();
         removeUnit();
