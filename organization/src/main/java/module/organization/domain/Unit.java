@@ -35,7 +35,7 @@ import org.joda.time.LocalDate;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
@@ -127,7 +127,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
         return !hasAnyParentAccountabilities() && hasMyOrgFromTopUnit();
     }
 
-    @Service
+    @Atomic
     public Unit edit(final MultiLanguageString name, final String acronym) {
         check(name, acronym);
         setPartyName(name);
@@ -146,7 +146,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
         super.disconnect();
     }
 
-    @Service
+    @Atomic
     static public Unit create(final UnitBean bean) {
         return create(bean.getParent(), bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityType(),
                 bean.getBegin(), bean.getEnd(), bean.getOrganizationalModel());
@@ -200,14 +200,14 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
      *            none is provided
      * @return
      */
-    @Service
+    @Atomic
     public static Unit create(Party parent, MultiLanguageString name, String acronym, PartyType partyType,
             AccountabilityType accountabilityType, LocalDate begin, LocalDate end, OrganizationalModel organizationalModel,
             String justification) {
         return new Unit(parent, name, acronym, partyType, accountabilityType, begin, end, organizationalModel, justification);
     }
 
-    @Service
+    @Atomic
     static public Unit createRoot(final UnitBean bean) {
         return createRoot(bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityJustification());
     }
@@ -225,7 +225,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
         return new Unit(null, name, acronym, partyType, null, new LocalDate(), null, null, null);
     }
 
-    @Service
+    @Atomic
     static public Unit createRoot(final MultiLanguageString name, final String acronym, final PartyType partyType,
             String accJustification) {
         return new Unit(null, name, acronym, partyType, null, new LocalDate(), null, null, accJustification);

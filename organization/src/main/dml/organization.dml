@@ -26,15 +26,6 @@
  */
  
 
-valueType pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString as MultiLanguageString {
-    externalizeWith {
-        String exportAsString();
-    }
-
-    internalizeWith importFromString();
-}
-
-
 class module.organization.domain.AccountabilityType {
 	String type;
 	MultiLanguageString name;

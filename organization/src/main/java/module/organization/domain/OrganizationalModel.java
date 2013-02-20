@@ -33,7 +33,7 @@ import java.util.TreeSet;
 
 import module.organization.domain.dto.OrganizationalModelBean;
 import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -69,17 +69,17 @@ public class OrganizationalModel extends OrganizationalModel_Base {
         return accountabilityTypes;
     }
 
-    @Service
+    @Atomic
     public static OrganizationalModel createNewModel(final OrganizationalModelBean organizationalModelBean) {
         return new OrganizationalModel(organizationalModelBean.getName());
     }
 
-    @Service
+    @Atomic
     public void addPartyService(final Party party) {
         addParties(party);
     }
 
-    @Service
+    @Atomic
     public void delete() {
         getAccountabilityTypesSet().clear();
         getPartiesSet().clear();

@@ -30,7 +30,7 @@ import java.util.List;
 
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -138,14 +138,14 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
         return getType() != null && getType().equalsIgnoreCase(type);
     }
 
-    @Service
+    @Atomic
     public void edit(final String type, final MultiLanguageString name) {
         check(type);
         setType(type);
         setName(name);
     }
 
-    @Service
+    @Atomic
     public void delete() {
         canDelete();
         disconnect();
@@ -178,7 +178,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
         return true;
     }
 
-    @Service
+    @Atomic
     static public AccountabilityType create(final AccountabilityTypeBean bean) {
         return new AccountabilityType(bean.getType(), bean.getName());
     }
@@ -195,7 +195,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
         return null;
     }
 
-    @Service
+    @Atomic
     public void associateConnectionRules(final List<ConnectionRule> connectionRules) {
         getConnectionRules().retainAll(connectionRules);
         getConnectionRules().addAll(connectionRules);

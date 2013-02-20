@@ -27,7 +27,7 @@ package module.organization.domain;
 import java.io.Serializable;
 
 import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -67,7 +67,7 @@ abstract public class ConnectionRule extends ConnectionRule_Base {
         setMyOrg(MyOrg.getInstance());
     }
 
-    @Service
+    @Atomic
     public void delete() {
         disconnect();
         deleteDomainObject();

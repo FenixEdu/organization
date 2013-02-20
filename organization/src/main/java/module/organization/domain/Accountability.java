@@ -38,7 +38,7 @@ import org.joda.time.LocalDate;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -238,7 +238,7 @@ public class Accountability extends Accountability_Base {
      * @param justification an information justification/reason for the change of accountability, or null if there is none, or
      *            none is provided
      */
-    @Service
+    @Atomic
     public void delete(String justification) {
         setInactive(justification);
     }
@@ -328,7 +328,7 @@ public class Accountability extends Accountability_Base {
      * 
      * @return the new Accountability that was just created
      */
-    @Service
+    @Atomic
     public void editDates(final LocalDate begin, final LocalDate end, String justification) {
         check(begin, "error.Accountability.invalid.begin");
         checkDates(getParent(), begin, end);

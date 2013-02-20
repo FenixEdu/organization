@@ -36,7 +36,7 @@ import org.joda.time.LocalDate;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.User.UserPresentationStrategy;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
@@ -144,7 +144,7 @@ public class Person extends Person_Base implements Searchable, Indexable {
         super.disconnect();
     }
 
-    @Service
+    @Atomic
     public void edit(final PersonBean bean) {
         setPartyName(getPartyName().withDefault(bean.getName()));
     }
@@ -160,12 +160,12 @@ public class Person extends Person_Base implements Searchable, Indexable {
         return s1 < 0 || s1 == s2 ? name : name.subSequence(0, s1) + name.substring(s2);
     }
 
-    @Service
+    @Atomic
     static public Person create(final MultiLanguageString partyName, final PartyType partyType) {
         return new Person(partyName, partyType);
     }
 
-    @Service
+    @Atomic
     static public Person create(final PersonBean bean) {
         return create(new MultiLanguageString(bean.getName()), getPartyTypeInstance());
     }

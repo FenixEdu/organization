@@ -28,7 +28,7 @@ import java.io.Serializable;
 
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -115,14 +115,14 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
         return getType() != null && getType().equalsIgnoreCase(type);
     }
 
-    @Service
+    @Atomic
     public void edit(final PartyTypeBean bean) {
         check(bean.getType());
         setType(bean.getType());
         setName(bean.getName());
     }
 
-    @Service
+    @Atomic
     public void delete() {
         canDelete();
         removeMyOrg();
@@ -144,7 +144,7 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
         return res != 0 ? res : getExternalId().compareTo(other.getExternalId());
     }
 
-    @Service
+    @Atomic
     static public PartyType create(final PartyTypeBean bean) {
         return new PartyType(bean.getType(), bean.getName());
     }

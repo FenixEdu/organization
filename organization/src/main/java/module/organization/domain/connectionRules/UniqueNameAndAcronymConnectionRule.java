@@ -34,7 +34,7 @@ import module.organization.domain.Unit;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -61,7 +61,7 @@ public class UniqueNameAndAcronymConnectionRule extends UniqueNameAndAcronymConn
         }
     }
 
-    @Service
+    @Atomic
     static public UniqueNameAndAcronymConnectionRule create() {
         return new UniqueNameAndAcronymConnectionRule();
     }

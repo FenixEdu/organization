@@ -24,7 +24,6 @@
  */
 package module.organization.domain;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -52,7 +51,7 @@ import pt.ist.bennu.core.domain.Presentable;
 import pt.ist.bennu.core.domain.RoleType;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
@@ -127,14 +126,14 @@ abstract public class Party extends Party_Base implements Presentable {
         return getParents(new PartyByPartyType(Unit.class, type));
     }
 
-    public List<Accountability> getAllParentAccountabilities() {
+    public Set<Accountability> getAllParentAccountabilities() {
         return super.getParentAccountabilities();
     }
 
     // Overriden methods to hide the erased accs: 
     @Override
-    public List<Accountability> getParentAccountabilities() {
-        ArrayList<Accountability> accsToReturn = new ArrayList<Accountability>();
+    public Set<Accountability> getParentAccountabilities() {
+        Set<Accountability> accsToReturn = new HashSet<Accountability>();
         for (Accountability acc : super.getParentAccountabilities()) {
             if (!acc.isErased()) {
                 accsToReturn.add(acc);
@@ -159,8 +158,8 @@ abstract public class Party extends Party_Base implements Presentable {
     }
 
     @Override
-    public List<Accountability> getChildAccountabilities() {
-        ArrayList<Accountability> accsToReturn = new ArrayList<Accountability>();
+    public Set<Accountability> getChildAccountabilities() {
+        Set<Accountability> accsToReturn = new HashSet<Accountability>();
         for (Accountability acc : super.getChildAccountabilities()) {
             if (!acc.isErased()) {
                 accsToReturn.add(acc);
@@ -484,7 +483,7 @@ abstract public class Party extends Party_Base implements Presentable {
         return false;
     }
 
-    @Service
+    @Atomic
     public void delete() {
         canDelete();
         disconnect();
@@ -498,8 +497,8 @@ abstract public class Party extends Party_Base implements Presentable {
     }
 
     protected void disconnect() {
-        while (super.hasAnyParentAccountabilities()) {
-            super.getParentAccountabilities().get(0).delete();
+        for (Accountability acc : super.getParentAccountabilities()) {
+            acc.delete();
         }
         getPartyTypes().clear();
         removeMyOrg();
@@ -515,7 +514,7 @@ abstract public class Party extends Party_Base implements Presentable {
      *            is provided
      * @return
      */
-    @Service
+    @Atomic
     public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin,
             final LocalDate end, String justification) {
         return Accountability.create(parent, this, type, begin, end, justification);
@@ -560,7 +559,7 @@ abstract public class Party extends Party_Base implements Presentable {
      *            none is provided
      * @return
      */
-    @Service
+    @Atomic
     public Accountability addChild(final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end,
             String justification) {
         Accountability intersectingAccountability = getIntersectingChildAccountability(child, type, begin, end);
@@ -608,7 +607,7 @@ abstract public class Party extends Party_Base implements Presentable {
         return intersectingAccountability;
     }
 
-    @Service
+    @Atomic
     public void removeParent(final Accountability accountability) {
         if (hasParentAccountabilities(accountability)) {
             if (isUnit() && getParentAccountabilitiesCount() == 1) {
@@ -618,7 +617,7 @@ abstract public class Party extends Party_Base implements Presentable {
         }
     }
 
-    @Service
+    @Atomic
     public void editPartyTypes(final List<PartyType> partyTypes) {
         getPartyTypes().retainAll(partyTypes);
         getPartyTypes().addAll(partyTypes);
