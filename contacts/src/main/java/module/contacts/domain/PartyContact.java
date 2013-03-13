@@ -25,6 +25,7 @@
 package module.contacts.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -58,7 +59,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     public PartyContact() {
         super();
         ContactsConfigurator.getInstance().addPartyContact(this);
-        this.PersistentGroupPartyContact.addListener(new ValidVisibilityGroupsEnforcer());
+        getRelationPersistentGroupPartyContact().addListener(new ValidVisibilityGroupsEnforcer());
     }
 
     static protected void validateUser(User userCreatingTheContact, Party partyThatWillOwnTheContact, PartyContactType type) {
@@ -87,7 +88,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 
     }
 
-    static protected void validateVisibilityGroups(List<PersistentGroup> visibilityGroups) {
+    static protected void validateVisibilityGroups(Collection<PersistentGroup> visibilityGroups) {
         if (!ContactsConfigurator.getInstance().getVisibilityGroups().containsAll(visibilityGroups)) {
             throw new DomainException("manage.contacts.wrong.visibility.groups.defined");
         }
@@ -227,7 +228,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      *            the groups to which this PartyContact will be visibile to
      */
     @Atomic
-    public void setVisibleTo(List<PersistentGroup> groups) {
+    public void setVisibleTo(Collection<PersistentGroup> groups) {
         // add all of the groups that are on the groups but not on the current
         // list of visibility groups
         if (groups != null) {

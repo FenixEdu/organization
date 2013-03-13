@@ -53,7 +53,7 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
     private ContactsConfigurator() {
         super();
         MyOrg.getInstance().setContactsConfigurator(this);
-        this.PersistentGroupContactsConfigurator.addListener(new VisibilityGroupsEnforcerListener());
+        getRelationPersistentGroupContactsConfigurator().addListener(new VisibilityGroupsEnforcerListener());
     }
 
     @Atomic
@@ -89,10 +89,10 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
      * @author João André Pereira Antunes (joao.antunes@tagus.ist.utl.pt)
      * 
      */
-    final static class VisibilityGroupsEnforcerListener implements RelationListener<ContactsConfigurator, PersistentGroup> {
+    final static class VisibilityGroupsEnforcerListener implements RelationListener<PersistentGroup, ContactsConfigurator> {
 
         @Override
-        public void afterAdd(Relation<ContactsConfigurator, PersistentGroup> arg0, ContactsConfigurator arg1, PersistentGroup arg2) {
+        public void afterAdd(Relation<PersistentGroup, ContactsConfigurator> arg0, PersistentGroup arg2, ContactsConfigurator arg1) {
             // nothing needs to be done when adding a group to the list of the
             // possible visibility groups
         }
@@ -102,23 +102,23 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
          * might have with that group
          */
         @Override
-        public void afterRemove(Relation<ContactsConfigurator, PersistentGroup> relation,
-                ContactsConfigurator contactsConfigurator, PersistentGroup persistentGroup) {
+        public void afterRemove(Relation<PersistentGroup, ContactsConfigurator> relation, PersistentGroup persistentGroup,
+                ContactsConfigurator contactsConfigurator) {
             for (PartyContact contact : ContactsConfigurator.getInstance().getPartyContact()) {
                 contact.removeVisibilityGroups(persistentGroup);
             }
         }
 
         @Override
-        public void beforeAdd(Relation<ContactsConfigurator, PersistentGroup> arg0, ContactsConfigurator arg1,
-                PersistentGroup arg2) {
+        public void beforeAdd(Relation<PersistentGroup, ContactsConfigurator> arg0, PersistentGroup arg2,
+                ContactsConfigurator arg1) {
             // nothing needs to be done when adding a group to the list of the
             // possible visibility groups
         }
 
         @Override
-        public void beforeRemove(Relation<ContactsConfigurator, PersistentGroup> relation,
-                ContactsConfigurator contactsConfigurator, PersistentGroup persistentGroup) {
+        public void beforeRemove(Relation<PersistentGroup, ContactsConfigurator> relation, PersistentGroup persistentGroup,
+                ContactsConfigurator contactsConfigurator) {
             // nothing needs to be done before removing the relation
 
         }

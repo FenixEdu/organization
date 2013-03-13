@@ -24,7 +24,7 @@
  */
 package module.contacts.domain;
 
-import java.util.List;
+import java.util.Collection;
 
 import module.organization.domain.Party;
 
@@ -44,7 +44,7 @@ import pt.ist.fenixframework.Atomic;
 public class EmailAddress extends EmailAddress_Base {
 
     public EmailAddress(String emailAddress, Party party, Boolean defaultContact, PartyContactType partyContactType,
-            List<PersistentGroup> visibilityGroups) {
+            Collection<PersistentGroup> visibilityGroups) {
         super();
 
         super.setVisibleTo(visibilityGroups);
@@ -71,7 +71,7 @@ public class EmailAddress extends EmailAddress_Base {
      */
     @Atomic
     public static EmailAddress createNewEmailAddress(String emailAddress, Party party, Boolean defaultContact,
-            PartyContactType partyContactType, User userCreatingTheContact, List<PersistentGroup> visibilityGroups) {
+            PartyContactType partyContactType, User userCreatingTheContact, Collection<PersistentGroup> visibilityGroups) {
         // validate that the user can actually create this contact
         validateUser(userCreatingTheContact, party, partyContactType);
 
