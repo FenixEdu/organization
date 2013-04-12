@@ -84,7 +84,7 @@ public class WebAddress extends WebAddress_Base {
         validateVisibilityGroups(visibilityGroups);
 
         // make sure that this isn't a duplicate contact for this party
-        for (PartyContact partyContact : party.getPartyContacts()) {
+        for (PartyContact partyContact : party.getPartyContactsSet()) {
             if (partyContact instanceof WebAddress && partyContact.getValue() == url && type.equals(partyContact.getType())) {
                 throw new DomainException("error.duplicate.partyContact");
             }

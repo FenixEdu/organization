@@ -79,7 +79,7 @@ public class EmailAddress extends EmailAddress_Base {
         validateVisibilityGroups(visibilityGroups);
 
         // make sure that this isn't a duplicate contact for this party
-        for (PartyContact partyContact : party.getPartyContacts()) {
+        for (PartyContact partyContact : party.getPartyContactsSet()) {
             if (partyContact instanceof EmailAddress && partyContact.getValue() == emailAddress
                     && partyContactType.equals(partyContact.getType())) {
                 throw new DomainException("error.duplicate.partyContact");

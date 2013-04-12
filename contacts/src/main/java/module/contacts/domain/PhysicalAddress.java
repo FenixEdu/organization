@@ -96,7 +96,7 @@ public class PhysicalAddress extends PhysicalAddress_Base {
         validateVisibilityGroups(visibilityGroups);
 
         // make sure that this isn't a duplicate contact for this party
-        for (PartyContact partyContact : party.getPartyContacts()) {
+        for (PartyContact partyContact : party.getPartyContactsSet()) {
             if (partyContact instanceof PhysicalAddress && partyContact.getValue() == complementarAddressString
                     && ((PhysicalAddress) partyContact).getGeographicLocation().equals(geographicLocation)) {
                 throw new DomainException("error.duplicate.partyContact");
@@ -113,7 +113,7 @@ public class PhysicalAddress extends PhysicalAddress_Base {
 
     @Override
     public void delete() {
-        removeGeographicLocation();
+        setGeographicLocation(null);
         super.delete();
     }
 

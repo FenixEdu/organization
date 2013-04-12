@@ -60,12 +60,12 @@ public class CountriesProvider implements DataProvider {
         // TODO ?? add a check to see if the source the user that is set on the
         // source bean has privileges to see the visibility information of this
         // contact information
-        final ArrayList<Country> listOfCountries = new ArrayList<Country>(MyOrg.getInstance().getCountries());
+        final ArrayList<Country> listOfCountries = new ArrayList<Country>(MyOrg.getInstance().getCountriesSet());
         return listOfCountries;
     }
 
     public static Object provideCountries() {
-        ArrayList<Country> listOfCountries = new ArrayList<Country>(MyOrg.getInstance().getCountries());
+        ArrayList<Country> listOfCountries = new ArrayList<Country>(MyOrg.getInstance().getCountriesSet());
         return listOfCountries;
     }
 

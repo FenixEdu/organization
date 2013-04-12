@@ -42,6 +42,10 @@
 			<artifactId>geography</artifactId>
 			<version>${version.pt.ist.geography}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jsp-api</artifactId>
+		</dependency>
 	</dependencies>
 
 	<repositories>

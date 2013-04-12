@@ -108,7 +108,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
         @Override
         public void beforeAdd(Relation<PartyContact, PersistentGroup> relation, PartyContact partyContact,
                 PersistentGroup persistentGroup) {
-            if (!ContactsConfigurator.getInstance().hasVisibilityGroups(persistentGroup)) {
+            if (!ContactsConfigurator.getInstance().getVisibilityGroups().contains(persistentGroup)) {
                 throw new DomainException("error.adding.contact.invalid.visibility.group",
                         DomainException.getResourceFor("resources/ContactsResources"));
             }
@@ -321,8 +321,8 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     }
 
     public void delete() {
-        removeParty();
-        removeContactsConfigurator();
+        setParty(null);
+        setContactsConfigurator(null);
         for (PersistentGroup group : getVisibilityGroups()) {
             removeVisibilityGroups(group);
         }
@@ -334,7 +334,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
         if (defaultContact != null && defaultContact.booleanValue()) {
             // remove the other default contacts of this type so that there is
             // only one for each type
-            for (PartyContact partyContact : getParty().getPartyContacts()) {
+            for (PartyContact partyContact : getParty().getPartyContactsSet()) {
                 if (partyContact.getClass().isInstance(this.getClass()) && partyContact.getDefaultContact().booleanValue()) {
                     partyContact.setDefaultContact(Boolean.FALSE);
                 }
@@ -369,4 +369,10 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
         EmailAddress email = getEmailAddressForSendingEmails(party);
         return email != null ? email.getValue() : StringUtils.EMPTY;
     }
+
+    @Deprecated
+    public java.util.Set<pt.ist.bennu.core.domain.groups.PersistentGroup> getVisibilityGroups() {
+        return getVisibilityGroupsSet();
+    }
+
 }

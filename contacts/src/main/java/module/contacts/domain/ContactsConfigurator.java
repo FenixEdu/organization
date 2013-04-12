@@ -290,4 +290,14 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
     public boolean isSuperEditor(User user) {
         return (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(user));
     }
+    @Deprecated
+    public java.util.Set<module.contacts.domain.PartyContact> getPartyContact() {
+        return getPartyContactSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.bennu.core.domain.groups.PersistentGroup> getVisibilityGroups() {
+        return getVisibilityGroupsSet();
+    }
+
 }

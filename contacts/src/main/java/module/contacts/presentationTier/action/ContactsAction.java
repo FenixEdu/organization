@@ -453,7 +453,7 @@ public class ContactsAction extends ContextBaseAction {
             chain.addComparator(new BeanComparator("externalId"));
 
             TreeSet<PartyContact> sortedContacts = new TreeSet<PartyContact>(chain);
-            sortedContacts.addAll(person.getPartyContacts());
+            sortedContacts.addAll(person.getPartyContactsSet());
 
             request.setAttribute("sortedContacts", sortedContacts);
 

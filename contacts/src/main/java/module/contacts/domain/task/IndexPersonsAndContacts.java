@@ -56,7 +56,7 @@ public class IndexPersonsAndContacts extends IndexPersonsAndContacts_Base {
     @Override
     @Atomic
     public void executeTask() {
-        for (Person person : MyOrg.getInstance().getPersons()) {
+        for (Person person : MyOrg.getInstance().getPersonsSet()) {
             person.setPartyName(person.getPartyName());
             personsTouched++;
         }

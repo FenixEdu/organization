@@ -85,7 +85,7 @@ public class Phone extends Phone_Base {
         validateVisibilityGroups(visibilityGroups);
 
         // make sure that this isn't a duplicate contact for this party
-        for (PartyContact partyContact : party.getPartyContacts()) {
+        for (PartyContact partyContact : party.getPartyContactsSet()) {
             if ((partyContact instanceof Phone) && partyContact.getValue() == number
                     && partyContactType.equals(partyContact.getType()) && phoneType.equals(((Phone) partyContact).getPhoneType())) {
                 throw new DomainException("error.duplicate.partyContact");
