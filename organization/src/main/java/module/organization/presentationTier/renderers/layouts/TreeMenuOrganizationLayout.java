@@ -173,7 +173,7 @@ public class TreeMenuOrganizationLayout extends Layout implements OrganizationLa
     }
 
     protected void drawPartyChildren(final HtmlList childHtmlList, final Party parent) {
-        final List<Party> children = new ArrayList<Party>(parent.getChildAccountabilitiesCount());
+        final List<Party> children = new ArrayList<Party>(parent.getChildAccountabilitiesSet().size());
 
         for (final Accountability accountability : parent.getChildAccountabilitiesSet()) {
             if (this.view.getPredicate().eval(accountability.getChild(), accountability)) {

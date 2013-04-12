@@ -127,40 +127,14 @@ abstract public class Party extends Party_Base implements Presentable {
     }
 
     public Set<Accountability> getAllParentAccountabilities() {
-        return super.getParentAccountabilities();
+        return super.getParentAccountabilitiesSet();
     }
 
     // Overriden methods to hide the erased accs: 
     @Override
-    public Set<Accountability> getParentAccountabilities() {
-        Set<Accountability> accsToReturn = new HashSet<Accountability>();
-        for (Accountability acc : super.getParentAccountabilities()) {
-            if (!acc.isErased()) {
-                accsToReturn.add(acc);
-            }
-        }
-        return accsToReturn;
-    }
-
-    @Override
-    public int getParentAccountabilitiesCount() {
-        return getParentAccountabilities().size();
-    }
-
-    @Override
     public Set<Accountability> getParentAccountabilitiesSet() {
-        return new HashSet<Accountability>(getParentAccountabilities());
-    }
-
-    @Override
-    public Iterator<Accountability> getParentAccountabilitiesIterator() {
-        return super.getParentAccountabilities().iterator();
-    }
-
-    @Override
-    public Set<Accountability> getChildAccountabilities() {
         Set<Accountability> accsToReturn = new HashSet<Accountability>();
-        for (Accountability acc : super.getChildAccountabilities()) {
+        for (Accountability acc : super.getParentAccountabilitiesSet()) {
             if (!acc.isErased()) {
                 accsToReturn.add(acc);
             }
@@ -168,19 +142,19 @@ abstract public class Party extends Party_Base implements Presentable {
         return accsToReturn;
     }
 
-    @Override
-    public int getChildAccountabilitiesCount() {
-        return getChildAccountabilities().size();
+    public Iterator<Accountability> getParentAccountabilitiesIterator() {
+        return super.getParentAccountabilitiesSet().iterator();
     }
 
     @Override
     public Set<Accountability> getChildAccountabilitiesSet() {
-        return new HashSet<Accountability>(getChildAccountabilities());
-    }
-
-    @Override
-    public Iterator<Accountability> getChildAccountabilitiesIterator() {
-        return getChildAccountabilities().iterator();
+        Set<Accountability> accsToReturn = new HashSet<Accountability>();
+        for (Accountability acc : super.getChildAccountabilitiesSet()) {
+            if (!acc.isErased()) {
+                accsToReturn.add(acc);
+            }
+        }
+        return accsToReturn;
     }
 
     @Deprecated
@@ -491,17 +465,17 @@ abstract public class Party extends Party_Base implements Presentable {
     }
 
     protected void canDelete() {
-        if (hasAnyChildAccountabilities()) {
+        if (!getChildAccountabilitiesSet().isEmpty()) {
             throw new DomainException("error.Party.delete.has.child.accountabilities");
         }
     }
 
     protected void disconnect() {
-        for (Accountability acc : super.getParentAccountabilities()) {
+        for (Accountability acc : super.getParentAccountabilitiesSet()) {
             acc.delete();
         }
         getPartyTypes().clear();
-        removeMyOrg();
+        setMyOrg(null);
     }
 
     /**
@@ -609,8 +583,8 @@ abstract public class Party extends Party_Base implements Presentable {
 
     @Atomic
     public void removeParent(final Accountability accountability) {
-        if (hasParentAccountabilities(accountability)) {
-            if (isUnit() && getParentAccountabilitiesCount() == 1) {
+        if (getParentAccountabilitiesSet().contains(accountability)) {
+            if (isUnit() && getParentAccountabilitiesSet().size() == 1) {
                 throw new DomainException("error.Party.cannot.remove.parent.accountability");
             }
             accountability.delete();

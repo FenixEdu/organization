@@ -111,7 +111,7 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
         setParent(null);
         setChild(null);
         setMyOrg(null);
-        if (child.getParentAccountabilitiesCount() == 0) {
+        if (child.getParentAccountabilitiesSet().size() == 0) {
             child.delete();
         }
     }
