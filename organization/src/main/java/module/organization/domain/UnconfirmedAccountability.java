@@ -105,12 +105,12 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
     @Override
     public void delete() {
         final Party child = getChild();
-        removeUnconfirmedAccountabilityType();
-        removeUser();
-        removeAccountabilityVersion();
-        removeParent();
-        removeChild();
-        removeMyOrg();
+        setUnconfirmedAccountabilityType(null);
+        setUser(null);
+        setAccountabilityVersion(null);
+        setParent(null);
+        setChild(null);
+        setMyOrg(null);
         if (child.getParentAccountabilitiesCount() == 0) {
             child.delete();
         }

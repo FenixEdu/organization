@@ -54,7 +54,7 @@ abstract public class PartyPredicate {
     }
 
     protected boolean hasPartyType(final PartyType type, final Party party) {
-        return type == null || party.hasPartyTypes(type);
+        return type == null || party.getPartyTypesSet().contains(type);
     }
 
     protected boolean hasAccountabilityType(final AccountabilityType type, final Accountability accountability) {

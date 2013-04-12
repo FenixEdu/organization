@@ -153,14 +153,14 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     }
 
     protected void canDelete() {
-        if (hasAnyAccountabilities()) {
+        if (!getAccountabilitiesSet().isEmpty()) {
             throw new DomainException("error.AccountabilityType.has.accountabilities.cannot.delete");
         }
     }
 
     private void disconnect() {
         getConnectionRules().clear();
-        removeMyOrg();
+        setMyOrg(null);
     }
 
     @Override
@@ -187,7 +187,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
         if (type == null || type.isEmpty()) {
             return null;
         }
-        for (final AccountabilityType element : MyOrg.getInstance().getAccountabilityTypes()) {
+        for (final AccountabilityType element : MyOrg.getInstance().getAccountabilityTypesSet()) {
             if (element.hasType(type)) {
                 return element;
             }
@@ -199,6 +199,36 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     public void associateConnectionRules(final List<ConnectionRule> connectionRules) {
         getConnectionRules().retainAll(connectionRules);
         getConnectionRules().addAll(connectionRules);
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.groups.UnitGroup> getUnitGroupFromChildUnitAccountabilityType() {
+        return getUnitGroupFromChildUnitAccountabilityTypeSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.ConnectionRule> getConnectionRules() {
+        return getConnectionRulesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.OrganizationalModel> getOrganizationalModels() {
+        return getOrganizationalModelsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.groups.UnitGroup> getUnitGroupFromMemberAccountabilityType() {
+        return getUnitGroupFromMemberAccountabilityTypeSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.UnconfirmedAccountability> getUnconfirmedAccountabilities() {
+        return getUnconfirmedAccountabilitiesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Accountability> getAccountabilities() {
+        return getAccountabilitiesSet();
     }
 
 }

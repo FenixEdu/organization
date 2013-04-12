@@ -163,7 +163,7 @@ public class Accountability extends Accountability_Base {
     }
 
     public boolean isValid() {
-        return hasParent() && hasChild() && getAccountabilityType().isValid(getParent(), getChild());
+        return getParent() != null && getChild() != null && getAccountabilityType().isValid(getParent(), getChild());
     }
 
     public boolean isActive(final LocalDate date) {
@@ -405,7 +405,7 @@ public class Accountability extends Accountability_Base {
         // accountabilities!!
         if (parties == null || parties.isEmpty()) {
             final PartyByAccTypeAndDates typeAndDates = new PartyByAccTypeAndDates(startDate, endDate, accTypes);
-            for (final Accountability accountability : MyOrg.getInstance().getAccountabilities()) {
+            for (final Accountability accountability : MyOrg.getInstance().getAccountabilitiesSet()) {
                 if (typeAndDates.eval(null, accountability)) {
                     accountabilities.add(accountability);
                 }
@@ -421,12 +421,12 @@ public class Accountability extends Accountability_Base {
 
     @ConsistencyPredicate
     public boolean checkHasChild() {
-        return hasChild();
+        return getChild() != null;
     }
 
     @ConsistencyPredicate
     public boolean checkHasParent() {
-        return hasParent();
+        return getParent() != null;
     }
 
     public LocalDate getBeginDate() {
@@ -451,6 +451,11 @@ public class Accountability extends Accountability_Base {
 
     public void switchChild(final Party newChild) {
         super.setChild(newChild);
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.FunctionDelegation> getFunctionDelegationDelegated() {
+        return getFunctionDelegationDelegatedSet();
     }
 
 }

@@ -104,7 +104,7 @@ public class UniqueNameAndAcronymConnectionRule extends UniqueNameAndAcronymConn
     }
 
     private boolean checkTopUnitsNameAndAcronym(final Unit unit) {
-        for (final Party party : MyOrg.getInstance().getTopUnits()) {
+        for (final Party party : MyOrg.getInstance().getTopUnitsSet()) {
             if (party.isUnit() && !party.equals(this) && hasSameNameAndAcronym((Unit) party, unit)) {
                 return false;
             }

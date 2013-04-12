@@ -83,7 +83,7 @@ public class OrganizationalModel extends OrganizationalModel_Base {
     public void delete() {
         getAccountabilityTypesSet().clear();
         getPartiesSet().clear();
-        removeMyOrg();
+        setMyOrg(null);
         deleteDomainObject();
     }
 
@@ -94,7 +94,7 @@ public class OrganizationalModel extends OrganizationalModel_Base {
 
     public Set<Unit> getAllUnits() {
         Set<Unit> units = new HashSet<Unit>();
-        for (Party party : getParties()) {
+        for (Party party : getPartiesSet()) {
             if (party.isUnit()) {
                 units.add((Unit) party);
                 units.addAll(party.getDescendentUnits());
@@ -104,12 +104,12 @@ public class OrganizationalModel extends OrganizationalModel_Base {
     }
 
     public boolean containsUnit(final Party party) {
-        if (hasParties(party)) {
+        if (getPartiesSet().contains(party)) {
             return true;
         }
         for (final Accountability accountability : party.getParentAccountabilitiesSet()) {
             final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (accountability.isActiveNow() && hasAccountabilityTypes(accountabilityType)) {
+            if (accountability.isActiveNow() && getAccountabilityTypesSet().contains(accountabilityType)) {
                 final Party parent = accountability.getParent();
                 if (containsUnit(parent)) {
                     return true;
@@ -117,6 +117,16 @@ public class OrganizationalModel extends OrganizationalModel_Base {
             }
         }
         return false;
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Party> getParties() {
+        return getPartiesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.AccountabilityType> getAccountabilityTypes() {
+        return getAccountabilityTypesSet();
     }
 
 }

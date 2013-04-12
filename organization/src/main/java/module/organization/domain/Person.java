@@ -139,8 +139,8 @@ public class Person extends Person_Base implements Searchable, Indexable {
 
     @Override
     protected void disconnect() {
-        removeUser();
-        removeMyOrgFromPerson();
+        setUser(null);
+        setMyOrgFromPerson(null);
         super.disconnect();
     }
 
@@ -171,7 +171,7 @@ public class Person extends Person_Base implements Searchable, Indexable {
     }
 
     static public Person readByPartyName(MultiLanguageString partyName) {
-        for (final Party party : MyOrg.getInstance().getParties()) {
+        for (final Party party : MyOrg.getInstance().getPartiesSet()) {
             if (!party.isUnit()) {
                 if (party.getPartyName().equals(partyName)) {
                     return (Person) party;
@@ -266,7 +266,7 @@ public class Person extends Person_Base implements Searchable, Indexable {
 
     @Override
     public String getPresentationName() {
-        return hasUser() ? getUser().getPresentationName() : getName();
+        return getUser() != null ? getUser().getPresentationName() : getName();
     }
 
 }

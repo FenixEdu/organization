@@ -103,7 +103,7 @@ public class TreeMenuOrganizationLayout extends Layout implements OrganizationLa
         final HtmlList list = new HtmlList();
         list.setClasses(this.view.getRootClasses());
 
-        final List<Unit> topUnits = new ArrayList<Unit>(myOrg.getTopUnits());
+        final List<Unit> topUnits = new ArrayList<Unit>(myOrg.getTopUnitsSet());
         Collections.sort(topUnits, this.view.getSortBy());
 
         for (final Unit unit : topUnits) {

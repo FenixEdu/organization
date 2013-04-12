@@ -124,7 +124,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
     @Override
     public boolean isTop() {
-        return !hasAnyParentAccountabilities() && hasMyOrgFromTopUnit();
+        return getParentAccountabilitiesSet().isEmpty() && getMyOrgFromTopUnit() != null;
     }
 
     @Atomic
@@ -142,7 +142,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
     @Override
     protected void disconnect() {
-        removeMyOrgFromTopUnit();
+        setMyOrgFromTopUnit(null);
         super.disconnect();
     }
 
@@ -249,7 +249,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
     @Override
     protected Party findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(final AccountabilityType accountabilityType,
             final PartyType partyType, final String acronym) {
-        if (hasPartyTypes(partyType) && acronym.equals(getAcronym())) {
+        if (getPartyTypesSet().contains(partyType) && acronym.equals(getAcronym())) {
             return this;
         }
         for (final Accountability accountability : getChildAccountabilitiesSet()) {
@@ -271,7 +271,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
     private int depth(final Set<Accountability> processed) {
         int depth = 0;
-        if (hasAnyOrganizationalModels()) {
+        if (!getOrganizationalModelsSet().isEmpty()) {
             return depth;
         }
         for (final Accountability accountability : getParentAccountabilitiesSet()) {
@@ -303,7 +303,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
                 final Party child = accountability.getChild();
                 if (child.isPerson()) {
                     final Person person = (Person) child;
-                    if (person.hasUser()) {
+                    if (person.getUser() != null) {
                         result.add(person.getUser());
                     }
                 } else if (child.isUnit()) {
@@ -350,4 +350,10 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
     public IndexMode getIndexMode() {
         return IndexMode.MANUAL;
     }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.groups.UnitGroup> getUnitGroup() {
+        return getUnitGroupSet();
+    }
+
 }

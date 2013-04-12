@@ -53,7 +53,7 @@ public class PartiesAutoCompleteProvider implements AutoCompleteProvider {
         final String[] input = trimmedValue.split(" ");
         StringNormalizer.normalize(input);
 
-        for (final Party party : MyOrg.getInstance().getParties()) {
+        for (final Party party : MyOrg.getInstance().getPartiesSet()) {
             final String partyName = StringNormalizer.normalize(party.getPartyName().getContent());
             if (hasMatch(input, partyName)) {
                 if (allowResult(party)) {
@@ -70,7 +70,7 @@ public class PartiesAutoCompleteProvider implements AutoCompleteProvider {
                     }
                 } else if (party.isPerson()) {
                     final Person person = (Person) party;
-                    final String username = person.hasUser() ? person.getUser().getUsername() : null;
+                    final String username = person.getUser() != null ? person.getUser().getUsername() : null;
                     if (username != null && username.equalsIgnoreCase(trimmedValue)) {
                         if (allowResult(party)) {
                             parties.add(person);

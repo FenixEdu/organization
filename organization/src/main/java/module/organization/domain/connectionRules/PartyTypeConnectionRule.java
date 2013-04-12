@@ -130,8 +130,8 @@ public class PartyTypeConnectionRule extends PartyTypeConnectionRule_Base {
 
     @Override
     protected void disconnect() {
-        removeAllowedParent();
-        removeAllowedChild();
+        setAllowedParent(null);
+        setAllowedChild(null);
         super.disconnect();
     }
 
@@ -146,11 +146,11 @@ public class PartyTypeConnectionRule extends PartyTypeConnectionRule_Base {
     }
 
     boolean hasAllowedParent(final Party parent) {
-        return parent.hasPartyTypes(getAllowedParent());
+        return parent.getPartyTypesSet().contains(getAllowedParent());
     }
 
     boolean hasAllowedChild(final Party child) {
-        return child.hasPartyTypes(getAllowedChild());
+        return child.getPartyTypesSet().contains(getAllowedChild());
     }
 
     @Override

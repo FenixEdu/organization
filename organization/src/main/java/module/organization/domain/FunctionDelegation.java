@@ -120,22 +120,28 @@ public class FunctionDelegation extends FunctionDelegation_Base {
         }
 
         Accountability delegatedAccountability = getAccountabilityDelegatee();
-        removeAccountabilityDelegatee();
+        setAccountabilityDelegatee(null);
         delegatedAccountability.delete();
 
-        removeAccountabilityDelegator();
-        removeMyOrg();
+        setAccountabilityDelegator(null);
+        setMyOrg(null);
 
         deleteDomainObject();
     }
 
     @ConsistencyPredicate
     public boolean checkHasAccountabilityDelegator() {
-        return hasAccountabilityDelegator();
+        return getAccountabilityDelegator() != null;
     }
 
     @ConsistencyPredicate
     public boolean checkHasAccountabilityDelegatee() {
-        return hasAccountabilityDelegatee();
+        return getAccountabilityDelegatee() != null;
     }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.FunctionDelegationLog> getFunctionDelegationLogs() {
+        return getFunctionDelegationLogsSet();
+    }
+
 }

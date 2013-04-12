@@ -125,15 +125,15 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
     @Atomic
     public void delete() {
         canDelete();
-        removeMyOrg();
+        setMyOrg(null);
         deleteDomainObject();
     }
 
     private void canDelete() {
-        if (hasAnyParties()) {
+        if (!getPartiesSet().isEmpty()) {
             throw new DomainException("error.PartyType.has.parties.cannot.delete");
         }
-        if (hasAnyParentConnectionRules() || hasAnyChildConnectionRules()) {
+        if (!getParentConnectionRulesSet().isEmpty() || !getChildConnectionRulesSet().isEmpty()) {
             throw new DomainException("error.PartyType.has.connection.rules.cannot.delete");
         }
     }
@@ -159,6 +159,21 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
             }
         }
         return null;
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.connectionRules.PartyTypeConnectionRule> getParentConnectionRules() {
+        return getParentConnectionRulesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.connectionRules.PartyTypeConnectionRule> getChildConnectionRules() {
+        return getChildConnectionRulesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Party> getParties() {
+        return getPartiesSet();
     }
 
 }

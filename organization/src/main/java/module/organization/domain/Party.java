@@ -805,4 +805,24 @@ abstract public class Party extends Party_Base implements Presentable {
 
     }
 
+    @Deprecated
+    public java.util.Set<module.organization.domain.Accountability> getParentAccountabilities() {
+        return getParentAccountabilitiesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.OrganizationalModel> getOrganizationalModels() {
+        return getOrganizationalModelsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Accountability> getChildAccountabilities() {
+        return getChildAccountabilitiesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.PartyType> getPartyTypes() {
+        return getPartyTypesSet();
+    }
+
 }
