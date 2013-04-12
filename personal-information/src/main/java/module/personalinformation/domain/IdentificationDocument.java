@@ -92,8 +92,8 @@ public class IdentificationDocument extends IdentificationDocument_Base {
     }
 
     protected void disconnect() {
-        removeMyOrg();
-        removePersonalInformation();
+        setMyOrg(null);
+        setPersonalInformation(null);
     }
 
     static IdentificationDocument create(final PersonalInformation information, final IdentificationDocumentBean bean) {
