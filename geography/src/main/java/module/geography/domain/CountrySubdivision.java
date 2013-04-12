@@ -177,7 +177,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
     @Atomic
     public void delete() {
         Unit unit = this.getUnit();
-        removeUnit();
+        setUnit(null);
         for (Accountability accountability : unit.getChildAccountabilities()) {
             unit.removeChildAccountabilities(accountability);
         }

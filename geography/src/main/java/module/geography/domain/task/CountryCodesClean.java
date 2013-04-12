@@ -57,7 +57,7 @@ public class CountryCodesClean extends CountryCodesClean_Base {
         countriesToClean.add(Country.getPortugal());
         HashMap<String, ArrayList<Integer>> infoByCountry = new HashMap<String, ArrayList<Integer>>();
 
-        for (Country country : MyOrg.getInstance().getCountries()) {
+        for (Country country : MyOrg.getInstance().getCountriesSet()) {
             // try {
             country.delete();
             countryDeletes++;

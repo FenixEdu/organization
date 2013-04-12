@@ -68,14 +68,14 @@ public class CleanCountrySubLevels extends CleanCountrySubLevels_Base {
         // add to an array all of the countries one wants to clean the sublevels
         ArrayList<Country> countriesToClean = new ArrayList<Country>();
         countriesToClean.add(Country.getPortugal());
-        countriesToClean.addAll(MyOrg.getInstance().getCountries());
+        countriesToClean.addAll(MyOrg.getInstance().getCountriesSet());
         HashMap<String, ArrayList<Integer>> infoByCountry = new HashMap<String, ArrayList<Integer>>();
 
         for (Country country : countriesToClean) {
             ArrayList<CountrySubdivision> countrySubdivisions = new ArrayList<CountrySubdivision>();
             countrySubdivisions.addAll(country.getChildren());
             for (CountrySubdivision countrySubdivision : countrySubdivisions) {
-                // countrySubdivision.removePhysicalAddress(); TODO implement it
+                // countrySubdivision.setPhysicalAddress(null); TODO implement it
                 // in a listener in the Contacts module
                 countrySubdivision.delete();
                 countrySubDivisionDeletes++;
@@ -84,7 +84,7 @@ public class CleanCountrySubLevels extends CleanCountrySubLevels_Base {
             subdivisionLevelNames.addAll(country.getLevelName());
 
             for (CountrySubdivisionLevelName countrySubdivisionLevelName : subdivisionLevelNames) {
-                countrySubdivisionLevelName.removeCountry();
+                countrySubdivisionLevelName.setCountry(null);
                 countrySubdivisionLevelName.delete();
                 countrySubDivisionLevelNameDeletes++;
             }

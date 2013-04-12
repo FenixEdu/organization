@@ -142,7 +142,7 @@ public class Country extends Country_Base {
      * @return the number.
      */
     public int getSubdivisionDepth() {
-        return getLevelNameCount();
+        return getLevelName().size();
     }
 
     // TODO check to see if the part of removing the PhysicalAddress and
@@ -150,8 +150,8 @@ public class Country extends Country_Base {
     @Deprecated
     public void delete() {
         Unit unit = this.getUnit();
-        removeUnit();
-        removeMyOrg();
+        setUnit(null);
+        setMyOrg(null);
         unit.delete();
         deleteDomainObject();
     }
@@ -333,4 +333,9 @@ public class Country extends Country_Base {
         }
         return one.equals(two);
     }
+    @Deprecated
+    public java.util.Set<module.geography.domain.CountrySubdivisionLevelName> getLevelName() {
+        return getLevelNameSet();
+    }
+
 }
