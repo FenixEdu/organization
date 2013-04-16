@@ -94,8 +94,8 @@ text-decoration: line-through;
 	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.accBeginDate" /></th>
 	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.accEndDate" /></th>
 	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.accountabilityType" /></th>
-	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.party.child" /></th>
 	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.party.parent" /></th>
+	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.party.child" /></th>
 	    <th><bean:message bundle="ORGANIZATION_RESOURCES" key="label.viewAccountabilityHistory.accountabilityJustification" /></th>
 	  </tr>
 	  <logic:iterate  name="accItemsToDisplay" id="accItem">
@@ -120,16 +120,16 @@ text-decoration: line-through;
 		    <td><bean:write name="accItem" property="endDate"/></td>
 		    <td><bean:write name="accItem" property="accountabilityType.name.content"/></td>
 		    <%-- Printing the parents based on if the Accoutability is deleted or not --%>
-			    <logic:present name="accItem" property="child">
-			    	<td><bean:write name="accItem" property="child.partyName"/></td>
-			    </logic:present>
-			    <logic:notPresent name="accItem" property="child">
-			    	<td>-</td>
-			    </logic:notPresent>
 			    <logic:present name="accItem" property="parent">
 			    	<td><bean:write name="accItem" property="parent.partyName"/></td>
 			    </logic:present>
 			    <logic:notPresent name="accItem" property="parent">
+			    	<td>-</td>
+			    </logic:notPresent>
+			    <logic:present name="accItem" property="child">
+			    	<td><bean:write name="accItem" property="child.partyName"/></td>
+			    </logic:present>
+			    <logic:notPresent name="accItem" property="child">
 			    	<td>-</td>
 			    </logic:notPresent>
 		    <%-- Printing the parents based on if the Accoutability is deleted or not : END--%>
