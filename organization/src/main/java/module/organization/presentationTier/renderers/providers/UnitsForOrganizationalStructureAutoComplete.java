@@ -31,7 +31,7 @@ import java.util.Set;
 
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
-import pt.ist.fenixframework.pstm.AbstractDomainObject;
+import pt.ist.fenixframework.FenixFramework;
 
 /**
  * 
@@ -47,7 +47,7 @@ public class UnitsForOrganizationalStructureAutoComplete extends UnitAutoComplet
             return Collections.emptySet();
         }
 
-        OrganizationalModel model = AbstractDomainObject.fromOID(Long.valueOf(oid));
+        OrganizationalModel model = FenixFramework.getDomainObject(oid);
         Set<Party> parties = new HashSet<Party>();
         parties.addAll(model.getAllUnits());
         return parties;

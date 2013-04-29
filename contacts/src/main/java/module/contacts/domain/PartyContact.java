@@ -25,6 +25,7 @@
 package module.contacts.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -38,13 +39,13 @@ import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
 import pt.ist.bennu.core.domain.groups.Role;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.dml.runtime.Relation;
+import pt.ist.fenixframework.dml.runtime.RelationListener;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Searchable;
-import dml.runtime.Relation;
-import dml.runtime.RelationListener;
 
 /**
  * 
@@ -58,7 +59,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     public PartyContact() {
         super();
         ContactsConfigurator.getInstance().addPartyContact(this);
-        this.PersistentGroupPartyContact.addListener(new ValidVisibilityGroupsEnforcer());
+        getRelationPersistentGroupPartyContact().addListener(new ValidVisibilityGroupsEnforcer());
     }
 
     static protected void validateUser(User userCreatingTheContact, Party partyThatWillOwnTheContact, PartyContactType type) {
@@ -87,7 +88,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
 
     }
 
-    static protected void validateVisibilityGroups(List<PersistentGroup> visibilityGroups) {
+    static protected void validateVisibilityGroups(Collection<PersistentGroup> visibilityGroups) {
         if (!ContactsConfigurator.getInstance().getVisibilityGroups().containsAll(visibilityGroups)) {
             throw new DomainException("manage.contacts.wrong.visibility.groups.defined");
         }
@@ -107,7 +108,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
         @Override
         public void beforeAdd(Relation<PartyContact, PersistentGroup> relation, PartyContact partyContact,
                 PersistentGroup persistentGroup) {
-            if (!ContactsConfigurator.getInstance().hasVisibilityGroups(persistentGroup)) {
+            if (!ContactsConfigurator.getInstance().getVisibilityGroups().contains(persistentGroup)) {
                 throw new DomainException("error.adding.contact.invalid.visibility.group",
                         DomainException.getResourceFor("resources/ContactsResources"));
             }
@@ -166,7 +167,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      * @param value
      *            the value to set
      */
-    @Service
+    @Atomic
     public void setContactValue(String value) {
         // if (UserView.getCurrentUser() != null /*&&
         // !isEditableBy(UserView.getCurrentUser())*/) {
@@ -185,7 +186,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      * @param value
      *            the value to set
      */
-    @Service
+    @Atomic
     public void forceChangeContactValue(String value) {
         setValue(value);
     }
@@ -226,8 +227,8 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
      * @param groups
      *            the groups to which this PartyContact will be visibile to
      */
-    @Service
-    public void setVisibleTo(List<PersistentGroup> groups) {
+    @Atomic
+    public void setVisibleTo(Collection<PersistentGroup> groups) {
         // add all of the groups that are on the groups but not on the current
         // list of visibility groups
         if (groups != null) {
@@ -320,8 +321,8 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
     }
 
     public void delete() {
-        removeParty();
-        removeContactsConfigurator();
+        setParty(null);
+        setContactsConfigurator(null);
         for (PersistentGroup group : getVisibilityGroups()) {
             removeVisibilityGroups(group);
         }
@@ -333,7 +334,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
         if (defaultContact != null && defaultContact.booleanValue()) {
             // remove the other default contacts of this type so that there is
             // only one for each type
-            for (PartyContact partyContact : getParty().getPartyContacts()) {
+            for (PartyContact partyContact : getParty().getPartyContactsSet()) {
                 if (partyContact.getClass().isInstance(this.getClass()) && partyContact.getDefaultContact().booleanValue()) {
                     partyContact.setDefaultContact(Boolean.FALSE);
                 }
@@ -342,7 +343,7 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
         super.setDefaultContact(defaultContact);
     }
 
-    @Service
+    @Atomic
     public void deleteByUser(User currentUser) {
         // Confirmations not done here anymore
 
@@ -368,4 +369,10 @@ public abstract class PartyContact extends PartyContact_Base implements Indexabl
         EmailAddress email = getEmailAddressForSendingEmails(party);
         return email != null ? email.getValue() : StringUtils.EMPTY;
     }
+
+    @Deprecated
+    public java.util.Set<pt.ist.bennu.core.domain.groups.PersistentGroup> getVisibilityGroups() {
+        return getVisibilityGroupsSet();
+    }
+
 }

@@ -33,7 +33,7 @@ import module.organization.domain.PartyType;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -88,7 +88,7 @@ public class PartyTypeConnectionRule extends PartyTypeConnectionRule_Base {
         }
     }
 
-    @Service
+    @Atomic
     static public PartyTypeConnectionRule create(final PartyType allowedParent, final PartyType allowedChild) {
         return new PartyTypeConnectionRule(allowedParent, allowedChild);
     }
@@ -130,8 +130,8 @@ public class PartyTypeConnectionRule extends PartyTypeConnectionRule_Base {
 
     @Override
     protected void disconnect() {
-        removeAllowedParent();
-        removeAllowedChild();
+        setAllowedParent(null);
+        setAllowedChild(null);
         super.disconnect();
     }
 
@@ -146,11 +146,11 @@ public class PartyTypeConnectionRule extends PartyTypeConnectionRule_Base {
     }
 
     boolean hasAllowedParent(final Party parent) {
-        return parent.hasPartyTypes(getAllowedParent());
+        return parent.getPartyTypesSet().contains(getAllowedParent());
     }
 
     boolean hasAllowedChild(final Party child) {
-        return child.hasPartyTypes(getAllowedChild());
+        return child.getPartyTypesSet().contains(getAllowedChild());
     }
 
     @Override

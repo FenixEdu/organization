@@ -24,7 +24,7 @@
  */
 package module.contacts.domain;
 
-import java.util.List;
+import java.util.Collection;
 
 import module.organization.domain.Party;
 
@@ -33,7 +33,7 @@ import org.joda.time.DateTime;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -44,7 +44,7 @@ import pt.ist.fenixWebFramework.services.Service;
 public class EmailAddress extends EmailAddress_Base {
 
     public EmailAddress(String emailAddress, Party party, Boolean defaultContact, PartyContactType partyContactType,
-            List<PersistentGroup> visibilityGroups) {
+            Collection<PersistentGroup> visibilityGroups) {
         super();
 
         super.setVisibleTo(visibilityGroups);
@@ -69,9 +69,9 @@ public class EmailAddress extends EmailAddress_Base {
      *            going to be visible to.
      * @return an EmailAddress with the given parameters
      */
-    @Service
+    @Atomic
     public static EmailAddress createNewEmailAddress(String emailAddress, Party party, Boolean defaultContact,
-            PartyContactType partyContactType, User userCreatingTheContact, List<PersistentGroup> visibilityGroups) {
+            PartyContactType partyContactType, User userCreatingTheContact, Collection<PersistentGroup> visibilityGroups) {
         // validate that the user can actually create this contact
         validateUser(userCreatingTheContact, party, partyContactType);
 
@@ -79,7 +79,7 @@ public class EmailAddress extends EmailAddress_Base {
         validateVisibilityGroups(visibilityGroups);
 
         // make sure that this isn't a duplicate contact for this party
-        for (PartyContact partyContact : party.getPartyContacts()) {
+        for (PartyContact partyContact : party.getPartyContactsSet()) {
             if (partyContact instanceof EmailAddress && partyContact.getValue() == emailAddress
                     && partyContactType.equals(partyContact.getType())) {
                 throw new DomainException("error.duplicate.partyContact");

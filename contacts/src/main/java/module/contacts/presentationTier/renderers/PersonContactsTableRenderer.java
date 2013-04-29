@@ -114,7 +114,7 @@ public class PersonContactsTableRenderer extends OutputRenderer {
                 // topDiv.setClasses("infobox1 mvert15px");
                 Person person = ((Person) unfiltered);
                 MetaObject personMO = MetaObjectFactory.createObject(unfiltered, RenderKit.getInstance().findSchema(getSchema()));
-                Collection<PartyContact> partyContacts = ((Person) unfiltered).getPartyContacts();
+                Collection<PartyContact> partyContacts = ((Person) unfiltered).getPartyContactsSet();
                 List<MetaObject> contacts = getFilteredContacts(partyContacts);
                 // construct the person's header on the table
                 HtmlBlockContainer header = new HtmlBlockContainer();

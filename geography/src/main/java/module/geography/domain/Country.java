@@ -38,7 +38,7 @@ import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -113,7 +113,7 @@ public class Country extends Country_Base {
         return new MultiLanguageString().with(Language.pt, "País").with(Language.en, COUNTRY_PARTYTYPE_NAME);
     }
 
-    @Service
+    @Atomic
     public AddressPrinter getAddressPrinter() {
         if (super.getIAddressPrinter() == null) {
             setIAddressPrinter(AddressPrinter.class);
@@ -142,7 +142,7 @@ public class Country extends Country_Base {
      * @return the number.
      */
     public int getSubdivisionDepth() {
-        return getLevelNameCount();
+        return getLevelName().size();
     }
 
     // TODO check to see if the part of removing the PhysicalAddress and
@@ -150,8 +150,8 @@ public class Country extends Country_Base {
     @Deprecated
     public void delete() {
         Unit unit = this.getUnit();
-        removeUnit();
-        removeMyOrg();
+        setUnit(null);
+        setMyOrg(null);
         unit.delete();
         deleteDomainObject();
     }
@@ -333,4 +333,9 @@ public class Country extends Country_Base {
         }
         return one.equals(two);
     }
+    @Deprecated
+    public java.util.Set<module.geography.domain.CountrySubdivisionLevelName> getLevelName() {
+        return getLevelNameSet();
+    }
+
 }

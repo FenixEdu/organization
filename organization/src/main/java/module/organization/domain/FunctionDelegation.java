@@ -33,7 +33,7 @@ import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.DomainObject;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
@@ -89,13 +89,13 @@ public class FunctionDelegation extends FunctionDelegation_Base {
         new FunctionDelegationLog(this, "Create");
     }
 
-    @Service
+    @Atomic
     public static FunctionDelegation create(final Accountability accountability, final Unit unit, final Person person,
             final LocalDate beginDate, final LocalDate endDate) {
         return new FunctionDelegation(accountability, unit, person, beginDate, endDate);
     }
 
-    @Service
+    @Atomic
     public void edit(final LocalDate beginDate, final LocalDate endDate) {
         new FunctionDelegationLog(this, "Edit");
         final Accountability accountabilityDelegatee = getAccountabilityDelegatee();
@@ -112,7 +112,7 @@ public class FunctionDelegation extends FunctionDelegation_Base {
         accountabilityDelegatee.editDates(beginDate, endDate);
     }
 
-    @Service
+    @Atomic
     public void delete() {
         new FunctionDelegationLog(this, "Delete");
         for (FunctionDelegationLog log : getFunctionDelegationLogs()) {
@@ -120,22 +120,28 @@ public class FunctionDelegation extends FunctionDelegation_Base {
         }
 
         Accountability delegatedAccountability = getAccountabilityDelegatee();
-        removeAccountabilityDelegatee();
+        setAccountabilityDelegatee(null);
         delegatedAccountability.delete();
 
-        removeAccountabilityDelegator();
-        removeMyOrg();
+        setAccountabilityDelegator(null);
+        setMyOrg(null);
 
         deleteDomainObject();
     }
 
     @ConsistencyPredicate
     public boolean checkHasAccountabilityDelegator() {
-        return hasAccountabilityDelegator();
+        return getAccountabilityDelegator() != null;
     }
 
     @ConsistencyPredicate
     public boolean checkHasAccountabilityDelegatee() {
-        return hasAccountabilityDelegatee();
+        return getAccountabilityDelegatee() != null;
     }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.FunctionDelegationLog> getFunctionDelegationLogs() {
+        return getFunctionDelegationLogsSet();
+    }
+
 }

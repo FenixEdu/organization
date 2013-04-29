@@ -261,8 +261,8 @@ public class OrganizationModelAction extends ContextBaseAction {
         PartySearchBean partySearchBean = getRenderedObject("partySearchBean");
         if (partySearchBean == null) {
             party = getDomainObject(request, "partyOid");
-            if (party == null && organizationalModel.getPartiesCount() == 1) {
-                party = organizationalModel.getPartiesIterator().next();
+            if (party == null && organizationalModel.getPartiesSet().size() == 1) {
+                party = organizationalModel.getPartiesSet().iterator().next();
                 request.setAttribute("viewName", UNIT_CHART_VIEW_NAME);
             }
             partySearchBean = new PartySearchBean(party);

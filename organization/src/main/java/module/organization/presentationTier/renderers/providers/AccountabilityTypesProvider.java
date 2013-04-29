@@ -47,7 +47,7 @@ public class AccountabilityTypesProvider implements DataProvider {
 
     @Override
     public Object provide(Object source, Object currentValue) {
-        return new ArrayList<AccountabilityType>(MyOrg.getInstance().getAccountabilityTypes());
+        return new ArrayList<AccountabilityType>(MyOrg.getInstance().getAccountabilityTypesSet());
     }
 
 }

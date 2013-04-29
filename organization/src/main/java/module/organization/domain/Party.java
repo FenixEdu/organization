@@ -24,7 +24,6 @@
  */
 package module.organization.domain;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -52,7 +51,7 @@ import pt.ist.bennu.core.domain.Presentable;
 import pt.ist.bennu.core.domain.RoleType;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
@@ -127,41 +126,15 @@ abstract public class Party extends Party_Base implements Presentable {
         return getParents(new PartyByPartyType(Unit.class, type));
     }
 
-    public List<Accountability> getAllParentAccountabilities() {
-        return super.getParentAccountabilities();
+    public Set<Accountability> getAllParentAccountabilities() {
+        return super.getParentAccountabilitiesSet();
     }
 
     // Overriden methods to hide the erased accs: 
     @Override
-    public List<Accountability> getParentAccountabilities() {
-        ArrayList<Accountability> accsToReturn = new ArrayList<Accountability>();
-        for (Accountability acc : super.getParentAccountabilities()) {
-            if (!acc.isErased()) {
-                accsToReturn.add(acc);
-            }
-        }
-        return accsToReturn;
-    }
-
-    @Override
-    public int getParentAccountabilitiesCount() {
-        return getParentAccountabilities().size();
-    }
-
-    @Override
     public Set<Accountability> getParentAccountabilitiesSet() {
-        return new HashSet<Accountability>(getParentAccountabilities());
-    }
-
-    @Override
-    public Iterator<Accountability> getParentAccountabilitiesIterator() {
-        return super.getParentAccountabilities().iterator();
-    }
-
-    @Override
-    public List<Accountability> getChildAccountabilities() {
-        ArrayList<Accountability> accsToReturn = new ArrayList<Accountability>();
-        for (Accountability acc : super.getChildAccountabilities()) {
+        Set<Accountability> accsToReturn = new HashSet<Accountability>();
+        for (Accountability acc : super.getParentAccountabilitiesSet()) {
             if (!acc.isErased()) {
                 accsToReturn.add(acc);
             }
@@ -169,19 +142,19 @@ abstract public class Party extends Party_Base implements Presentable {
         return accsToReturn;
     }
 
-    @Override
-    public int getChildAccountabilitiesCount() {
-        return getChildAccountabilities().size();
+    public Iterator<Accountability> getParentAccountabilitiesIterator() {
+        return super.getParentAccountabilitiesSet().iterator();
     }
 
     @Override
     public Set<Accountability> getChildAccountabilitiesSet() {
-        return new HashSet<Accountability>(getChildAccountabilities());
-    }
-
-    @Override
-    public Iterator<Accountability> getChildAccountabilitiesIterator() {
-        return getChildAccountabilities().iterator();
+        Set<Accountability> accsToReturn = new HashSet<Accountability>();
+        for (Accountability acc : super.getChildAccountabilitiesSet()) {
+            if (!acc.isErased()) {
+                accsToReturn.add(acc);
+            }
+        }
+        return accsToReturn;
     }
 
     @Deprecated
@@ -484,7 +457,7 @@ abstract public class Party extends Party_Base implements Presentable {
         return false;
     }
 
-    @Service
+    @Atomic
     public void delete() {
         canDelete();
         disconnect();
@@ -492,17 +465,17 @@ abstract public class Party extends Party_Base implements Presentable {
     }
 
     protected void canDelete() {
-        if (hasAnyChildAccountabilities()) {
+        if (!getChildAccountabilitiesSet().isEmpty()) {
             throw new DomainException("error.Party.delete.has.child.accountabilities");
         }
     }
 
     protected void disconnect() {
-        while (super.hasAnyParentAccountabilities()) {
-            super.getParentAccountabilities().get(0).delete();
+        for (Accountability acc : super.getParentAccountabilitiesSet()) {
+            acc.delete();
         }
         getPartyTypes().clear();
-        removeMyOrg();
+        setMyOrg(null);
     }
 
     /**
@@ -515,7 +488,7 @@ abstract public class Party extends Party_Base implements Presentable {
      *            is provided
      * @return
      */
-    @Service
+    @Atomic
     public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin,
             final LocalDate end, String justification) {
         return Accountability.create(parent, this, type, begin, end, justification);
@@ -560,7 +533,7 @@ abstract public class Party extends Party_Base implements Presentable {
      *            none is provided
      * @return
      */
-    @Service
+    @Atomic
     public Accountability addChild(final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end,
             String justification) {
         Accountability intersectingAccountability = getIntersectingChildAccountability(child, type, begin, end);
@@ -608,17 +581,17 @@ abstract public class Party extends Party_Base implements Presentable {
         return intersectingAccountability;
     }
 
-    @Service
+    @Atomic
     public void removeParent(final Accountability accountability) {
-        if (hasParentAccountabilities(accountability)) {
-            if (isUnit() && getParentAccountabilitiesCount() == 1) {
+        if (getParentAccountabilitiesSet().contains(accountability)) {
+            if (isUnit() && getParentAccountabilitiesSet().size() == 1) {
                 throw new DomainException("error.Party.cannot.remove.parent.accountability");
             }
             accountability.delete();
         }
     }
 
-    @Service
+    @Atomic
     public void editPartyTypes(final List<PartyType> partyTypes) {
         getPartyTypes().retainAll(partyTypes);
         getPartyTypes().addAll(partyTypes);
@@ -804,6 +777,26 @@ abstract public class Party extends Party_Base implements Presentable {
 
         return accountabilities;
 
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Accountability> getParentAccountabilities() {
+        return getParentAccountabilitiesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.OrganizationalModel> getOrganizationalModels() {
+        return getOrganizationalModelsSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.Accountability> getChildAccountabilities() {
+        return getChildAccountabilitiesSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.PartyType> getPartyTypes() {
+        return getPartyTypesSet();
     }
 
 }

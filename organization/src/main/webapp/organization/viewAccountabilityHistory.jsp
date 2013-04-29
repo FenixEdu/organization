@@ -6,7 +6,7 @@
 <%@page import="module.organization.domain.Party"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.joda.time.LocalDate"%>
-<%@page import="pt.ist.fenixframework.pstm.AbstractDomainObject"%>
+<%@page import="pt.ist.fenixframework.FenixFramework"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
     <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
     <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
@@ -22,7 +22,7 @@ request.setAttribute("parties",partiesStrings);
 ArrayList<Party> parties = new ArrayList<Party>();
 for(String partyString : partiesStrings)
 {
-    parties.add((Party) AbstractDomainObject.fromExternalId(partyString));
+    parties.add((Party) FenixFramework.getDomainObject(partyString));
     
 }
 
@@ -31,7 +31,7 @@ request.setAttribute("accountabilities",accountabilitiesStrings);
 ArrayList<AccountabilityType> accountabilities = new ArrayList<AccountabilityType>();
 for (String accString : accountabilitiesStrings)
 {
-    accountabilities.add((AccountabilityType) AbstractDomainObject.fromExternalId(accString));
+    accountabilities.add((AccountabilityType) FenixFramework.getDomainObject(accString));
 }
 
 String startDateYear = request.getParameter("startDateYear");

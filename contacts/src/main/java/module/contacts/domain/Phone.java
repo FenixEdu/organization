@@ -33,7 +33,7 @@ import org.joda.time.DateTime;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -74,7 +74,7 @@ public class Phone extends Phone_Base {
      * @param visibilityGroups
      * @return a Phone with the given parameters
      */
-    @Service
+    @Atomic
     public static Phone createNewPhone(PhoneType phoneType, String number, Party party, Boolean defaultContact,
             PartyContactType partyContactType, User userCreatingTheContact, List<PersistentGroup> visibilityGroups) {
 
@@ -85,7 +85,7 @@ public class Phone extends Phone_Base {
         validateVisibilityGroups(visibilityGroups);
 
         // make sure that this isn't a duplicate contact for this party
-        for (PartyContact partyContact : party.getPartyContacts()) {
+        for (PartyContact partyContact : party.getPartyContactsSet()) {
             if ((partyContact instanceof Phone) && partyContact.getValue() == number
                     && partyContactType.equals(partyContact.getType()) && phoneType.equals(((Phone) partyContact).getPhoneType())) {
                 throw new DomainException("error.duplicate.partyContact");
@@ -100,7 +100,7 @@ public class Phone extends Phone_Base {
         return getPhoneType().getFieldName();
     };
 
-    @Service
+    @Atomic
     public void changePhoneType(PhoneType phoneType) {
         setPhoneType(phoneType);
     }

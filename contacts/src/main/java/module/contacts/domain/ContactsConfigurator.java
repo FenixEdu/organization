@@ -24,6 +24,7 @@
  */
 package module.contacts.domain;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -32,10 +33,10 @@ import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
 import pt.ist.bennu.core.domain.groups.Role;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.dml.runtime.Relation;
+import pt.ist.fenixframework.dml.runtime.RelationListener;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
-import dml.runtime.Relation;
-import dml.runtime.RelationListener;
 
 /**
  * 
@@ -52,10 +53,10 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
     private ContactsConfigurator() {
         super();
         MyOrg.getInstance().setContactsConfigurator(this);
-        this.PersistentGroupContactsConfigurator.addListener(new VisibilityGroupsEnforcerListener());
+        getRelationPersistentGroupContactsConfigurator().addListener(new VisibilityGroupsEnforcerListener());
     }
 
-    @Service
+    @Atomic
     public static ContactsConfigurator getInstance() {
         ContactsConfigurator contactsConfigurator = MyOrg.getInstance().getContactsConfigurator();
         if (contactsConfigurator == null) {
@@ -88,10 +89,10 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
      * @author João André Pereira Antunes (joao.antunes@tagus.ist.utl.pt)
      * 
      */
-    final static class VisibilityGroupsEnforcerListener implements RelationListener<ContactsConfigurator, PersistentGroup> {
+    final static class VisibilityGroupsEnforcerListener implements RelationListener<PersistentGroup, ContactsConfigurator> {
 
         @Override
-        public void afterAdd(Relation<ContactsConfigurator, PersistentGroup> arg0, ContactsConfigurator arg1, PersistentGroup arg2) {
+        public void afterAdd(Relation<PersistentGroup, ContactsConfigurator> arg0, PersistentGroup arg2, ContactsConfigurator arg1) {
             // nothing needs to be done when adding a group to the list of the
             // possible visibility groups
         }
@@ -101,41 +102,41 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
          * might have with that group
          */
         @Override
-        public void afterRemove(Relation<ContactsConfigurator, PersistentGroup> relation,
-                ContactsConfigurator contactsConfigurator, PersistentGroup persistentGroup) {
+        public void afterRemove(Relation<PersistentGroup, ContactsConfigurator> relation, PersistentGroup persistentGroup,
+                ContactsConfigurator contactsConfigurator) {
             for (PartyContact contact : ContactsConfigurator.getInstance().getPartyContact()) {
                 contact.removeVisibilityGroups(persistentGroup);
             }
         }
 
         @Override
-        public void beforeAdd(Relation<ContactsConfigurator, PersistentGroup> arg0, ContactsConfigurator arg1,
-                PersistentGroup arg2) {
+        public void beforeAdd(Relation<PersistentGroup, ContactsConfigurator> arg0, PersistentGroup arg2,
+                ContactsConfigurator arg1) {
             // nothing needs to be done when adding a group to the list of the
             // possible visibility groups
         }
 
         @Override
-        public void beforeRemove(Relation<ContactsConfigurator, PersistentGroup> relation,
-                ContactsConfigurator contactsConfigurator, PersistentGroup persistentGroup) {
+        public void beforeRemove(Relation<PersistentGroup, ContactsConfigurator> relation, PersistentGroup persistentGroup,
+                ContactsConfigurator contactsConfigurator) {
             // nothing needs to be done before removing the relation
 
         }
 
     }
 
-    @Service
+    @Atomic
     private static ContactsConfigurator createInstance() {
         return new ContactsConfigurator();
     }
 
-    @Service
-    public void setVisibilityGroups(List<PersistentGroup> groups) {
+    @Atomic
+    public void setVisibilityGroups(Collection<PersistentGroup> groups) {
 
         if (groups == null) {
             return;
         }
-        List<PersistentGroup> existingGroups = getVisibilityGroups();
+        Set<PersistentGroup> existingGroups = getVisibilityGroups();
         // add the ones on the groups to the list of existing
         for (PersistentGroup persistentGroup : groups) {
             if (!existingGroups.contains(persistentGroup)) {
@@ -162,7 +163,7 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
      *            the group to which all of the current members will be assigned
      *            the super-editor role
      */
-    @Service
+    @Atomic
     public void assignSuperEditorToPersonsCurrentlyIn(PersistentGroup groupToUse) {
         Set<User> groupMembers = groupToUse.getMembers();
         for (User user : groupMembers) {
@@ -170,13 +171,13 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
         }
     }
 
-    @Service
+    @Atomic
     public void assignSuperEditorRole(User user) {
         Role.getRole(getContactsRoles().MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).addUsers(user);
 
     }
 
-    @Service
+    @Atomic
     public void removeSuperEditorRole(User user) {
         Role.getRole(getContactsRoles().MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).removeUsers(user);
     }
@@ -289,4 +290,14 @@ public class ContactsConfigurator extends ContactsConfigurator_Base {
     public boolean isSuperEditor(User user) {
         return (Role.getRole(ContactsRoles.MODULE_CONTACTS_DOMAIN_CONTACTSEDITOR).isMember(user));
     }
+    @Deprecated
+    public java.util.Set<module.contacts.domain.PartyContact> getPartyContact() {
+        return getPartyContactSet();
+    }
+
+    @Deprecated
+    public java.util.Set<pt.ist.bennu.core.domain.groups.PersistentGroup> getVisibilityGroups() {
+        return getVisibilityGroupsSet();
+    }
+
 }

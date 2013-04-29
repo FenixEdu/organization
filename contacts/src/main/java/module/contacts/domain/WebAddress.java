@@ -33,7 +33,7 @@ import org.joda.time.DateTime;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -74,7 +74,7 @@ public class WebAddress extends WebAddress_Base {
      *            contact visible to
      * @return an WebAddress with the given parameters
      */
-    @Service
+    @Atomic
     public static WebAddress createNewWebAddress(String url, Party party, Boolean defaultContact, PartyContactType type,
             User userCreatingTheContact, List<PersistentGroup> visibilityGroups) {
         // validate that the user can actually create this contact
@@ -84,7 +84,7 @@ public class WebAddress extends WebAddress_Base {
         validateVisibilityGroups(visibilityGroups);
 
         // make sure that this isn't a duplicate contact for this party
-        for (PartyContact partyContact : party.getPartyContacts()) {
+        for (PartyContact partyContact : party.getPartyContactsSet()) {
             if (partyContact instanceof WebAddress && partyContact.getValue() == url && type.equals(partyContact.getType())) {
                 throw new DomainException("error.duplicate.partyContact");
             }
