@@ -33,7 +33,7 @@ import module.organization.domain.Unit;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -79,7 +79,7 @@ public class UnitGroup extends UnitGroup_Base {
         }
         final String unitName = unit.getPresentationName();
         final String unitIdentifier =
-                hasAnyChildUnitAccountabilityType() ? BundleUtil.getFormattedStringFromResourceBundle(
+                !getChildUnitAccountabilityTypeSet().isEmpty() ? BundleUtil.getFormattedStringFromResourceBundle(
                         "resources/OrganizationResources", "label.persistent.group.unitGroup.includeing.subunits", unitName) : unitName;
         return BundleUtil.getFormattedStringFromResourceBundle("resources/OrganizationResources",
                 "label.persistent.group.unitGroup.name", unitIdentifier, builder.toString());
@@ -87,7 +87,7 @@ public class UnitGroup extends UnitGroup_Base {
 
     @Override
     public boolean isMember(final User user) {
-        if (user != null && user.hasPerson()) {
+        if (user != null && user.getPerson() != null) {
             final Person person = user.getPerson();
             final Unit unit = getUnit();
             return person.hasPartyAsAncestor(unit, getAccountabilityTypes());
@@ -108,7 +108,7 @@ public class UnitGroup extends UnitGroup_Base {
         return result;
     }
 
-    @Service
+    @Atomic
     public static UnitGroup getOrCreateGroup(final Unit unit, final AccountabilityType[] memberTypes,
             final AccountabilityType[] childUnitTypes) {
         if (unit == null) {
@@ -143,6 +143,16 @@ public class UnitGroup extends UnitGroup_Base {
             return true;
         }
         return false;
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.AccountabilityType> getChildUnitAccountabilityType() {
+        return getChildUnitAccountabilityTypeSet();
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.AccountabilityType> getMemberAccountabilityType() {
+        return getMemberAccountabilityTypeSet();
     }
 
 }

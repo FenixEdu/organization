@@ -103,7 +103,7 @@ public class TreeMenuOrganizationLayout extends Layout implements OrganizationLa
         final HtmlList list = new HtmlList();
         list.setClasses(this.view.getRootClasses());
 
-        final List<Unit> topUnits = new ArrayList<Unit>(myOrg.getTopUnits());
+        final List<Unit> topUnits = new ArrayList<Unit>(myOrg.getTopUnitsSet());
         Collections.sort(topUnits, this.view.getSortBy());
 
         for (final Unit unit : topUnits) {
@@ -173,7 +173,7 @@ public class TreeMenuOrganizationLayout extends Layout implements OrganizationLa
     }
 
     protected void drawPartyChildren(final HtmlList childHtmlList, final Party parent) {
-        final List<Party> children = new ArrayList<Party>(parent.getChildAccountabilitiesCount());
+        final List<Party> children = new ArrayList<Party>(parent.getChildAccountabilitiesSet().size());
 
         for (final Accountability accountability : parent.getChildAccountabilitiesSet()) {
             if (this.view.getPredicate().eval(accountability.getChild(), accountability)) {

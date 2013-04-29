@@ -32,7 +32,7 @@ import module.geography.domain.CountrySubdivision;
 import module.geography.domain.CountrySubdivisionLevelName;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * *WARNING* This task shouldn't be called to delete the districts as it removes
@@ -62,20 +62,20 @@ public class CleanCountrySubLevels extends CleanCountrySubLevels_Base {
     /* (non-Javadoc)
      * @see pt.ist.bennu.core.domain.scheduler.Task#executeTask()
      */
+    @Atomic
     @Override
-    @Service
     public void executeTask() {
         // add to an array all of the countries one wants to clean the sublevels
         ArrayList<Country> countriesToClean = new ArrayList<Country>();
         countriesToClean.add(Country.getPortugal());
-        countriesToClean.addAll(MyOrg.getInstance().getCountries());
+        countriesToClean.addAll(MyOrg.getInstance().getCountriesSet());
         HashMap<String, ArrayList<Integer>> infoByCountry = new HashMap<String, ArrayList<Integer>>();
 
         for (Country country : countriesToClean) {
             ArrayList<CountrySubdivision> countrySubdivisions = new ArrayList<CountrySubdivision>();
             countrySubdivisions.addAll(country.getChildren());
             for (CountrySubdivision countrySubdivision : countrySubdivisions) {
-                // countrySubdivision.removePhysicalAddress(); TODO implement it
+                // countrySubdivision.setPhysicalAddress(null); TODO implement it
                 // in a listener in the Contacts module
                 countrySubdivision.delete();
                 countrySubDivisionDeletes++;
@@ -84,7 +84,7 @@ public class CleanCountrySubLevels extends CleanCountrySubLevels_Base {
             subdivisionLevelNames.addAll(country.getLevelName());
 
             for (CountrySubdivisionLevelName countrySubdivisionLevelName : subdivisionLevelNames) {
-                countrySubdivisionLevelName.removeCountry();
+                countrySubdivisionLevelName.setCountry(null);
                 countrySubdivisionLevelName.delete();
                 countrySubDivisionLevelNameDeletes++;
             }

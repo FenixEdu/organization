@@ -38,7 +38,7 @@ import org.joda.time.LocalDate;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -163,7 +163,7 @@ public class Accountability extends Accountability_Base {
     }
 
     public boolean isValid() {
-        return hasParent() && hasChild() && getAccountabilityType().isValid(getParent(), getChild());
+        return getParent() != null && getChild() != null && getAccountabilityType().isValid(getParent(), getChild());
     }
 
     public boolean isActive(final LocalDate date) {
@@ -238,7 +238,7 @@ public class Accountability extends Accountability_Base {
      * @param justification an information justification/reason for the change of accountability, or null if there is none, or
      *            none is provided
      */
-    @Service
+    @Atomic
     public void delete(String justification) {
         setInactive(justification);
     }
@@ -328,7 +328,7 @@ public class Accountability extends Accountability_Base {
      * 
      * @return the new Accountability that was just created
      */
-    @Service
+    @Atomic
     public void editDates(final LocalDate begin, final LocalDate end, String justification) {
         check(begin, "error.Accountability.invalid.begin");
         checkDates(getParent(), begin, end);
@@ -405,7 +405,7 @@ public class Accountability extends Accountability_Base {
         // accountabilities!!
         if (parties == null || parties.isEmpty()) {
             final PartyByAccTypeAndDates typeAndDates = new PartyByAccTypeAndDates(startDate, endDate, accTypes);
-            for (final Accountability accountability : MyOrg.getInstance().getAccountabilities()) {
+            for (final Accountability accountability : MyOrg.getInstance().getAccountabilitiesSet()) {
                 if (typeAndDates.eval(null, accountability)) {
                     accountabilities.add(accountability);
                 }
@@ -421,12 +421,12 @@ public class Accountability extends Accountability_Base {
 
     @ConsistencyPredicate
     public boolean checkHasChild() {
-        return hasChild();
+        return getChild() != null;
     }
 
     @ConsistencyPredicate
     public boolean checkHasParent() {
-        return hasParent();
+        return getParent() != null;
     }
 
     public LocalDate getBeginDate() {
@@ -451,6 +451,11 @@ public class Accountability extends Accountability_Base {
 
     public void switchChild(final Party newChild) {
         super.setChild(newChild);
+    }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.FunctionDelegation> getFunctionDelegationDelegated() {
+        return getFunctionDelegationDelegatedSet();
     }
 
 }

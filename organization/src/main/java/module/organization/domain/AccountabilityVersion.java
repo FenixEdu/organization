@@ -92,12 +92,13 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
 
     @ConsistencyPredicate
     public boolean checkIsConnectedToList() {
-        return (hasPreviousAccVersion() && !hasAccountability()) || (!hasPreviousAccVersion() && hasAccountability());
+        return (getPreviousAccVersion() != null && getAccountability() == null)
+                || (getPreviousAccVersion() == null && getAccountability() != null);
     }
 
     @ConsistencyPredicate
     public boolean checkErasedAsFinalVersion() {
-        return !getErased() || hasAccountability();
+        return !getErased() || getAccountability() != null;
     }
 
     @ConsistencyPredicate(OrganizationConsistencyException.class)

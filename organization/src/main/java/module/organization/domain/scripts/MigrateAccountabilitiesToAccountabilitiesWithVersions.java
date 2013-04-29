@@ -58,7 +58,7 @@ public class MigrateAccountabilitiesToAccountabilitiesWithVersions extends ReadC
 
         // let's get the list of all Accountabilities without Versions
 
-        for (Accountability acc : MyOrg.getInstance().getAccountabilities()) {
+        for (Accountability acc : MyOrg.getInstance().getAccountabilitiesSet()) {
             if (acc.getAccountabilityVersion() == null) {
                 accountabilitiesToMigrate.add(acc);
             }

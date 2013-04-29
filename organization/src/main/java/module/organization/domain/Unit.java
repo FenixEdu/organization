@@ -35,7 +35,7 @@ import org.joda.time.LocalDate;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.IndexDocument;
 import pt.ist.fenixframework.plugins.luceneIndexing.domain.interfaces.Indexable;
@@ -124,10 +124,10 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
     @Override
     public boolean isTop() {
-        return !hasAnyParentAccountabilities() && hasMyOrgFromTopUnit();
+        return getParentAccountabilitiesSet().isEmpty() && getMyOrgFromTopUnit() != null;
     }
 
-    @Service
+    @Atomic
     public Unit edit(final MultiLanguageString name, final String acronym) {
         check(name, acronym);
         setPartyName(name);
@@ -142,11 +142,11 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
     @Override
     protected void disconnect() {
-        removeMyOrgFromTopUnit();
+        setMyOrgFromTopUnit(null);
         super.disconnect();
     }
 
-    @Service
+    @Atomic
     static public Unit create(final UnitBean bean) {
         return create(bean.getParent(), bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityType(),
                 bean.getBegin(), bean.getEnd(), bean.getOrganizationalModel());
@@ -200,14 +200,14 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
      *            none is provided
      * @return
      */
-    @Service
+    @Atomic
     public static Unit create(Party parent, MultiLanguageString name, String acronym, PartyType partyType,
             AccountabilityType accountabilityType, LocalDate begin, LocalDate end, OrganizationalModel organizationalModel,
             String justification) {
         return new Unit(parent, name, acronym, partyType, accountabilityType, begin, end, organizationalModel, justification);
     }
 
-    @Service
+    @Atomic
     static public Unit createRoot(final UnitBean bean) {
         return createRoot(bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityJustification());
     }
@@ -225,7 +225,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
         return new Unit(null, name, acronym, partyType, null, new LocalDate(), null, null, null);
     }
 
-    @Service
+    @Atomic
     static public Unit createRoot(final MultiLanguageString name, final String acronym, final PartyType partyType,
             String accJustification) {
         return new Unit(null, name, acronym, partyType, null, new LocalDate(), null, null, accJustification);
@@ -249,7 +249,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
     @Override
     protected Party findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(final AccountabilityType accountabilityType,
             final PartyType partyType, final String acronym) {
-        if (hasPartyTypes(partyType) && acronym.equals(getAcronym())) {
+        if (getPartyTypesSet().contains(partyType) && acronym.equals(getAcronym())) {
             return this;
         }
         for (final Accountability accountability : getChildAccountabilitiesSet()) {
@@ -271,7 +271,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
 
     private int depth(final Set<Accountability> processed) {
         int depth = 0;
-        if (hasAnyOrganizationalModels()) {
+        if (!getOrganizationalModelsSet().isEmpty()) {
             return depth;
         }
         for (final Accountability accountability : getParentAccountabilitiesSet()) {
@@ -303,7 +303,7 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
                 final Party child = accountability.getChild();
                 if (child.isPerson()) {
                     final Person person = (Person) child;
-                    if (person.hasUser()) {
+                    if (person.getUser() != null) {
                         result.add(person.getUser());
                     }
                 } else if (child.isUnit()) {
@@ -350,4 +350,10 @@ public class Unit extends Unit_Base implements Indexable, Searchable {
     public IndexMode getIndexMode() {
         return IndexMode.MANUAL;
     }
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.groups.UnitGroup> getUnitGroup() {
+        return getUnitGroupSet();
+    }
+
 }

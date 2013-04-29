@@ -179,7 +179,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
     public ActionForward viewPartyTypes(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) throws Exception {
-        request.setAttribute("partyTypes", getMyOrg().getPartyTypes());
+        request.setAttribute("partyTypes", getMyOrg().getPartyTypesSet());
         return forward(request, "/organization/partyTypes/viewPartyTypes.jsp");
     }
 
@@ -230,7 +230,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
     public ActionForward viewAccountabilityTypes(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        request.setAttribute("accountabilityTypes", getMyOrg().getAccountabilityTypes());
+        request.setAttribute("accountabilityTypes", getMyOrg().getAccountabilityTypesSet());
         return forward(request, "/organization/accountabilityTypes/viewAccountabilityTypes.jsp");
     }
 
@@ -290,14 +290,14 @@ public class OrganizationManagementAction extends ContextBaseAction {
         buildConnectionRuleOids(type, (OrganizationForm) form);
 
         request.setAttribute("accountabilityType", type);
-        request.setAttribute("connectionRules", getMyOrg().getConnectionRules());
+        request.setAttribute("connectionRules", getMyOrg().getConnectionRulesSet());
 
         return forward(request, "/organization/connectionRules/associateConnectionRules.jsp");
     }
 
     private void buildConnectionRuleOids(final AccountabilityType type, final OrganizationForm organizationForm) {
         int index = 0;
-        final String[] oids = new String[type.getConnectionRulesCount()];
+        final String[] oids = new String[type.getConnectionRulesSet().size()];
         for (final ConnectionRule connectionRule : type.getConnectionRulesSet()) {
             oids[index++] = connectionRule.getExternalId();
         }
@@ -314,7 +314,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
         } catch (final DomainException e) {
             addMessage(request, e.getKey(), e.getArgs());
             request.setAttribute("accountabilityType", type);
-            request.setAttribute("connectionRules", getMyOrg().getConnectionRules());
+            request.setAttribute("connectionRules", getMyOrg().getConnectionRulesSet());
             return forward(request, "/organization/connectionRules/associateConnectionRules.jsp");
         }
 
@@ -333,7 +333,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
 
     public ActionForward viewConnectionRules(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        request.setAttribute("connectionRules", getMyOrg().getConnectionRules());
+        request.setAttribute("connectionRules", getMyOrg().getConnectionRulesSet());
         return forward(request, "/organization/connectionRules/viewConnectionRules.jsp");
     }
 
@@ -571,13 +571,13 @@ public class OrganizationManagementAction extends ContextBaseAction {
         buildPartyTypeOids(party, (OrganizationForm) form);
 
         request.setAttribute("party", party);
-        request.setAttribute("partyTypes", getMyOrg().getPartyTypes());
+        request.setAttribute("partyTypes", getMyOrg().getPartyTypesSet());
         return forward(request, "/organization/partyTypes/editPartyPartyTypes.jsp");
     }
 
     private void buildPartyTypeOids(final Party party, final OrganizationForm organizationForm) {
         int index = 0;
-        final String[] oids = new String[party.getPartyTypesCount()];
+        final String[] oids = new String[party.getPartyTypesSet().size()];
         for (final PartyType partyType : party.getPartyTypesSet()) {
             oids[index++] = partyType.getExternalId();
         }
@@ -593,7 +593,7 @@ public class OrganizationManagementAction extends ContextBaseAction {
         } catch (final DomainException e) {
             addMessage(request, e.getKey(), e.getArgs());
             request.setAttribute("party", party);
-            request.setAttribute("partyTypes", getMyOrg().getPartyTypes());
+            request.setAttribute("partyTypes", getMyOrg().getPartyTypesSet());
             return forward(request, "/organization/partyTypes/editPartyPartyTypes.jsp");
         }
 

@@ -32,7 +32,7 @@ import org.joda.time.LocalDate;
 import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
@@ -71,7 +71,7 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
         AccountabilityVersion.insertAccountabilityVersion(begin, end, this, false, justification);
     }
 
-    @Service
+    @Atomic
     public static AccountabilityType readAccountabilityType() {
         final AccountabilityType accountabilityType = AccountabilityType.readBy(ACCOUNTABILITY_TYPE_TYPE);
         return accountabilityType == null ? createAccountabilityType() : accountabilityType;
@@ -105,13 +105,13 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
     @Override
     public void delete() {
         final Party child = getChild();
-        removeUnconfirmedAccountabilityType();
-        removeUser();
-        removeAccountabilityVersion();
-        removeParent();
-        removeChild();
-        removeMyOrg();
-        if (child.getParentAccountabilitiesCount() == 0) {
+        setUnconfirmedAccountabilityType(null);
+        setUser(null);
+        setAccountabilityVersion(null);
+        setParent(null);
+        setChild(null);
+        setMyOrg(null);
+        if (child.getParentAccountabilitiesSet().size() == 0) {
             child.delete();
         }
     }
@@ -125,14 +125,14 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
         delete();
     }
 
-    @Service
+    @Atomic
     public void confirm(String justification) {
         Accountability.create(getParent(), getChild(), getUnconfirmedAccountabilityType(), getBeginDate(), getEndDate(),
                 justification);
         delete();
     }
 
-    @Service
+    @Atomic
     public void reject() {
         delete();
     }
