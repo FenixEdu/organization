@@ -40,7 +40,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core._development.PropertiesManager;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -80,7 +80,7 @@ public class PortugueseDistrictImportAuxiliaryServices {
         return singletonHolder;
     }
 
-    @Service
+    @Atomic
     protected void executeTask(PortugueseDistrictImport originalTask) {
         // let's retrieve Portugal, if it doesn't exist, we must create it
         portugal = Country.getPortugal();

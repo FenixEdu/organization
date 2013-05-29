@@ -28,7 +28,7 @@ import module.geography.domain.Galaxy;
 import module.geography.domain.GeographicConstants;
 import module.geography.domain.Planet;
 import module.geography.domain.Universe;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.Language;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -42,7 +42,7 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  * 
  */
 public class Magrathea implements GeographicConstants {
-    @Service
+    @Atomic
     public static Planet buildEarth() {
         Universe universe = Universe.getMultiverseZero();
         if (universe == null) {

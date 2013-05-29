@@ -29,7 +29,7 @@ import module.contacts.domain.PartyContact;
 import module.organization.domain.Person;
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -54,9 +54,9 @@ public class IndexPersonsAndContacts extends IndexPersonsAndContacts_Base {
      * @see pt.ist.bennu.core.domain.scheduler.Task#executeTask()
      */
     @Override
-    @Service
+    @Atomic
     public void executeTask() {
-        for (Person person : MyOrg.getInstance().getPersons()) {
+        for (Person person : MyOrg.getInstance().getPersonsSet()) {
             person.setPartyName(person.getPartyName());
             personsTouched++;
         }

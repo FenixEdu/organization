@@ -46,7 +46,7 @@ public class PartyTypesProvider implements DataProvider {
 
     @Override
     public Object provide(Object source, Object currentValue) {
-        return new ArrayList<PartyType>(MyOrg.getInstance().getPartyTypes());
+        return new ArrayList<PartyType>(MyOrg.getInstance().getPartyTypesSet());
     }
 
 }

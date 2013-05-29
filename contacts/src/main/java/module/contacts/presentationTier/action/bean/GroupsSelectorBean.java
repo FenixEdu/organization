@@ -25,8 +25,8 @@
 package module.contacts.presentationTier.action.bean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import pt.ist.bennu.core.domain.groups.PersistentGroup;
 
@@ -45,14 +45,14 @@ public class GroupsSelectorBean implements Serializable {
     /**
      * The groups that are selected
      */
-    private List<PersistentGroup> groups;
+    private Set<PersistentGroup> groups;
 
-    public void setGroups(List<PersistentGroup> groups) {
-        this.groups = new ArrayList<PersistentGroup>();
+    public void setGroups(Set<PersistentGroup> groups) {
+        this.groups = new HashSet<PersistentGroup>();
         this.groups.addAll(groups);
     }
 
-    public List<PersistentGroup> getGroups() {
+    public Set<PersistentGroup> getGroups() {
         return groups;
     }
 

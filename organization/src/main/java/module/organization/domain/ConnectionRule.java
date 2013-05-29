@@ -27,7 +27,7 @@ package module.organization.domain;
 import java.io.Serializable;
 
 import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -67,7 +67,7 @@ abstract public class ConnectionRule extends ConnectionRule_Base {
         setMyOrg(MyOrg.getInstance());
     }
 
-    @Service
+    @Atomic
     public void delete() {
         disconnect();
         deleteDomainObject();
@@ -75,7 +75,7 @@ abstract public class ConnectionRule extends ConnectionRule_Base {
 
     protected void disconnect() {
         getAccountabilityTypes().clear();
-        removeMyOrg();
+        setMyOrg(null);
     }
 
     abstract public ConnectionRuleBean buildBean();
@@ -83,4 +83,10 @@ abstract public class ConnectionRule extends ConnectionRule_Base {
     abstract public boolean isValid(final AccountabilityType accountabilityType, final Party parent, final Party child);
 
     abstract public String getDescription();
+
+    @Deprecated
+    public java.util.Set<module.organization.domain.AccountabilityType> getAccountabilityTypes() {
+        return getAccountabilityTypesSet();
+    }
+
 }

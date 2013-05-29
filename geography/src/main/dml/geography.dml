@@ -24,13 +24,6 @@
  *   along with the Geography Module. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
- 
- valueType java.lang.Class as Class {
-	externalizeWith {
-		String getName();
-	}
-	internalizeWith pt.ist.bennu.core.domain.util.ClassInternalizer.internalize();
-}
 
 class module.geography.domain.GeographicLocation {
 	DateTime lastReview;

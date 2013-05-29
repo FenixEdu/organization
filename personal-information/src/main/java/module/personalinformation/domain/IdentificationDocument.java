@@ -28,7 +28,6 @@ import java.io.Serializable;
 
 import pt.ist.bennu.core.domain.MyOrg;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.fenixframework.pstm.Transaction;
 
 /**
  * 
@@ -89,12 +88,12 @@ public class IdentificationDocument extends IdentificationDocument_Base {
 
     public void delete() {
         disconnect();
-        Transaction.deleteObject(this);
+        deleteDomainObject();
     }
 
     protected void disconnect() {
-        removeMyOrg();
-        removePersonalInformation();
+        setMyOrg(null);
+        setPersonalInformation(null);
     }
 
     static IdentificationDocument create(final PersonalInformation information, final IdentificationDocumentBean bean) {

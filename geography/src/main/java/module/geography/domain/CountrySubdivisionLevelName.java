@@ -52,7 +52,7 @@ public class CountrySubdivisionLevelName extends CountrySubdivisionLevelName_Bas
      *         doesn't take into account the existing CountrySubdivisions
      */
     public boolean canBeDeleted() {
-        if (this.hasCountry()) {
+        if (this.getCountry() != null) {
             throw new DomainException("error.Party.delete.has.child.accountabilities");
         }
         return true;
