@@ -8,7 +8,9 @@ import java.util.Collections;
 import java.util.List;
 
 import module.geography.domain.Country;
-import pt.ist.bennu.core.domain.MyOrg;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 
@@ -26,7 +28,7 @@ public class CountryProvider implements DataProvider {
     @Override
     public Object provide(Object arg0, Object arg1) {
 
-        List<Country> countries = new ArrayList<Country>(MyOrg.getInstance().getCountriesSet());
+        List<Country> countries = new ArrayList<Country>(Bennu.getInstance().getCountriesSet());
 
         Collections.sort(countries, Country.COMPARATOR_BY_NAME);
 

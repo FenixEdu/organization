@@ -31,26 +31,29 @@ import java.util.List;
 import java.util.Map;
 
 import module.geography.domain.Country;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.commons.StringNormalizer;
 
 /**
  * 
  * @author Luis Cruz
  * 
  */
-public class CountryAutoCompleteProvider implements AutoCompleteProvider {
+public class CountryAutoCompleteProvider implements AutoCompleteProvider<Country> {
 
     @Override
-    public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
+    public Collection<Country> getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         final List<Country> countries = new ArrayList<Country>();
 
         final String trimmedValue = value.trim();
         final String[] input = trimmedValue.split(" ");
-        StringNormalizer.normalize(input);
+        for (int i = 0; i < input.length; i++) {
+            input[i] = StringNormalizer.normalize(input[i]);
+        }
 
-        for (final Country country : MyOrg.getInstance().getCountriesSet()) {
+        for (final Country country : Bennu.getInstance().getCountriesSet()) {
             final String countryName = StringNormalizer.normalize(country.getName().getContent());
             if (hasMatch(input, countryName)) {
                 countries.add(country);

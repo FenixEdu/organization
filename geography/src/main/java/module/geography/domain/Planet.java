@@ -26,13 +26,12 @@ package module.geography.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import module.organization.domain.Unit;
 
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
-
-import pt.utl.ist.fenix.tools.util.i18n.Language;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
  * Planets. Some have intelligent life in them, most of which would like it
@@ -43,7 +42,7 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  * 
  */
 public class Planet extends Planet_Base {
-    public Planet(Galaxy parent, MultiLanguageString name, String acronym) {
+    public Planet(Galaxy parent, LocalizedString name, String acronym) {
         super();
         setUnit(Unit.create(parent.getUnit(), name, acronym, getPartyType("Planeta", PLANET_PARTYTYPE_NAME),
                 getOrCreateAccountabilityType(), new LocalDate(), null));
@@ -51,8 +50,8 @@ public class Planet extends Planet_Base {
     }
 
     @Override
-    public MultiLanguageString getType() {
-        return new MultiLanguageString().with(Language.pt, "Planeta").with(Language.en, PLANET_PARTYTYPE_NAME);
+    public LocalizedString getType() {
+        return new LocalizedString().with(new Locale("pt"), "Planeta").with(Locale.ENGLISH, PLANET_PARTYTYPE_NAME);
     }
 
     public Galaxy getParent() {

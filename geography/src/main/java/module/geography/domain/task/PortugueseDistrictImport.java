@@ -24,14 +24,17 @@
  */
 package module.geography.domain.task;
 
-import pt.ist.bennu.core.util.BundleUtil;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.scheduler.CronTask;
+import org.fenixedu.bennu.scheduler.annotation.Task;
 
 /**
  * 
  * @author João Antunes
  * 
  */
-public class PortugueseDistrictImport extends PortugueseDistrictImport_Base {
+@Task(englishTitle = "Import Portuguese District from CSV")
+public class PortugueseDistrictImport extends CronTask {
 
     public PortugueseDistrictImport() {
         super();
@@ -39,15 +42,15 @@ public class PortugueseDistrictImport extends PortugueseDistrictImport_Base {
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/GeographyResources", "label.task.ctt.portugal.districts.import");
+        return BundleUtil.getString("resources/GeographyResources", "label.task.ctt.portugal.districts.import");
     }
 
     protected void auxLogInfo(String message) {
-        logInfo(message);
+        taskLog(message);
     }
 
     @Override
-    public void executeTask() {
+    public void runTask() {
         // let's initialize the auxiliary class due to the the nasty injector
         // errors
         PortugueseDistrictImportAuxiliaryServices aux = PortugueseDistrictImportAuxiliaryServices.getInstance();

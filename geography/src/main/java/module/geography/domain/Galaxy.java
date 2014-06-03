@@ -26,13 +26,12 @@ package module.geography.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import module.organization.domain.Unit;
 
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
-
-import pt.utl.ist.fenix.tools.util.i18n.Language;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
  * Galaxies. Some are far far away.
@@ -43,15 +42,15 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  * 
  */
 public class Galaxy extends Galaxy_Base {
-    public Galaxy(Universe parent, MultiLanguageString name, String acronym) {
+    public Galaxy(Universe parent, LocalizedString name, String acronym) {
         super();
         setUnit(Unit.create(parent.getUnit(), name, acronym, getPartyType("Galáxia", GALAXY_PARTYTYPE_NAME),
                 getOrCreateAccountabilityType(), new LocalDate(), null));
     }
 
     @Override
-    public MultiLanguageString getType() {
-        return new MultiLanguageString().with(Language.pt, "Galáxia").with(Language.en, GALAXY_PARTYTYPE_NAME);
+    public LocalizedString getType() {
+        return new LocalizedString().with(new Locale("pt"), "Galáxia").with(Locale.ENGLISH, GALAXY_PARTYTYPE_NAME);
     }
 
     public Universe getParent() {

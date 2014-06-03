@@ -26,12 +26,13 @@ package module.geography.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Set;
 
 import module.organization.domain.Unit;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.commons.i18n.LocalizedString;
 
 /**
  * Universes. Some claim that these is more than one Universe, and each decision
@@ -45,14 +46,14 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  */
 public class Universe extends Universe_Base implements GeographicConstants {
 
-    public Universe(MultiLanguageString name, String acronym) {
+    public Universe(LocalizedString name, String acronym) {
         super();
         setUnit(Unit.createRoot(name, acronym, getPartyType("Universo", UNIVERSE_PARTYTYPE_NAME)));
     }
 
     @Override
-    public MultiLanguageString getType() {
-        return new MultiLanguageString().with(Language.pt, "Universo").with(Language.en, UNIVERSE_PARTYTYPE_NAME);
+    public LocalizedString getType() {
+        return new LocalizedString().with(new Locale("pt"), "Universo").with(Locale.ENGLISH, UNIVERSE_PARTYTYPE_NAME);
     }
 
     public Collection<Galaxy> getChildren() {
@@ -74,7 +75,7 @@ public class Universe extends Universe_Base implements GeographicConstants {
     }
 
     public static Universe getMultiverseZero() {
-        Set<Unit> tops = MyOrg.getInstance().getTopUnitsSet();
+        Set<Unit> tops = Bennu.getInstance().getTopUnitsSet();
         for (Unit unit : tops) {
             if (unit.getAcronym().equals(MULTIVERSE_UNIT_ACRONYM)) {
                 return (Universe) unit.getGeographicLocation();

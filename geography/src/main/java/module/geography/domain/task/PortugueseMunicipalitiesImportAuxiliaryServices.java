@@ -31,18 +31,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import module.geography.domain.Country;
 import module.geography.domain.CountrySubdivision;
+import module.geography.util.GeographyPropertiesManager;
 import module.organization.domain.Accountability;
 
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core._development.PropertiesManager;
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
  * 
@@ -65,8 +65,8 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
 
     protected int touches = 0;
 
-    private final MultiLanguageString municipalityLevelName = new MultiLanguageString().with(Language.pt, "Concelho").with(
-            Language.en, "Municipality");
+    private final LocalizedString municipalityLevelName = new LocalizedString().with(new Locale("pt"), "Concelho").with(
+            Locale.ENGLISH, "Municipality");
 
     private static PortugueseMunicipalitiesImportAuxiliaryServices singletonHolder;
 
@@ -91,60 +91,58 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
 
         try {
             File file =
-                    new File(PropertiesManager.getProperty("modules.geography.file.import.location") + CTT_MUNICIPALITIESFILE);
-            if (originalTask.getLastRun() == null || file.lastModified() > originalTask.getLastRun().getMillis()) {
-                DateTime lastReview = new DateTime(file.lastModified());
-                FileInputStream fileReader = new FileInputStream(file);
-                reader = new LineNumberReader(new InputStreamReader(fileReader, "ISO-8859-1"));
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(";");
-                    String districtCode = parts[0];
-                    String municipalityCode = parts[1];
-                    String municipalityName = parts[2];
-                    CountrySubdivision district = portugal.getChildByCode(districtCode);
-                    CountrySubdivision municipality = null;
-                    if (district == null) {
-                        // abort the transaction!! throw some kind of exception
-                        // and warn the user of the outcome
-                        originalTask.auxLogInfo("Script aborted because the district with code: " + districtCode
-                                + " couldn't be found");
-                        throw new RuntimeException("Script aborted because the district with code: " + districtCode
-                                + " couldn't be found");
+                    new File(GeographyPropertiesManager.getConfiguration().getGeographyImportFilesLocation()
+                            + CTT_MUNICIPALITIESFILE);
+            DateTime lastReview = new DateTime(file.lastModified());
+            FileInputStream fileReader = new FileInputStream(file);
+            reader = new LineNumberReader(new InputStreamReader(fileReader, "ISO-8859-1"));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                String districtCode = parts[0];
+                String municipalityCode = parts[1];
+                String municipalityName = parts[2];
+                CountrySubdivision district = portugal.getChildByCode(districtCode);
+                CountrySubdivision municipality = null;
+                if (district == null) {
+                    // abort the transaction!! throw some kind of exception
+                    // and warn the user of the outcome
+                    originalTask.auxLogInfo("Script aborted because the district with code: " + districtCode
+                            + " couldn't be found");
+                    throw new RuntimeException("Script aborted because the district with code: " + districtCode
+                            + " couldn't be found");
+                } else {
+                    // get the municipality
+                    municipality = district.getChildByCode(municipalityCode);
+                    if (municipality == null) {
+                        municipality = createMunicipality(district, municipalityCode, municipalityName, lastReview);
                     } else {
-                        // get the municipality
-                        municipality = district.getChildByCode(municipalityCode);
-                        if (municipality == null) {
-                            municipality = createMunicipality(district, municipalityCode, municipalityName, lastReview);
-                        } else {
-                            modifyMunicipality(municipality, municipalityCode, municipalityName, "", lastReview);
+                        modifyMunicipality(municipality, municipalityCode, municipalityName, "", lastReview);
 
-                        }
                     }
-                    municipalitiesOnFile.add(municipality);
                 }
-
-                // 'removing' all of the existing municipalities
-
-                // getting all of the existing districts
-                for (CountrySubdivision countrySubdivision : portugal.getChildren()) {
-                    if (countrySubdivision.getLevelName().getContent(Language.pt)
-                            .equalsIgnoreCase(municipalityLevelName.getContent(Language.pt))) {
-                        existingMunicipalities.add(countrySubdivision);
-                    }
-                } // let's assert
-                  // which ones are in excess and remove them
-                existingMunicipalities.removeAll(municipalitiesOnFile);
-                for (CountrySubdivision countrySubdivision : existingMunicipalities) {
-                    removeMunicipality(countrySubdivision);
-                }
-                originalTask.auxLogInfo("File last modification was: " + lastReview);
-                originalTask.auxLogInfo(additions + " municipalities added.");
-                originalTask.auxLogInfo(touches + " municipalities unmodified, but whose date has changed.");
-                originalTask.auxLogInfo(modifications + " municipalities modified");
-            } else {
-                originalTask.auxLogInfo("File unmodified, nothing imported.");
+                municipalitiesOnFile.add(municipality);
             }
+
+            // 'removing' all of the existing municipalities
+
+            // getting all of the existing districts
+            for (CountrySubdivision countrySubdivision : portugal.getChildren()) {
+                if (countrySubdivision.getLevelName().getContent(new Locale("pt"))
+                        .equalsIgnoreCase(municipalityLevelName.getContent(new Locale("pt")))) {
+                    existingMunicipalities.add(countrySubdivision);
+                }
+            } // let's assert
+              // which ones are in excess and remove them
+            existingMunicipalities.removeAll(municipalitiesOnFile);
+            for (CountrySubdivision countrySubdivision : existingMunicipalities) {
+                removeMunicipality(countrySubdivision);
+            }
+            originalTask.auxLogInfo("File last modification was: " + lastReview);
+            originalTask.auxLogInfo(additions + " municipalities added.");
+            originalTask.auxLogInfo(touches + " municipalities unmodified, but whose date has changed.");
+            originalTask.auxLogInfo(modifications + " municipalities modified");
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -184,7 +182,7 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
 
     private void modifyMunicipality(CountrySubdivision municipality, String municipalityCode, String municipalityName,
             String municipalityAcronym, DateTime lastReview) {
-        String originalMunicipalityName = municipality.getName().getContent(Language.pt);
+        String originalMunicipalityName = municipality.getName().getContent(new Locale("pt"));
         String originalMunicipalityAcronym = municipality.getAcronym();
         // let's check if there are changes on the data:
         if (!originalMunicipalityName.equals(municipalityName) || !originalMunicipalityAcronym.equals(municipalityAcronym)

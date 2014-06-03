@@ -28,16 +28,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Locale;
 
+import module.geography.domain.exception.GeographyDomainException;
 import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
 
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
  * A {@link Country} subdivision of some level of jurisdiction. Subdivisions are
@@ -54,7 +54,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
         super();
     }
 
-    public static final Comparator COMPARATOR_BY_LEVEL = new Comparator<CountrySubdivision>() {
+    public static final Comparator<CountrySubdivision> COMPARATOR_BY_LEVEL = new Comparator<CountrySubdivision>() {
         @Override
         public int compare(final CountrySubdivision location1, CountrySubdivision location2) {
             return location1.getLevel().compareTo(location2.getLevel());
@@ -71,7 +71,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
 
     private CountrySubdivision(Unit parent, Integer level, String name, String acronym, String code) {
         this();
-        setUnit(Unit.create(parent, new MultiLanguageString().with(Language.pt, name).with(Language.en, name), acronym,
+        setUnit(Unit.create(parent, new LocalizedString().with(new Locale("pt"), name).with(Locale.ENGLISH, name), acronym,
                 getPartyType("Subdivisão de País", COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(),
                 new LocalDate(), null));
         setLevel(level);
@@ -79,15 +79,15 @@ public class CountrySubdivision extends CountrySubdivision_Base {
     }
 
     @Override
-    public MultiLanguageString getType() {
+    public LocalizedString getType() {
         return getLevelName();
     }
 
-    public MultiLanguageString getLevelName() {
+    public LocalizedString getLevelName() {
         return getCountry().getSubdivisionLevelName(getLevel());
     }
 
-    public void setLevelName(MultiLanguageString levelName, Boolean isLabel) {
+    public void setLevelName(LocalizedString levelName, Boolean isLabel) {
         getCountry().setSubdivisionLevelName(getLevel(), levelName, isLabel);
     }
 
@@ -101,7 +101,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
 
     public CountrySubdivision getParentSubdivision() {
         if (getLevel() == 1) {
-            throw new DomainException("error.geography.requesting-parent-subdivision-at-level-one");
+            throw new GeographyDomainException("error.geography.requesting-parent-subdivision-at-level-one");
         }
         return (CountrySubdivision) getParentLocation();
     }
@@ -186,7 +186,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
 
     }
 
-    public MultiLanguageString getFullName() {
+    public LocalizedString getFullName() {
         if (getLevel() == 1) {
             return getName();
         }

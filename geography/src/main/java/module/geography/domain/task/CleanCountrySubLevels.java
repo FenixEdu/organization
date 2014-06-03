@@ -30,8 +30,12 @@ import java.util.HashMap;
 import module.geography.domain.Country;
 import module.geography.domain.CountrySubdivision;
 import module.geography.domain.CountrySubdivisionLevelName;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.scheduler.CronTask;
+import org.fenixedu.bennu.scheduler.annotation.Task;
+
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -44,15 +48,15 @@ import pt.ist.fenixframework.Atomic;
  * @author João Antunes
  * 
  */
-public class CleanCountrySubLevels extends CleanCountrySubLevels_Base {
+@Task(englishTitle = "Clean Country Sub-Levels")
+public class CleanCountrySubLevels extends CronTask {
 
     /* (non-Javadoc)
      * @see pt.ist.bennu.core.domain.scheduler.Task#getLocalizedName()
      */
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/GeographyResources",
-                "label.task.clean.country.sublevels.with.note");
+        return BundleUtil.getString("resources/GeographyResources", "label.task.clean.country.sublevels.with.note");
     }
 
     private int countrySubDivisionLevelNameDeletes = 0;
@@ -64,11 +68,11 @@ public class CleanCountrySubLevels extends CleanCountrySubLevels_Base {
      */
     @Atomic
     @Override
-    public void executeTask() {
+    public void runTask() {
         // add to an array all of the countries one wants to clean the sublevels
         ArrayList<Country> countriesToClean = new ArrayList<Country>();
         countriesToClean.add(Country.getPortugal());
-        countriesToClean.addAll(MyOrg.getInstance().getCountriesSet());
+        countriesToClean.addAll(Bennu.getInstance().getCountriesSet());
         HashMap<String, ArrayList<Integer>> infoByCountry = new HashMap<String, ArrayList<Integer>>();
 
         for (Country country : countriesToClean) {
@@ -96,10 +100,10 @@ public class CleanCountrySubLevels extends CleanCountrySubLevels_Base {
         }
 
         for (String country : infoByCountry.keySet()) {
-            logInfo("Cleaned the following registries for " + country + ":");
+            taskLog("Cleaned the following registries for " + country + ":");
             ArrayList<Integer> integers = infoByCountry.get(country);
-            logInfo("CountrySubDivision deletes: " + integers.get(0));
-            logInfo("CountrySubDivisionLevelName deletes: " + integers.get(1));
+            taskLog("CountrySubDivision deletes: " + integers.get(0));
+            taskLog("CountrySubDivisionLevelName deletes: " + integers.get(1));
         }
 
     }
