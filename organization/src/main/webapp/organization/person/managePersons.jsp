@@ -31,7 +31,7 @@
 				<fr:property name="classes" value="table" />
 				<fr:property name="columnClasses" value=",,tderror" />
 				
-				<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=${externalId}" />
+				<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=\${externalId}" />
 				<fr:property name="key(viewParty)" value="label.view"/>
 				<fr:property name="bundle(viewParty)" value="ORGANIZATION_RESOURCES"/>
 				<fr:property name="order(viewParty)" value="1"/>

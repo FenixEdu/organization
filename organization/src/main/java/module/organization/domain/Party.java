@@ -43,16 +43,13 @@ import module.organization.domain.predicates.PartyPredicate.PartyByPartyType;
 import module.organization.domain.predicates.PartyPredicate.TruePartyPredicate;
 import module.organization.domain.predicates.PartyResultCollection;
 
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.groups.DynamicGroup;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.commons.i18n.I18N;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.Presentable;
-import pt.ist.bennu.core.domain.RoleType;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -65,7 +62,7 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
  * @author Luis Cruz
  * 
  */
-abstract public class Party extends Party_Base implements Presentable {
+abstract public class Party extends Party_Base {
 
     static public final Comparator<Party> COMPARATOR_BY_NAME = new Comparator<Party>() {
         @Override
@@ -85,13 +82,7 @@ abstract public class Party extends Party_Base implements Presentable {
 
     protected Party() {
         super();
-        setMyOrg(MyOrg.getInstance());
-    }
-
-    protected void check(final Object obj, final String message) {
-        if (obj == null) {
-            throw new DomainException(message);
-        }
+        setMyOrg(Bennu.getInstance());
     }
 
     /**
@@ -466,7 +457,7 @@ abstract public class Party extends Party_Base implements Presentable {
 
     protected void canDelete() {
         if (!getChildAccountabilitiesSet().isEmpty()) {
-            throw new DomainException("error.Party.delete.has.child.accountabilities");
+            throw new OrganizationDomainException("error.Party.delete.has.child.accountabilities");
         }
     }
 
@@ -572,8 +563,7 @@ abstract public class Party extends Party_Base implements Presentable {
             if (accountability.getChild() == child && accountability.getAccountabilityType() == type
                     && accountability.intersects(begin, end)) {
                 if (intersectingAccountability != null) {
-                    throw new DomainException("error.Party.multiple.intersecting.accountabilities", ResourceBundle.getBundle(
-                            "resources/OrganizationResources", Language.getLocale()));
+                    throw new OrganizationDomainException("error.Party.multiple.intersecting.accountabilities");
                 }
                 intersectingAccountability = accountability;
             }
@@ -585,7 +575,7 @@ abstract public class Party extends Party_Base implements Presentable {
     public void removeParent(final Accountability accountability) {
         if (getParentAccountabilitiesSet().contains(accountability)) {
             if (isUnit() && getParentAccountabilitiesSet().size() == 1) {
-                throw new DomainException("error.Party.cannot.remove.parent.accountability");
+                throw new OrganizationDomainException("error.Party.cannot.remove.parent.accountability");
             }
             accountability.delete();
         }
@@ -597,10 +587,10 @@ abstract public class Party extends Party_Base implements Presentable {
         getPartyTypes().addAll(partyTypes);
 
         if (getPartyTypesSet().isEmpty()) {
-            throw new DomainException("error.Party.must.have.at.least.one.party.type");
+            throw new OrganizationDomainException("error.Party.must.have.at.least.one.party.type");
         }
         if (!accountabilitiesStillValid()) {
-            throw new DomainException("error.Party.invalid.party.types.accountability.rules.are.not.correct");
+            throw new OrganizationDomainException("error.Party.invalid.party.types.accountability.rules.are.not.correct");
         }
 
     }
@@ -615,7 +605,7 @@ abstract public class Party extends Party_Base implements Presentable {
     }
 
     public String getPartyNameWithSuffixType() {
-        return ResourceBundle.getBundle("resources.OrganizationResources", Language.getLocale()).getString(
+        return ResourceBundle.getBundle("resources.OrganizationResources", I18N.getLocale()).getString(
                 "label." + getClass().getSimpleName().toLowerCase())
                 + " - " + getPartyName().getContent();
     }
@@ -644,8 +634,7 @@ abstract public class Party extends Party_Base implements Presentable {
     }
 
     public boolean isAuthorizedToManage() {
-        final User user = UserView.getCurrentUser();
-        return user == null || user.hasRoleType(RoleType.MANAGER);
+        return DynamicGroup.get("managers").isMember(Authenticate.getUser());
     }
 
     public boolean hasChildAccountabilityIncludingAncestry(final Collection<AccountabilityType> accountabilityTypes,
@@ -694,7 +683,6 @@ abstract public class Party extends Party_Base implements Presentable {
         return null;
     }
 
-    @Override
     public String getPresentationName() {
         return getPartyName().getContent();
     }

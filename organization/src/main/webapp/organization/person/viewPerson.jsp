@@ -40,12 +40,12 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2" />
 			
-			<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=${parent.externalId}" />
+			<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=\${parent.externalId}" />
 			<fr:property name="key(viewParty)" value="label.view"/>
 			<fr:property name="bundle(viewParty)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="order(viewParty)" value="1"/>
 
-			<fr:property name="linkFormat(removeParent)" value="/organization.do?method=removeParent&amp;accOid=${externalId}" />
+			<fr:property name="linkFormat(removeParent)" value="/organization.do?method=removeParent&amp;accOid=\${externalId}" />
 			<fr:property name="key(removeParent)" value="label.remove"/>
 			<fr:property name="bundle(removeParent)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="confirmationKey(removeParent)" value="label.remove.confirmation.message" />

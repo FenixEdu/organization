@@ -22,7 +22,7 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2 tdleft thleft"/>
 
-			<fr:property name="linkFormat(deleteConnectionRule)" value="/organization.do?method=deleteConnectionRule&amp;connectionRuleOid=${externalId}" />
+			<fr:property name="linkFormat(deleteConnectionRule)" value="/organization.do?method=deleteConnectionRule&amp;connectionRuleOid=\${externalId}" />
 			<fr:property name="key(deleteConnectionRule)" value="label.delete"/>
 			<fr:property name="bundle(deleteConnectionRule)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="confirmationKey(deleteConnectionRule)" value="label.delete.confirmation.message"/>

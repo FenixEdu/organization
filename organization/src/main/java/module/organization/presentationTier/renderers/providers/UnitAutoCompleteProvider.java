@@ -33,9 +33,10 @@ import java.util.Set;
 
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.commons.StringNormalizer;
 
 /**
  * 
@@ -43,15 +44,14 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  * @author Paulo Abrantes
  * 
  */
-public class UnitAutoCompleteProvider implements AutoCompleteProvider {
+public class UnitAutoCompleteProvider implements AutoCompleteProvider<Unit> {
 
     @Override
-    public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
+    public Collection<Unit> getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         final List<Unit> units = new ArrayList<Unit>();
 
         final String trimmedValue = value.trim();
-        final String[] input = trimmedValue.split(" ");
-        StringNormalizer.normalize(input);
+        final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
 
         for (final Party party : getParties(argsMap, value)) {
             if (party.isUnit()) {
@@ -83,6 +83,6 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
     }
 
     protected Set<? extends Party> getParties(Map<String, String> argsMap, String value) {
-        return MyOrg.getInstance().getPartiesSet();
+        return Bennu.getInstance().getPartiesSet();
     }
 }

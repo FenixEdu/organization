@@ -27,10 +27,10 @@ package module.organization.domain;
 import jvstm.cps.ConsistencyPredicate;
 import module.organization.domain.util.OrganizationConsistencyException;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-
-import pt.ist.bennu.core.domain.User;
 
 /**
  * 
@@ -49,7 +49,7 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
         super.setBeginDate(beginDate);
         super.setEndDate(endDate);
         super.setCreationDate(new DateTime());
-        super.setUserWhoCreated(pt.ist.bennu.core.applicationTier.Authenticate.UserView.getCurrentUser());
+        super.setUserWhoCreated(Authenticate.getUser());
     }
 
     // let's protect all of the methods that could compromise the workings of

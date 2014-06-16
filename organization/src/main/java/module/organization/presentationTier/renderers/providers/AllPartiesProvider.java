@@ -28,7 +28,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import module.organization.domain.Party;
-import pt.ist.bennu.core.domain.MyOrg;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+
 import pt.ist.fenixWebFramework.rendererExtensions.converters.DomainObjectKeyConverter;
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
@@ -51,7 +53,7 @@ public class AllPartiesProvider implements DataProvider {
         // TODO: check method performance
 
         final Set<Party> result = new TreeSet<Party>(Party.COMPARATOR_BY_TYPE_AND_NAME);
-        for (final Party party : MyOrg.getInstance().getPartiesSet()) {
+        for (final Party party : Bennu.getInstance().getPartiesSet()) {
             result.add(party);
             result.addAll(party.getDescendents());
         }

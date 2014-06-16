@@ -5,18 +5,19 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/chart" prefix="chart" %>
-<%@page import="pt.ist.bennu.core.presentationTier.component.OrganizationChart"%>
+<%@page import="org.fenixedu.bennu.core.presentationTier.component.OrganizationChart"%>
 <%@page import="module.organization.domain.Unit"%>
 <%@page import="module.organization.domain.Accountability"%>
 <%@page import="module.organization.domain.Party"%>
 <%@page import="module.organization.domain.UnconfirmedAccountability"%>
 
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/organization/CSS/organization.css" media="screen"/>
 
 <%@page import="module.organization.domain.AccountabilityType"%><bean:define id="partyChart" name="partyChart" type="module.organization.presentationTier.actions.OrganizationModelAction.PartyChart"/>
 <logic:notEmpty name="partyChart">
 	<logic:present name="partyChart" property="unit">
 		<bean:define id="unit" name="partyChart" property="unit"/>
-		<logic:present role="pt.ist.bennu.core.domain.RoleType.MANAGER">
+		<logic:present role="#managers">
 			<bean:define id="url">/organizationModel.do?method=prepareEditUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 			<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="label.unit.edit" bundle="ORGANIZATION_RESOURCES"/>
@@ -37,7 +38,7 @@
 		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.unit.child.create" bundle="ORGANIZATION_RESOURCES"/>
 		</html:link>
-		<logic:present role="pt.ist.bennu.core.domain.RoleType.MANAGER">
+		<logic:present role="#managers">
 			|
 			<bean:define id="url">/organizationModel.do?method=prepareManageChildAccountabilities&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 			<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
@@ -70,7 +71,7 @@
 						    passedElement = true;
 					%>
 							<div class="orgTBox orgTBoxLight">
-								<bean:write name="object" property="partyName"/>
+								<bean:write name="object" property="partyName.content"/>
 							</div>
 					<%
 						} else {

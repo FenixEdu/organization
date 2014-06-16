@@ -5,7 +5,7 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/chart" prefix="chart" %>
-<%@page import="pt.ist.bennu.core.presentationTier.component.OrganizationChart"%>
+<%@page import="org.fenixedu.bennu.core.presentationTier.component.OrganizationChart"%>
 <%@page import="module.organization.domain.Unit"%>
 
 <h2>
@@ -39,7 +39,7 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2 tdleft thleft"/>
 
-			<fr:property name="linkFormat(deleteAccountability)" value="<%= url + "&amp;accountabilityOid=${externalId}" %>" />
+			<fr:property name="linkFormat(deleteAccountability)" value="${url}&amp;accountabilityOid=\${externalId}" />
 			<fr:property name="key(deleteAccountability)" value="label.delete"/>
 			<fr:property name="bundle(deleteAccountability)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="confirmationKey(deleteAccountability)" value="label.delete.confirmation.message"/>

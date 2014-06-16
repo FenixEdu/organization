@@ -5,12 +5,12 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/chart" prefix="chart" %>
-<%@page import="pt.ist.bennu.core.presentationTier.component.OrganizationChart"%>
+<%@page import="org.fenixedu.bennu.core.presentationTier.component.OrganizationChart"%>
 <%@page import="module.organization.domain.Unit"%>
 
 <h2>
 	<bean:message key="label.model" bundle="ORGANIZATION_RESOURCES"/>:
-	<bean:write name="organizationalModel" property="name"/>
+	<bean:write name="organizationalModel" property="name.content"/>
 </h2>
 
 <logic:present name="party">

@@ -3,14 +3,14 @@
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz
- * 
+ *
  *      https://fenix-ashes.ist.utl.pt/
- * 
+ *
  *   This file is part of the Organization Module.
  *
  *   The Organization Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Organization Module is distributed in the hope that it will be useful,
@@ -20,26 +20,25 @@
  *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 package module.organization.domain;
 
 import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
 
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
- * 
+ *
  * @author João Antunes
  * @author Luis Cruz
- * 
+ *
  */
 public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
 
@@ -50,8 +49,7 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
     protected UnconfirmedAccountability() {
         super();
         setSubmited(new DateTime());
-        final User user = UserView.getCurrentUser();
-        setUser(user);
+        setUser(Authenticate.getUser());
     }
 
     protected UnconfirmedAccountability(Party parent, Party child, AccountabilityType type, LocalDate begin, LocalDate end,
@@ -77,8 +75,8 @@ public class UnconfirmedAccountability extends UnconfirmedAccountability_Base {
         return accountabilityType == null ? createAccountabilityType() : accountabilityType;
     }
 
-    private static MultiLanguageString getLocalizedName() {
-        return BundleUtil.getMultilanguageString(ACCOUNTABILITY_TYPE_NAME_BUNDLE, ACCOUNTABILITY_TYPE_NAME_KEY);
+    private static LocalizedString getLocalizedName() {
+        return BundleUtil.getLocalizedString(ACCOUNTABILITY_TYPE_NAME_BUNDLE, ACCOUNTABILITY_TYPE_NAME_KEY);
     }
 
     private static AccountabilityType createAccountabilityType() {

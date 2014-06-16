@@ -9,6 +9,8 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/chart" prefix="chart" %>
 <%@page import="module.organization.domain.Accountability"%>
 
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/organization/CSS/organization.css" media="screen"/>
+
 <h2>
 	<bean:message key="label.model" bundle="ORGANIZATION_RESOURCES"/>
 	:

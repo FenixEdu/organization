@@ -3,14 +3,14 @@
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz
- * 
+ *
  *      https://fenix-ashes.ist.utl.pt/
- * 
+ *
  *   This file is part of the Organization Module.
  *
  *   The Organization Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Organization Module is distributed in the hope that it will be useful,
@@ -20,20 +20,19 @@
  *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 package module.organization.domain;
 
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
 
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
-
 /**
- * 
+ *
  * @author Pedro Santos
  * @author João Figueiredo
  * @author Luis Cruz
- * 
+ *
  */
 public class UnitBean extends PartyBean {
 
@@ -44,7 +43,7 @@ public class UnitBean extends PartyBean {
     private PartyType partyType;
     private OrganizationalModel organizationalModel;
 
-    private MultiLanguageString name;
+    private LocalizedString name;
     private String acronym;
 
     private String accountabilityJustification;
@@ -86,11 +85,11 @@ public class UnitBean extends PartyBean {
         return getUnit();
     }
 
-    public MultiLanguageString getName() {
+    public LocalizedString getName() {
         return name;
     }
 
-    public void setName(MultiLanguageString name) {
+    public void setName(LocalizedString name) {
         this.name = name;
     }
 

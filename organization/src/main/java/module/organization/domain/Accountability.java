@@ -32,12 +32,12 @@ import java.util.List;
 import jvstm.cps.ConsistencyPredicate;
 import module.organization.domain.predicates.PartyPredicate.PartyByAccTypeAndDates;
 
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.exceptions.DomainException;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -97,7 +97,7 @@ public class Accountability extends Accountability_Base {
 
     protected Accountability() {
         super();
-        setMyOrg(MyOrg.getInstance());
+        setMyOrg(Bennu.getInstance());
     }
 
     protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
@@ -124,7 +124,7 @@ public class Accountability extends Accountability_Base {
 
     protected void checkDates(final Party parent, final LocalDate begin, final LocalDate end) {
         if (begin != null && end != null && begin.isAfter(end)) {
-            throw new DomainException("error.Accountability.begin.is.after.end");
+            throw new OrganizationDomainException("error.Accountability.begin.is.after.end");
         }
         checkBeginFromOldestParentAccountability(parent, begin);
     }
@@ -140,25 +140,25 @@ public class Accountability extends Accountability_Base {
         if (oldest != null && begin.isBefore(oldest.getBeginDate())) {
             final String[] args =
                     new String[] { oldest.getChild().getPartyName().getContent(), oldest.getBeginDate().toString("dd/MM/yyyy") };
-            throw new DomainException("error.Accountability.begin.starts.before.oldest.parent.begin", args);
+            throw new OrganizationDomainException("error.Accountability.begin.starts.before.oldest.parent.begin", args);
         }
     }
 
     protected void check(final Object obj, final String message) {
         if (obj == null) {
-            throw new DomainException(message);
+            throw new OrganizationDomainException(message);
         }
     }
 
     protected void canCreate(final Party parent, final Party child, final AccountabilityType type) {
         if (parent.equals(child)) {
-            throw new DomainException("error.Accountability.parent.equals.child");
+            throw new OrganizationDomainException("error.Accountability.parent.equals.child");
         }
         if (parent.ancestorsInclude(child, type)) {
-            throw new DomainException("error.Accountability.parent.ancestors.include.child.with.type");
+            throw new OrganizationDomainException("error.Accountability.parent.ancestors.include.child.with.type");
         }
         if (!type.isValid(parent, child)) {
-            throw new DomainException("error.Accountability.type.doesnot.allow.parent.child");
+            throw new OrganizationDomainException("error.Accountability.type.doesnot.allow.parent.child");
         }
     }
 
@@ -256,19 +256,19 @@ public class Accountability extends Accountability_Base {
     @Override
     @Deprecated
     public void setParent(Party parent) {
-        throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
+        throw new OrganizationDomainException("should.not.use.this.method.delete.and.create.another.instead");
     }
 
     @Override
     @Deprecated
     public void setChild(Party child) {
-        throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
+        throw new OrganizationDomainException("should.not.use.this.method.delete.and.create.another.instead");
     }
 
     @Override
     @Deprecated
     public void setAccountabilityType(AccountabilityType accountabilityType) {
-        throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
+        throw new OrganizationDomainException("should.not.use.this.method.delete.and.create.another.instead");
     }
 
     /**
@@ -405,7 +405,7 @@ public class Accountability extends Accountability_Base {
         // accountabilities!!
         if (parties == null || parties.isEmpty()) {
             final PartyByAccTypeAndDates typeAndDates = new PartyByAccTypeAndDates(startDate, endDate, accTypes);
-            for (final Accountability accountability : MyOrg.getInstance().getAccountabilitiesSet()) {
+            for (final Accountability accountability : Bennu.getInstance().getAccountabilitiesSet()) {
                 if (typeAndDates.eval(null, accountability)) {
                     accountabilities.add(accountability);
                 }

@@ -3,14 +3,14 @@
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz
- * 
+ *
  *      https://fenix-ashes.ist.utl.pt/
- * 
+ *
  *   This file is part of the Organization Module.
  *
  *   The Organization Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Organization Module is distributed in the hope that it will be useful,
@@ -20,7 +20,7 @@
  *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 package module.organization.domain;
 
@@ -32,32 +32,31 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import module.organization.domain.dto.OrganizationalModelBean;
-import pt.ist.bennu.core.domain.MyOrg;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.commons.i18n.LocalizedString;
+
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
- * 
+ *
  * @author Paulo Abrantes
  * @author Luis Cruz
- * 
+ *
  */
 public class OrganizationalModel extends OrganizationalModel_Base {
 
-    public static final Comparator<OrganizationalModel> COMPARATORY_BY_NAME = new Comparator<OrganizationalModel>() {
-        @Override
-        public int compare(final OrganizationalModel o1, final OrganizationalModel o2) {
-            final int c = o1.getName().compareTo(o2.getName());
-            return c == 0 ? o1.hashCode() - o2.hashCode() : c;
-        }
+    public static final Comparator<OrganizationalModel> COMPARATORY_BY_NAME = (o1, o2) -> {
+        final int c = o1.getName().compareTo(o2.getName());
+        return c == 0 ? o1.hashCode() - o2.hashCode() : c;
     };
 
     public OrganizationalModel() {
         super();
-        setMyOrg(MyOrg.getInstance());
+        setMyOrg(Bennu.getInstance());
     }
 
-    public OrganizationalModel(final MultiLanguageString name) {
+    public OrganizationalModel(final LocalizedString name) {
         this();
         setName(name);
     }

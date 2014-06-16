@@ -5,9 +5,9 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/chart" prefix="chart" %>
-<%@page import="pt.ist.bennu.core.presentationTier.component.OrganizationChart"%>
 <%@page import="module.organization.domain.Unit"%>
 
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/organization/CSS/organization.css" media="screen"/>
 
 <html:link action="/organization.do?method=viewPartyTypes"  styleClass="secondaryLink">
 	<bean:message key="label.party.type" bundle="ORGANIZATION_RESOURCES"/>
@@ -32,7 +32,7 @@
 
 <h2><bean:message key="label.models" bundle="ORGANIZATION_RESOURCES"/></h2>
 
-<logic:present role="pt.ist.bennu.core.domain.RoleType.MANAGER">
+<logic:present role="#managers">
 	<p class="mtop05">
 		<html:link action="/organizationModel.do?method=prepareCreateModel">
 			+ <bean:message key="label.models.create" bundle="ORGANIZATION_RESOURCES"/>

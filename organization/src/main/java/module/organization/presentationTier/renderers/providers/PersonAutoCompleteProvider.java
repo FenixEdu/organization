@@ -32,9 +32,10 @@ import java.util.Map;
 
 import module.organization.domain.Party;
 import module.organization.domain.Person;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.commons.StringNormalizer;
 
 /**
  * 
@@ -42,13 +43,12 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  * @author João Figueiredo
  * 
  */
-public class PersonAutoCompleteProvider implements AutoCompleteProvider {
+public class PersonAutoCompleteProvider implements AutoCompleteProvider<Person> {
 
     @Override
-    public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
+    public Collection<Person> getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         final List<Person> persons = new ArrayList<Person>();
 
-        final String trimmedValue = value.trim();
         String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
 
         for (final Person person : getPersons(argsMap, value)) {
@@ -77,7 +77,7 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider {
      * Results
      */
     protected Collection<Person> getPersons(Map<String, String> argsMap, String value) {
-        return MyOrg.getInstance().getPersonsSet();
+        return Bennu.getInstance().getPersonsSet();
     }
 
     private boolean hasMatch(final String[] input, final String unitNameParts) {

@@ -5,15 +5,17 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/chart" prefix="chart" %>
-<%@page import="pt.ist.bennu.core.presentationTier.component.OrganizationChart"%>
+<%@page import="org.fenixedu.bennu.core.presentationTier.component.OrganizationChart"%>
 <%@page import="module.organization.domain.Unit"%>
+
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/organization/CSS/organization.css" media="screen"/>
 
 <h2>
 	<bean:message key="label.model" bundle="ORGANIZATION_RESOURCES"/>:
-	<bean:write name="organizationalModel" property="name"/>
+	<bean:write name="organizationalModel" property="name.content"/>
 </h2>
 
-<logic:present role="pt.ist.bennu.core.domain.RoleType.MANAGER">
+<logic:present role="#managers">
 	<p class="mvert05">
 		<html:link action="/organizationModel.do?method=editModel" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
 			<bean:message key="label.model.edit" bundle="ORGANIZATION_RESOURCES"/>
@@ -62,7 +64,7 @@
 					<div class="orgTBox orgTBoxLight">
 						<bean:define id="url">/organizationModel.do?method=viewModel&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 						<html:link action="<%= url %>" paramId="organizationalModelOid" paramName="organizationalModel" paramProperty="externalId">
-							<bean:write name="party" property="partyName"/>
+							<bean:write name="party" property="partyName.content"/>
 						</html:link>
 					</div>
 				</chart:orgChart>
@@ -73,13 +75,13 @@
 
 <logic:present name="party" scope="request">
 	<jsp:include page="viewPartyDetails.jsp"/>
-	<div class="ui-tabs ui-widget ui-widget-content ui-corner-all" style="font-size: 1.0em;">
+	<div class="panel panel-default" style="font-size: 1.0em;">
 		<logic:notEmpty name="hooks">
-			<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+			<ul class="panel-heading nav nav-tabs" style="padding-bottom: 0">
 				<logic:iterate id="hook" type="module.organization.presentationTier.actions.PartyViewHook" name="hooks">
 					<bean:define id="url">/organizationModel.do?method=viewModel&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/></bean:define>
 					<% final String cssClasses = hook.getViewName().equals(request.getParameter("viewName")) ?
-							"ui-corner-top ui-tabs-selected ui-state-active ui-state-focus" : "ui-corner-top ui-state-default"; %>
+							"active" : "ui-corner-top ui-state-default"; %>
 					<li class="<%= cssClasses %>">
 						<html:link action="<%= url %>" paramId="viewName" paramName="hook" paramProperty="viewName">
 							<bean:write name="hook" property="presentationName"/>
@@ -89,7 +91,7 @@
 			</ul>
 		</logic:notEmpty>
 		<logic:present name="viewPage">
-			<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+			<div class="panel-body ui-tabs-panel ui-widget-content ui-corner-bottom">
 				<jsp:include page='<%= (String) request.getAttribute("viewPage") %>'/>
 			</div>
 		</logic:present>

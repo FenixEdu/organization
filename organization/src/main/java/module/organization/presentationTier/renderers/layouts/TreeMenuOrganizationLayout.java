@@ -32,7 +32,9 @@ import module.organization.domain.Accountability;
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
 import module.organization.presentationTier.renderers.OrganizationView;
-import pt.ist.bennu.core.domain.MyOrg;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 import pt.ist.fenixWebFramework.renderers.components.HtmlImage;
@@ -67,8 +69,8 @@ public class TreeMenuOrganizationLayout extends Layout implements OrganizationLa
         final HtmlBlockContainer container = new HtmlBlockContainer();
         container.addChild(generateScript());
 
-        if (object instanceof MyOrg) {
-            container.addChild(drawOrganization((MyOrg) object));
+        if (object instanceof Bennu) {
+            container.addChild(drawOrganization((Bennu) object));
         } else if (object instanceof Party) {
             container.addChild(drawOrganization((Party) object));
         } else {
@@ -99,7 +101,7 @@ public class TreeMenuOrganizationLayout extends Layout implements OrganizationLa
         return script;
     }
 
-    private HtmlComponent drawOrganization(final MyOrg myOrg) {
+    private HtmlComponent drawOrganization(final Bennu myOrg) {
         final HtmlList list = new HtmlList();
         list.setClasses(this.view.getRootClasses());
 

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE schemas SYSTEM "../fenix-renderers-schemas.dtd" []>
 <schemas>
 <schema name="organization.PartyType.view" type="module.organization.domain.PartyType" bundle="ORGANIZATION_RESOURCES">
 	<slot name="type" key="label.type" read-only="true" />
@@ -43,12 +42,12 @@
 <schema name="organization.PartyTypeConnectionRuleBean" type="module.organization.domain.connectionRules.PartyTypeConnectionRule$PartyTypeConnectionRuleBean" bundle="ORGANIZATION_RESOURCES">
 	<slot name="parent" layout="menu-select" key="label.PartyTypeConnectionRule.allowed.parent.type" required="true">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
-		<property name="format" value="${name}" />
+		<property name="format" value="${name.content}" />
 		<property name="sortBy" value="name" />
 	</slot>
 	<slot name="child" layout="menu-select" key="label.PartyTypeConnectionRule.allowed.child.type" required="true">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
-		<property name="format" value="${name}" />
+		<property name="format" value="${name.content}" />
 		<property name="sortBy" value="name" />
 	</slot>
 </schema>
@@ -77,7 +76,7 @@
 	</slot>
 	<slot name="partyType" layout="menu-select" key="label.unit.party.type" required="true">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
-		<property name="format" value="${name}" />
+		<property name="format" value="${name.content}" />
 		<property name="sortBy" value="name" />
 	</slot>
 </schema>
@@ -94,12 +93,12 @@
 	</slot>
 	<slot name="partyType" layout="menu-select" key="label.unit.party.type" required="true">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
-		<property name="format" value="${name}" />
+		<property name="format" value="${name.content}" />
 		<property name="sortBy" value="name" />
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" required="true">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
-		<property name="format" value="${name}" />
+		<property name="format" value="${name.content}" />
 		<property name="sortBy" value="name" />
 		<property name="saveOptions" value="true"/>
 	</slot>
@@ -122,7 +121,7 @@
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" required="true">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
-		<property name="format" value="${name}" />
+		<property name="format" value="${name.content}" />
 		<property name="sortBy" value="name" />
 		<property name="saveOptions" value="true"/>
 	</slot>
@@ -164,7 +163,7 @@
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" required="true">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
-		<property name="format" value="${name}" />
+		<property name="format" value="${name.content}" />
 		<property name="sortBy" value="name" />
 		<property name="saveOptions" value="true"/>
 	</slot>
@@ -182,7 +181,7 @@
 	</slot>
 	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" required="true">
 		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
-		<property name="format" value="${name}" />
+		<property name="format" value="${name.content}" />
 		<property name="sortBy" value="name" />
 		<property name="saveOptions" value="true"/>
 	</slot>
