@@ -17,51 +17,18 @@
 	</p>
 </html:messages>
 
-<bean:define id="accountabilityTypeOid" name="accountabilityType" property="externalId"  type="java.lang.String"/>
-<fr:form action='<%= "/organization.do?accountabilityTypeOid=" + accountabilityTypeOid %>'>
-	<html:hidden property="method" value="associateConnectionRules"/>
+<fr:edit name="accountabilityType" action='/organization.do?accountabilityTypeOid=${accountabilityType.externalId}&method=viewAccountabilityTypes'>
 	
-	<logic:notEmpty name="connectionRules">
-	
-		<script type="text/javascript">
-		<!--
-			function setCheckBoxValue(value) {
-				elements = document.getElementsByTagName('input');
-				for (i = 0; i < elements.length; i++) {
-					if (elements[i].type == 'checkbox') {
-						elements[i].checked = value;	
-					}
-				}
-			}
-		//-->
-		</script>
-		
-		
-		<a href="javascript:setCheckBoxValue(true)"><bean:message key="label.select.all" bundle="ORGANIZATION_RESOURCES" /></a> | <a href="javascript:setCheckBoxValue(false)"><bean:message key="label.select.none" bundle="ORGANIZATION_RESOURCES" /></a>
-		<table class="tstyle2">
-			<logic:iterate id="connectionRule" name="connectionRules">
-				<tr>
-					<td>
-						<html:multibox name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="oids">
-							<bean:write name="connectionRule" property="externalId"/>
-						</html:multibox>
-					</td>
-					<td>
-						<bean:write name="connectionRule" property="description" />
-					</td>
-				</tr>
-			</logic:iterate>
-		</table>
-		
-		<html:submit><bean:message key="label.save" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-	</logic:notEmpty>
-	
-	<logic:empty name="connectionRules">
-		<p>
-			<em><bean:message key="label.no.connection.rules" bundle="ORGANIZATION_RESOURCES" /></em>
-		</p>
-	</logic:empty>
-	
-	<html:cancel onclick="this.form.method.value='viewAccountabilityTypes';return true;" ><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
-	
-</fr:form>
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="form listInsideClear" />
+		<fr:property name="columnClasses" value=",,tderror" />
+	</fr:layout>
+	<fr:schema type="module.organization.domain.AccountabilityType" bundle="ORGANIZATION_RESOURCES">
+		<fr:slot name="connectionRules" layout="option-select" key="label.unit.party.type">
+			<fr:property name="eachSchema" value="organization.ConnectionRule.view"/>
+	        <fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.ConnectionRulesProvider" />
+	        <fr:property name="classes" value="nobullet noindent"/>
+	        <fr:property name="sortBy" value="description"/>
+	    </fr:slot>
+	</fr:schema>
+</fr:edit>

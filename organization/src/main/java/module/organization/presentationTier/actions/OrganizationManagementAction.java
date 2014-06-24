@@ -52,15 +52,14 @@ import org.apache.struts.action.ActionMapping;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.exceptions.DomainException;
 import org.fenixedu.bennu.core.presentationTier.actions.BaseAction;
-import org.fenixedu.bennu.core.presentationTier.forms.BaseForm;
 import org.fenixedu.commons.StringNormalizer;
 
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
-import pt.ist.fenixframework.FenixFramework;
 
-@Mapping(path = "/organization", formBeanClass = OrganizationManagementAction.OrganizationForm.class,
-        functionality = OrganizationModelAction.class)
+import com.google.common.base.Strings;
+
+@Mapping(path = "/organization", functionality = OrganizationModelAction.class)
 /**
  * 
  * @author Pedro Santos
@@ -70,50 +69,6 @@ import pt.ist.fenixframework.FenixFramework;
  * 
  */
 public class OrganizationManagementAction extends BaseAction {
-
-    static public class OrganizationForm extends BaseForm {
-        private static final long serialVersionUID = 4469811183847905665L;
-
-        private String name;
-        private String connectionRuleClassName;
-        private String[] oids;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getConnectionRuleClassName() {
-            return connectionRuleClassName;
-        }
-
-        public void setConnectionRuleClassName(String connectionRuleClassName) {
-            this.connectionRuleClassName = connectionRuleClassName;
-        }
-
-        boolean hasConnectionRuleClassName() {
-            return connectionRuleClassName != null && !connectionRuleClassName.isEmpty();
-        }
-
-        public String[] getOids() {
-            return oids;
-        }
-
-        public void setOids(String[] oids) {
-            this.oids = oids;
-        }
-
-        public boolean hasOids() {
-            return getOids() != null;
-        }
-
-        public boolean hasName() {
-            return getName() != null && !getName().isEmpty();
-        }
-    }
 
     public ActionForward intro(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) throws Exception {
@@ -230,48 +185,10 @@ public class OrganizationManagementAction extends BaseAction {
             final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
         final AccountabilityType type = getDomainObject(request, "accountabilityTypeOid");
-        buildConnectionRuleOids(type, (OrganizationForm) form);
 
         request.setAttribute("accountabilityType", type);
-        request.setAttribute("connectionRules", Bennu.getInstance().getConnectionRulesSet());
 
         return forward("/organization/connectionRules/associateConnectionRules.jsp");
-    }
-
-    private void buildConnectionRuleOids(final AccountabilityType type, final OrganizationForm organizationForm) {
-        int index = 0;
-        final String[] oids = new String[type.getConnectionRulesSet().size()];
-        for (final ConnectionRule connectionRule : type.getConnectionRulesSet()) {
-            oids[index++] = connectionRule.getExternalId();
-        }
-        organizationForm.setOids(oids);
-    }
-
-    public ActionForward associateConnectionRules(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-
-        final AccountabilityType type = getDomainObject(request, "accountabilityTypeOid");
-
-        try {
-            type.associateConnectionRules(buildConnectionRules((OrganizationForm) form));
-        } catch (final DomainException e) {
-            addMessage(request, e.getKey(), e.getArgs());
-            request.setAttribute("accountabilityType", type);
-            request.setAttribute("connectionRules", Bennu.getInstance().getConnectionRulesSet());
-            return forward("/organization/connectionRules/associateConnectionRules.jsp");
-        }
-
-        return viewAccountabilityTypes(mapping, form, request, response);
-    }
-
-    private List<ConnectionRule> buildConnectionRules(final OrganizationForm form) {
-        final List<ConnectionRule> result = new ArrayList<ConnectionRule>();
-        if (form.hasOids()) {
-            for (final String oid : form.getOids()) {
-                result.add(FenixFramework.<ConnectionRule> getDomainObject(oid));
-            }
-        }
-        return result;
     }
 
     public ActionForward viewConnectionRules(final ActionMapping mapping, final ActionForm form,
@@ -283,10 +200,12 @@ public class OrganizationManagementAction extends BaseAction {
     public ActionForward prepareCreateConnectionRule(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
-        final OrganizationForm organizationForm = (OrganizationForm) form;
-        if (organizationForm.hasConnectionRuleClassName()) {
-            final Class<?> clazz = Class.forName(organizationForm.getConnectionRuleClassName());
+        String connectionRuleClassName = request.getParameter("connectionRuleClassName");
+
+        if (!Strings.isNullOrEmpty(connectionRuleClassName)) {
+            final Class<?> clazz = Class.forName(connectionRuleClassName);
             request.setAttribute("connectionRuleBean", clazz.newInstance());
+            request.setAttribute("simpleName", clazz.getSimpleName());
         } else {
             request.removeAttribute("connectionRuleBean");
         }
@@ -511,46 +430,8 @@ public class OrganizationManagementAction extends BaseAction {
             final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
         final Party party = getDomainObject(request, "partyOid");
-        buildPartyTypeOids(party, (OrganizationForm) form);
-
         request.setAttribute("party", party);
-        request.setAttribute("partyTypes", Bennu.getInstance().getPartyTypesSet());
         return forward("/organization/partyTypes/editPartyPartyTypes.jsp");
-    }
-
-    private void buildPartyTypeOids(final Party party, final OrganizationForm organizationForm) {
-        int index = 0;
-        final String[] oids = new String[party.getPartyTypesSet().size()];
-        for (final PartyType partyType : party.getPartyTypesSet()) {
-            oids[index++] = partyType.getExternalId();
-        }
-        organizationForm.setOids(oids);
-    }
-
-    public ActionForward editPartyPartyTypes(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-
-        final Party party = getDomainObject(request, "partyOid");
-        try {
-            party.editPartyTypes(buildPartyTypes((OrganizationForm) form));
-        } catch (final DomainException e) {
-            addMessage(request, e.getKey(), e.getArgs());
-            request.setAttribute("party", party);
-            request.setAttribute("partyTypes", Bennu.getInstance().getPartyTypesSet());
-            return forward("/organization/partyTypes/editPartyPartyTypes.jsp");
-        }
-
-        return viewParty(mapping, form, request, response);
-    }
-
-    private List<PartyType> buildPartyTypes(final OrganizationForm form) {
-        final List<PartyType> result = new ArrayList<PartyType>();
-        if (form.hasOids()) {
-            for (final String oid : form.getOids()) {
-                result.add(FenixFramework.<PartyType> getDomainObject(oid));
-            }
-        }
-        return result;
     }
 
     public ActionForward managePersons(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -560,20 +441,20 @@ public class OrganizationManagementAction extends BaseAction {
 
     public ActionForward searchPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) throws Exception {
-        searchPerson(request, (OrganizationForm) form);
+        searchPerson(request);
         return forward("/organization/person/managePersons.jsp");
     }
 
     // TODO: refactor this code?
-    private void searchPerson(final HttpServletRequest request, final OrganizationForm form) {
-        if (!form.hasName()) {
+    private void searchPerson(final HttpServletRequest request) {
+        if (Strings.isNullOrEmpty(request.getParameter("name"))) {
             addMessage(request, "label.must.introduce.name");
             return;
         }
 
         final List<Person> persons = new ArrayList<Person>();
 
-        final String trimmedValue = form.getName().trim();
+        final String trimmedValue = request.getParameter("name").trim();
         final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
 
         for (final Party party : Bennu.getInstance().getPersonsSet()) {

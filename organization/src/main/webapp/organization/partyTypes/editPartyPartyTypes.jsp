@@ -13,26 +13,18 @@
 	<br />
 </html:messages>
 
-<bean:define id="partyOid" name="party" property="externalId"  type="java.lang.String"/>
-<fr:form action='<%= "/organization.do?partyOid=" + partyOid %>'>
-	<html:hidden property="method" value="editPartyPartyTypes"/>
-	
-	<table class="tstyle2">
-		<logic:iterate id="partyType" name="partyTypes">
-			<tr>
-				<td>
-					<html:multibox name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="oids">
-						<bean:write name="partyType" property="externalId"/>
-					</html:multibox>
-				</td>
-				<td>
-					<fr:view name="partyType" property="name" />
-				</td>
-			</tr>
-		</logic:iterate>
-	</table>
-	
-	<html:submit><bean:message key="label.save" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-	<html:cancel onclick="this.form.method.value='viewParty';return true;" ><bean:message key="label.back" bundle="ORGANIZATION_RESOURCES" /></html:cancel>
-	
-</fr:form>
+<fr:edit name="party" action="/organization.do?partyOid=${party.externalId}&method=viewParty">
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="form listInsideClear" />
+		<fr:property name="columnClasses" value=",,tderror" />
+	</fr:layout>
+	<fr:schema type="module.organization.domain.Party" bundle="ORGANIZATION_RESOURCES">
+		<fr:slot name="partyTypes" layout="option-select" key="label.unit.party.type">
+			<fr:property name="eachLayout" value="values-dash"/>
+	        <fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
+	        <fr:property name="classes" value="nobullet noindent"/>
+	        <fr:property name="sortBy" value="name"/>
+	    </fr:slot>
+	</fr:schema>
+	<fr:destination name="cancel" path="/organization.do?partyOid=${party.externalId}&method=viewParty" />
+</fr:edit>

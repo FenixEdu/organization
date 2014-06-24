@@ -12,10 +12,10 @@
 	<br />
 </html:messages>
 
-<html:form action="/organization.do?method=searchPerson">
-	<bean:message key="label.name" bundle="ORGANIZATION_RESOURCES" />: <html:text property="name" />
+<fr:form action="/organization.do?method=searchPerson">
+	<bean:message key="label.name" bundle="ORGANIZATION_RESOURCES" />: <input type="text" name="name" />
 	<html:submit styleClass="inputbutton"><bean:message key="label.search" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-</html:form>
+</fr:form>
 
 <ul>
 	<li>
