@@ -54,13 +54,16 @@ public class CountryAutoCompleteProvider implements AutoCompleteProvider<Country
         }
 
         for (final Country country : Bennu.getInstance().getCountriesSet()) {
-            final String countryName = StringNormalizer.normalize(country.getName().getContent());
-            if (hasMatch(input, countryName)) {
-                countries.add(country);
-            } else {
-                final String countryAcronym = StringNormalizer.normalize(country.getAcronym());
-                if (hasMatch(input, countryAcronym)) {
+            final String content = country.getName().getContent();
+            if (content != null) {
+                final String countryName = StringNormalizer.normalize(content);
+                if (hasMatch(input, countryName)) {
                     countries.add(country);
+                } else {
+                    final String countryAcronym = StringNormalizer.normalize(country.getAcronym());
+                    if (hasMatch(input, countryAcronym)) {
+                        countries.add(country);
+                    }
                 }
             }
         }

@@ -54,8 +54,9 @@ public class PartiesAutoCompleteProvider implements AutoCompleteProvider<Party> 
         final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
 
         for (final Party party : Bennu.getInstance().getPartiesSet()) {
-            final String partyName = StringNormalizer.normalize(party.getPartyName().getContent());
-            if (hasMatch(input, partyName)) {
+            final String content = party.getPartyName().getContent();
+            final String partyName = content == null ? null : StringNormalizer.normalize(content);
+            if (partyName != null && hasMatch(input, partyName)) {
                 if (allowResult(party)) {
                     parties.add(party);
                 }

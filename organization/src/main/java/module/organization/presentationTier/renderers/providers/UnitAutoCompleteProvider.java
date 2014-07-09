@@ -56,8 +56,9 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider<Unit> {
         for (final Party party : getParties(argsMap, value)) {
             if (party.isUnit()) {
                 final Unit unit = (Unit) party;
-                final String unitName = StringNormalizer.normalize(unit.getPartyName().getContent());
-                if (hasMatch(input, unitName)) {
+                final String content = unit.getPartyName().getContent();
+                final String unitName = content == null ? null : StringNormalizer.normalize(content);
+                if (unitName != null && hasMatch(input, unitName)) {
                     units.add(unit);
                 } else {
                     final String unitAcronym = StringNormalizer.normalize(unit.getAcronym());
