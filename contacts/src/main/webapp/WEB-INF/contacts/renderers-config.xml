@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE renderers-config SYSTEM "../fenix-renderers-config.dtd" []>
 <renderers-config>
 <renderer type="module.organization.domain.Person" layout="person-table-contact" class="module.contacts.presentationTier.renderers.PersonContactsTableRenderer">
         <property name="bundle" value="CONTACTS_RESOURCES"/>
