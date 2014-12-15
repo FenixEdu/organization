@@ -162,9 +162,9 @@ public class Unit extends Unit_Base {
     /**
      *
      * @param parent the parent unit, whose relation will be established using the provided accountabilityType
-     * @param name
-     * @param acronym
-     * @param partyType
+     * @param name name
+     * @param acronym acronym
+     * @param partyType partyType
      * @param accountabilityType the accountabilityType to connect to the parent unit
      * @param begin the begin date of the accountability
      * @param end the end date, or null, if the accountability end date remains to be closed
@@ -173,7 +173,7 @@ public class Unit extends Unit_Base {
      * @deprecated use
      *             {@link #create(Party, LocalizedString, String, PartyType, AccountabilityType, LocalDate, LocalDate, OrganizationalModel, String)}
      *             instead
-     * @return
+     * @return Unit
      */
     @Deprecated
     public static Unit create(Party parent, LocalizedString name, String acronym, PartyType partyType,
@@ -183,9 +183,9 @@ public class Unit extends Unit_Base {
 
     /**
      * @param parent the parent unit, whose relation will be established using the provided accountabilityType
-     * @param name
-     * @param acronym
-     * @param partyType
+     * @param name name
+     * @param acronym acronym
+     * @param partyType partyType
      * @param accountabilityType the accountabilityType to connect to the parent unit
      * @param begin the begin date of the accountability
      * @param end the end date, or null, if the accountability end date remains to be closed
@@ -193,7 +193,7 @@ public class Unit extends Unit_Base {
      *            organizationalModel.
      * @param justification an information justification/reason for the change of accountability, or null if there is none, or
      *            none is provided
-     * @return
+     * @return Unit
      */
     @Atomic
     public static Unit create(Party parent, LocalizedString name, String acronym, PartyType partyType,
@@ -209,11 +209,11 @@ public class Unit extends Unit_Base {
 
     /**
      *
-     * @param name
-     * @param acronym
-     * @param partyType
+     * @param name name
+     * @param acronym acronym
+     * @param partyType partyType
      * @deprecated use {@link #createRoot(LocalizedString, String, PartyType, String)} instead
-     * @return
+     * @return Unit
      */
     @Deprecated
     static public Unit createRoot(final LocalizedString name, final String acronym, final PartyType partyType) {

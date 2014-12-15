@@ -471,13 +471,13 @@ abstract public class Party extends Party_Base {
 
     /**
      * 
-     * @param parent
-     * @param type
-     * @param begin
-     * @param end
+     * @param parent parent
+     * @param type type
+     * @param begin begin
+     * @param end end
      * @param justification an information justification/reason for the accountability change, or null if there is none, or none
      *            is provided
-     * @return
+     * @return Accountability
      */
     @Atomic
     public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin,
@@ -488,11 +488,11 @@ abstract public class Party extends Party_Base {
     /**
      * 
      * @deprecated Use {@link #addParent(Party, AccountabilityType, LocalDate, LocalDate, String)} instead
-     * @param parent
-     * @param type
-     * @param begin
-     * @param end
-     * @return
+     * @param parent parent
+     * @param type type
+     * @param begin begin
+     * @param end end
+     * @return Accountability
      */
     @Deprecated
     public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
@@ -502,11 +502,11 @@ abstract public class Party extends Party_Base {
 
     /**
      * 
-     * @param child
-     * @param type
-     * @param begin
-     * @param end
-     * @return
+     * @param child child
+     * @param type type
+     * @param begin begin
+     * @param end end
+     * @return Accountability
      * @deprecated Use {@link #addChild(Party, AccountabilityType, LocalDate, LocalDate, String)} instead
      */
     @Deprecated
@@ -516,13 +516,13 @@ abstract public class Party extends Party_Base {
 
     /**
      * 
-     * @param child
-     * @param type
-     * @param begin
-     * @param end
+     * @param child child
+     * @param type type
+     * @param begin begin
+     * @param end end
      * @param justification an information justification/reason for the change of accountability, or null if there is none, or
      *            none is provided
-     * @return
+     * @return Accountability
      */
     @Atomic
     public Accountability addChild(final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end,

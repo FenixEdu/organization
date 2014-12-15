@@ -72,7 +72,7 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider<Person> 
         return persons;
     }
 
-    /**
+    /*
      * Should be overridden by subclasses to allow filtering of the Search
      * Results
      */

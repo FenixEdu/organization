@@ -172,7 +172,7 @@ public class Accountability extends Accountability_Base {
 
     /**
      * 
-     * @return true if the {@link AccountabilityHistory} item is inactive, false
+     * @return true if the AccountabilityHistory item is inactive, false
      *         otherwise
      */
     public boolean isErased() {
@@ -273,7 +273,7 @@ public class Accountability extends Accountability_Base {
 
     /**
      * 
-     * @param beginDate
+     * @param beginDate begin date
      * @param justification an information justification/reason for the change of accountability, or null if there is none, or
      *            none is provided
      */
@@ -287,7 +287,7 @@ public class Accountability extends Accountability_Base {
 
     /**
      * 
-     * @param endDate
+     * @param endDate end date
      * @param justification an information justification/reason for the change of accountability, or null if there is none, or
      *            none is provided
      */
@@ -307,7 +307,6 @@ public class Accountability extends Accountability_Base {
      *            the new begin date
      * @param end
      *            the new end date
-     * @return the new Accountability that was just created
      * @deprecated use the {@link #editDates(LocalDate, LocalDate, String)} instead
      */
     @Deprecated
@@ -325,8 +324,6 @@ public class Accountability extends Accountability_Base {
      *            the new end date
      * @param justification an information justification/reason for the change of accountability, or null if there is none, or
      *            none is provided
-     * 
-     * @return the new Accountability that was just created
      */
     @Atomic
     public void editDates(final LocalDate begin, final LocalDate end, String justification) {
@@ -357,8 +354,8 @@ public class Accountability extends Accountability_Base {
 
     /**
      * 
-     * @param start
-     * @param end
+     * @param start start
+     * @param end end
      * @return true if the given start and end date overlap in more than one day
      *         with this accountability (exclusively, i.e. if the end date of
      *         this accountability equals the begin date passed as argument, it
@@ -372,8 +369,8 @@ public class Accountability extends Accountability_Base {
 
     /**
      * 
-     * @param begin
-     * @param end
+     * @param begin begin
+     * @param end end
      * @return true if it intersects i.e. (TODO a better explanation of what it
      *         means) it works inclusively e.g. if the end day and the start day
      *         of the accountability are the same, it returns true
@@ -384,8 +381,8 @@ public class Accountability extends Accountability_Base {
 
     /**
      * 
-     * @param localDate1
-     * @param localDate2
+     * @param localDate1 localDate1
+     * @param localDate2 localDate2
      * @return false if any of the dates are null, or if localDate1 isn't after
      *         localDate2, true otherwise
      */

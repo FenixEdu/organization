@@ -115,16 +115,11 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
      * It creates a new AccountabilityHistory item and pushes the others (if
      * they exist)
      * 
-     * @param userWhoCreated
-     * @param instantOfCreation
-     * @param beginDate
-     * @param endDate
+     * @param beginDate beginDate
+     * @param endDate endDate
      * @param acc
      *            the Accountability which
-     * @param active
-     *            if true, the new AccountabilityHistory will be marked as
-     *            active, if it is false it is equivalent of deleting the new
-     *            AccountabilityHistory
+     * @param erased erased
      * @param justification an information justification/reason for the change of accountability, or null if there is none, or
      *            none is provided
      * 
