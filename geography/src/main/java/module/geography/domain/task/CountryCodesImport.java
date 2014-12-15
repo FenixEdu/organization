@@ -34,11 +34,12 @@ import module.geography.domain.Planet;
 import module.geography.util.AddressPrinter;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.fenixedu.bennu.scheduler.CronTask;
 import org.fenixedu.bennu.scheduler.annotation.Task;
 import org.fenixedu.commons.i18n.LocalizedString;
+
+import com.google.common.base.Strings;
 
 /**
  * Import ISO-3166-1 country codes list. Source import file located in:
@@ -65,9 +66,9 @@ public class CountryCodesImport extends CronTask {
                 String longCode = parts[1];
                 String numericCode = parts[2];
                 String countryNameEn = parts[3];
-                String countryNamePt = parts.length > 5 && StringUtils.isNotEmpty(parts[5]) ? parts[5] : null;
-                String nationalityEn = parts.length > 6 && StringUtils.isNotEmpty(parts[6]) ? parts[6] : null;
-                String nationalityPt = parts.length > 7 && StringUtils.isNotEmpty(parts[7]) ? parts[7] : null;
+                String countryNamePt = parts.length > 5 && Strings.isNullOrEmpty(parts[5]) ? null : parts[5];
+                String nationalityEn = parts.length > 6 && Strings.isNullOrEmpty(parts[6]) ? null : parts[6];
+                String nationalityPt = parts.length > 7 && Strings.isNullOrEmpty(parts[7]) ? null : parts[7];
                 Country country = planet.getChildByAcronym(longCode);
                 if (country == null) {
                     country =

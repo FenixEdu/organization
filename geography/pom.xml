@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.fenixedu</groupId>
         <artifactId>fenix-framework-project</artifactId>
-        <version>2.0.1</version>
+        <version>2.2.0</version>
         <relativePath />
     </parent>
 
@@ -16,6 +16,7 @@
 
     <properties>
         <version.org.fenixedu.bennu>3.4.0</version.org.fenixedu.bennu>
+        <version.org.apache.commons.commons-lang>3.3.2</version.org.apache.commons.commons-lang>
     </properties>
 
     <dependencies>
@@ -34,12 +35,17 @@
             <artifactId>bennu-scheduler</artifactId>
             <version>${version.org.fenixedu.bennu}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${version.org.apache.commons.commons-lang}</version>
+        </dependency>
     </dependencies>
 
     <repositories>
         <repository>
-                <id>fenixedu-maven-repository</id>
-                <url>https://repo.fenixedu.org/fenixedu-maven-repository</url>
+            <id>fenixedu-maven-repository</id>
+            <url>https://repo.fenixedu.org/fenixedu-maven-repository</url>
         </repository>
     </repositories>
 </project>

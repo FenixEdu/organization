@@ -28,9 +28,10 @@ import java.util.Locale;
 
 import module.organization.domain.Unit;
 
-import org.apache.commons.lang.StringUtils;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
+
+import com.google.common.base.Strings;
 
 /**
  * Special kind of {@link CountrySubdivision} specific for Portugal. It covers a
@@ -45,7 +46,7 @@ import org.joda.time.LocalDate;
 public class PostalExtension extends PostalExtension_Base {
     public PostalExtension(CountrySubdivision parent, String acronym, String street, String postalCode, String postalBranch) {
         super();
-        String name = StringUtils.isNotBlank(street) ? street : postalBranch;
+        String name = Strings.isNullOrEmpty(street) ? postalBranch : street;
         setUnit(Unit.create(parent.getUnit(), new LocalizedString().with(new Locale("pt"), name).with(Locale.ENGLISH, name),
                 acronym, getPartyType("Subdivisão de País", COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(),
                 new LocalDate(), null));
