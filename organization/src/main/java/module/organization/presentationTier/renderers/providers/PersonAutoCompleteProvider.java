@@ -34,6 +34,8 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 
 import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.UserProfile;
 import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
 import org.fenixedu.commons.StringNormalizer;
 
@@ -52,15 +54,20 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider<Person> 
         String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
 
         for (final Person person : getPersons(argsMap, value)) {
-            final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
-            if (person.getUser() == null) {
+            final User user = person.getUser();
+            if (user == null) {
                 continue;
             }
-            if (hasMatch(values, normalizedName)) {
+            if (user.getUsername().indexOf(value) >= 0) {
                 persons.add(person);
-            }
-            if (person.getUser().getUsername().indexOf(value) >= 0) {
-                persons.add(person);
+            } else {
+                final UserProfile profile = user.getProfile();
+                if (profile != null) {
+                    final String normalizedName = StringNormalizer.normalize(profile.getFullName()).toLowerCase();
+                    if (hasMatch(values, normalizedName)) {
+                        persons.add(person);
+                    }
+                }
             }
             if (persons.size() >= maxCount) {
                 break;
