@@ -2,8 +2,6 @@ package pt.ist.jpdaplace;
 
 public class Parish {
 
-    private static final long serialVersionUID = 1L;
-
     public final Municipality municipality;
     public final String name;
     public final String code;

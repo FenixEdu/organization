@@ -24,23 +24,19 @@
  *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
- 
 
 class module.organization.domain.AccountabilityType {
 	String type;
-	MultiLanguageString name;
+	LocalizedString name;
 }
 
 class module.organization.domain.Accountability {
-	//DateTime creationDate; //FENIX-337 to comment
-	//LocalDate beginDate; //FENIX-337 to comment
-	//LocalDate endDate; //FENIX-337 to comment
 }
 
 class module.organization.domain.AccountabilityVersion {
-	DateTime creationDate; //FENIX-337 new
-	LocalDate beginDate; //FENIX-337 new
-	LocalDate endDate; //FENIX-337 new
+	DateTime creationDate;
+	LocalDate beginDate;
+	LocalDate endDate;
 	boolean erased;
 	String justification;
 }
@@ -51,11 +47,11 @@ class module.organization.domain.AccountabilityVersion {
 	
 class module.organization.domain.PartyType {
 	String type;
-	MultiLanguageString name;
+	LocalizedString name;
 }
 
 class module.organization.domain.Party {
-	MultiLanguageString partyName;
+	LocalizedString partyName;
 }
 
 	class module.organization.domain.Person extends module.organization.domain.Party {
@@ -75,13 +71,13 @@ class module.organization.domain.ConnectionRule {
 	}
 
 class module.organization.domain.OrganizationalModel {
-	MultiLanguageString name;
+	LocalizedString name;
 }
 
-class module.organization.domain.groups.PersonGroup extends pt.ist.bennu.core.domain.groups.PersistentGroup {
+class module.organization.domain.groups.PersistentPersonGroup extends org.fenixedu.bennu.core.domain.groups.GroupConstant {
 }
 
-class module.organization.domain.groups.UnitGroup extends pt.ist.bennu.core.domain.groups.PersistentGroup {
+class module.organization.domain.groups.PersistentUnitGroup extends org.fenixedu.bennu.core.domain.groups.PersistentGroup {
 }
 
 class module.organization.domain.FunctionDelegation {
@@ -98,27 +94,27 @@ class module.organization.domain.FunctionDelegationLog {
 /** Relations **/
 
 relation UserPerson {
-	pt.ist.bennu.core.domain.User playsRole user;
+	org.fenixedu.bennu.core.domain.User playsRole user;
 	module.organization.domain.Person playsRole person;
 }
 
 
 relation MyOrgAccountabilityType {
-	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	org.fenixedu.bennu.core.domain.Bennu playsRole myOrg;
 	module.organization.domain.AccountabilityType playsRole accountabilityTypes {
 		multiplicity *;
 	}
 }
 
 relation MyOrgAccountability {
-	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	org.fenixedu.bennu.core.domain.Bennu playsRole myOrg;
 	module.organization.domain.Accountability playsRole accountabilities {
 		multiplicity *;
 	}
 }
 
 relation MyOrgPartyType {
-	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	org.fenixedu.bennu.core.domain.Bennu playsRole myOrg;
 	module.organization.domain.PartyType playsRole partyTypes {
 		multiplicity *;
 	}
@@ -139,21 +135,21 @@ relation UnconfirmedAccountabilityAccountabilityType {
 }
 
 relation MyOrgParty {
-	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	org.fenixedu.bennu.core.domain.Bennu playsRole myOrg;
 	module.organization.domain.Party playsRole parties {
 		multiplicity *;
 	}
 }
 
 relation MyOrgTopUnit {
-	pt.ist.bennu.core.domain.MyOrg playsRole myOrgFromTopUnit;
+	org.fenixedu.bennu.core.domain.Bennu playsRole myOrgFromTopUnit;
 	module.organization.domain.Unit playsRole topUnits {
 		multiplicity *;
 	}
 }
 
 relation MyOrgWithPersons {
-	pt.ist.bennu.core.domain.MyOrg playsRole myOrgFromPerson;
+	org.fenixedu.bennu.core.domain.Bennu playsRole myOrgFromPerson;
 	module.organization.domain.Person playsRole persons {
 		multiplicity *;
 	}
@@ -171,7 +167,7 @@ relation PartyTypeParty {
 
 //FENIX-331 refacorization, relation not needed anymore
 //relation AccountabilityUser {
-//	pt.ist.bennu.core.domain.User playsRole creatorUser;
+//	org.fenixedu.bennu.core.domain.User playsRole creatorUser;
 //	module.organization.domain.Accountability playsRole accountabilitiesCreated {
 //		multiplicity *;
 //	}
@@ -213,7 +209,7 @@ relation AccountabilityVersionAccountabilityVersion {
 }
 
 relation AccountabilityVersionUser {
-	pt.ist.bennu.core.domain.User playsRole userWhoCreated {
+	org.fenixedu.bennu.core.domain.User playsRole userWhoCreated {
 		multiplicity 1;
 	}
 	module.organization.domain.AccountabilityVersion playsRole accountabilityVersionItems {
@@ -237,7 +233,7 @@ relation PartyChildAccountabilities {
 }
 
 relation MyOrgConnectionRule {
-	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	org.fenixedu.bennu.core.domain.Bennu playsRole myOrg;
 	module.organization.domain.ConnectionRule playsRole connectionRules {
 		multiplicity *;
 	}
@@ -267,7 +263,7 @@ relation PartyTypeConnectionRuleChildPartyType {
 }
 
 relation MyOrgOrganizationalModel {
-	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	org.fenixedu.bennu.core.domain.Bennu playsRole myOrg;
 	module.organization.domain.OrganizationalModel playsRole organizationalModels {
 		multiplicity *;
 	}
@@ -292,14 +288,14 @@ relation OrganizationalModelAccountabilityType {
 }
 
 relation UserUnconfirmedAccountability {
-	pt.ist.bennu.core.domain.User playsRole user;
+	org.fenixedu.bennu.core.domain.User playsRole user;
 	module.organization.domain.UnconfirmedAccountability playsRole unconfirmedAccountabilities {
 		multiplicity *;
 	}
 }
 
 relation MyOrgFunctionDelegation {
-	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	org.fenixedu.bennu.core.domain.Bennu playsRole myOrg;
 	module.organization.domain.FunctionDelegation playsRole functionDelegation {
 		multiplicity *;
 	}
@@ -318,7 +314,7 @@ relation FunctionDelegationAccountabilityDelegatee {
 }
 
 relation MyOrgFunctionDelegationLog {
-	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	org.fenixedu.bennu.core.domain.Bennu playsRole myOrg;
 	module.organization.domain.FunctionDelegationLog playsRole functionDelegationLogs {
 		multiplicity *;
 	}
@@ -333,13 +329,13 @@ relation FunctionDelegationFunctionDelegationLog {
 
 relation UnitGroupUnit {
 	module.organization.domain.Unit playsRole unit;
-	module.organization.domain.groups.UnitGroup playsRole unitGroup {
+	module.organization.domain.groups.PersistentUnitGroup playsRole unitGroup {
 		multiplicity *;
 	}
 }
 
 relation UnitGroupMemberAccountabilityTypes {
-	module.organization.domain.groups.UnitGroup playsRole unitGroupFromMemberAccountabilityType {
+	module.organization.domain.groups.PersistentUnitGroup playsRole unitGroupFromMemberAccountabilityType {
 		multiplicity *;
 	}
 	module.organization.domain.AccountabilityType playsRole memberAccountabilityType {
@@ -348,7 +344,7 @@ relation UnitGroupMemberAccountabilityTypes {
 }
 
 relation UnitGroupChildUnitAccountabilityTypes {
-	module.organization.domain.groups.UnitGroup playsRole unitGroupFromChildUnitAccountabilityType {
+	module.organization.domain.groups.PersistentUnitGroup playsRole unitGroupFromChildUnitAccountabilityType {
 		multiplicity *;
 	}
 	module.organization.domain.AccountabilityType playsRole childUnitAccountabilityType {

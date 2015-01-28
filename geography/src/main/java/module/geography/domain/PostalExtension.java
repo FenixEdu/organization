@@ -24,13 +24,14 @@
  */
 package module.geography.domain;
 
+import java.util.Locale;
+
 import module.organization.domain.Unit;
 
-import org.apache.commons.lang.StringUtils;
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
 
-import pt.utl.ist.fenix.tools.util.i18n.Language;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
+import com.google.common.base.Strings;
 
 /**
  * Special kind of {@link CountrySubdivision} specific for Portugal. It covers a
@@ -45,9 +46,9 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 public class PostalExtension extends PostalExtension_Base {
     public PostalExtension(CountrySubdivision parent, String acronym, String street, String postalCode, String postalBranch) {
         super();
-        String name = StringUtils.isNotBlank(street) ? street : postalBranch;
-        setUnit(Unit.create(parent.getUnit(), new MultiLanguageString().with(Language.pt, name).with(Language.en, name), acronym,
-                getPartyType("Subdivisão de País", COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(),
+        String name = Strings.isNullOrEmpty(street) ? postalBranch : street;
+        setUnit(Unit.create(parent.getUnit(), new LocalizedString().with(new Locale("pt"), name).with(Locale.ENGLISH, name),
+                acronym, getPartyType("Subdivisão de País", COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(),
                 new LocalDate(), null));
         setLevel(parent.getLevel() + 1);
         setCode(postalCode);

@@ -8,20 +8,17 @@
 <h2><bean:message key="label.create.new" bundle="ORGANIZATION_RESOURCES" /></h2>
 
 <div class="mvert1">
-	<fr:form action="/organization.do">
-		<html:hidden name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="method" value="prepareCreateConnectionRule" />
+	<fr:form action="/organization.do?method=prepareCreateConnectionRule">
 		<bean:message key="label.connection.rule" bundle="ORGANIZATION_RESOURCES" />:
-		<html:select name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="connectionRuleClassName" onchange="this.form.submit();">
-			<html:option value=""><bean:message key="label.organization.choose.an.option" bundle="ORGANIZATION_RESOURCES" /></html:option>
-			<html:option value="module.organization.domain.connectionRules.PartyTypeConnectionRule$PartyTypeConnectionRuleBean"><bean:message key="label.PartyTypeConnectionRule" bundle="ORGANIZATION_RESOURCES" /></html:option>
-			<html:option value="module.organization.domain.connectionRules.UniqueNameAndAcronymConnectionRule$UniqueNameAndAcronymConnectionRuleBean"><bean:message key="label.UniqueNameAndAcronymConnectionRule" bundle="ORGANIZATION_RESOURCES" /></html:option>
-		</html:select>
+		<select name="connectionRuleClassName" onchange="this.form.submit();">
+			<option value=""><bean:message key="label.organization.choose.an.option" bundle="ORGANIZATION_RESOURCES" /></option>
+			<option value="module.organization.domain.connectionRules.PartyTypeConnectionRule$PartyTypeConnectionRuleBean" ${simpleName == 'PartyTypeConnectionRuleBean' ? 'selected': ''}><bean:message key="label.PartyTypeConnectionRule" bundle="ORGANIZATION_RESOURCES" /></option>
+			<option value="module.organization.domain.connectionRules.UniqueNameAndAcronymConnectionRule$UniqueNameAndAcronymConnectionRuleBean" ${simpleName == 'UniqueNameAndAcronymConnectionRuleBean' ? 'selected': ''}><bean:message key="label.UniqueNameAndAcronymConnectionRule" bundle="ORGANIZATION_RESOURCES" /></option>
+		</select>
 	</fr:form>
 </div>
 
-<fr:form action="/organization.do">	
-	<html:hidden name="module.organization.presentationTier.actions.OrganizationManagementAction$OrganizationForm" property="method" value="createConnectionRule" />
-	
+<fr:form action="/organization.do?method=createConnectionRule">		
 	<html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">
 		<p><span class="error0"><bean:write name="message" /></span></p>
 	</html:messages>

@@ -24,7 +24,8 @@
  */
 package module.organization.presentationTier.renderers.providers;
 
-import pt.ist.bennu.core.domain.MyOrg;
+import org.fenixedu.bennu.core.domain.Bennu;
+
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 
@@ -42,7 +43,7 @@ public class OrganizationalModelProvider implements DataProvider {
 
     @Override
     public Object provide(Object source, Object currentValue) {
-        return MyOrg.getInstance().getOrganizationalModelsSet();
+        return Bennu.getInstance().getOrganizationalModelsSet();
     }
 
 }

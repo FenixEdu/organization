@@ -18,12 +18,12 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2 tdleft thleft"/>
 
-			<fr:property name="linkFormat(editPartyType)" value="/organization.do?method=prepareEditPartyType&amp;partyTypeOid=${externalId}" />
+			<fr:property name="linkFormat(editPartyType)" value="/organization.do?method=prepareEditPartyType&amp;partyTypeOid=\${externalId}" />
 			<fr:property name="key(editPartyType)" value="label.edit"/>
 			<fr:property name="bundle(editPartyType)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="order(editPartyType)" value="1"/>
 
-			<fr:property name="linkFormat(deletePartyType)" value="/organization.do?method=deletePartyType&amp;partyTypeOid=${externalId}" />
+			<fr:property name="linkFormat(deletePartyType)" value="/organization.do?method=deletePartyType&amp;partyTypeOid=\${externalId}" />
 			<fr:property name="key(deletePartyType)" value="label.delete"/>
 			<fr:property name="bundle(deletePartyType)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="confirmationKey(deletePartyType)" value="label.delete.confirmation.message"/>

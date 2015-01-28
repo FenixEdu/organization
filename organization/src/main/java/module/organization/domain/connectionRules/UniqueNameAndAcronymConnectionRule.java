@@ -3,14 +3,14 @@
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz
- * 
+ *
  *      https://fenix-ashes.ist.utl.pt/
- * 
+ *
  *   This file is part of the Organization Module.
  *
  *   The Organization Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Organization Module is distributed in the hope that it will be useful,
@@ -20,26 +20,32 @@
  *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 package module.organization.domain.connectionRules;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.ConnectionRule;
+import module.organization.domain.OrganizationDomainException;
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.commons.i18n.LocalizedString;
+
 import pt.ist.fenixframework.Atomic;
 
 /**
- * 
+ *
  * @author João Figueiredo
- * 
+ *
  */
 public class UniqueNameAndAcronymConnectionRule extends UniqueNameAndAcronymConnectionRule_Base {
 
@@ -72,9 +78,9 @@ public class UniqueNameAndAcronymConnectionRule extends UniqueNameAndAcronymConn
     }
 
     private void checkIfExistsRule() {
-        for (final ConnectionRule rule : MyOrg.getInstance().getConnectionRulesSet()) {
+        for (final ConnectionRule rule : Bennu.getInstance().getConnectionRulesSet()) {
             if (rule != this && rule instanceof UniqueNameAndAcronymConnectionRule) {
-                throw new DomainException("error.UniqueNameAndAcronymConnectionRule.rule.already.exists");
+                throw OrganizationDomainException.uniqueNameAndAcronymConnectionRuleAlreadyExists();
             }
         }
     }
@@ -90,7 +96,7 @@ public class UniqueNameAndAcronymConnectionRule extends UniqueNameAndAcronymConn
     }
 
     private boolean checkNameAndAcronym(final Unit parent, final Unit child) {
-        return (parent != null) ? checkChildsNameAndAcronym(parent.getChildAccountabilities(), child) : checkTopUnitsNameAndAcronym(child);
+        return (parent != null) ? checkChildsNameAndAcronym(parent.getChildAccountabilitiesSet(), child) : checkTopUnitsNameAndAcronym(child);
     }
 
     private boolean checkChildsNameAndAcronym(final Collection<Accountability> accountabilities, final Unit child) {
@@ -104,7 +110,7 @@ public class UniqueNameAndAcronymConnectionRule extends UniqueNameAndAcronymConn
     }
 
     private boolean checkTopUnitsNameAndAcronym(final Unit unit) {
-        for (final Party party : MyOrg.getInstance().getTopUnitsSet()) {
+        for (final Party party : Bennu.getInstance().getTopUnitsSet()) {
             if (party.isUnit() && !party.equals(this) && hasSameNameAndAcronym((Unit) party, unit)) {
                 return false;
             }
@@ -113,13 +119,24 @@ public class UniqueNameAndAcronymConnectionRule extends UniqueNameAndAcronymConn
     }
 
     private boolean hasSameNameAndAcronym(final Unit one, final Unit other) {
-        return one.getPartyName().equalInAnyLanguage(other.getPartyName())
+        return equalInAnyLanguage(one.getPartyName(), other.getPartyName())
                 && one.getAcronym().equalsIgnoreCase(other.getAcronym());
+    }
+
+    private static boolean equalInAnyLanguage(LocalizedString one, LocalizedString other) {
+        Set<Locale> locales = new HashSet<Locale>();
+        locales.addAll(one.getLocales());
+        locales.addAll(other.getLocales());
+        for (Locale locale : locales) {
+            if (one.getContent(locale) != null && one.getContent(locale).equalsIgnoreCase(other.getContent(locale))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public String getDescription() {
-        return BundleUtil.getStringFromResourceBundle("resources/OrganizationResources",
-                "label.UniqueNameAndAcronymConnectionRule.description");
+        return BundleUtil.getString("resources/OrganizationResources", "label.UniqueNameAndAcronymConnectionRule.description");
     }
 }

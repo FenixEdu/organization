@@ -27,17 +27,19 @@ package module.geography.domain.task;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 
 import module.geography.domain.Country;
 import module.geography.domain.Planet;
 import module.geography.util.AddressPrinter;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.text.WordUtils;
+import org.fenixedu.bennu.scheduler.CronTask;
+import org.fenixedu.bennu.scheduler.annotation.Task;
+import org.fenixedu.commons.i18n.LocalizedString;
 
-import pt.utl.ist.fenix.tools.util.i18n.Language;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
+import com.google.common.base.Strings;
 
 /**
  * Import ISO-3166-1 country codes list. Source import file located in:
@@ -48,11 +50,12 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  * @author Pedro Santos
  * 
  */
-public class CountryCodesImport extends CountryCodesImport_Base {
+@Task(englishTitle = "Import Country Codes from CSV")
+public class CountryCodesImport extends CronTask {
     private static final String ISO3166_FILE = "/iso-3166.csv";
 
     @Override
-    public void executeTask() {
+    public void runTask() {
         InputStream stream = getClass().getResourceAsStream(ISO3166_FILE);
         try {
             List<String> lines = IOUtils.readLines(stream);
@@ -63,9 +66,9 @@ public class CountryCodesImport extends CountryCodesImport_Base {
                 String longCode = parts[1];
                 String numericCode = parts[2];
                 String countryNameEn = parts[3];
-                String countryNamePt = parts.length > 5 && StringUtils.isNotEmpty(parts[5]) ? parts[5] : null;
-                String nationalityEn = parts.length > 6 && StringUtils.isNotEmpty(parts[6]) ? parts[6] : null;
-                String nationalityPt = parts.length > 7 && StringUtils.isNotEmpty(parts[7]) ? parts[7] : null;
+                String countryNamePt = parts.length > 5 && Strings.isNullOrEmpty(parts[5]) ? null : parts[5];
+                String nationalityEn = parts.length > 6 && Strings.isNullOrEmpty(parts[6]) ? null : parts[6];
+                String nationalityPt = parts.length > 7 && Strings.isNullOrEmpty(parts[7]) ? null : parts[7];
                 Country country = planet.getChildByAcronym(longCode);
                 if (country == null) {
                     country =
@@ -91,14 +94,14 @@ public class CountryCodesImport extends CountryCodesImport_Base {
         return getClass().getName();
     }
 
-    private static MultiLanguageString makeName(String pt, String en) {
+    private static LocalizedString makeName(String pt, String en) {
         if (pt != null || en != null) {
-            MultiLanguageString name = new MultiLanguageString();
+            LocalizedString name = new LocalizedString();
             if (pt != null) {
-                name = name.with(Language.pt, WordUtils.capitalizeFully(pt));
+                name = name.with(new Locale("pt"), WordUtils.capitalizeFully(pt));
             }
             if (en != null) {
-                name = name.with(Language.en, WordUtils.capitalizeFully(en));
+                name = name.with(Locale.ENGLISH, WordUtils.capitalizeFully(en));
             }
             return name;
         }

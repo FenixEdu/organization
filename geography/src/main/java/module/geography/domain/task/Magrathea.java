@@ -24,13 +24,16 @@
  */
 package module.geography.domain.task;
 
+import java.util.Locale;
+
 import module.geography.domain.Galaxy;
 import module.geography.domain.GeographicConstants;
 import module.geography.domain.Planet;
 import module.geography.domain.Universe;
+
+import org.fenixedu.commons.i18n.LocalizedString;
+
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
  * Planet Factory.
@@ -47,22 +50,21 @@ public class Magrathea implements GeographicConstants {
         Universe universe = Universe.getMultiverseZero();
         if (universe == null) {
             universe =
-                    new Universe(new MultiLanguageString().with(Language.pt, "Multiverso Zero").with(Language.en,
+                    new Universe(new LocalizedString().with(new Locale("pt"), "Multiverso Zero").with(Locale.ENGLISH,
                             "Multiverse Zero"), MULTIVERSE_UNIT_ACRONYM);
         }
 
         Galaxy galaxy = universe.getChildByAcronym(MILKY_WAY_UNIT_ACRONYM);
         if (galaxy == null) {
             galaxy =
-                    new Galaxy(universe,
-                            new MultiLanguageString().with(Language.pt, "Via Láctea").with(Language.en, "Milky Way"),
-                            MILKY_WAY_UNIT_ACRONYM);
+                    new Galaxy(universe, new LocalizedString().with(new Locale("pt"), "Via Láctea").with(Locale.ENGLISH,
+                            "Milky Way"), MILKY_WAY_UNIT_ACRONYM);
         }
 
         Planet planet = galaxy.getChildByAcronym(EARTH_UNIT_ACRONYM);
         if (planet == null) {
             planet =
-                    new Planet(galaxy, new MultiLanguageString().with(Language.pt, "Terra").with(Language.en, "Earth"),
+                    new Planet(galaxy, new LocalizedString().with(new Locale("pt"), "Terra").with(Locale.ENGLISH, "Earth"),
                             EARTH_UNIT_ACRONYM);
         }
 

@@ -42,12 +42,12 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2" />
 			
-			<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=${parent.externalId}" />
+			<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=\${parent.externalId}" />
 			<fr:property name="key(viewParty)" value="label.view"/>
 			<fr:property name="bundle(viewParty)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="order(viewParty)" value="1"/>
 
-			<fr:property name="linkFormat(removeParent)" value="/organization.do?method=removeParent&amp;accOid=${externalId}" />
+			<fr:property name="linkFormat(removeParent)" value="/organization.do?method=removeParent&amp;accOid=\${externalId}" />
 			<fr:property name="key(removeParent)" value="label.remove"/>
 			<fr:property name="bundle(removeParent)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="confirmationKey(removeParent)" value="label.remove.confirmation.message" />
@@ -73,13 +73,13 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle2" />
 			
-			<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=${child.externalId}" />
+			<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=\${child.externalId}" />
 			<fr:property name="key(viewParty)" value="label.view"/>
 			<fr:property name="bundle(viewParty)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="order(viewParty)" value="1"/>
 			<fr:property name="visibleIf(viewParty)" value="child.unit"/>
 			
-			<fr:property name="linkFormat(removeChild)" value="/organization.do?method=removeChild&amp;accOid=${externalId}" />
+			<fr:property name="linkFormat(removeChild)" value="/organization.do?method=removeChild&amp;accOid=\${externalId}" />
 			<fr:property name="key(removeChild)" value="label.remove"/>
 			<fr:property name="bundle(removeChild)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="confirmationKey(removeChild)" value="label.remove.confirmation.message" />

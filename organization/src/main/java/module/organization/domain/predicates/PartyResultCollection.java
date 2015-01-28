@@ -53,7 +53,7 @@ public class PartyResultCollection {
         return predicate.eval(party, accountability);
     }
 
-    /**
+    /*
      * Add Party to result if candAddParty is true and if this collection permit
      * duplicates and does not contains the specified element.
      * 

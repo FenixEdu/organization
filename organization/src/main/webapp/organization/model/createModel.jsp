@@ -19,5 +19,5 @@
 		<fr:property name="classes" value="form" />
 		<fr:property name="columnClasses" value=",,tderror" />
 	</fr:layout>
-	<fr:destination name="cancel" path="/organization.do?method=viewModels" />
+	<fr:destination name="cancel" path="/organizationModel.do?method=viewModels" />
 </fr:edit>

@@ -32,9 +32,12 @@ import java.util.Map;
 
 import module.organization.domain.Party;
 import module.organization.domain.Person;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.UserProfile;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.commons.StringNormalizer;
 
 /**
  * 
@@ -42,25 +45,29 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  * @author João Figueiredo
  * 
  */
-public class PersonAutoCompleteProvider implements AutoCompleteProvider {
+public class PersonAutoCompleteProvider implements AutoCompleteProvider<Person> {
 
     @Override
-    public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
+    public Collection<Person> getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         final List<Person> persons = new ArrayList<Person>();
 
-        final String trimmedValue = value.trim();
         String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
 
         for (final Person person : getPersons(argsMap, value)) {
-            final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
-            if (person.getUser() == null) {
+            final User user = person.getUser();
+            if (user == null) {
                 continue;
             }
-            if (hasMatch(values, normalizedName)) {
+            if (user.getUsername().indexOf(value) >= 0) {
                 persons.add(person);
-            }
-            if (person.getUser().getUsername().indexOf(value) >= 0) {
-                persons.add(person);
+            } else {
+                final UserProfile profile = user.getProfile();
+                if (profile != null) {
+                    final String normalizedName = StringNormalizer.normalize(profile.getFullName()).toLowerCase();
+                    if (hasMatch(values, normalizedName)) {
+                        persons.add(person);
+                    }
+                }
             }
             if (persons.size() >= maxCount) {
                 break;
@@ -72,12 +79,12 @@ public class PersonAutoCompleteProvider implements AutoCompleteProvider {
         return persons;
     }
 
-    /**
+    /*
      * Should be overridden by subclasses to allow filtering of the Search
      * Results
      */
     protected Collection<Person> getPersons(Map<String, String> argsMap, String value) {
-        return MyOrg.getInstance().getPersonsSet();
+        return Bennu.getInstance().getPersonsSet();
     }
 
     private boolean hasMatch(final String[] input, final String unitNameParts) {

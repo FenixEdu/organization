@@ -31,18 +31,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import module.geography.domain.Country;
 import module.geography.domain.CountrySubdivision;
+import module.geography.util.GeographyPropertiesManager;
 import module.organization.domain.Accountability;
 
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core._development.PropertiesManager;
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
  * 
@@ -64,8 +64,8 @@ public class PortugueseDistrictImportAuxiliaryServices {
 
     protected int touches = 0;
 
-    private final MultiLanguageString districtLevelName = new MultiLanguageString().with(Language.pt, "Distrito").with(
-            Language.en, "District");;
+    private final LocalizedString districtLevelName = new LocalizedString().with(new Locale("pt"), "Distrito").with(
+            Locale.ENGLISH, "District");;
 
     private static PortugueseDistrictImportAuxiliaryServices singletonHolder;
 
@@ -87,47 +87,47 @@ public class PortugueseDistrictImportAuxiliaryServices {
         LineNumberReader reader = null;
         ArrayList<CountrySubdivision> districtsOnFile = new ArrayList<CountrySubdivision>();
         ArrayList<CountrySubdivision> existingDistricts = new ArrayList<CountrySubdivision>();
+
         try {
-            File file = new File(PropertiesManager.getProperty("modules.geography.file.import.location") + CTT_DISTRICTFILE);
-            if (originalTask.getLastRun() == null || file.lastModified() > originalTask.getLastRun().getMillis()) {
-                DateTime lastReview = new DateTime(file.lastModified());
-                FileInputStream fileReader = new FileInputStream(file);
-                reader = new LineNumberReader(new InputStreamReader(fileReader, "ISO-8859-1"));
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(";");
-                    String districtCode = parts[0];
-                    String districtName = parts[1];
+            File file =
+                    new File(GeographyPropertiesManager.getConfiguration().getGeographyImportFilesLocation() + CTT_DISTRICTFILE);
 
-                    CountrySubdivision district = portugal.getChildByCode(districtCode);
-                    if (district == null) {
-                        district = createDistrict(districtCode, districtName, lastReview);
-                    } else {
-                        modifyDistrict(district, districtCode, districtName, "", lastReview);
-                    }
-                    districtsOnFile.add(district);
-                } // 'remove' all of the districts in
-                  // excess i.e. make their // accountabilities end
+            DateTime lastReview = new DateTime(file.lastModified());
+            FileInputStream fileReader = new FileInputStream(file);
+            reader = new LineNumberReader(new InputStreamReader(fileReader, "ISO-8859-1"));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                String districtCode = parts[0];
+                String districtName = parts[1];
 
-                // getting all of the existing districts
-                for (CountrySubdivision countrySubdivision : portugal.getChildren()) {
-                    if (countrySubdivision.getLevelName().getContent(Language.pt)
-                            .equalsIgnoreCase(districtLevelName.getContent(Language.pt))) {
-                        existingDistricts.add(countrySubdivision);
-                    }
-                } // let's assert
-                  // which ones are in excess and remove them
-                existingDistricts.removeAll(districtsOnFile);
-                for (CountrySubdivision countrySubdivision : existingDistricts) {
-                    removeDistrict(countrySubdivision);
+                CountrySubdivision district = portugal.getChildByCode(districtCode);
+                if (district == null) {
+                    district = createDistrict(districtCode, districtName, lastReview);
+                } else {
+                    modifyDistrict(district, districtCode, districtName, "", lastReview);
                 }
-                originalTask.auxLogInfo("File last modification was: " + lastReview);
-                originalTask.auxLogInfo(additions + " districts added.");
-                originalTask.auxLogInfo(touches + " districts unmodified, but whose date has changed.");
-                originalTask.auxLogInfo(modifications + " districts modified");
-            } else {
-                originalTask.auxLogInfo("File unmodified, nothing imported.");
+                districtsOnFile.add(district);
+            } // 'remove' all of the districts in
+              // excess i.e. make their // accountabilities end
+
+            // getting all of the existing districts
+            for (CountrySubdivision countrySubdivision : portugal.getChildren()) {
+                if (countrySubdivision.getLevelName().getContent(new Locale("pt"))
+                        .equalsIgnoreCase(districtLevelName.getContent(new Locale("pt")))) {
+                    existingDistricts.add(countrySubdivision);
+                }
+            } // let's assert
+              // which ones are in excess and remove them
+            existingDistricts.removeAll(districtsOnFile);
+            for (CountrySubdivision countrySubdivision : existingDistricts) {
+                removeDistrict(countrySubdivision);
             }
+            originalTask.auxLogInfo("File last modification was: " + lastReview);
+            originalTask.auxLogInfo(additions + " districts added.");
+            originalTask.auxLogInfo(touches + " districts unmodified, but whose date has changed.");
+            originalTask.auxLogInfo(modifications + " districts modified");
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -158,7 +158,7 @@ public class PortugueseDistrictImportAuxiliaryServices {
 
     protected void modifyDistrict(CountrySubdivision district, String districtCode, String districtName, String districtAcronym,
             DateTime lastReview) {
-        String originalDistrictName = district.getName().getContent(Language.pt);
+        String originalDistrictName = district.getName().getContent(new Locale("pt"));
         String originalDistrictAcronym = district.getAcronym();
 
         // let's check if there are changes on the data:

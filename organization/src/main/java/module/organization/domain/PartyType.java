@@ -3,14 +3,14 @@
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz
- * 
+ *
  *      https://fenix-ashes.ist.utl.pt/
- * 
+ *
  *   This file is part of the Organization Module.
  *
  *   The Organization Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Organization Module is distributed in the hope that it will be useful,
@@ -20,23 +20,23 @@
  *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 package module.organization.domain;
 
 import java.io.Serializable;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.commons.i18n.LocalizedString;
+
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
- * 
+ *
  * @author Pedro Santos
  * @author Paulo Abrantes
  * @author Luis Cruz
- * 
+ *
  */
 public class PartyType extends PartyType_Base implements Comparable<PartyType> {
 
@@ -44,7 +44,7 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
 
         private static final long serialVersionUID = -3867902288197067597L;
         private String type;
-        private MultiLanguageString name;
+        private LocalizedString name;
         private PartyType partyType;
 
         public PartyTypeBean() {
@@ -64,11 +64,11 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
             this.type = type;
         }
 
-        public MultiLanguageString getName() {
+        public LocalizedString getName() {
             return name;
         }
 
-        public void setName(MultiLanguageString name) {
+        public void setName(LocalizedString name) {
             this.name = name;
         }
 
@@ -87,14 +87,14 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
 
     private PartyType() {
         super();
-        setMyOrg(MyOrg.getInstance());
+        setMyOrg(Bennu.getInstance());
     }
 
     public PartyType(final String type) {
         this(type, null);
     }
 
-    public PartyType(final String type, final MultiLanguageString name) {
+    public PartyType(final String type, final LocalizedString name) {
         this();
         check(type);
         setType(type);
@@ -103,11 +103,11 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
 
     private void check(final String type) {
         if (type == null || type.isEmpty()) {
-            throw new DomainException("error.PartyType.invalid.type");
+            throw new OrganizationDomainException("error.PartyType.invalid.type");
         }
         final PartyType partyType = readBy(type);
         if (partyType != null && partyType != this) {
-            throw new DomainException("error.PartyType.duplicated.type", type);
+            throw new OrganizationDomainException("error.PartyType.duplicated.type", type);
         }
     }
 
@@ -131,10 +131,10 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
 
     private void canDelete() {
         if (!getPartiesSet().isEmpty()) {
-            throw new DomainException("error.PartyType.has.parties.cannot.delete");
+            throw new OrganizationDomainException("error.PartyType.has.parties.cannot.delete");
         }
         if (!getParentConnectionRulesSet().isEmpty() || !getChildConnectionRulesSet().isEmpty()) {
-            throw new DomainException("error.PartyType.has.connection.rules.cannot.delete");
+            throw new OrganizationDomainException("error.PartyType.has.connection.rules.cannot.delete");
         }
     }
 
@@ -153,7 +153,7 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
         if (type == null || type.isEmpty()) {
             return null;
         }
-        for (final PartyType element : MyOrg.getInstance().getPartyTypesSet()) {
+        for (final PartyType element : Bennu.getInstance().getPartyTypesSet()) {
             if (element.hasType(type)) {
                 return element;
             }

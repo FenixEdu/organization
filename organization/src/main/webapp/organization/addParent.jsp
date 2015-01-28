@@ -5,7 +5,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 
-<h2><bean:write name="partyBean" property="party.partyName"/>: <bean:message key="label.add.parent" bundle="ORGANIZATION_RESOURCES" /></h2>
+<h2><bean:write name="partyBean" property="party.partyName.content"/>: <bean:message key="label.add.parent" bundle="ORGANIZATION_RESOURCES" /></h2>
 
 <html:messages id="message" message="true" bundle="ORGANIZATION_RESOURCES">
 	<span class="error0"> <bean:write name="message" /> </span>

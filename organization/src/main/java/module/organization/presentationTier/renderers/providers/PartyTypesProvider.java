@@ -27,7 +27,9 @@ package module.organization.presentationTier.renderers.providers;
 import java.util.ArrayList;
 
 import module.organization.domain.PartyType;
-import pt.ist.bennu.core.domain.MyOrg;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 
@@ -46,7 +48,7 @@ public class PartyTypesProvider implements DataProvider {
 
     @Override
     public Object provide(Object source, Object currentValue) {
-        return new ArrayList<PartyType>(MyOrg.getInstance().getPartyTypesSet());
+        return new ArrayList<PartyType>(Bennu.getInstance().getPartyTypesSet());
     }
 
 }

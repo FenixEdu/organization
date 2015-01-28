@@ -40,12 +40,12 @@ class module.geography.domain.Country extends module.geography.domain.Geographic
 	Class iAddressPrinter; // (REQUIRED);
 	String iso3166alpha3Code;
 	Integer iso3166numericCode;
-	MultiLanguageString nationality;
+	LocalizedString nationality;
 }
 
 class module.geography.domain.CountrySubdivisionLevelName {
 	Integer level (REQUIRED);
-	MultiLanguageString name (REQUIRED);
+	LocalizedString name (REQUIRED);
 }
 
 class module.geography.domain.CountrySubdivision extends module.geography.domain.GeographicLocation {
@@ -59,20 +59,8 @@ class module.geography.domain.PostalExtension extends module.geography.domain.Co
 	String postalBranch;
 }
 
-class module.geography.domain.task.CountryCodesImport extends pt.ist.bennu.core.domain.scheduler.Task {
-}
-class module.geography.domain.task.PortugueseDistrictImport extends pt.ist.bennu.core.domain.scheduler.Task {
-}
-class module.geography.domain.task.CleanCountrySubLevels extends pt.ist.bennu.core.domain.scheduler.Task {
-}
-class module.geography.domain.task.CountryCodesClean extends pt.ist.bennu.core.domain.scheduler.Task {
-}
-class module.geography.domain.task.PortugueseMunicipalitiesImport extends pt.ist.bennu.core.domain.scheduler.Task {
-}
-
-
-relation MyOrgCountries {
-	pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+relation BennuHasCountries {
+	org.fenixedu.bennu.core.domain.Bennu playsRole bennu;
 	module.geography.domain.Country playsRole countries {
 		multiplicity *;
 	}

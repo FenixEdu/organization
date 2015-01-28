@@ -26,8 +26,9 @@ package module.organization.domain.search;
 
 import java.util.ResourceBundle;
 
+import org.fenixedu.commons.i18n.I18N;
+
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -41,8 +42,7 @@ public enum PartySearchType implements IPresentableEnum {
     @Override
     public String getLocalizedName() {
         try {
-            final ResourceBundle resourceBundle =
-                    ResourceBundle.getBundle("resources.OrganizationResources", Language.getLocale());
+            final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.OrganizationResources", I18N.getLocale());
             return resourceBundle.getString(PartySearchType.class.getSimpleName() + "." + name());
         } catch (final Exception ex) {
             ex.printStackTrace();

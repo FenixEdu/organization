@@ -24,11 +24,16 @@
  */
 package module.geography.domain.task;
 
+import java.util.Locale;
+
 import module.geography.domain.Country;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.scheduler.CronTask;
+import org.fenixedu.bennu.scheduler.annotation.Task;
+import org.fenixedu.commons.i18n.LocalizedString;
+
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
  * 
@@ -36,7 +41,8 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  * @author João Antunes
  * 
  */
-public class PortugueseMunicipalitiesImport extends PortugueseMunicipalitiesImport_Base {
+@Task(englishTitle = "Import Portuguese Municipalities from TXT file")
+public class PortugueseMunicipalitiesImport extends CronTask {
 
     private static final String CTT_MUNICIPALITIESFILE = "/concelhos.txt";
 
@@ -50,8 +56,8 @@ public class PortugueseMunicipalitiesImport extends PortugueseMunicipalitiesImpo
 
     protected int touches = 0;
 
-    private final MultiLanguageString municipalityLevelName = new MultiLanguageString().with(Language.pt, "Concelho").with(
-            Language.en, "Municipality");
+    private final LocalizedString municipalityLevelName = new LocalizedString().with(new Locale("pt"), "Concelho").with(
+            Locale.ENGLISH, "Municipality");
 
     public PortugueseMunicipalitiesImport() {
         super();
@@ -59,17 +65,16 @@ public class PortugueseMunicipalitiesImport extends PortugueseMunicipalitiesImpo
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/GeographyResources",
-                "label.task.ctt.portugal.municipalities.import");
+        return BundleUtil.getString("resources/GeographyResources", "label.task.ctt.portugal.municipalities.import");
     }
 
     protected void auxLogInfo(String message) {
-        logInfo(message);
+        taskLog(message);
     }
 
     @Atomic
     @Override
-    public void executeTask() {
+    public void runTask() {
         // let's initialize the auxiliary class due to the the nasty injector
         // errors
         PortugueseMunicipalitiesImportAuxiliaryServices aux = PortugueseMunicipalitiesImportAuxiliaryServices.getInstance();

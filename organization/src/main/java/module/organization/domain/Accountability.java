@@ -32,12 +32,12 @@ import java.util.List;
 import jvstm.cps.ConsistencyPredicate;
 import module.organization.domain.predicates.PartyPredicate.PartyByAccTypeAndDates;
 
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.exceptions.DomainException;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -97,7 +97,7 @@ public class Accountability extends Accountability_Base {
 
     protected Accountability() {
         super();
-        setMyOrg(MyOrg.getInstance());
+        setMyOrg(Bennu.getInstance());
     }
 
     protected Accountability(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin,
@@ -124,7 +124,7 @@ public class Accountability extends Accountability_Base {
 
     protected void checkDates(final Party parent, final LocalDate begin, final LocalDate end) {
         if (begin != null && end != null && begin.isAfter(end)) {
-            throw new DomainException("error.Accountability.begin.is.after.end");
+            throw new OrganizationDomainException("error.Accountability.begin.is.after.end");
         }
         checkBeginFromOldestParentAccountability(parent, begin);
     }
@@ -140,25 +140,25 @@ public class Accountability extends Accountability_Base {
         if (oldest != null && begin.isBefore(oldest.getBeginDate())) {
             final String[] args =
                     new String[] { oldest.getChild().getPartyName().getContent(), oldest.getBeginDate().toString("dd/MM/yyyy") };
-            throw new DomainException("error.Accountability.begin.starts.before.oldest.parent.begin", args);
+            throw new OrganizationDomainException("error.Accountability.begin.starts.before.oldest.parent.begin", args);
         }
     }
 
     protected void check(final Object obj, final String message) {
         if (obj == null) {
-            throw new DomainException(message);
+            throw new OrganizationDomainException(message);
         }
     }
 
     protected void canCreate(final Party parent, final Party child, final AccountabilityType type) {
         if (parent.equals(child)) {
-            throw new DomainException("error.Accountability.parent.equals.child");
+            throw new OrganizationDomainException("error.Accountability.parent.equals.child");
         }
         if (parent.ancestorsInclude(child, type)) {
-            throw new DomainException("error.Accountability.parent.ancestors.include.child.with.type");
+            throw new OrganizationDomainException("error.Accountability.parent.ancestors.include.child.with.type");
         }
         if (!type.isValid(parent, child)) {
-            throw new DomainException("error.Accountability.type.doesnot.allow.parent.child");
+            throw new OrganizationDomainException("error.Accountability.type.doesnot.allow.parent.child");
         }
     }
 
@@ -172,7 +172,7 @@ public class Accountability extends Accountability_Base {
 
     /**
      * 
-     * @return true if the {@link AccountabilityHistory} item is inactive, false
+     * @return true if the AccountabilityHistory item is inactive, false
      *         otherwise
      */
     public boolean isErased() {
@@ -256,24 +256,24 @@ public class Accountability extends Accountability_Base {
     @Override
     @Deprecated
     public void setParent(Party parent) {
-        throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
+        throw new OrganizationDomainException("should.not.use.this.method.delete.and.create.another.instead");
     }
 
     @Override
     @Deprecated
     public void setChild(Party child) {
-        throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
+        throw new OrganizationDomainException("should.not.use.this.method.delete.and.create.another.instead");
     }
 
     @Override
     @Deprecated
     public void setAccountabilityType(AccountabilityType accountabilityType) {
-        throw new DomainException("should.not.use.this.method.delete.and.create.another.instead");
+        throw new OrganizationDomainException("should.not.use.this.method.delete.and.create.another.instead");
     }
 
     /**
      * 
-     * @param beginDate
+     * @param beginDate begin date
      * @param justification an information justification/reason for the change of accountability, or null if there is none, or
      *            none is provided
      */
@@ -287,7 +287,7 @@ public class Accountability extends Accountability_Base {
 
     /**
      * 
-     * @param endDate
+     * @param endDate end date
      * @param justification an information justification/reason for the change of accountability, or null if there is none, or
      *            none is provided
      */
@@ -307,7 +307,6 @@ public class Accountability extends Accountability_Base {
      *            the new begin date
      * @param end
      *            the new end date
-     * @return the new Accountability that was just created
      * @deprecated use the {@link #editDates(LocalDate, LocalDate, String)} instead
      */
     @Deprecated
@@ -325,8 +324,6 @@ public class Accountability extends Accountability_Base {
      *            the new end date
      * @param justification an information justification/reason for the change of accountability, or null if there is none, or
      *            none is provided
-     * 
-     * @return the new Accountability that was just created
      */
     @Atomic
     public void editDates(final LocalDate begin, final LocalDate end, String justification) {
@@ -357,8 +354,8 @@ public class Accountability extends Accountability_Base {
 
     /**
      * 
-     * @param start
-     * @param end
+     * @param start start
+     * @param end end
      * @return true if the given start and end date overlap in more than one day
      *         with this accountability (exclusively, i.e. if the end date of
      *         this accountability equals the begin date passed as argument, it
@@ -372,8 +369,8 @@ public class Accountability extends Accountability_Base {
 
     /**
      * 
-     * @param begin
-     * @param end
+     * @param begin begin
+     * @param end end
      * @return true if it intersects i.e. (TODO a better explanation of what it
      *         means) it works inclusively e.g. if the end day and the start day
      *         of the accountability are the same, it returns true
@@ -384,8 +381,8 @@ public class Accountability extends Accountability_Base {
 
     /**
      * 
-     * @param localDate1
-     * @param localDate2
+     * @param localDate1 localDate1
+     * @param localDate2 localDate2
      * @return false if any of the dates are null, or if localDate1 isn't after
      *         localDate2, true otherwise
      */
@@ -405,7 +402,7 @@ public class Accountability extends Accountability_Base {
         // accountabilities!!
         if (parties == null || parties.isEmpty()) {
             final PartyByAccTypeAndDates typeAndDates = new PartyByAccTypeAndDates(startDate, endDate, accTypes);
-            for (final Accountability accountability : MyOrg.getInstance().getAccountabilitiesSet()) {
+            for (final Accountability accountability : Bennu.getInstance().getAccountabilitiesSet()) {
                 if (typeAndDates.eval(null, accountability)) {
                     accountabilities.add(accountability);
                 }

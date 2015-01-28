@@ -27,7 +27,6 @@ package module.organization.presentationTier.actions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,17 +50,19 @@ import module.organization.domain.search.PartySearchBean;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.exceptions.DomainException;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.presentationTier.component.OrganizationChart;
+import org.fenixedu.bennu.struts.annotations.Mapping;
+import org.fenixedu.bennu.struts.base.BaseAction;
+import org.fenixedu.bennu.struts.portal.EntryPoint;
+import org.fenixedu.bennu.struts.portal.StrutsApplication;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.presentationTier.LayoutContext;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
-import pt.ist.bennu.core.presentationTier.component.OrganizationChart;
-import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.struts.annotations.Mapping;
-import pt.utl.ist.fenix.tools.util.Pair;
 
+@StrutsApplication(bundle = "OrganizationResources", path = "organization", titleKey = "label.manage.organization",
+        accessGroup = "#managers", hint = "Organization")
 @Mapping(path = "/organizationModel")
 /**
  * 
@@ -69,7 +70,7 @@ import pt.utl.ist.fenix.tools.util.Pair;
  * @author Luis Cruz
  * 
  */
-public class OrganizationModelAction extends ContextBaseAction {
+public class OrganizationModelAction extends BaseAction {
 
     public static class OrganizationalModelChart extends OrganizationChart<OrganizationalModel> {
 
@@ -193,7 +194,7 @@ public class OrganizationModelAction extends ContextBaseAction {
 
         @Override
         public String getPresentationName() {
-            return BundleUtil.getStringFromResourceBundle("resources.OrganizationResources", "label.viewUnits");
+            return BundleUtil.getString("resources.OrganizationResources", "label.viewUnits");
         }
 
     }
@@ -212,7 +213,7 @@ public class OrganizationModelAction extends ContextBaseAction {
 
         @Override
         public String getPresentationName() {
-            return BundleUtil.getStringFromResourceBundle("resources.OrganizationResources", "label.viewPeople");
+            return BundleUtil.getString("resources.OrganizationResources", "label.viewPeople");
         }
 
     }
@@ -224,32 +225,20 @@ public class OrganizationModelAction extends ContextBaseAction {
         partyViewHookManager.register(new PeopleChartView());
     }
 
-    public static void addHeadToLayoutContext(final HttpServletRequest request) {
-        final LayoutContext layoutContext = (LayoutContext) getContext(request);
-        layoutContext.addHead("/organization/layoutContext/head.jsp");
-    }
-
-    @Override
-    public ActionForward execute(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-            final HttpServletResponse response) throws Exception {
-        final ActionForward forward = super.execute(mapping, form, request, response);
-        addHeadToLayoutContext(request);
-        return forward;
-    }
-
     public static void viewModels(final HttpServletRequest request) {
         final Set<OrganizationalModel> organizationalModels =
                 new TreeSet<OrganizationalModel>(OrganizationalModel.COMPARATORY_BY_NAME);
-        organizationalModels.addAll(MyOrg.getInstance().getOrganizationalModelsSet());
+        organizationalModels.addAll(Bennu.getInstance().getOrganizationalModelsSet());
         request.setAttribute("organizationalModels", organizationalModels);
         final OrganizationalModelChart organizationalModelChart = new OrganizationalModelChart(organizationalModels);
         request.setAttribute("organizationalModelChart", organizationalModelChart);
     }
 
+    @EntryPoint
     public ActionForward viewModels(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) throws Exception {
         viewModels(request);
-        return forward(request, "/organization/model/viewModels.jsp");
+        return forward("/organization/model/viewModels.jsp");
     }
 
     public ActionForward viewModel(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -287,14 +276,14 @@ public class OrganizationModelAction extends ContextBaseAction {
             }
         }
 
-        return forward(request, "/organization/model/viewModel.jsp");
+        return forward("/organization/model/viewModel.jsp");
     }
 
     public ActionForward prepareCreateModel(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) throws Exception {
         final OrganizationalModelBean organizationalModelBean = new OrganizationalModelBean();
         request.setAttribute("organizationalModelBean", organizationalModelBean);
-        return forward(request, "/organization/model/createModel.jsp");
+        return forward("/organization/model/createModel.jsp");
     }
 
     public ActionForward createModel(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -308,7 +297,7 @@ public class OrganizationModelAction extends ContextBaseAction {
             final HttpServletResponse response) throws Exception {
         final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
         request.setAttribute("organizationalModel", organizationalModel);
-        return forward(request, "/organization/model/editModel.jsp");
+        return forward("/organization/model/editModel.jsp");
     }
 
     public ActionForward deleteModel(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -324,7 +313,7 @@ public class OrganizationModelAction extends ContextBaseAction {
         request.setAttribute("organizationalModel", organizationalModel);
         final PartySearchBean partySearchBean = new PartySearchBean(null);
         request.setAttribute("partySearchBean", partySearchBean);
-        return forward(request, "/organization/model/addUnitToModel.jsp");
+        return forward("/organization/model/addUnitToModel.jsp");
     }
 
     public ActionForward addUnitToModel(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -340,7 +329,7 @@ public class OrganizationModelAction extends ContextBaseAction {
             final HttpServletRequest request, final HttpServletResponse response) throws Exception {
         final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
         request.setAttribute("organizationalModel", organizationalModel);
-        return forward(request, "/organization/model/manageModelAccountabilityTypes.jsp");
+        return forward("/organization/model/manageModelAccountabilityTypes.jsp");
     }
 
     public ActionForward prepareCreateUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -354,7 +343,7 @@ public class OrganizationModelAction extends ContextBaseAction {
             unitBean.setParent(party);
         }
         request.setAttribute("unitBean", unitBean);
-        return forward(request, "/organization/model/createUnit.jsp");
+        return forward("/organization/model/createUnit.jsp");
     }
 
     public ActionForward createUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -373,7 +362,7 @@ public class OrganizationModelAction extends ContextBaseAction {
             final Party party = getDomainObject(request, "partyOid");
             request.setAttribute("party", party);
             request.setAttribute("unitBean", bean);
-            return forward(request, "/organization/model/createUnit.jsp");
+            return forward("/organization/model/createUnit.jsp");
         }
     }
 
@@ -384,7 +373,7 @@ public class OrganizationModelAction extends ContextBaseAction {
         final Party party = getDomainObject(request, "partyOid");
         request.setAttribute("party", party);
         request.setAttribute("unitBean", new UnitBean((Unit) party));
-        return forward(request, "/organization/model/editUnit.jsp");
+        return forward("/organization/model/editUnit.jsp");
     }
 
     public ActionForward editUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -400,7 +389,7 @@ public class OrganizationModelAction extends ContextBaseAction {
             final Party party = getDomainObject(request, "partyOid");
             request.setAttribute("party", party);
             request.setAttribute("unitBean", bean);
-            return forward(request, "/organization/model/editUnit.jsp");
+            return forward("/organization/model/editUnit.jsp");
         }
     }
 
@@ -410,7 +399,7 @@ public class OrganizationModelAction extends ContextBaseAction {
         request.setAttribute("organizationalModel", organizationalModel);
         final Party party = getDomainObject(request, "partyOid");
         request.setAttribute("party", party);
-        return forward(request, "/organization/model/managePartyPartyTypes.jsp");
+        return forward("/organization/model/managePartyPartyTypes.jsp");
     }
 
     public ActionForward prepareAddUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -422,7 +411,7 @@ public class OrganizationModelAction extends ContextBaseAction {
         final UnitBean unitBean = new UnitBean();
         unitBean.setParent(party);
         request.setAttribute("unitBean", unitBean);
-        return forward(request, "/organization/model/addUnit.jsp");
+        return forward("/organization/model/addUnit.jsp");
     }
 
     public ActionForward addUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -438,7 +427,7 @@ public class OrganizationModelAction extends ContextBaseAction {
             final Party party = unitBean.getParent();
             request.setAttribute("party", party);
             request.setAttribute("unitBean", unitBean);
-            return forward(request, "/organization/model/addUnit.jsp");
+            return forward("/organization/model/addUnit.jsp");
         }
     }
 
@@ -457,76 +446,11 @@ public class OrganizationModelAction extends ContextBaseAction {
             final PartyChart partyChart = new PartyChart(organizationalModel.getPartiesSet());
             request.setAttribute("partiesChart", partyChart);
 
-            return forward(request, "/organization/model/viewModel.jsp");
+            return forward("/organization/model/viewModel.jsp");
         } catch (final DomainException e) {
             addMessage(request, e.getKey(), e.getArgs());
         }
         return viewModel(mapping, form, request, response);
-    }
-
-    public ActionForward reviewUnconfirmedAccountabilities(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
-        request.setAttribute("organizationalModel", organizationalModel);
-        final Party party = getDomainObject(request, "partyOid");
-        request.setAttribute("party", party);
-
-        final Set<AccountabilityType> accountabilityTypes = new HashSet<AccountabilityType>();
-        accountabilityTypes.addAll(organizationalModel.getAccountabilityTypesSet());
-        accountabilityTypes.add(UnconfirmedAccountability.readAccountabilityType());
-        final Collection<Accountability> childAccountabilities = party.getChildrenAccountabilities(accountabilityTypes);
-        final Collection<Accountability> parentAccountabilities = party.getParentAccountabilities(accountabilityTypes);
-
-        final List<Pair<Accountability, PartyChart>> unconfirmedAccountabilities =
-                new ArrayList<Pair<Accountability, PartyChart>>();
-        for (final Accountability accountability : childAccountabilities) {
-            if (accountability instanceof UnconfirmedAccountability) {
-                final PartyChart partyChart = new PartyChart(accountability);
-                final Pair<Accountability, PartyChart> pair = new Pair<Accountability, PartyChart>(accountability, partyChart);
-                unconfirmedAccountabilities.add(pair);
-            }
-        }
-        for (final Accountability accountability : parentAccountabilities) {
-            if (accountability instanceof UnconfirmedAccountability) {
-                final PartyChart partyChart = new PartyChart(accountability);
-                final Pair<Accountability, PartyChart> pair = new Pair<Accountability, PartyChart>(accountability, partyChart);
-                unconfirmedAccountabilities.add(pair);
-            }
-        }
-
-        if (unconfirmedAccountabilities.isEmpty()) {
-            return viewModel(mapping, form, request, response);
-        }
-
-        Collections.sort(unconfirmedAccountabilities, new Comparator<Pair<Accountability, PartyChart>>() {
-            @Override
-            public int compare(final Pair<Accountability, PartyChart> pair1, final Pair<Accountability, PartyChart> pair2) {
-                final Accountability accountability1 = pair1.getKey();
-                final Accountability accountability2 = pair2.getKey();
-                return Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES.compare(accountability1, accountability2);
-            }
-        });
-        request.setAttribute("unconfirmedAccountabilities", unconfirmedAccountabilities);
-
-        return forward(request, "/organization/model/reviewUnconfirmedAccountabilities.jsp");
-    }
-
-    public ActionForward confirmAccountability(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        final UnconfirmedAccountability unconfirmedAccountability = getDomainObject(request, "unconfirmedAccountabilityOid");
-        if (unconfirmedAccountability != null) {
-            unconfirmedAccountability.confirm();
-        }
-        return reviewUnconfirmedAccountabilities(mapping, form, request, response);
-    }
-
-    public ActionForward rejectAccountability(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        final UnconfirmedAccountability unconfirmedAccountability = getDomainObject(request, "unconfirmedAccountabilityOid");
-        if (unconfirmedAccountability != null) {
-            unconfirmedAccountability.reject();
-        }
-        return reviewUnconfirmedAccountabilities(mapping, form, request, response);
     }
 
     public ActionForward prepareManageChildAccountabilities(final ActionMapping mapping, final ActionForm form,
@@ -538,7 +462,7 @@ public class OrganizationModelAction extends ContextBaseAction {
         final UnitBean unitBean = new UnitBean();
         unitBean.setParent(party);
         request.setAttribute("unitBean", unitBean);
-        return forward(request, "/organization/model/manageChildAccountabilities.jsp");
+        return forward("/organization/model/manageChildAccountabilities.jsp");
     }
 
     public ActionForward prepareEditAccountability(final ActionMapping mapping, final ActionForm form,
@@ -552,7 +476,7 @@ public class OrganizationModelAction extends ContextBaseAction {
         request.setAttribute("unitBean", unitBean);
         final Accountability accountability = getDomainObject(request, "accountabilityOid");
         request.setAttribute("accountability", accountability);
-        return forward(request, "/organization/model/editAccountability.jsp");
+        return forward("/organization/model/editAccountability.jsp");
     }
 
     public ActionForward prepareDeleteAccountability(final ActionMapping mapping, final ActionForm form,
@@ -564,7 +488,7 @@ public class OrganizationModelAction extends ContextBaseAction {
         final UnitBean unitBean = new UnitBean();
         unitBean.setParent(party);
         request.setAttribute("unitBean", unitBean);
-        return forward(request, "/organization/model/deleteAccountability.jsp");
+        return forward("/organization/model/deleteAccountability.jsp");
     }
 
     public ActionForward deleteAccountability(final ActionMapping mapping, final ActionForm form,

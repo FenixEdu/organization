@@ -3,14 +3,14 @@
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: João Figueiredo, Luis Cruz
- * 
+ *
  *      https://fenix-ashes.ist.utl.pt/
- * 
+ *
  *   This file is part of the Organization Module.
  *
  *   The Organization Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Organization Module is distributed in the hope that it will be useful,
@@ -20,7 +20,7 @@
  *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Organization Module. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 package module.organization.domain;
 
@@ -28,37 +28,30 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.commons.i18n.LocalizedString;
+
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
- * 
+ *
  * @author Pedro Santos
  * @author Paulo Abrantes
  * @author Luis Cruz
- * 
+ *
  */
 public class AccountabilityType extends AccountabilityType_Base implements Comparable<AccountabilityType> {
 
-    public static class AccountabilityTypeComparator implements Comparator<AccountabilityType>, Serializable {
-
-        @Override
-        public int compare(final AccountabilityType o1, final AccountabilityType o2) {
-            int c = o1.getName().compareTo(o2.getName());
-            return c == 0 ? o2.hashCode() - o1.hashCode() : c;
-        }
-
-    }
-
-    public static final Comparator<AccountabilityType> COMPARATORY_BY_NAME = new AccountabilityTypeComparator();
+    public static final Comparator<AccountabilityType> COMPARATORY_BY_NAME = (o1, o2) -> {
+        int c = o1.getName().compareTo(o2.getName());
+        return c == 0 ? o2.hashCode() - o1.hashCode() : c;
+    };
 
     static public class AccountabilityTypeBean implements Serializable {
 
         private static final long serialVersionUID = -1189746935274309327L;
         private String type;
-        private MultiLanguageString name;
+        private LocalizedString name;
         private AccountabilityType accountabilityType;
 
         public AccountabilityTypeBean() {
@@ -70,7 +63,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
             setAccountabilityType(accountabilityType);
         }
 
-        public AccountabilityTypeBean(String type, MultiLanguageString name) {
+        public AccountabilityTypeBean(String type, LocalizedString name) {
             setType(type);
             setName(name);
         }
@@ -83,11 +76,11 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
             this.type = type;
         }
 
-        public MultiLanguageString getName() {
+        public LocalizedString getName() {
             return name;
         }
 
-        public void setName(MultiLanguageString name) {
+        public void setName(LocalizedString name) {
             this.name = name;
         }
 
@@ -110,14 +103,14 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
 
     protected AccountabilityType() {
         super();
-        setMyOrg(MyOrg.getInstance());
+        setMyOrg(Bennu.getInstance());
     }
 
     protected AccountabilityType(final String type) {
         this(type, null);
     }
 
-    protected AccountabilityType(final String type, final MultiLanguageString name) {
+    protected AccountabilityType(final String type, final LocalizedString name) {
         this();
         check(type);
         setType(type);
@@ -126,11 +119,11 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
 
     protected void check(final String type) {
         if (type == null || type.isEmpty()) {
-            throw new DomainException("error.AccountabilityType.invalid.type");
+            throw new OrganizationDomainException("error.AccountabilityType.invalid.type");
         }
         final AccountabilityType accountabilityType = readBy(type);
         if (accountabilityType != null && accountabilityType != this) {
-            throw new DomainException("error.AccountabilityType.duplicated.type", type);
+            throw new OrganizationDomainException("error.AccountabilityType.duplicated.type", type);
         }
     }
 
@@ -139,7 +132,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     }
 
     @Atomic
-    public void edit(final String type, final MultiLanguageString name) {
+    public void edit(final String type, final LocalizedString name) {
         check(type);
         setType(type);
         setName(name);
@@ -154,7 +147,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
 
     protected void canDelete() {
         if (!getAccountabilitiesSet().isEmpty()) {
-            throw new DomainException("error.AccountabilityType.has.accountabilities.cannot.delete");
+            throw new OrganizationDomainException("error.AccountabilityType.has.accountabilities.cannot.delete");
         }
     }
 
@@ -187,7 +180,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
         if (type == null || type.isEmpty()) {
             return null;
         }
-        for (final AccountabilityType element : MyOrg.getInstance().getAccountabilityTypesSet()) {
+        for (final AccountabilityType element : Bennu.getInstance().getAccountabilityTypesSet()) {
             if (element.hasType(type)) {
                 return element;
             }
@@ -202,7 +195,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     }
 
     @Deprecated
-    public java.util.Set<module.organization.domain.groups.UnitGroup> getUnitGroupFromChildUnitAccountabilityType() {
+    public java.util.Set<module.organization.domain.groups.PersistentUnitGroup> getUnitGroupFromChildUnitAccountabilityType() {
         return getUnitGroupFromChildUnitAccountabilityTypeSet();
     }
 
@@ -217,7 +210,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     }
 
     @Deprecated
-    public java.util.Set<module.organization.domain.groups.UnitGroup> getUnitGroupFromMemberAccountabilityType() {
+    public java.util.Set<module.organization.domain.groups.PersistentUnitGroup> getUnitGroupFromMemberAccountabilityType() {
         return getUnitGroupFromMemberAccountabilityTypeSet();
     }
 

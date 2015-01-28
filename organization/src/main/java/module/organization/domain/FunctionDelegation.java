@@ -25,17 +25,14 @@
 package module.organization.domain;
 
 import java.util.Comparator;
-import java.util.ResourceBundle;
 
 import jvstm.cps.ConsistencyPredicate;
 
+import org.fenixedu.bennu.core.domain.Bennu;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.DomainObject;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -77,12 +74,11 @@ public class FunctionDelegation extends FunctionDelegation_Base {
     public FunctionDelegation(final Accountability accountability, final Unit unit, final Person person,
             final LocalDate beginDate, final LocalDate endDate) {
         super();
-        setMyOrg(MyOrg.getInstance());
+        setMyOrg(Bennu.getInstance());
         setAccountabilityDelegator(accountability);
         final AccountabilityType accountabilityType = accountability.getAccountabilityType();
         if (unit.hasAnyIntersectingChildAccountability(person, accountabilityType, beginDate, endDate)) {
-            throw new DomainException("error.FunctionDelegation.already.assigned", ResourceBundle.getBundle(
-                    "resources/OrganizationResources", Language.getLocale()));
+            throw OrganizationDomainException.functionDelegationAlreadyAssigned();
         }
         final Accountability delegatedAccountability = unit.addChild(person, accountabilityType, beginDate, endDate);
         setAccountabilityDelegatee(delegatedAccountability);
@@ -105,8 +101,7 @@ public class FunctionDelegation extends FunctionDelegation_Base {
         final Unit unit = (Unit) getAccountabilityDelegatee().getParent();
         if (unit.hasAnyIntersectingChildAccountability(accountabilityDelegatee.getChild(),
                 accountabilityDelegatee.getAccountabilityType(), beginDate, endDate)) {
-            throw new DomainException("error.FunctionDelegation.already.assigned", ResourceBundle.getBundle(
-                    "resources/OrganizationResources", Language.getLocale()));
+            throw OrganizationDomainException.functionDelegationAlreadyAssigned();
         }
 
         accountabilityDelegatee.editDates(beginDate, endDate);

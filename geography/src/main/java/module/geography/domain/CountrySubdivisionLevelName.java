@@ -24,8 +24,9 @@
  */
 package module.geography.domain;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
+import module.geography.domain.exception.GeographyDomainException;
+
+import org.fenixedu.commons.i18n.LocalizedString;
 
 /**
  * Each {@link CountrySubdivision} has a matching level name. Each country has
@@ -38,7 +39,7 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  */
 public class CountrySubdivisionLevelName extends CountrySubdivisionLevelName_Base {
 
-    public CountrySubdivisionLevelName(Integer level, MultiLanguageString name) {
+    public CountrySubdivisionLevelName(Integer level, LocalizedString name) {
         super();
         setLevel(level);
         setName(name);
@@ -53,7 +54,7 @@ public class CountrySubdivisionLevelName extends CountrySubdivisionLevelName_Bas
      */
     public boolean canBeDeleted() {
         if (this.getCountry() != null) {
-            throw new DomainException("error.Party.delete.has.child.accountabilities");
+            throw new GeographyDomainException("error.Party.delete.has.child.accountabilities");
         }
         return true;
     }

@@ -26,7 +26,8 @@ package module.organization.domain;
 
 import java.io.Serializable;
 
-import pt.ist.bennu.core.domain.MyOrg;
+import org.fenixedu.bennu.core.domain.Bennu;
+
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -64,7 +65,7 @@ abstract public class ConnectionRule extends ConnectionRule_Base {
 
     protected ConnectionRule() {
         super();
-        setMyOrg(MyOrg.getInstance());
+        setMyOrg(Bennu.getInstance());
     }
 
     @Atomic

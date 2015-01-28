@@ -33,9 +33,10 @@ import java.util.Map;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.commons.StringNormalizer;
 
 /**
  * 
@@ -43,19 +44,19 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  * @author Paulo Abrantes
  * 
  */
-public class PartiesAutoCompleteProvider implements AutoCompleteProvider {
+public class PartiesAutoCompleteProvider implements AutoCompleteProvider<Party> {
 
     @Override
-    public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
+    public Collection<Party> getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         final List<Party> parties = new ArrayList<Party>();
 
         final String trimmedValue = value.trim();
-        final String[] input = trimmedValue.split(" ");
-        StringNormalizer.normalize(input);
+        final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
 
-        for (final Party party : MyOrg.getInstance().getPartiesSet()) {
-            final String partyName = StringNormalizer.normalize(party.getPartyName().getContent());
-            if (hasMatch(input, partyName)) {
+        for (final Party party : Bennu.getInstance().getPartiesSet()) {
+            final String content = party.getPartyName().getContent();
+            final String partyName = content == null ? null : StringNormalizer.normalize(content);
+            if (partyName != null && hasMatch(input, partyName)) {
                 if (allowResult(party)) {
                     parties.add(party);
                 }

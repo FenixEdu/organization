@@ -12,10 +12,10 @@
 	<br />
 </html:messages>
 
-<html:form action="/organization.do?method=searchPerson">
-	<bean:message key="label.name" bundle="ORGANIZATION_RESOURCES" />: <html:text property="name" />
+<fr:form action="/organization.do?method=searchPerson">
+	<bean:message key="label.name" bundle="ORGANIZATION_RESOURCES" />: <input type="text" name="name" />
 	<html:submit styleClass="inputbutton"><bean:message key="label.search" bundle="ORGANIZATION_RESOURCES" /></html:submit>
-</html:form>
+</fr:form>
 
 <ul>
 	<li>
@@ -31,7 +31,7 @@
 				<fr:property name="classes" value="table" />
 				<fr:property name="columnClasses" value=",,tderror" />
 				
-				<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=${externalId}" />
+				<fr:property name="linkFormat(viewParty)" value="/organization.do?method=viewParty&amp;partyOid=\${externalId}" />
 				<fr:property name="key(viewParty)" value="label.view"/>
 				<fr:property name="bundle(viewParty)" value="ORGANIZATION_RESOURCES"/>
 				<fr:property name="order(viewParty)" value="1"/>

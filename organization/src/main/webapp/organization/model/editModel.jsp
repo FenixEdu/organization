@@ -7,7 +7,7 @@
 
 <h2>
 	<bean:message key="label.model" bundle="ORGANIZATION_RESOURCES"/>:
-	<bean:write name="organizationalModel" property="name"/>
+	<bean:write name="organizationalModel" property="name.content"/>
 </h2>
 
 <h3 class="mtop05">

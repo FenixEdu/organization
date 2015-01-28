@@ -29,18 +29,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Locale;
 
+import module.geography.domain.exception.GeographyDomainException;
 import module.geography.util.AddressPrinter;
 import module.organization.domain.Accountability;
 import module.organization.domain.Unit;
 
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
  * A country. Holds information about its subdivisions as districts, states, or
@@ -75,9 +75,9 @@ public class Country extends Country_Base {
     };
 
     public Country(Planet parent, String iso3166alpha2Code, String iso3166alpha3Code, Integer iso3166numericCode,
-            MultiLanguageString name, MultiLanguageString nationality, Class<AddressPrinter> iAddressPrinter) {
+            LocalizedString name, LocalizedString nationality, Class<AddressPrinter> iAddressPrinter) {
         super();
-        setMyOrg(MyOrg.getInstance());
+        setBennu(Bennu.getInstance());
         setUnit(Unit.create(parent.getUnit(), name, iso3166alpha3Code, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
                 getOrCreateAccountabilityType(), new LocalDate(), null));
         setIso3166alpha2Code(iso3166alpha2Code);
@@ -87,10 +87,10 @@ public class Country extends Country_Base {
         setNationality(nationality);
     }
 
-    public Country(Planet parent, MultiLanguageString name, String acronym, Class iAddressPrinter,
+    public Country(Planet parent, LocalizedString name, String acronym, Class iAddressPrinter,
             CountrySubdivisionLevelName... subdivisionNames) {
         super();
-        setMyOrg(MyOrg.getInstance());
+        setBennu(Bennu.getInstance());
 
         setIAddressPrinter(iAddressPrinter);
         setUnit(Unit.create(parent.getUnit(), name, acronym, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
@@ -103,14 +103,14 @@ public class Country extends Country_Base {
     @Override
     public void setIAddressPrinter(Class iAddressPrinter) {
         if (!AddressPrinter.class.isAssignableFrom(iAddressPrinter)) {
-            throw new DomainException("error.invalid.iaddressprinter");
+            throw new GeographyDomainException("error.invalid.iaddressprinter");
         }
         super.setIAddressPrinter(iAddressPrinter);
     }
 
     @Override
-    public MultiLanguageString getType() {
-        return new MultiLanguageString().with(Language.pt, "País").with(Language.en, COUNTRY_PARTYTYPE_NAME);
+    public LocalizedString getType() {
+        return new LocalizedString().with(new Locale("pt"), "País").with(Locale.ENGLISH, COUNTRY_PARTYTYPE_NAME);
     }
 
     @Atomic
@@ -123,7 +123,7 @@ public class Country extends Country_Base {
         try {
             ap = (AddressPrinter) super.getIAddressPrinter().getConstructor().newInstance();
         } catch (Exception e) {
-            throw new DomainException("error.instance.iaddressprinter", e);
+            throw new GeographyDomainException("error.instance.iaddressprinter", e);
         }
 
         return ap;
@@ -151,12 +151,12 @@ public class Country extends Country_Base {
     public void delete() {
         Unit unit = this.getUnit();
         setUnit(null);
-        setMyOrg(null);
+        setBennu(null);
         unit.delete();
         deleteDomainObject();
     }
 
-    public MultiLanguageString getSubdivisionLevelName(Integer level) {
+    public LocalizedString getSubdivisionLevelName(Integer level) {
         for (CountrySubdivisionLevelName levelName : getLevelNameSet()) {
             if (levelName.getLevel().equals(level)) {
                 return levelName.getName();
@@ -256,7 +256,7 @@ public class Country extends Country_Base {
     }
 
     public static Country findByAcronym(String acronym) {
-        for (Country country : MyOrg.getInstance().getCountriesSet()) {
+        for (Country country : Bennu.getInstance().getCountriesSet()) {
             if (country.getAcronym().equalsIgnoreCase(acronym)) {
                 return country;
             }
@@ -265,7 +265,7 @@ public class Country extends Country_Base {
     }
 
     public static Country findByIso3166alpha2Code(String code) {
-        for (Country country : MyOrg.getInstance().getCountriesSet()) {
+        for (Country country : Bennu.getInstance().getCountriesSet()) {
             if (country.getIso3166alpha2Code().equalsIgnoreCase(code)) {
                 return country;
             }
@@ -274,7 +274,7 @@ public class Country extends Country_Base {
     }
 
     public static Country findByIso3166alpha3Code(String code) {
-        for (Country country : MyOrg.getInstance().getCountriesSet()) {
+        for (Country country : Bennu.getInstance().getCountriesSet()) {
             if (country.getIso3166alpha3Code().equalsIgnoreCase(code)) {
                 return country;
             }
@@ -283,9 +283,9 @@ public class Country extends Country_Base {
     }
 
     public static Country findByName(String name) {
-        for (Country country : MyOrg.getInstance().getCountriesSet()) {
-            for (Language language : country.getName().getAllLanguages()) {
-                if (country.getName().getContent(language).equalsIgnoreCase(name)) {
+        for (Country country : Bennu.getInstance().getCountriesSet()) {
+            for (Locale locale : country.getName().getLocales()) {
+                if (country.getName().getContent(locale).equalsIgnoreCase(name)) {
                     return country;
                 }
             }
@@ -293,7 +293,7 @@ public class Country extends Country_Base {
         return null;
     }
 
-    public void setSubdivisionLevelName(Integer level, MultiLanguageString levelName, Boolean isLabel) {
+    public void setSubdivisionLevelName(Integer level, LocalizedString levelName, Boolean isLabel) {
         CountrySubdivisionLevelName countrySubdivisionLevelNameToAlter = null;
         for (CountrySubdivisionLevelName subdivisionLevel : getLevelNameSet()) {
             if (subdivisionLevel.getLevel() == level) {
@@ -310,7 +310,7 @@ public class Country extends Country_Base {
     }
 
     public void update(Planet parent, String iso3166alpha2Code, String iso3166alpha3Code, Integer iso3166numericCode,
-            MultiLanguageString name, MultiLanguageString nationality, Class<AddressPrinter> iAddressPrinter) {
+            LocalizedString name, LocalizedString nationality, Class<AddressPrinter> iAddressPrinter) {
         if (!same(getIso3166alpha2Code(), iso3166alpha2Code) || !same(getIso3166alpha3Code(), iso3166alpha3Code)
                 || !same(getIso3166numericCode(), iso3166numericCode) || !same(getName(), name)
                 || !same(getNationality(), nationality) || !same(getIAddressPrinter(), iAddressPrinter)) {
@@ -333,6 +333,7 @@ public class Country extends Country_Base {
         }
         return one.equals(two);
     }
+
     @Deprecated
     public java.util.Set<module.geography.domain.CountrySubdivisionLevelName> getLevelName() {
         return getLevelNameSet();
