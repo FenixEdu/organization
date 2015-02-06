@@ -121,13 +121,13 @@ text-decoration: line-through;
 		    <td><bean:write name="accItem" property="accountabilityType.name.content"/></td>
 		    <%-- Printing the parents based on if the Accoutability is deleted or not --%>
 			    <logic:present name="accItem" property="child">
-			    	<td><bean:write name="accItem" property="child.partyName"/></td>
+			    	<td><bean:write name="accItem" property="child.partyName.content"/></td>
 			    </logic:present>
 			    <logic:notPresent name="accItem" property="child">
 			    	<td>-</td>
 			    </logic:notPresent>
 			    <logic:present name="accItem" property="parent">
-			    	<td><bean:write name="accItem" property="parent.partyName"/></td>
+			    	<td><bean:write name="accItem" property="parent.partyName.content"/></td>
 			    </logic:present>
 			    <logic:notPresent name="accItem" property="parent">
 			    	<td>-</td>
