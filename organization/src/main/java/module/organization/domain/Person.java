@@ -33,6 +33,7 @@ import module.organization.domain.PartyType.PartyTypeBean;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.domain.User.UserPresentationStrategy;
+import org.fenixedu.bennu.core.domain.UserProfile;
 import org.fenixedu.commons.StringNormalizer;
 import org.fenixedu.commons.i18n.I18N;
 import org.fenixedu.commons.i18n.LocalizedString;
@@ -59,14 +60,14 @@ public class Person extends Person_Base {
 
             @Override
             public String present(User user) {
-                return user.getPerson() != null ? user.getPerson().getName() + " (" + user.getUsername() + ")" : user
-                        .getUsername();
+                final UserProfile profile = user.getProfile();
+                return profile == null ? user.getUsername() : profile.getFullName() + " (" + user.getUsername() + ")";
             }
 
             @Override
             public String shortPresent(User user) {
-                return user.getPerson() != null ? user.getPerson().getFirstAndLastName() + " (" + user.getUsername() + ")" : user
-                        .getUsername();
+                final UserProfile profile = user.getProfile();
+                return profile == null ? user.getUsername() : profile.getDisplayName() + " (" + user.getUsername() + ")";
             }
 
         });
