@@ -147,14 +147,15 @@ public class Person extends Person_Base {
     }
 
     public String getName() {
-        return getPartyName().getContent();
+        final User user = getUser();
+        final UserProfile profile = user == null ? null : user.getProfile();
+        return profile == null ? getPartyName().getContent() : profile.getFullName();
     }
 
     public String getFirstAndLastName() {
-        String name = getName();
-        int s1 = name.indexOf(' ');
-        int s2 = name.lastIndexOf(' ');
-        return s1 < 0 || s1 == s2 ? name : name.subSequence(0, s1) + name.substring(s2);
+        final User user = getUser();
+        final UserProfile profile = user == null ? null : user.getProfile();
+        return profile == null ? "" : profile.getDisplayName();
     }
 
     @Atomic
