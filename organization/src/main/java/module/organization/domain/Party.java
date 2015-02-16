@@ -556,6 +556,17 @@ abstract public class Party extends Party_Base {
         return false;
     }
 
+    boolean hasAnyIntersectingChildAccountability(final Party child, final AccountabilityType type, final LocalDate begin,
+            final LocalDate end, final Accountability exluding) {
+        for (final Accountability accountability : getChildAccountabilities()) {
+            if (exluding != accountability && accountability.getChild() == child && accountability.getAccountabilityType() == type
+                    && accountability.intersects(begin, end)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private Accountability getIntersectingChildAccountability(final Party child, final AccountabilityType type,
             final LocalDate begin, final LocalDate end) {
         Accountability intersectingAccountability = null;

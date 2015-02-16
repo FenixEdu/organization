@@ -100,7 +100,7 @@ public class FunctionDelegation extends FunctionDelegation_Base {
 
         final Unit unit = (Unit) getAccountabilityDelegatee().getParent();
         if (unit.hasAnyIntersectingChildAccountability(accountabilityDelegatee.getChild(),
-                accountabilityDelegatee.getAccountabilityType(), beginDate, endDate)) {
+                accountabilityDelegatee.getAccountabilityType(), beginDate, endDate, accountabilityDelegatee)) {
             throw OrganizationDomainException.functionDelegationAlreadyAssigned();
         }
 
