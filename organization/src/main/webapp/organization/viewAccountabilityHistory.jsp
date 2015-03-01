@@ -114,8 +114,8 @@ text-decoration: line-through;
 		  </logic:notEqual>
 	  <%-- Taking care of the class of the row : END--%>
 	  
-		    <td><bean:write name="accItem" property="creationDate"/></td>
-		    <td><bean:write name="accItem" property="creatorUser"/></td>
+		    <td><%= ((Accountability)accItem).getCreationDate() == null ? "" : ((Accountability)accItem).getCreationDate().toString("yyyy-MM-dd HH:mm") %></td>
+		    <td><%= ((Accountability)accItem).getCreatorUser() == null ? "" : ((Accountability)accItem).getCreatorUser().getProfile().getFullName() %></td>
 		    <td><bean:write name="accItem" property="beginDate"/></td>
 		    <td><bean:write name="accItem" property="endDate"/></td>
 		    <td><bean:write name="accItem" property="accountabilityType.name.content"/></td>
