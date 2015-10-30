@@ -147,13 +147,9 @@ public class Planet extends Place<Place<?, Planet>, Country> {
             final String parishName = line.substring(s6 + 1);
 
             final District district = country.getPlace(districtKey);
-            if (district == null) {
-                System.out.println("no district for: " + districtKey);
-            } else {
+            if (district != null) {
                 final Municipality municipality = district.getPlace(municipalityKey);
-                if (municipality == null) {
-                    System.out.println("no municipality for: " + districtKey + " " + municipalityKey);
-                } else {
+                if (municipality != null) {
                     new Parish(municipality, parishName, parishKey);
                 }
             }
