@@ -28,8 +28,7 @@ public class Country extends Place<Planet, District> {
     }
 
     private String getResource(final String bundleName, final Locale locale) {
-        final ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleName, locale);
-        return resourceBundle.getString(alpha3);
+        return ResourceBundle.getBundle(bundleName, locale).getString(alpha3);
     }
 
 }

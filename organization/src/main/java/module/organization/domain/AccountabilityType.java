@@ -152,7 +152,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     }
 
     private void disconnect() {
-        getConnectionRules().clear();
+        getConnectionRulesSet().clear();
         setMyOrg(null);
     }
 
@@ -163,12 +163,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     }
 
     public boolean isValid(final Party parent, final Party child) {
-        for (final ConnectionRule rule : getConnectionRules()) {
-            if (!rule.isValid(this, parent, child)) {
-                return false;
-            }
-        }
-        return true;
+        return !getConnectionRulesSet().stream().anyMatch(r -> !r.isValid(this, parent, child));
     }
 
     @Atomic
@@ -190,8 +185,8 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
 
     @Atomic
     public void associateConnectionRules(final List<ConnectionRule> connectionRules) {
-        getConnectionRules().retainAll(connectionRules);
-        getConnectionRules().addAll(connectionRules);
+        getConnectionRulesSet().retainAll(connectionRules);
+        getConnectionRulesSet().addAll(connectionRules);
     }
 
     @Deprecated

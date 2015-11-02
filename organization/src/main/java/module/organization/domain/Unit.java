@@ -28,6 +28,9 @@ import java.text.Collator;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
@@ -234,11 +237,8 @@ public class Unit extends Unit_Base {
 
     public void closeAllParentAccountabilitiesByType(final AccountabilityType accountabilityType) {
         final LocalDate now = new LocalDate();
-        for (final Accountability accountability : getParentAccountabilitiesSet()) {
-            if (accountability.getEndDate() == null || accountability.getEndDate().isAfter(now)) {
-                accountability.setEndDate(now);
-            }
-        }
+        getParentAccountabilityStream().filter(a -> a.getEndDate() == null || a.getEndDate().isAfter(now))
+                .forEach(a -> a.setEndDate(now));
     }
 
     @Override
@@ -247,17 +247,10 @@ public class Unit extends Unit_Base {
         if (getPartyTypesSet().contains(partyType) && acronym.equals(getAcronym())) {
             return this;
         }
-        for (final Accountability accountability : getChildAccountabilitiesSet()) {
-            if (accountability.getAccountabilityType() == accountabilityType) {
-                final Party party =
-                        accountability.getChild().findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(accountabilityType,
-                                partyType, acronym);
-                if (party != null) {
-                    return party;
-                }
-            }
-        }
-        return null;
+        return getChildAccountabilityStream()
+                .filter(a -> a.getAccountabilityType() == accountabilityType).map(a -> a.getChild()
+                        .findPartyByPartyTypeAndAcronymForAccountabilityTypeLink(accountabilityType, partyType, acronym))
+                .filter(p -> p != null).findAny().orElse(null);
     }
 
     private int depth() {
@@ -265,49 +258,50 @@ public class Unit extends Unit_Base {
     }
 
     private int depth(final Set<Accountability> processed) {
-        int depth = 0;
+        int[] depth = new int[] { 0 };
         if (!getOrganizationalModelsSet().isEmpty()) {
-            return depth;
+            return depth[0];
         }
-        for (final Accountability accountability : getParentAccountabilitiesSet()) {
-            if (!processed.contains(accountability)) {
-                processed.add(accountability);
-                final Party party = accountability.getParent();
+        getParentAccountabilityStream().filter(a -> !processed.contains(a)).forEach(new Consumer<Accountability>() {
+            @Override
+            public void accept(final Accountability a) {
+                processed.add(a);
+                final Party party = a.getParent();
                 if (party.isUnit()) {
                     final Unit unit = (Unit) party;
                     final int parentDepth = unit.depth(processed);
-                    if (parentDepth > depth) {
-                        depth = parentDepth;
+                    if (parentDepth > depth[0]) {
+                        depth[0] = parentDepth;
                     }
                 }
             }
-        }
-        return depth + 1;
+        });
+        return depth[0] + 1;
     }
 
+    /**
+     * @deprecated use getMemberStream instead
+     */
+    @Deprecated
     public Set<User> getMembers(final Set<AccountabilityType> accountabilityTypes) {
-        final Set<User> result = new HashSet<User>();
-        getMembers(result, accountabilityTypes);
-        return result;
+        return getMemberStream(accountabilityTypes).collect(Collectors.toSet());
     }
 
-    protected void getMembers(final Set<User> result, final Set<AccountabilityType> accountabilityTypes) {
-        for (final Accountability accountability : getChildAccountabilitiesSet()) {
-            final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (accountabilityTypes.contains(accountabilityType) && accountability.isActiveNow()) {
-                final Party child = accountability.getChild();
-                if (child.isPerson()) {
-                    final Person person = (Person) child;
-                    if (person.getUser() != null) {
-                        result.add(person.getUser());
-                    }
-                } else if (child.isUnit()) {
-                    final Unit unit = (Unit) child;
-                    unit.getMembers(result, accountabilityTypes);
-                } else {
-                    throw OrganizationDomainException.unknownPartyType();
-                }
-            }
+    public Stream<User> getMemberStream(final Set<AccountabilityType> accountabilityTypes) {
+        return getChildAccountabilityStream()
+                .filter(a -> accountabilityTypes.contains(a.getAccountabilityType()) && a.isActiveNow())
+                .flatMap(a -> getMembers(accountabilityTypes, a.getChild()));
+    }
+
+    private static Stream<User> getMembers(final Set<AccountabilityType> accountabilityTypes, final Party party) {
+        if (party.isPerson()) {
+            final Person person = (Person) party;
+            return person.getUser() == null ? Stream.empty() : Stream.of(person.getUser());
+        } else if (party.isUnit()) {
+            final Unit unit = (Unit) party;
+            return unit.getMemberStream(accountabilityTypes);
+        } else {
+            throw OrganizationDomainException.unknownPartyType();
         }
     }
 

@@ -24,13 +24,13 @@
  */
 package module.organization.domain;
 
-import jvstm.cps.ConsistencyPredicate;
-import module.organization.domain.util.OrganizationConsistencyException;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+
+import jvstm.cps.ConsistencyPredicate;
+import module.organization.domain.util.OrganizationConsistencyException;
 
 /**
  * 
@@ -41,7 +41,8 @@ import org.joda.time.LocalDate;
  */
 public class AccountabilityVersion extends AccountabilityVersion_Base {
 
-    private AccountabilityVersion(LocalDate beginDate, LocalDate endDate, Accountability acc, boolean erased, String justification) {
+    private AccountabilityVersion(LocalDate beginDate, LocalDate endDate, Accountability acc, boolean erased,
+            String justification) {
         super();
         super.setAccountability(acc);
         super.setJustification(justification);
@@ -136,7 +137,7 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
         if (firstAccVersion == null) {
             //we are the first ones, let's just create ourselves
             if (erased) {
-                throw new IllegalArgumentException("creating.a.deleted.acc.does.not.make.sense"); //we shouldn't be creating a deleted accountability to start with!
+                throw new IllegalArgumentException("creating.a.deleted.acc.does.not.make.sense");//we shouldn't be creating a deleted accountability to start with!
             }
             new AccountabilityVersion(beginDate, endDate, acc, erased, justification);
         } else {
@@ -154,14 +155,11 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
     }
 
     public static boolean redundantInfo(AccountabilityVersion av1, AccountabilityVersion av2) {
-        return ((av1.getBeginDate().equals(av2.getBeginDate())) && (av1.getErased() == av2.getErased()) && matchingDates(
-                av1.getEndDate(), av2.getEndDate()));
+        return ((av1.getBeginDate().equals(av2.getBeginDate())) && (av1.getErased() == av2.getErased())
+                && matchingDates(av1.getEndDate(), av2.getEndDate()));
     }
 
     private static boolean matchingDates(LocalDate date1, LocalDate date2) {
-        if (date1 == null) {
-            return date2 == null;
-        }
-        return date1.equals(date2);
+        return date1 == null ? date2 == null : date1.equals(date2);
     }
 }

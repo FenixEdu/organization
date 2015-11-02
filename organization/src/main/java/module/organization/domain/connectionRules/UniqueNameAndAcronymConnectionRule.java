@@ -24,10 +24,14 @@
  */
 package module.organization.domain.connectionRules;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Stream;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.commons.i18n.LocalizedString;
 
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
@@ -35,11 +39,6 @@ import module.organization.domain.ConnectionRule;
 import module.organization.domain.OrganizationDomainException;
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
-
-import org.fenixedu.bennu.core.domain.Bennu;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.commons.i18n.LocalizedString;
-
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -96,17 +95,13 @@ public class UniqueNameAndAcronymConnectionRule extends UniqueNameAndAcronymConn
     }
 
     private boolean checkNameAndAcronym(final Unit parent, final Unit child) {
-        return (parent != null) ? checkChildsNameAndAcronym(parent.getChildAccountabilitiesSet(), child) : checkTopUnitsNameAndAcronym(child);
+        return (parent != null) ? checkChildsNameAndAcronym(parent.getChildAccountabilityStream(),
+                child) : checkTopUnitsNameAndAcronym(child);
     }
 
-    private boolean checkChildsNameAndAcronym(final Collection<Accountability> accountabilities, final Unit child) {
-        for (final Accountability accountability : accountabilities) {
-            if (accountability.getChild().isUnit() && !accountability.getChild().equals(child)
-                    && hasSameNameAndAcronym((Unit) accountability.getChild(), child)) {
-                return false;
-            }
-        }
-        return true;
+    private boolean checkChildsNameAndAcronym(final Stream<Accountability> accountabilities, final Unit child) {
+        return !accountabilities.anyMatch(
+                a -> a.getChild().isUnit() && !a.getChild().equals(child) && hasSameNameAndAcronym((Unit) a.getChild(), child));
     }
 
     private boolean checkTopUnitsNameAndAcronym(final Unit unit) {

@@ -28,13 +28,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import module.organization.domain.Accountability;
+import org.fenixedu.bennu.core.domain.Bennu;
+
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
 import module.organization.presentationTier.renderers.OrganizationView;
-
-import org.fenixedu.bennu.core.domain.Bennu;
-
 import pt.ist.fenixWebFramework.renderers.components.HtmlBlockContainer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 import pt.ist.fenixWebFramework.renderers.components.HtmlImage;
@@ -152,8 +150,8 @@ public class TreeMenuOrganizationLayout extends Layout implements OrganizationLa
     }
 
     private void generateImageOnClick(final Party party, final HtmlImage image, final HtmlList childHtmlList) {
-        image.setOnClick(String.format("change('%s', '%s');return false;", IMG_PREFIX + party.getExternalId(),
-                childHtmlList.getId()));
+        image.setOnClick(
+                String.format("change('%s', '%s');return false;", IMG_PREFIX + party.getExternalId(), childHtmlList.getId()));
     }
 
     private HtmlList createChildHtmlList(final Party parent) {
@@ -175,18 +173,8 @@ public class TreeMenuOrganizationLayout extends Layout implements OrganizationLa
     }
 
     protected void drawPartyChildren(final HtmlList childHtmlList, final Party parent) {
-        final List<Party> children = new ArrayList<Party>(parent.getChildAccountabilitiesSet().size());
-
-        for (final Accountability accountability : parent.getChildAccountabilitiesSet()) {
-            if (this.view.getPredicate().eval(accountability.getChild(), accountability)) {
-                children.add(accountability.getChild());
-            }
-        }
-
-        Collections.sort(children, this.view.getSortBy());
-        for (final Party party : children) {
-            drawParty(childHtmlList, party);
-        }
+        parent.getChildAccountabilityStream().filter(a -> this.view.getPredicate().eval(a.getChild(), a)).map(a -> a.getChild())
+                .sorted(this.view.getSortBy()).forEachOrdered(p -> drawParty(childHtmlList, p));
     }
 
     @Override

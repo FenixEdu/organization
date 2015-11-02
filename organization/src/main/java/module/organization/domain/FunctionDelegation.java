@@ -26,11 +26,10 @@ package module.organization.domain;
 
 import java.util.Comparator;
 
-import jvstm.cps.ConsistencyPredicate;
-
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.joda.time.LocalDate;
 
+import jvstm.cps.ConsistencyPredicate;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.DomainObject;
 
@@ -110,11 +109,9 @@ public class FunctionDelegation extends FunctionDelegation_Base {
     @Atomic
     public void delete() {
         new FunctionDelegationLog(this, "Delete");
-        for (FunctionDelegationLog log : getFunctionDelegationLogs()) {
-            removeFunctionDelegationLogs(log);
-        }
+        getFunctionDelegationLogsSet().forEach(l -> removeFunctionDelegationLogs(l));
 
-        Accountability delegatedAccountability = getAccountabilityDelegatee();
+        final Accountability delegatedAccountability = getAccountabilityDelegatee();
         setAccountabilityDelegatee(null);
         delegatedAccountability.delete();
 

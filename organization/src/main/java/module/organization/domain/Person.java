@@ -24,11 +24,9 @@
  */
 package module.organization.domain;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import module.organization.domain.PartyType.PartyTypeBean;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
@@ -39,6 +37,7 @@ import org.fenixedu.commons.i18n.I18N;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
 
+import module.organization.domain.PartyType.PartyTypeBean;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -169,14 +168,8 @@ public class Person extends Person_Base {
     }
 
     static public Person readByPartyName(LocalizedString partyName) {
-        for (final Party party : Bennu.getInstance().getPartiesSet()) {
-            if (!party.isUnit()) {
-                if (party.getPartyName().equals(partyName)) {
-                    return (Person) party;
-                }
-            }
-        }
-        return null;
+        final Stream<Party> stream = Bennu.getInstance().getPartiesSet().stream();
+        return stream.filter(p -> !p.isUnit() && p.getPartyName().equals(partyName)).map(p -> (Person) p).findAny().orElse(null);
     }
 
     static public PartyType getPartyTypeInstance() {
@@ -196,28 +189,25 @@ public class Person extends Person_Base {
         return partyType;
     }
 
+    /**
+     * @deprecated use searchPersonsStream instead
+     */
+    @Deprecated
     public static List<Person> searchPersons(String value) {
-        final List<Person> persons = new ArrayList<Person>();
+        return searchPersonStream(value).collect(Collectors.toList());
+    }
 
+    public static Stream<Person> searchPersonStream(String value) {
         final String trimmedValue = value.trim();
         final String[] input = trimmedValue.split(" ");
         for (int i = 0; i < input.length; i++) {
             input[i] = StringNormalizer.normalize(input[i]);
         }
 
-        for (final Party party : Bennu.getInstance().getPersonsSet()) {
-            if (party.isPerson()) {
-                final Person person = (Person) party;
-                final String unitName = StringNormalizer.normalize(person.getPartyName().getContent());
-                if (hasMatch(input, unitName)) {
-                    persons.add(person);
-                }
-            }
-        }
-
-        Collections.sort(persons, Party.COMPARATOR_BY_NAME);
-
-        return persons;
+        final Stream<Person> stream = Bennu.getInstance().getPersonsSet().stream();
+        return stream.filter(p -> p.isPerson()).map(p -> (Person) p)
+                .filter(p -> hasMatch(input, StringNormalizer.normalize(p.getPartyName().getContent())))
+                .sorted(Party.COMPARATOR_BY_NAME);
     }
 
     private static boolean hasMatch(final String[] input, final String unitNameParts) {

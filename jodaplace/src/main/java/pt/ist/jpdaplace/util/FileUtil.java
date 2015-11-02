@@ -1,33 +1,25 @@
 package pt.ist.jpdaplace.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.Reader;
+import java.util.function.Consumer;
 
 public class FileUtil {
 
-    public static String[] readResource(final String resource) {
+    public static void consumeResourceByLines(final String resource, final Consumer<String> consumer) {
         final InputStream inputStream = FileUtil.class.getResourceAsStream(resource);
-        try {
-            final InputStreamReader fileReader = new InputStreamReader(inputStream, "ISO8859-1");
-            try {
-                char[] buffer = new char[4096];
-                final StringBuilder fileContents = new StringBuilder();
-                for (int n = 0; (n = fileReader.read(buffer)) != -1; fileContents.append(buffer, 0, n)) {
-                    ;
-                }
-                return fileContents.toString().split("\n");
-            } catch (final IOException ex) {
-                throw new Error(ex);
-            } finally {
-                try {
-                    fileReader.close();
-                } catch (final IOException ex) {
-                    throw new Error(ex);
-                }
+        try (final Reader reader = new InputStreamReader(inputStream,  "ISO8859-1");
+                BufferedReader bufferedReader = new BufferedReader(reader)) {
+            for (;;) {
+                final String line = bufferedReader.readLine();
+                if (line == null)
+                    break;
+                consumer.accept(line);
             }
-        } catch (final UnsupportedEncodingException ex) {
+        } catch (final IOException ex) {
             throw new Error(ex);
         }
     }

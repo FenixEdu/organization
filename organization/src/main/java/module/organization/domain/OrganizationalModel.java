@@ -25,17 +25,18 @@
 package module.organization.domain;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import module.organization.domain.dto.OrganizationalModelBean;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.commons.i18n.LocalizedString;
 
+import module.organization.domain.dto.OrganizationalModelBean;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -91,31 +92,30 @@ public class OrganizationalModel extends OrganizationalModel_Base {
         getAccountabilityTypesSet().addAll(accountabilityTypes);
     }
 
+    /**
+     * @deprecated use getAllUnitStream instead
+     */
+    @Deprecated
     public Set<Unit> getAllUnits() {
-        Set<Unit> units = new HashSet<Unit>();
-        for (Party party : getPartiesSet()) {
-            if (party.isUnit()) {
-                units.add((Unit) party);
-                units.addAll(party.getDescendentUnits());
+        return getAllUnitStream().collect(Collectors.toSet());
+    }
+
+    public Stream<Unit> getAllUnitStream() {
+        return getPartiesSet().stream().filter(p -> p.isUnit()).map(p -> (Unit) p).flatMap(new Function<Unit, Stream<Unit>>() {
+            @Override
+            public Stream<Unit> apply(final Unit u) {
+                return Stream.concat(Stream.of(u), u.getDescendentUnitStream());
             }
-        }
-        return units;
+        });
     }
 
     public boolean containsUnit(final Party party) {
         if (getPartiesSet().contains(party)) {
             return true;
         }
-        for (final Accountability accountability : party.getParentAccountabilitiesSet()) {
-            final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (accountability.isActiveNow() && getAccountabilityTypesSet().contains(accountabilityType)) {
-                final Party parent = accountability.getParent();
-                if (containsUnit(parent)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return party.getParentAccountabilityStream()
+                .filter(a -> a.isActiveNow() && getAccountabilityTypesSet().contains(a.getAccountabilityType()))
+                .map(a -> a.getParent()).anyMatch(p -> containsUnit(p));
     }
 
     @Deprecated

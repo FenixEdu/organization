@@ -28,12 +28,22 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.groups.DynamicGroup;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.commons.i18n.I18N;
+import org.joda.time.LocalDate;
 
 import module.organization.domain.predicates.PartyPredicate;
 import module.organization.domain.predicates.PartyPredicate.PartyByAccTypeAndDates;
@@ -42,13 +52,6 @@ import module.organization.domain.predicates.PartyPredicate.PartyByClassType;
 import module.organization.domain.predicates.PartyPredicate.PartyByPartyType;
 import module.organization.domain.predicates.PartyPredicate.TruePartyPredicate;
 import module.organization.domain.predicates.PartyResultCollection;
-
-import org.fenixedu.bennu.core.domain.Bennu;
-import org.fenixedu.bennu.core.groups.DynamicGroup;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.commons.i18n.I18N;
-import org.joda.time.LocalDate;
-
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -89,7 +92,7 @@ abstract public class Party extends Party_Base {
      * 
      * @return gets all of immediately above parents
      */
-    public Collection<Party> getParents() {
+    public Collection<Party> getParentStream() {
         return getParents(new TruePartyPredicate());
     }
 
@@ -121,7 +124,11 @@ abstract public class Party extends Party_Base {
         return super.getParentAccountabilitiesSet();
     }
 
-    // Overriden methods to hide the erased accs: 
+    // Overriden methods to hide the erased accs:
+    /**
+     * @deprecated use getParentAccountabilityStream instead
+     */
+    @Deprecated
     @Override
     public Set<Accountability> getParentAccountabilitiesSet() {
         Set<Accountability> accsToReturn = new HashSet<Accountability>();
@@ -133,10 +140,19 @@ abstract public class Party extends Party_Base {
         return accsToReturn;
     }
 
+    public Stream<Accountability> getParentAccountabilityStream() {
+        final Stream<Accountability> stream = super.getParentAccountabilitiesSet().stream();
+        return stream.filter(a -> !a.isErased());
+    }
+
     public Iterator<Accountability> getParentAccountabilitiesIterator() {
         return super.getParentAccountabilitiesSet().iterator();
     }
 
+    /**
+     * @deprecated use getChildAccountabilityStream instead
+     */
+    @Deprecated
     @Override
     public Set<Accountability> getChildAccountabilitiesSet() {
         Set<Accountability> accsToReturn = new HashSet<Accountability>();
@@ -146,6 +162,11 @@ abstract public class Party extends Party_Base {
             }
         }
         return accsToReturn;
+    }
+
+    public Stream<Accountability> getChildAccountabilityStream() {
+        final Stream<Accountability> stream = super.getChildAccountabilitiesSet().stream();
+        return stream.filter(a -> !a.isErased());
     }
 
     @Deprecated
@@ -173,16 +194,14 @@ abstract public class Party extends Party_Base {
     }
 
     //end of overriden methods
-
+    /**
+     * @deprecated use getParentAccountabilityStream instead
+     */
+    @Deprecated
     @SuppressWarnings("unchecked")
     public <T extends Party> Collection<T> getParents(final PartyPredicate predicate) {
-        final Collection<Party> result = new LinkedList<Party>();
-        for (final Accountability accountability : getParentAccountabilities()) {
-            if (predicate.eval(accountability.getParent(), accountability)) {
-                result.add(accountability.getParent());
-            }
-        }
-        return (List<T>) result;
+        final Stream<Accountability> stream = getParentAccountabilityStream();
+        return stream.filter(a -> predicate.eval(a.getParent(), a)).map(a -> (T) a.getParent()).collect(Collectors.toList());
     }
 
     public Collection<Accountability> getParentAccountabilities(final LocalDate startDate, final LocalDate endDate,
@@ -213,15 +232,14 @@ abstract public class Party extends Party_Base {
         return getParentAccountabilities(new PartyByAccountabilityType(types));
     }
 
+    /**
+     * @deprecated use getParentAccountabilityStream instead
+     */
+    @Deprecated
     @SuppressWarnings("unchecked")
     protected <T extends Accountability> Collection<T> getParentAccountabilities(final PartyPredicate predicate) {
-        final Collection<Accountability> result = new LinkedList<Accountability>();
-        for (final Accountability accountability : getParentAccountabilities()) {
-            if (predicate.eval(accountability.getParent(), accountability)) {
-                result.add(accountability);
-            }
-        }
-        return (List<T>) result;
+        final Stream<Accountability> stream = getParentAccountabilityStream();
+        return stream.filter(a -> predicate.eval(a.getParent(), a)).map(a -> (T) a).collect(Collectors.toList());
     }
 
     public Collection<Party> getChildren() {
@@ -272,15 +290,14 @@ abstract public class Party extends Party_Base {
         return getChildren(new PartyByPartyType(Person.class, type));
     }
 
+    /**
+     * @deprecated use getChildAccountabilityStream instead
+     */
+    @Deprecated
     @SuppressWarnings("unchecked")
     public <T extends Party> Collection<T> getChildren(final PartyPredicate predicate) {
-        final Collection<Party> result = new LinkedList<Party>();
-        for (final Accountability accountability : getChildAccountabilities()) {
-            if (predicate.eval(accountability.getChild(), accountability)) {
-                result.add(accountability.getChild());
-            }
-        }
-        return (List<T>) result;
+        final Stream<Accountability> stream = getChildAccountabilityStream();
+        return stream.filter(a -> predicate.eval(a.getChild(), a)).map(a -> (T) a.getChild()).collect(Collectors.toList());
     }
 
     public Collection<Accountability> getChildrenAccountabilities(final Collection<AccountabilityType> types) {
@@ -296,15 +313,14 @@ abstract public class Party extends Party_Base {
         return getChildrenAccountabilities(new PartyByAccountabilityType(clazz, types));
     }
 
+    /**
+     * @deprecated use getChildAccountabilityStream instead
+     */
+    @Deprecated
     @SuppressWarnings("unchecked")
     protected <T extends Accountability> Collection<T> getChildrenAccountabilities(final PartyPredicate predicate) {
-        final Collection<Accountability> result = new LinkedList<Accountability>();
-        for (final Accountability accountability : getChildAccountabilities()) {
-            if (predicate.eval(accountability.getChild(), accountability)) {
-                result.add(accountability);
-            }
-        }
-        return (List<T>) result;
+        final Stream<Accountability> stream = getChildAccountabilityStream();
+        return stream.filter(a -> predicate.eval(a.getChild(), a)).map(a -> (T) a).collect(Collectors.toList());
     }
 
     public Collection<Party> getAncestors() {
@@ -349,25 +365,19 @@ abstract public class Party extends Party_Base {
      *            all of the ancestors (recursively)
      */
     protected void getAncestors(final PartyResultCollection result) {
-        for (final Accountability accountability : getParentAccountabilities()) {
-            result.conditionalAddParty(accountability.getParent(), accountability);
-            accountability.getParent().getAncestors(result);
-        }
+        getParentAccountabilityStream().forEach(new Consumer<Accountability>() {
+            @Override
+            public void accept(final Accountability a) {
+                result.conditionalAddParty(a.getParent(), a);
+                a.getParent().getAncestors(result);
+
+            }
+        });
     }
 
     public boolean ancestorsInclude(final Party party, final AccountabilityType type) {
-        for (final Accountability accountability : getParentAccountabilities()) {
-            if (accountability.hasAccountabilityType(type)) {
-                if (accountability.getParent().equals(party)) {
-                    return true;
-                }
-                if (accountability.getParent().ancestorsInclude(party, type)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return getParentAccountabilityStream().filter(a -> a.hasAccountabilityType(type))
+                .anyMatch(a -> a.getParent().equals(party) || a.getParent().ancestorsInclude(party, type));
     }
 
     public Collection<Party> getDescendents() {
@@ -388,10 +398,24 @@ abstract public class Party extends Party_Base {
         return result.getResult();
     }
 
+    /**
+     * @deprecated use getDescendentUnitStream instead
+     */
+    @Deprecated
     public Collection<Unit> getDescendentUnits() {
         final PartyResultCollection result = new PartyResultCollection(new PartyByClassType(Unit.class));
         getDescendents(result);
         return result.getResult();
+    }
+
+    public Stream<Unit> getDescendentUnitStream() {
+        return getChildAccountabilityStream().map(a -> a.getChild()).filter(p -> p.isUnit()).map(p -> (Unit) p)
+                .flatMap(new Function<Unit, Stream<Unit>>() {
+                    @Override
+                    public Stream<Unit> apply(final Unit u) {
+                        return Stream.concat(Stream.of(u), u.getDescendentUnitStream());
+                    }
+                });
     }
 
     public Collection<Unit> getDescendentUnits(final AccountabilityType type) {
@@ -425,19 +449,27 @@ abstract public class Party extends Party_Base {
     }
 
     protected void getDescendents(final PartyResultCollection result) {
-        for (final Accountability accountability : getChildAccountabilities()) {
-            result.conditionalAddParty(accountability.getChild(), accountability);
-            accountability.getChild().getDescendents(result);
-        }
+        getChildAccountabilityStream().forEach(new Consumer<Accountability>() {
+            @Override
+            public void accept(final Accountability a) {
+                result.conditionalAddParty(a.getChild(), a);
+                a.getChild().getDescendents(result);
+
+            }
+        });
     }
 
+    /**
+     * @deprecated use getSiblingStream instead
+     */
+    @Deprecated
     public Collection<Party> getSiblings() {
-        final Collection<Party> result = new LinkedList<Party>();
-        for (final Accountability accountability : getParentAccountabilities()) {
-            result.addAll(accountability.getParent().getChildren());
-        }
-        result.remove(this);
-        return result;
+        return getSiblingStream().collect(Collectors.toList());
+    }
+
+    public Stream<Party> getSiblingStream() {
+        return getParentAccountabilityStream().map(a -> a.getParent()).flatMap(p -> p.getChildAccountabilityStream())
+                .map(a -> a.getChild()).filter(p -> p != this);
     }
 
     public boolean isUnit() {
@@ -462,9 +494,7 @@ abstract public class Party extends Party_Base {
     }
 
     protected void disconnect() {
-        for (Accountability acc : super.getParentAccountabilitiesSet()) {
-            acc.delete();
-        }
+        super.getParentAccountabilitiesSet().forEach(a -> a.delete());
         getPartyTypes().clear();
         setMyOrg(null);
     }
@@ -480,8 +510,8 @@ abstract public class Party extends Party_Base {
      * @return Accountability
      */
     @Atomic
-    public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin,
-            final LocalDate end, String justification) {
+    public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin, final LocalDate end,
+            String justification) {
         return Accountability.create(parent, this, type, begin, end, justification);
     }
 
@@ -495,7 +525,8 @@ abstract public class Party extends Party_Base {
      * @return Accountability
      */
     @Deprecated
-    public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
+    public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin,
+            final LocalDate end) {
         return addParent(parent, type, begin, end, null);
 
     }
@@ -529,14 +560,12 @@ abstract public class Party extends Party_Base {
             String justification) {
         Accountability intersectingAccountability = getIntersectingChildAccountability(child, type, begin, end);
         if (intersectingAccountability != null) {
-            if (begin == null
-                    || (begin != null && intersectingAccountability.getBeginDate() != null && begin
-                            .isBefore(intersectingAccountability.getBeginDate()))) {
+            if (begin == null || (begin != null && intersectingAccountability.getBeginDate() != null
+                    && begin.isBefore(intersectingAccountability.getBeginDate()))) {
                 intersectingAccountability.setBeginDate(begin);
             }
-            if (end == null
-                    || (end != null && intersectingAccountability.getEndDate() != null && end.isAfter(intersectingAccountability
-                            .getEndDate()))) {
+            if (end == null || (end != null && intersectingAccountability.getEndDate() != null
+                    && end.isAfter(intersectingAccountability.getEndDate()))) {
                 intersectingAccountability.editDates(intersectingAccountability.getBeginDate(), end);
             }
             return intersectingAccountability;
@@ -547,24 +576,14 @@ abstract public class Party extends Party_Base {
 
     public boolean hasAnyIntersectingChildAccountability(final Party child, final AccountabilityType type, final LocalDate begin,
             final LocalDate end) {
-        for (final Accountability accountability : getChildAccountabilities()) {
-            if (accountability.getChild() == child && accountability.getAccountabilityType() == type
-                    && accountability.intersects(begin, end)) {
-                return true;
-            }
-        }
-        return false;
+        return getChildAccountabilityStream()
+                .anyMatch(a -> a.getChild() == child && a.getAccountabilityType() == type && a.intersects(begin, end));
     }
 
     boolean hasAnyIntersectingChildAccountability(final Party child, final AccountabilityType type, final LocalDate begin,
             final LocalDate end, final Accountability exluding) {
-        for (final Accountability accountability : getChildAccountabilities()) {
-            if (exluding != accountability && accountability.getChild() == child && accountability.getAccountabilityType() == type
-                    && accountability.intersects(begin, end)) {
-                return true;
-            }
-        }
-        return false;
+        return getChildAccountabilityStream().anyMatch(
+                a -> exluding != a && a.getChild() == child && a.getAccountabilityType() == type && a.intersects(begin, end));
     }
 
     private Accountability getIntersectingChildAccountability(final Party child, final AccountabilityType type,
@@ -607,18 +626,12 @@ abstract public class Party extends Party_Base {
     }
 
     protected boolean accountabilitiesStillValid() {
-        for (final Accountability accountability : getParentAccountabilitiesSet()) {
-            if (!accountability.isValid()) {
-                return false;
-            }
-        }
-        return true;
+        return !getParentAccountabilityStream().anyMatch(a -> !a.isValid());
     }
 
     public String getPartyNameWithSuffixType() {
-        return ResourceBundle.getBundle("resources.OrganizationResources", I18N.getLocale()).getString(
-                "label." + getClass().getSimpleName().toLowerCase())
-                + " - " + getPartyName().getContent();
+        return ResourceBundle.getBundle("resources.OrganizationResources", I18N.getLocale())
+                .getString("label." + getClass().getSimpleName().toLowerCase()) + " - " + getPartyName().getContent();
     }
 
     public Set<OrganizationalModel> getAllOrganizationModels() {
@@ -648,30 +661,41 @@ abstract public class Party extends Party_Base {
         return DynamicGroup.get("managers").isMember(Authenticate.getUser());
     }
 
+    /**
+     * Use hasChildAccountabilityIncludingAncestry with Predicate instead
+     */
+    @Deprecated
     public boolean hasChildAccountabilityIncludingAncestry(final Collection<AccountabilityType> accountabilityTypes,
             final Party party) {
-        return hasActiveChildAccountabilityIncludingAncestry(new HashSet<Party>(), accountabilityTypes, party);
+        return hasChildAccountabilityIncludingAncestry(new Predicate<Accountability>() {
+            @Override
+            public boolean test(Accountability a) {
+                return accountabilityTypes.contains(a.getAccountabilityType());
+            }
+        }, party);
     }
 
+    public boolean hasChildAccountabilityIncludingAncestry(final Predicate<Accountability> accountabilityPredicate,
+            final Party party) {
+        return hasActiveChildAccountabilityIncludingAncestry(new HashSet<Party>(), accountabilityPredicate, party);
+    }
+    
     private boolean hasActiveChildAccountabilityIncludingAncestry(final Set<Party> processed,
-            final Collection<AccountabilityType> accountabilityTypes, final Party party) {
+            final Predicate<Accountability> accountabilityPredicate, final Party party) {
         if (!processed.contains(this)) {
             processed.add(this);
-            for (final Accountability accountability : getChildAccountabilitiesSet()) {
-                if (accountability.isActiveNow() && accountabilityTypes.contains(accountability.getAccountabilityType())) {
-                    final Party child = accountability.getChild();
-                    if (child == party) {
-                        return true;
-                    }
-                }
+
+            if (getChildAccountabilityStream()
+                    .filter(a -> a.isActiveNow() && accountabilityPredicate.test(a))
+                    .map(a -> a.getChild()).anyMatch(p -> p == party)) {
+                return true;
             }
-            for (final Accountability accountability : getParentAccountabilitiesSet()) {
-                if (accountability.isActiveNow() && accountabilityTypes.contains(accountability.getAccountabilityType())) {
-                    final Party parent = accountability.getParent();
-                    if (parent.hasActiveChildAccountabilityIncludingAncestry(processed, accountabilityTypes, party)) {
-                        return true;
-                    }
-                }
+
+            if (getParentAccountabilityStream()
+                    .filter(a -> a.isActiveNow() && accountabilityPredicate.test(a))
+                    .map(a -> a.getParent())
+                    .anyMatch(p -> p.hasActiveChildAccountabilityIncludingAncestry(processed, accountabilityPredicate, party))) {
+                return true;
             }
         }
         return false;
@@ -718,39 +742,21 @@ abstract public class Party extends Party_Base {
     }
 
     private boolean hasParentWithActiveAncestry(final AccountabilityType accountabilityType, final LocalDate when) {
-        for (final Accountability accountability : getParentAccountabilitiesSet()) {
-            if (accountability.getAccountabilityType() == accountabilityType && accountability.isActive(when)) {
-                final Party parent = accountability.getParent();
-                return parent.hasActiveAncestry(accountabilityType, when);
-            }
-        }
-        return false;
+        return getParentAccountabilityStream().filter(a -> a.getAccountabilityType() == accountabilityType && a.isActive(when))
+                .map(a -> a.getParent()).anyMatch(p -> p.hasActiveAncestry(accountabilityType, when));
     }
 
     public boolean hasPartyAsAncestor(final Party party, final Set<AccountabilityType> accountabilityTypes) {
-        for (final Accountability accountability : getParentAccountabilitiesSet()) {
-            final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (accountabilityTypes.contains(accountabilityType) && accountability.isActiveNow()) {
-                final Party parent = accountability.getParent();
-                if (parent == party || parent.hasPartyAsAncestor(party, accountabilityTypes)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return getParentAccountabilityStream()
+                .filter(a -> accountabilityTypes.contains(a.getAccountabilityType()) && a.isActiveNow()).map(a -> a.getParent())
+                .anyMatch(p -> p == party || p.hasPartyAsAncestor(party, accountabilityTypes));
     }
 
-    public boolean hasPartyAsAncestor(final Party party, final Set<AccountabilityType> accountabilityTypes, final LocalDate when) {
-        for (final Accountability accountability : getParentAccountabilitiesSet()) {
-            final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (accountabilityTypes.contains(accountabilityType) && accountability.isActive(when)) {
-                final Party parent = accountability.getParent();
-                if (parent == party || parent.hasPartyAsAncestor(party, accountabilityTypes)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public boolean hasPartyAsAncestor(final Party party, final Set<AccountabilityType> accountabilityTypes,
+            final LocalDate when) {
+        return getParentAccountabilityStream()
+                .filter(a -> accountabilityTypes.contains(a.getAccountabilityType()) && a.isActive(when)).map(a -> a.getParent())
+                .anyMatch(p -> p == party || p.hasPartyAsAncestor(party, accountabilityTypes));
     }
 
     /**
@@ -766,8 +772,8 @@ abstract public class Party extends Party_Base {
      *            no maximum
      * @return a list of historic and actual Accountabilities {@link Accountability}
      */
-    public SortedSet<Accountability> getAccountabilitiesAndHistoricItems(List<AccountabilityType> accTypes,
-            LocalDate dateOfStart, LocalDate dateOfEnd) {
+    public SortedSet<Accountability> getAccountabilitiesAndHistoricItems(List<AccountabilityType> accTypes, LocalDate dateOfStart,
+            LocalDate dateOfEnd) {
         TreeSet<Accountability> accountabilities =
                 new TreeSet<Accountability>(Accountability.COMPARATOR_BY_CREATION_DATE_FALLBACK_TO_START_DATE);
 
@@ -778,6 +784,9 @@ abstract public class Party extends Party_Base {
 
     }
 
+    /**
+     * @deprecated use getParentAccountabilityStream instead
+     */
     @Deprecated
     public java.util.Set<module.organization.domain.Accountability> getParentAccountabilities() {
         return getParentAccountabilitiesSet();
@@ -788,6 +797,9 @@ abstract public class Party extends Party_Base {
         return getOrganizationalModelsSet();
     }
 
+    /**
+     * @deprecated use getChildAccountabilityStream instead
+     */
     @Deprecated
     public java.util.Set<module.organization.domain.Accountability> getChildAccountabilities() {
         return getChildAccountabilitiesSet();
