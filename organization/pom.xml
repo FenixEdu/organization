@@ -17,6 +17,7 @@
     <properties>
         <version.org.fenixedu.bennu.core>3.4.1</version.org.fenixedu.bennu.core>
         <version.org.fenixedu.bennu.renderers>5.0.2</version.org.fenixedu.bennu.renderers>
+        <version.javax.servlet.jsp.api>2.1</version.javax.servlet.jsp.api>
     </properties>
 
     <dependencies>
@@ -38,7 +39,7 @@
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>jsp-api</artifactId>
-            <version>2.1</version>
+            <version>${version.javax.servlet.jsp.api}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
