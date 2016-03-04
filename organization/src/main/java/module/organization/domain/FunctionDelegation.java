@@ -79,7 +79,7 @@ public class FunctionDelegation extends FunctionDelegation_Base {
         if (unit.hasAnyIntersectingChildAccountability(person, accountabilityType, beginDate, endDate)) {
             throw OrganizationDomainException.functionDelegationAlreadyAssigned();
         }
-        final Accountability delegatedAccountability = unit.addChild(person, accountabilityType, beginDate, endDate);
+        final Accountability delegatedAccountability = unit.addChild(person, accountabilityType, beginDate, endDate, null);
         setAccountabilityDelegatee(delegatedAccountability);
         new FunctionDelegationLog(this, "Create");
     }
@@ -95,7 +95,7 @@ public class FunctionDelegation extends FunctionDelegation_Base {
         new FunctionDelegationLog(this, "Edit");
         final Accountability accountabilityDelegatee = getAccountabilityDelegatee();
         // This avoids detecting intersections with itself
-        accountabilityDelegatee.editDates(beginDate.minusDays(2), endDate.minusDays(1));
+        accountabilityDelegatee.editDates(beginDate.minusDays(2), endDate.minusDays(1), null);
 
         final Unit unit = (Unit) getAccountabilityDelegatee().getParent();
         if (unit.hasAnyIntersectingChildAccountability(accountabilityDelegatee.getChild(),
@@ -103,7 +103,7 @@ public class FunctionDelegation extends FunctionDelegation_Base {
             throw OrganizationDomainException.functionDelegationAlreadyAssigned();
         }
 
-        accountabilityDelegatee.editDates(beginDate, endDate);
+        accountabilityDelegatee.editDates(beginDate, endDate, null);
     }
 
     @Atomic
@@ -113,7 +113,7 @@ public class FunctionDelegation extends FunctionDelegation_Base {
 
         final Accountability delegatedAccountability = getAccountabilityDelegatee();
         setAccountabilityDelegatee(null);
-        delegatedAccountability.delete();
+        delegatedAccountability.delete(null);
 
         setAccountabilityDelegator(null);
         setMyOrg(null);
@@ -129,11 +129,6 @@ public class FunctionDelegation extends FunctionDelegation_Base {
     @ConsistencyPredicate
     public boolean checkHasAccountabilityDelegatee() {
         return getAccountabilityDelegatee() != null;
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.FunctionDelegationLog> getFunctionDelegationLogs() {
-        return getFunctionDelegationLogsSet();
     }
 
 }

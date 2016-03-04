@@ -119,11 +119,11 @@ public class UnitBean extends PartyBean {
 
     @Override
     public void addParent() {
-        getUnit().addParent(getParent(), getAccountabilityType(), getBegin(), getEnd());
+        getUnit().addParent(getParent(), getAccountabilityType(), getBegin(), getEnd(), null);
     }
 
     public void addChild() {
-        getParent().addChild(getChild(), getAccountabilityType(), getBegin(), getEnd());
+        getParent().addChild(getChild(), getAccountabilityType(), getBegin(), getEnd(), null);
     }
 
     public OrganizationalModel getOrganizationalModel() {

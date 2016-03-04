@@ -26,12 +26,12 @@ package module.geography.domain;
 
 import java.util.Locale;
 
-import module.organization.domain.Unit;
-
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
 
 import com.google.common.base.Strings;
+
+import module.organization.domain.Unit;
 
 /**
  * Special kind of {@link CountrySubdivision} specific for Portugal. It covers a
@@ -49,7 +49,7 @@ public class PostalExtension extends PostalExtension_Base {
         String name = Strings.isNullOrEmpty(street) ? postalBranch : street;
         setUnit(Unit.create(parent.getUnit(), new LocalizedString().with(new Locale("pt"), name).with(Locale.ENGLISH, name),
                 acronym, getPartyType("Subdivisão de País", COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(),
-                new LocalDate(), null));
+                new LocalDate(), null, null));
         setLevel(parent.getLevel() + 1);
         setCode(postalCode);
         setStreetName(street);

@@ -29,7 +29,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
@@ -147,41 +146,13 @@ public class Unit extends Unit_Base {
     @Atomic
     static public Unit create(final UnitBean bean) {
         return create(bean.getParent(), bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityType(),
-                bean.getBegin(), bean.getEnd(), bean.getOrganizationalModel());
-    }
-
-    @Deprecated
-    public static Unit create(Party parent, LocalizedString name, String acronym, PartyType partyType,
-            AccountabilityType accountabilityType, LocalDate begin, LocalDate end) {
-        return create(parent, name, acronym, partyType, accountabilityType, begin, end, null, null);
+                bean.getBegin(), bean.getEnd(), bean.getOrganizationalModel(), null);
     }
 
     public static Unit create(Party parent, LocalizedString name, String acronym, PartyType partyType,
             AccountabilityType accountabilityType, LocalDate begin, LocalDate end, String accJustification) {
         return create(parent, name, acronym, partyType, accountabilityType, begin, end, null, accJustification);
 
-    }
-
-    /**
-     *
-     * @param parent the parent unit, whose relation will be established using the provided accountabilityType
-     * @param name name
-     * @param acronym acronym
-     * @param partyType partyType
-     * @param accountabilityType the accountabilityType to connect to the parent unit
-     * @param begin the begin date of the accountability
-     * @param end the end date, or null, if the accountability end date remains to be closed
-     * @param organizationalModel if provided, the newly created unit will be added as a top unit to the given
-     *            organizationalModel.
-     * @deprecated use
-     *             {@link #create(Party, LocalizedString, String, PartyType, AccountabilityType, LocalDate, LocalDate, OrganizationalModel, String)}
-     *             instead
-     * @return Unit
-     */
-    @Deprecated
-    public static Unit create(Party parent, LocalizedString name, String acronym, PartyType partyType,
-            AccountabilityType accountabilityType, LocalDate begin, LocalDate end, OrganizationalModel organizationalModel) {
-        return Unit.create(parent, name, acronym, partyType, accountabilityType, begin, end, organizationalModel, null);
     }
 
     /**
@@ -208,19 +179,6 @@ public class Unit extends Unit_Base {
     @Atomic
     static public Unit createRoot(final UnitBean bean) {
         return createRoot(bean.getName(), bean.getAcronym(), bean.getPartyType(), bean.getAccountabilityJustification());
-    }
-
-    /**
-     *
-     * @param name name
-     * @param acronym acronym
-     * @param partyType partyType
-     * @deprecated use {@link #createRoot(LocalizedString, String, PartyType, String)} instead
-     * @return Unit
-     */
-    @Deprecated
-    static public Unit createRoot(final LocalizedString name, final String acronym, final PartyType partyType) {
-        return new Unit(null, name, acronym, partyType, null, new LocalDate(), null, null, null);
     }
 
     @Atomic
@@ -279,12 +237,10 @@ public class Unit extends Unit_Base {
         return depth[0] + 1;
     }
 
-    /**
-     * @deprecated use getMemberStream instead
-     */
-    @Deprecated
-    public Set<User> getMembers(final Set<AccountabilityType> accountabilityTypes) {
-        return getMemberStream(accountabilityTypes).collect(Collectors.toSet());
+    public Stream<User> getMemberStream(final Set<AccountabilityType> accountabilityTypes, final LocalDate when) {
+        return getChildAccountabilityStream()
+                .filter(a -> accountabilityTypes.contains(a.getAccountabilityType()) && a.isActive(when))
+                .flatMap(a -> getMembers(accountabilityTypes, a.getChild()));
     }
 
     public Stream<User> getMemberStream(final Set<AccountabilityType> accountabilityTypes) {
@@ -303,11 +259,6 @@ public class Unit extends Unit_Base {
         } else {
             throw OrganizationDomainException.unknownPartyType();
         }
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.groups.PersistentUnitGroup> getUnitGroup() {
-        return getUnitGroupSet();
     }
 
 }

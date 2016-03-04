@@ -4,10 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
-import module.organization.domain.AccountabilityType;
-import module.organization.domain.Person;
-import module.organization.domain.Unit;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.annotation.GroupArgument;
 import org.fenixedu.bennu.core.annotation.GroupOperator;
@@ -16,6 +13,10 @@ import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.groups.CustomGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.joda.time.DateTime;
+
+import module.organization.domain.AccountabilityType;
+import module.organization.domain.Person;
+import module.organization.domain.Unit;
 
 @GroupOperator("unit")
 public class UnitGroup extends CustomGroup {
@@ -72,13 +73,13 @@ public class UnitGroup extends CustomGroup {
     }
 
     @Override
-    public Set<User> getMembers() {
-        return unit.getMembers(getAccountabilityTypes());
+    public Stream<User> getMembers() {
+        return unit.getMemberStream(getAccountabilityTypes());
     }
 
     @Override
-    public Set<User> getMembers(DateTime when) {
-        return getMembers();
+    public Stream<User> getMembers(final DateTime when) {
+        return unit.getMemberStream(getAccountabilityTypes(), when.toLocalDate());
     }
 
     @Override

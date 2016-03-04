@@ -30,16 +30,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Locale;
-
-import module.geography.domain.exception.GeographyDomainException;
-import module.geography.util.AddressPrinter;
-import module.organization.domain.Accountability;
-import module.organization.domain.Unit;
+import java.util.stream.Collectors;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
 
+import module.geography.domain.exception.GeographyDomainException;
+import module.geography.util.AddressPrinter;
+import module.organization.domain.AccountabilityType;
+import module.organization.domain.Unit;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -79,7 +79,7 @@ public class Country extends Country_Base {
         super();
         setBennu(Bennu.getInstance());
         setUnit(Unit.create(parent.getUnit(), name, iso3166alpha3Code, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
-                getOrCreateAccountabilityType(), new LocalDate(), null));
+                getOrCreateAccountabilityType(), new LocalDate(), null, null));
         setIso3166alpha2Code(iso3166alpha2Code);
         setIAddressPrinter(iAddressPrinter);
         setIso3166alpha3Code(iso3166alpha3Code);
@@ -94,7 +94,7 @@ public class Country extends Country_Base {
 
         setIAddressPrinter(iAddressPrinter);
         setUnit(Unit.create(parent.getUnit(), name, acronym, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
-                getOrCreateAccountabilityType(), new LocalDate(), null));
+                getOrCreateAccountabilityType(), new LocalDate(), null, null));
         for (CountrySubdivisionLevelName subdivisionName : subdivisionNames) {
             addLevelName(subdivisionName);
         }
@@ -170,12 +170,7 @@ public class Country extends Country_Base {
     }
 
     public Collection<CountrySubdivision> getChildren() {
-        Collection<Unit> units = getChildUnits();
-        Collection<CountrySubdivision> children = new ArrayList<CountrySubdivision>();
-        for (Unit unit : units) {
-            children.add((CountrySubdivision) unit.getGeographicLocation());
-        }
-        return children;
+        return getChildUnits().map(u -> (CountrySubdivision) u.getGeographicLocation()).collect(Collectors.toList());
     }
 
     /**
@@ -215,30 +210,24 @@ public class Country extends Country_Base {
      *         were active on the given date and of the
      */
     public Collection<CountrySubdivision> getChildrenValidAt(LocalDate date) {
-        Collection<Unit> units = getChildUnits();
+        Collection<Unit> units = getChildUnits().collect(Collectors.toList());
         Collection<CountrySubdivision> children = new ArrayList<CountrySubdivision>();
         for (Unit unit : units) {
-            for (Accountability accountability : unit.getParentAccountabilities(getOrCreateAccountabilityType())) {
-                if (accountability.isActive(date)) {
-                    children.add((CountrySubdivision) unit.getGeographicLocation());
-                }
-            }
+            final AccountabilityType type = getOrCreateAccountabilityType();
+            unit.getParentAccountabilityStream().filter(a -> a.getAccountabilityType() == type && a.isActive(date))
+                    .forEach(a -> children.add((CountrySubdivision) unit.getGeographicLocation()));
         }
         return children;
     }
 
     public CountrySubdivision getChildByAcronym(String acronym) {
-        for (Unit unit : getChildUnits()) {
-            if (unit.getAcronym().equals(acronym)) {
-                return (CountrySubdivision) unit.getGeographicLocation();
-            }
-        }
-        return null;
+        return getChildUnits().filter(u -> u.getAcronym().equals(acronym))
+                .map(u -> (CountrySubdivision) u.getGeographicLocation()).findAny().orElse(null);
     }
 
     public CountrySubdivision getChildByCode(String... codes) {
         String code = codes[0];
-        for (Unit subdivision : getChildUnits()) {
+        for (Unit subdivision : getChildUnits().collect(Collectors.toList())) {
             CountrySubdivision geographicLocation = (CountrySubdivision) subdivision.getGeographicLocation();
             if (geographicLocation.getCode().equals(code)) {
                 if (codes.length > 1) {
@@ -314,11 +303,11 @@ public class Country extends Country_Base {
         if (!same(getIso3166alpha2Code(), iso3166alpha2Code) || !same(getIso3166alpha3Code(), iso3166alpha3Code)
                 || !same(getIso3166numericCode(), iso3166numericCode) || !same(getName(), name)
                 || !same(getNationality(), nationality) || !same(getIAddressPrinter(), iAddressPrinter)) {
-            for (Accountability accountability : getUnit().getParentAccountabilities(getOrCreateAccountabilityType())) {
-                accountability.editDates(new LocalDate(), null);
-            }
+            final AccountabilityType type = getOrCreateAccountabilityType();
+            getUnit().getParentAccountabilityStream().filter(a -> a.getAccountabilityType() == type)
+                    .forEach(a -> a.editDates(new LocalDate(), null, null));
             setUnit(Unit.create(parent.getUnit(), name, iso3166alpha3Code, getPartyType("País", COUNTRY_PARTYTYPE_NAME),
-                    getOrCreateAccountabilityType(), new LocalDate(), null));
+                    getOrCreateAccountabilityType(), new LocalDate(), null, null));
             setIso3166alpha2Code(iso3166alpha2Code);
             setIAddressPrinter(iAddressPrinter);
             setIso3166alpha3Code(iso3166alpha3Code);

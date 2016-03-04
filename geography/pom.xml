@@ -10,12 +10,12 @@
     </parent>
 
     <artifactId>geography</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Geography</name>
 
     <properties>
-        <version.org.fenixedu.bennu>3.4.1</version.org.fenixedu.bennu>
+        <version.org.fenixedu.bennu>4.0.0.RC2</version.org.fenixedu.bennu>
         <version.org.apache.commons.commons-lang>3.3.2</version.org.apache.commons.commons-lang>
     </properties>
 

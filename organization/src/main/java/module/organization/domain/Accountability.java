@@ -29,15 +29,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import jvstm.cps.ConsistencyPredicate;
-import module.organization.domain.predicates.PartyPredicate.PartyByAccTypeAndDates;
-
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.domain.exceptions.DomainException;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import jvstm.cps.ConsistencyPredicate;
+import module.organization.domain.predicates.PartyPredicate.PartyByAccTypeAndDates;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -225,16 +224,6 @@ public class Accountability extends Accountability_Base {
     /**
      * It doesn't actually delete the accountability as it actually marks it as an accountability history item
      * 
-     * @deprecated use {@link #delete(String)} instead
-     */
-    @Deprecated
-    public void delete() {
-        setInactive(null);
-    }
-
-    /**
-     * It doesn't actually delete the accountability as it actually marks it as an accountability history item
-     * 
      * @param justification an information justification/reason for the change of accountability, or null if there is none, or
      *            none is provided
      */
@@ -254,21 +243,18 @@ public class Accountability extends Accountability_Base {
     }
 
     @Override
-    @Deprecated
-    public void setParent(Party parent) {
-        throw new OrganizationDomainException("should.not.use.this.method.delete.and.create.another.instead");
+    public Party getParent() {
+        return super.getParent();
     }
 
     @Override
-    @Deprecated
-    public void setChild(Party child) {
-        throw new OrganizationDomainException("should.not.use.this.method.delete.and.create.another.instead");
+    public Party getChild() {
+        return super.getChild();
     }
 
     @Override
-    @Deprecated
-    public void setAccountabilityType(AccountabilityType accountabilityType) {
-        throw new OrganizationDomainException("should.not.use.this.method.delete.and.create.another.instead");
+    public AccountabilityType getAccountabilityType() {
+        return super.getAccountabilityType();
     }
 
     /**
@@ -282,7 +268,7 @@ public class Accountability extends Accountability_Base {
     }
 
     public void setBeginDate(LocalDate beginDate) {
-        editDates(beginDate, getEndDate());
+        editDates(beginDate, getEndDate(), null);
     }
 
     /**
@@ -296,22 +282,7 @@ public class Accountability extends Accountability_Base {
     }
 
     public void setEndDate(LocalDate endDate) {
-        editDates(getBeginDate(), endDate);
-    }
-
-    /**
-     * Marks the current accountability as an historic one and creates a new one
-     * based on the new dates
-     * 
-     * @param begin
-     *            the new begin date
-     * @param end
-     *            the new end date
-     * @deprecated use the {@link #editDates(LocalDate, LocalDate, String)} instead
-     */
-    @Deprecated
-    public void editDates(final LocalDate begin, final LocalDate end) {
-        editDates(begin, end, null);
+        editDates(getBeginDate(), endDate, null);
     }
 
     /**
@@ -396,7 +367,9 @@ public class Accountability extends Accountability_Base {
 
         // let's iterate through the parties
         for (Party party : parties) {
-            accountabilities.addAll(party.getAccountabilitiesAndHistoricItems(accTypes, startDate, endDate));
+            final PartyByAccTypeAndDates predicate = new PartyByAccTypeAndDates(startDate, endDate, accTypes);
+            party.getParentAccountabilitiesSet().stream().filter(a -> predicate.eval(a.getChild(), a)).forEach(a -> accountabilities.add(a));
+            party.getChildAccountabilityStream().filter(a -> predicate.eval(a.getParent(), a)).forEach(a -> accountabilities.add(a));
         }
         // if no parties have been specified, we will get all of the
         // accountabilities!!
@@ -448,11 +421,6 @@ public class Accountability extends Accountability_Base {
 
     public void switchChild(final Party newChild) {
         super.setChild(newChild);
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.FunctionDelegation> getFunctionDelegationDelegated() {
-        return getFunctionDelegationDelegatedSet();
     }
 
 }

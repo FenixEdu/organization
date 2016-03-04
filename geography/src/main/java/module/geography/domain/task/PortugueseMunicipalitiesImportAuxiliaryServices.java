@@ -33,15 +33,15 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import module.geography.domain.Country;
-import module.geography.domain.CountrySubdivision;
-import module.geography.util.GeographyPropertiesManager;
-import module.organization.domain.Accountability;
-
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import module.geography.domain.Country;
+import module.geography.domain.CountrySubdivision;
+import module.geography.util.GeographyPropertiesManager;
+import module.organization.domain.Accountability;
+import module.organization.domain.AccountabilityType;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -65,8 +65,8 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
 
     protected int touches = 0;
 
-    private final LocalizedString municipalityLevelName = new LocalizedString().with(new Locale("pt"), "Concelho").with(
-            Locale.ENGLISH, "Municipality");
+    private final LocalizedString municipalityLevelName =
+            new LocalizedString().with(new Locale("pt"), "Concelho").with(Locale.ENGLISH, "Municipality");
 
     private static PortugueseMunicipalitiesImportAuxiliaryServices singletonHolder;
 
@@ -90,9 +90,8 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
         ArrayList<CountrySubdivision> existingMunicipalities = new ArrayList<CountrySubdivision>();
 
         try {
-            File file =
-                    new File(GeographyPropertiesManager.getConfiguration().getGeographyImportFilesLocation()
-                            + CTT_MUNICIPALITIESFILE);
+            File file = new File(
+                    GeographyPropertiesManager.getConfiguration().getGeographyImportFilesLocation() + CTT_MUNICIPALITIESFILE);
             DateTime lastReview = new DateTime(file.lastModified());
             FileInputStream fileReader = new FileInputStream(file);
             reader = new LineNumberReader(new InputStreamReader(fileReader, "ISO-8859-1"));
@@ -107,10 +106,10 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
                 if (district == null) {
                     // abort the transaction!! throw some kind of exception
                     // and warn the user of the outcome
-                    originalTask.auxLogInfo("Script aborted because the district with code: " + districtCode
-                            + " couldn't be found");
-                    throw new RuntimeException("Script aborted because the district with code: " + districtCode
-                            + " couldn't be found");
+                    originalTask
+                            .auxLogInfo("Script aborted because the district with code: " + districtCode + " couldn't be found");
+                    throw new RuntimeException(
+                            "Script aborted because the district with code: " + districtCode + " couldn't be found");
                 } else {
                     // get the municipality
                     municipality = district.getChildByCode(municipalityCode);
@@ -133,7 +132,7 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
                     existingMunicipalities.add(countrySubdivision);
                 }
             } // let's assert
-              // which ones are in excess and remove them
+             // which ones are in excess and remove them
             existingMunicipalities.removeAll(municipalitiesOnFile);
             for (CountrySubdivision countrySubdivision : existingMunicipalities) {
                 removeMunicipality(countrySubdivision);
@@ -160,14 +159,9 @@ public class PortugueseMunicipalitiesImportAuxiliaryServices {
     private void removeMunicipality(CountrySubdivision municipality) {
         // modify the district by setting the accountability of the last one
         // end before the date of the last review
-        Accountability activeAccountability = null;
-        for (Accountability accountability : municipality.getUnit().getParentAccountabilities(
-                municipality.getOrCreateAccountabilityType())) {
-            if (accountability.isActiveNow()) {
-                activeAccountability = accountability;
-            }
-        }
-
+        final AccountabilityType type = municipality.getOrCreateAccountabilityType();
+        Accountability activeAccountability = municipality.getUnit().getParentAccountabilityStream()
+                .filter(a -> a.getAccountabilityType() == type && a.isActiveNow()).findAny().orElse(null);
         if (activeAccountability != null) {
             // make the accountability expire a minimal measure of time before
             // of

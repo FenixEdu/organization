@@ -161,19 +161,4 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
         return null;
     }
 
-    @Deprecated
-    public java.util.Set<module.organization.domain.connectionRules.PartyTypeConnectionRule> getParentConnectionRules() {
-        return getParentConnectionRulesSet();
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.connectionRules.PartyTypeConnectionRule> getChildConnectionRules() {
-        return getChildConnectionRulesSet();
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.Party> getParties() {
-        return getPartiesSet();
-    }
-
 }

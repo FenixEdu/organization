@@ -53,42 +53,34 @@ public class AccountabilityVersion extends AccountabilityVersion_Base {
         super.setUserWhoCreated(Authenticate.getUser());
     }
 
-    // let's protect all of the methods that could compromise the workings of
-    // the Acc. Version
-    @Deprecated
     @Override
-    public void setAccountability(Accountability accountability) {
-        throw new UnsupportedOperationException("this.slot.shouldn't.be.editable.make.new.object.instead");
+    public Accountability getAccountability() {
+        return super.getAccountability();
     }
 
-    @Deprecated
     @Override
-    public void setErased(boolean erased) {
-        throw new UnsupportedOperationException("this.slot.shouldn't.be.editable.make.new.object.instead");
+    public boolean getErased() {
+        return super.getErased();
     }
 
-    @Deprecated
     @Override
-    public void setBeginDate(LocalDate beginDate) {
-        throw new UnsupportedOperationException("this.slot.shouldn't.be.editable.make.new.object.instead");
+    public LocalDate getBeginDate() {
+        return super.getBeginDate();
     }
 
-    @Deprecated
     @Override
-    public void setEndDate(LocalDate endDate) {
-        throw new UnsupportedOperationException("this.slot.shouldn't.be.editable.make.new.object.instead");
+    public LocalDate getEndDate() {
+        return super.getEndDate();
     }
 
-    @Deprecated
     @Override
-    public void setCreationDate(DateTime creationDate) {
-        throw new UnsupportedOperationException("this.slot.shouldn't.be.editable.make.new.object.instead");
+    public DateTime getCreationDate() {
+        return super.getCreationDate();
     }
 
-    @Deprecated
     @Override
-    public void setUserWhoCreated(User userWhoCreated) {
-        throw new UnsupportedOperationException("this.slot.shouldn't.be.editable.make.new.object.instead");
+    public User getUserWhoCreated() {
+        return super.getUserWhoCreated();
     }
 
     @ConsistencyPredicate

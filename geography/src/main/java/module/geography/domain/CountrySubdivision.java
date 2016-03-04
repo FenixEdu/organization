@@ -29,14 +29,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Locale;
-
-import module.geography.domain.exception.GeographyDomainException;
-import module.organization.domain.Accountability;
-import module.organization.domain.Unit;
+import java.util.stream.Collectors;
 
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
 
+import module.geography.domain.exception.GeographyDomainException;
+import module.organization.domain.Accountability;
+import module.organization.domain.AccountabilityType;
+import module.organization.domain.Unit;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -73,7 +74,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
         this();
         setUnit(Unit.create(parent, new LocalizedString().with(new Locale("pt"), name).with(Locale.ENGLISH, name), acronym,
                 getPartyType("Subdivisão de País", COUNTRY_SUBDIVISION_PARTYTYPE_NAME), getOrCreateAccountabilityType(),
-                new LocalDate(), null));
+                new LocalDate(), null, null));
         setLevel(level);
         setCode(code);
     }
@@ -136,25 +137,19 @@ public class CountrySubdivision extends CountrySubdivision_Base {
      * @return a collection with the active children at the given time {@link Accountability}
      */
     public Collection<CountrySubdivision> getChildren(LocalDate date) {
-        Collection<Unit> units = getChildUnits();
+        Collection<Unit> units = getChildUnits().collect(Collectors.toList());
         Collection<CountrySubdivision> children = new ArrayList<CountrySubdivision>();
         for (Unit unit : units) {
-            for (Accountability accountability : unit.getParentAccountabilities(getOrCreateAccountabilityType())) {
-                if (accountability.isActive(date)) {
-                    children.add((CountrySubdivision) unit.getGeographicLocation());
-                }
-            }
+            final AccountabilityType type = getOrCreateAccountabilityType();
+            unit.getParentAccountabilityStream().filter(a -> a.getAccountabilityType() == type && a.isActive(date))
+                    .forEach(a -> children.add((CountrySubdivision) unit.getGeographicLocation()));
         }
         return children;
     }
 
     public CountrySubdivision getChildByAcronym(String acronym) {
-        for (Unit unit : getChildUnits()) {
-            if (unit.getAcronym().equals(acronym)) {
-                return (CountrySubdivision) unit.getGeographicLocation();
-            }
-        }
-        return null;
+        return getChildUnits().filter(u -> u.getAcronym().equals(acronym))
+                .map(u -> (CountrySubdivision) u.getGeographicLocation()).findAny().orElse(null);
     }
 
     public CountrySubdivision getChildByCode(String... codes) {
@@ -178,9 +173,7 @@ public class CountrySubdivision extends CountrySubdivision_Base {
     public void delete() {
         Unit unit = this.getUnit();
         setUnit(null);
-        for (Accountability accountability : unit.getChildAccountabilities()) {
-            unit.removeChildAccountabilities(accountability);
-        }
+        unit.getChildAccountabilityStream().forEach(a -> a.getChild().removeParent(a));
         unit.delete();
         this.deleteDomainObject();
 

@@ -25,18 +25,20 @@
 package module.geography.domain;
 
 import java.text.Collator;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.commons.i18n.LocalizedString;
 
 import module.geography.domain.exception.GeographyDomainException;
+import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.AccountabilityType.AccountabilityTypeBean;
 import module.organization.domain.PartyType;
 import module.organization.domain.Unit;
-
-import org.fenixedu.bennu.core.domain.Bennu;
-import org.fenixedu.commons.i18n.LocalizedString;
 
 /**
  * Abstract location concept. If you can put it in a "where" sentence it should
@@ -103,15 +105,17 @@ public abstract class GeographicLocation extends GeographicLocation_Base impleme
     public abstract LocalizedString getType();
 
     protected GeographicLocation getParentLocation() {
-        Collection<Unit> parents = getUnit().getParentUnits(AccountabilityType.readBy(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME));
-        if (parents.size() != 1) {
+        final AccountabilityType type = AccountabilityType.readBy(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME);
+        final Supplier<Stream<Accountability>> supplier = () -> getUnit().getParentAccountabilityStream().filter(a -> a.getAccountabilityType() == type);
+        if (supplier.get().count() != 1) {
             throw new GeographyDomainException("error.geography.invalid-organizational-structure");
         }
-        return parents.iterator().next().getGeographicLocation();
+        return supplier.get().map(a -> (Unit) a.getParent()).findAny().orElseThrow(() -> new Error("Unreachable code")).getGeographicLocation();
     }
 
-    protected Collection<Unit> getChildUnits() {
-        return getUnit().getChildUnits(AccountabilityType.readBy(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME));
+    protected Stream<Unit> getChildUnits() {
+        final AccountabilityType type = AccountabilityType.readBy(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME);
+        return getUnit().getChildAccountabilityStream().filter(a -> a.getAccountabilityType() == type).map(a -> (Unit) a.getChild());
     }
 
     public static AccountabilityType getOrCreateAccountabilityType() {
@@ -138,4 +142,5 @@ public abstract class GeographicLocation extends GeographicLocation_Base impleme
         }
         return new PartyType(en, new LocalizedString().with(new Locale("pt"), pt).with(Locale.ENGLISH, en));
     }
+
 }

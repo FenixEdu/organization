@@ -31,12 +31,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
@@ -45,8 +43,6 @@ import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.commons.i18n.I18N;
 import org.joda.time.LocalDate;
 
-import module.organization.domain.predicates.PartyPredicate;
-import module.organization.domain.predicates.PartyPredicate.PartyByAccTypeAndDates;
 import module.organization.domain.predicates.PartyPredicate.PartyByAccountabilityType;
 import module.organization.domain.predicates.PartyPredicate.PartyByClassType;
 import module.organization.domain.predicates.PartyPredicate.PartyByPartyType;
@@ -88,56 +84,12 @@ abstract public class Party extends Party_Base {
         setMyOrg(Bennu.getInstance());
     }
 
-    /**
-     * 
-     * @return gets all of immediately above parents
-     */
-    public Collection<Party> getParentStream() {
-        return getParents(new TruePartyPredicate());
-    }
-
-    public Collection<Party> getParents(final AccountabilityType type) {
-        return getParents(new PartyByAccountabilityType(type));
-    }
-
-    public Collection<Party> getParents(final Collection<AccountabilityType> types) {
-        return getParents(new PartyByAccountabilityType(types));
-    }
-
-    public Collection<Party> getParents(final PartyType type) {
-        return getParents(new PartyByPartyType(type));
-    }
-
-    public Collection<Unit> getParentUnits() {
-        return getParents(new PartyByClassType(Unit.class));
-    }
-
-    public Collection<Unit> getParentUnits(final AccountabilityType type) {
-        return getParents(new PartyByAccountabilityType(Unit.class, type));
-    }
-
-    public Collection<Unit> getParentUnits(final PartyType type) {
-        return getParents(new PartyByPartyType(Unit.class, type));
+    public Stream<Party> getParentStream() {
+        return getParentAccountabilityStream().map(a -> a.getParent());
     }
 
     public Set<Accountability> getAllParentAccountabilities() {
         return super.getParentAccountabilitiesSet();
-    }
-
-    // Overriden methods to hide the erased accs:
-    /**
-     * @deprecated use getParentAccountabilityStream instead
-     */
-    @Deprecated
-    @Override
-    public Set<Accountability> getParentAccountabilitiesSet() {
-        Set<Accountability> accsToReturn = new HashSet<Accountability>();
-        for (Accountability acc : super.getParentAccountabilitiesSet()) {
-            if (!acc.isErased()) {
-                accsToReturn.add(acc);
-            }
-        }
-        return accsToReturn;
     }
 
     public Stream<Accountability> getParentAccountabilityStream() {
@@ -149,178 +101,9 @@ abstract public class Party extends Party_Base {
         return super.getParentAccountabilitiesSet().iterator();
     }
 
-    /**
-     * @deprecated use getChildAccountabilityStream instead
-     */
-    @Deprecated
-    @Override
-    public Set<Accountability> getChildAccountabilitiesSet() {
-        Set<Accountability> accsToReturn = new HashSet<Accountability>();
-        for (Accountability acc : super.getChildAccountabilitiesSet()) {
-            if (!acc.isErased()) {
-                accsToReturn.add(acc);
-            }
-        }
-        return accsToReturn;
-    }
-
     public Stream<Accountability> getChildAccountabilityStream() {
         final Stream<Accountability> stream = super.getChildAccountabilitiesSet().stream();
         return stream.filter(a -> !a.isErased());
-    }
-
-    @Deprecated
-    @Override
-    public void removeChildAccountabilities(Accountability childAccountabilities) {
-        throw new UnsupportedOperationException("dont.use.this.api");
-    }
-
-    @Deprecated
-    @Override
-    public void removeParentAccountabilities(Accountability parentAccountabilities) {
-        throw new UnsupportedOperationException("dont.use.this.api");
-    }
-
-    @Deprecated
-    @Override
-    public void addChildAccountabilities(Accountability childAccountabilities) {
-        throw new UnsupportedOperationException("dont.use.this.api");
-    }
-
-    @Deprecated
-    @Override
-    public void addParentAccountabilities(Accountability parentAccountabilities) {
-        throw new UnsupportedOperationException("dont.use.this.api");
-    }
-
-    //end of overriden methods
-    /**
-     * @deprecated use getParentAccountabilityStream instead
-     */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public <T extends Party> Collection<T> getParents(final PartyPredicate predicate) {
-        final Stream<Accountability> stream = getParentAccountabilityStream();
-        return stream.filter(a -> predicate.eval(a.getParent(), a)).map(a -> (T) a.getParent()).collect(Collectors.toList());
-    }
-
-    public Collection<Accountability> getParentAccountabilities(final LocalDate startDate, final LocalDate endDate,
-            final AccountabilityType... types) {
-        return getParentAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, types));
-    }
-
-    public Collection<? extends Accountability> getParentAccountabilities(LocalDate startDate, LocalDate endDate,
-            List<AccountabilityType> accTypes) {
-        return getParentAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, accTypes));
-    }
-
-    public Collection<Accountability> getChildrenAccountabilities(final LocalDate startDate, final LocalDate endDate,
-            final AccountabilityType... types) {
-        return getChildrenAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, types));
-    }
-
-    public Collection<? extends Accountability> getChildrenAccountabilities(LocalDate startDate, LocalDate endDate,
-            List<AccountabilityType> accTypes) {
-        return getChildrenAccountabilities(new PartyByAccTypeAndDates(startDate, endDate, accTypes));
-    }
-
-    public Collection<Accountability> getParentAccountabilities(final Collection<AccountabilityType> types) {
-        return getParentAccountabilities(new PartyByAccountabilityType(types));
-    }
-
-    public Collection<Accountability> getParentAccountabilities(final AccountabilityType... types) {
-        return getParentAccountabilities(new PartyByAccountabilityType(types));
-    }
-
-    /**
-     * @deprecated use getParentAccountabilityStream instead
-     */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    protected <T extends Accountability> Collection<T> getParentAccountabilities(final PartyPredicate predicate) {
-        final Stream<Accountability> stream = getParentAccountabilityStream();
-        return stream.filter(a -> predicate.eval(a.getParent(), a)).map(a -> (T) a).collect(Collectors.toList());
-    }
-
-    public Collection<Party> getChildren() {
-        return getChildren(new TruePartyPredicate());
-    }
-
-    public Collection<Party> getChildren(final AccountabilityType type) {
-        return getChildren(new PartyByAccountabilityType(type));
-    }
-
-    public Collection<Party> getChildren(final Collection<AccountabilityType> types) {
-        return getChildren(new PartyByAccountabilityType(types));
-    }
-
-    public Collection<Party> getChildren(final PartyType type) {
-        return getChildren(new PartyByPartyType(type));
-    }
-
-    public Collection<Unit> getChildUnits() {
-        return getChildren(new PartyByClassType(Unit.class));
-    }
-
-    public Collection<Unit> getChildUnits(final AccountabilityType type) {
-        return getChildren(new PartyByAccountabilityType(Unit.class, type));
-    }
-
-    public Collection<Unit> getChildUnits(final Collection<AccountabilityType> types) {
-        return getChildren(new PartyByAccountabilityType(Unit.class, types));
-    }
-
-    public Collection<Unit> getChildUnits(final PartyType type) {
-        return getChildren(new PartyByPartyType(Unit.class, type));
-    }
-
-    public Collection<Person> getChildPersons() {
-        return getChildren(new PartyByClassType(Person.class));
-    }
-
-    public Collection<Person> getChildPersons(final AccountabilityType type) {
-        return getChildren(new PartyByAccountabilityType(Person.class, type));
-    }
-
-    public Collection<Person> getChildPersons(final Collection<AccountabilityType> types) {
-        return getChildren(new PartyByAccountabilityType(Person.class, types));
-    }
-
-    public Collection<Person> getChildPersons(final PartyType type) {
-        return getChildren(new PartyByPartyType(Person.class, type));
-    }
-
-    /**
-     * @deprecated use getChildAccountabilityStream instead
-     */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public <T extends Party> Collection<T> getChildren(final PartyPredicate predicate) {
-        final Stream<Accountability> stream = getChildAccountabilityStream();
-        return stream.filter(a -> predicate.eval(a.getChild(), a)).map(a -> (T) a.getChild()).collect(Collectors.toList());
-    }
-
-    public Collection<Accountability> getChildrenAccountabilities(final Collection<AccountabilityType> types) {
-        return getChildrenAccountabilities(new PartyByAccountabilityType(types));
-    }
-
-    public Collection<Accountability> getChildrenAccountabilities(final AccountabilityType... types) {
-        return getChildrenAccountabilities(new PartyByAccountabilityType(types));
-    }
-
-    public Collection<Accountability> getChildrenAccountabilities(final Class<? extends Party> clazz,
-            final Collection<AccountabilityType> types) {
-        return getChildrenAccountabilities(new PartyByAccountabilityType(clazz, types));
-    }
-
-    /**
-     * @deprecated use getChildAccountabilityStream instead
-     */
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    protected <T extends Accountability> Collection<T> getChildrenAccountabilities(final PartyPredicate predicate) {
-        final Stream<Accountability> stream = getChildAccountabilityStream();
-        return stream.filter(a -> predicate.eval(a.getChild(), a)).map(a -> (T) a).collect(Collectors.toList());
     }
 
     public Collection<Party> getAncestors() {
@@ -398,16 +181,6 @@ abstract public class Party extends Party_Base {
         return result.getResult();
     }
 
-    /**
-     * @deprecated use getDescendentUnitStream instead
-     */
-    @Deprecated
-    public Collection<Unit> getDescendentUnits() {
-        final PartyResultCollection result = new PartyResultCollection(new PartyByClassType(Unit.class));
-        getDescendents(result);
-        return result.getResult();
-    }
-
     public Stream<Unit> getDescendentUnitStream() {
         return getChildAccountabilityStream().map(a -> a.getChild()).filter(p -> p.isUnit()).map(p -> (Unit) p)
                 .flatMap(new Function<Unit, Stream<Unit>>() {
@@ -459,14 +232,6 @@ abstract public class Party extends Party_Base {
         });
     }
 
-    /**
-     * @deprecated use getSiblingStream instead
-     */
-    @Deprecated
-    public Collection<Party> getSiblings() {
-        return getSiblingStream().collect(Collectors.toList());
-    }
-
     public Stream<Party> getSiblingStream() {
         return getParentAccountabilityStream().map(a -> a.getParent()).flatMap(p -> p.getChildAccountabilityStream())
                 .map(a -> a.getChild()).filter(p -> p != this);
@@ -494,8 +259,8 @@ abstract public class Party extends Party_Base {
     }
 
     protected void disconnect() {
-        super.getParentAccountabilitiesSet().forEach(a -> a.delete());
-        getPartyTypes().clear();
+        super.getParentAccountabilitiesSet().forEach(a -> a.delete(null));
+        getPartyTypesSet().clear();
         setMyOrg(null);
     }
 
@@ -513,36 +278,6 @@ abstract public class Party extends Party_Base {
     public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin, final LocalDate end,
             String justification) {
         return Accountability.create(parent, this, type, begin, end, justification);
-    }
-
-    /**
-     * 
-     * @deprecated Use {@link #addParent(Party, AccountabilityType, LocalDate, LocalDate, String)} instead
-     * @param parent parent
-     * @param type type
-     * @param begin begin
-     * @param end end
-     * @return Accountability
-     */
-    @Deprecated
-    public Accountability addParent(final Party parent, final AccountabilityType type, final LocalDate begin,
-            final LocalDate end) {
-        return addParent(parent, type, begin, end, null);
-
-    }
-
-    /**
-     * 
-     * @param child child
-     * @param type type
-     * @param begin begin
-     * @param end end
-     * @return Accountability
-     * @deprecated Use {@link #addChild(Party, AccountabilityType, LocalDate, LocalDate, String)} instead
-     */
-    @Deprecated
-    public Accountability addChild(final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
-        return addChild(child, type, begin, end, null);
     }
 
     /**
@@ -566,7 +301,7 @@ abstract public class Party extends Party_Base {
             }
             if (end == null || (end != null && intersectingAccountability.getEndDate() != null
                     && end.isAfter(intersectingAccountability.getEndDate()))) {
-                intersectingAccountability.editDates(intersectingAccountability.getBeginDate(), end);
+                intersectingAccountability.editDates(intersectingAccountability.getBeginDate(), end, null);
             }
             return intersectingAccountability;
         }
@@ -589,7 +324,7 @@ abstract public class Party extends Party_Base {
     private Accountability getIntersectingChildAccountability(final Party child, final AccountabilityType type,
             final LocalDate begin, final LocalDate end) {
         Accountability intersectingAccountability = null;
-        for (final Accountability accountability : getChildAccountabilities()) {
+        for (final Accountability accountability : getChildAccountabilitiesSet()) {
             if (accountability.getChild() == child && accountability.getAccountabilityType() == type
                     && accountability.intersects(begin, end)) {
                 if (intersectingAccountability != null) {
@@ -607,14 +342,14 @@ abstract public class Party extends Party_Base {
             if (isUnit() && getParentAccountabilitiesSet().size() == 1) {
                 throw new OrganizationDomainException("error.Party.cannot.remove.parent.accountability");
             }
-            accountability.delete();
+            accountability.delete(null);
         }
     }
 
     @Atomic
     public void editPartyTypes(final List<PartyType> partyTypes) {
-        getPartyTypes().retainAll(partyTypes);
-        getPartyTypes().addAll(partyTypes);
+        getPartyTypesSet().retainAll(partyTypes);
+        getPartyTypesSet().addAll(partyTypes);
 
         if (getPartyTypesSet().isEmpty()) {
             throw new OrganizationDomainException("error.Party.must.have.at.least.one.party.type");
@@ -659,20 +394,6 @@ abstract public class Party extends Party_Base {
 
     public boolean isAuthorizedToManage() {
         return DynamicGroup.get("managers").isMember(Authenticate.getUser());
-    }
-
-    /**
-     * Use hasChildAccountabilityIncludingAncestry with Predicate instead
-     */
-    @Deprecated
-    public boolean hasChildAccountabilityIncludingAncestry(final Collection<AccountabilityType> accountabilityTypes,
-            final Party party) {
-        return hasChildAccountabilityIncludingAncestry(new Predicate<Accountability>() {
-            @Override
-            public boolean test(Accountability a) {
-                return accountabilityTypes.contains(a.getAccountabilityType());
-            }
-        }, party);
     }
 
     public boolean hasChildAccountabilityIncludingAncestry(final Predicate<Accountability> accountabilityPredicate,
@@ -731,14 +452,7 @@ abstract public class Party extends Party_Base {
     }
 
     public boolean hasDirectActiveAncestry(final AccountabilityType accountabilityType, final LocalDate when) {
-        return !getParents(new PartyPredicate() {
-
-            @Override
-            public boolean eval(Party party, Accountability accountability) {
-                return accountability.getAccountabilityType() == accountabilityType && accountability.isActive(when);
-            }
-
-        }).isEmpty();
+        return getParentAccountabilityStream().anyMatch(a -> a.getAccountabilityType() == accountabilityType && a.isActive(when));
     }
 
     private boolean hasParentWithActiveAncestry(final AccountabilityType accountabilityType, final LocalDate when) {
@@ -757,57 +471,6 @@ abstract public class Party extends Party_Base {
         return getParentAccountabilityStream()
                 .filter(a -> accountabilityTypes.contains(a.getAccountabilityType()) && a.isActive(when)).map(a -> a.getParent())
                 .anyMatch(p -> p == party || p.hasPartyAsAncestor(party, accountabilityTypes));
-    }
-
-    /**
-     * 
-     * @param accTypes
-     *            the AccountabilityType types to use on the retrieval or null
-     *            to get all
-     * @param dateOfStart
-     *            the mininum date to retrieve elements for, or null if there is
-     *            no minimum
-     * @param dateOfEnd
-     *            the maximum date to retrieve elements for, or null if there is
-     *            no maximum
-     * @return a list of historic and actual Accountabilities {@link Accountability}
-     */
-    public SortedSet<Accountability> getAccountabilitiesAndHistoricItems(List<AccountabilityType> accTypes, LocalDate dateOfStart,
-            LocalDate dateOfEnd) {
-        TreeSet<Accountability> accountabilities =
-                new TreeSet<Accountability>(Accountability.COMPARATOR_BY_CREATION_DATE_FALLBACK_TO_START_DATE);
-
-        accountabilities.addAll(getParentAccountabilities(dateOfStart, dateOfEnd, accTypes));
-        accountabilities.addAll(getChildrenAccountabilities(dateOfStart, dateOfEnd, accTypes));
-
-        return accountabilities;
-
-    }
-
-    /**
-     * @deprecated use getParentAccountabilityStream instead
-     */
-    @Deprecated
-    public java.util.Set<module.organization.domain.Accountability> getParentAccountabilities() {
-        return getParentAccountabilitiesSet();
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.OrganizationalModel> getOrganizationalModels() {
-        return getOrganizationalModelsSet();
-    }
-
-    /**
-     * @deprecated use getChildAccountabilityStream instead
-     */
-    @Deprecated
-    public java.util.Set<module.organization.domain.Accountability> getChildAccountabilities() {
-        return getChildAccountabilitiesSet();
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.PartyType> getPartyTypes() {
-        return getPartyTypesSet();
     }
 
 }

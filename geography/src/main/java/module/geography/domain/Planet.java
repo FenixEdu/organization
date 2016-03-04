@@ -24,14 +24,14 @@
  */
 package module.geography.domain;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
-
-import module.organization.domain.Unit;
+import java.util.stream.Collectors;
 
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
+
+import module.organization.domain.Unit;
 
 /**
  * Planets. Some have intelligent life in them, most of which would like it
@@ -45,8 +45,7 @@ public class Planet extends Planet_Base {
     public Planet(Galaxy parent, LocalizedString name, String acronym) {
         super();
         setUnit(Unit.create(parent.getUnit(), name, acronym, getPartyType("Planeta", PLANET_PARTYTYPE_NAME),
-                getOrCreateAccountabilityType(), new LocalDate(), null));
-
+                getOrCreateAccountabilityType(), new LocalDate(), null, null));
     }
 
     @Override
@@ -59,21 +58,12 @@ public class Planet extends Planet_Base {
     }
 
     public Collection<Country> getChildren() {
-        Collection<Unit> units = getChildUnits();
-        Collection<Country> children = new ArrayList<Country>();
-        for (Unit unit : units) {
-            children.add((Country) unit.getGeographicLocation());
-        }
-        return children;
+        return getChildUnits().map(u -> (Country) u.getGeographicLocation()).collect(Collectors.toList());
     }
 
     public Country getChildByAcronym(String acronym) {
-        for (Unit unit : getChildUnits()) {
-            if (unit.getAcronym().equals(acronym)) {
-                return (Country) unit.getGeographicLocation();
-            }
-        }
-        return null;
+        return getChildUnits().filter(u -> u.getAcronym().equals(acronym)).map(u -> (Country) u.getGeographicLocation()).findAny()
+                .orElse(null);
     }
 
     public static Planet getEarth() {

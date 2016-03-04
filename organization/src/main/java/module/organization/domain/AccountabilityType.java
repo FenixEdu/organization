@@ -189,34 +189,4 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
         getConnectionRulesSet().addAll(connectionRules);
     }
 
-    @Deprecated
-    public java.util.Set<module.organization.domain.groups.PersistentUnitGroup> getUnitGroupFromChildUnitAccountabilityType() {
-        return getUnitGroupFromChildUnitAccountabilityTypeSet();
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.ConnectionRule> getConnectionRules() {
-        return getConnectionRulesSet();
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.OrganizationalModel> getOrganizationalModels() {
-        return getOrganizationalModelsSet();
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.groups.PersistentUnitGroup> getUnitGroupFromMemberAccountabilityType() {
-        return getUnitGroupFromMemberAccountabilityTypeSet();
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.UnconfirmedAccountability> getUnconfirmedAccountabilities() {
-        return getUnconfirmedAccountabilitiesSet();
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.Accountability> getAccountabilities() {
-        return getAccountabilitiesSet();
-    }
-
 }

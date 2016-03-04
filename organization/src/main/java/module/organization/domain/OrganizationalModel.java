@@ -26,11 +26,9 @@ package module.organization.domain;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
@@ -92,14 +90,6 @@ public class OrganizationalModel extends OrganizationalModel_Base {
         getAccountabilityTypesSet().addAll(accountabilityTypes);
     }
 
-    /**
-     * @deprecated use getAllUnitStream instead
-     */
-    @Deprecated
-    public Set<Unit> getAllUnits() {
-        return getAllUnitStream().collect(Collectors.toSet());
-    }
-
     public Stream<Unit> getAllUnitStream() {
         return getPartiesSet().stream().filter(p -> p.isUnit()).map(p -> (Unit) p).flatMap(new Function<Unit, Stream<Unit>>() {
             @Override
@@ -116,16 +106,6 @@ public class OrganizationalModel extends OrganizationalModel_Base {
         return party.getParentAccountabilityStream()
                 .filter(a -> a.isActiveNow() && getAccountabilityTypesSet().contains(a.getAccountabilityType()))
                 .map(a -> a.getParent()).anyMatch(p -> containsUnit(p));
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.Party> getParties() {
-        return getPartiesSet();
-    }
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.AccountabilityType> getAccountabilityTypes() {
-        return getAccountabilityTypesSet();
     }
 
 }

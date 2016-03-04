@@ -34,17 +34,13 @@ class module.organization.domain.Accountability {
 }
 
 class module.organization.domain.AccountabilityVersion {
-	DateTime creationDate;
-	LocalDate beginDate;
-	LocalDate endDate;
-	boolean erased;
-	String justification;
+	protected DateTime creationDate;
+	protected LocalDate beginDate;
+	protected LocalDate endDate;
+	protected boolean erased;
+	protected String justification;
 }
 
-	class module.organization.domain.UnconfirmedAccountability extends module.organization.domain.Accountability {
-		DateTime submited;
-	}
-	
 class module.organization.domain.PartyType {
 	String type;
 	LocalizedString name;
@@ -72,9 +68,6 @@ class module.organization.domain.ConnectionRule {
 
 class module.organization.domain.OrganizationalModel {
 	LocalizedString name;
-}
-
-class module.organization.domain.groups.PersistentPersonGroup extends org.fenixedu.bennu.core.domain.groups.GroupConstant {
 }
 
 class module.organization.domain.groups.PersistentUnitGroup extends org.fenixedu.bennu.core.domain.groups.PersistentGroup {
@@ -121,17 +114,10 @@ relation MyOrgPartyType {
 }
 
 relation AccountabilityAccountabilityType {
-	module.organization.domain.Accountability playsRole accountabilities {
+	protected module.organization.domain.Accountability playsRole accountabilities {
 		multiplicity *;
 	}
-	module.organization.domain.AccountabilityType playsRole accountabilityType;
-}
-
-relation UnconfirmedAccountabilityAccountabilityType {
-	module.organization.domain.UnconfirmedAccountability playsRole unconfirmedAccountabilities {
-		multiplicity *;
-	}
-	module.organization.domain.AccountabilityType playsRole unconfirmedAccountabilityType;
+	protected module.organization.domain.AccountabilityType playsRole accountabilityType;
 }
 
 relation MyOrgParty {
@@ -191,43 +177,43 @@ relation PartyTypeParty {
 
 //FENIX-331 - needed relation
 relation AccountabilityAccountabilityVersion {
-	module.organization.domain.Accountability playsRole accountability {
+	protected module.organization.domain.Accountability playsRole accountability {
 		multiplicity 1;
 	}
-	module.organization.domain.AccountabilityVersion playsRole accountabilityVersion {
+	protected module.organization.domain.AccountabilityVersion playsRole accountabilityVersion {
 		multiplicity 1;
 	}
 }
 
 relation AccountabilityVersionAccountabilityVersion {
-	module.organization.domain.AccountabilityVersion playsRole previousAccVersion {
+	protected module.organization.domain.AccountabilityVersion playsRole previousAccVersion {
 		multiplicity 0..1;
 	}
-	module.organization.domain.AccountabilityVersion playsRole nextAccVersion {
+	protected module.organization.domain.AccountabilityVersion playsRole nextAccVersion {
 		multiplicity 0..1;
 	}
 }
 
 relation AccountabilityVersionUser {
-	org.fenixedu.bennu.core.domain.User playsRole userWhoCreated {
+	protected org.fenixedu.bennu.core.domain.User playsRole userWhoCreated {
 		multiplicity 1;
 	}
-	module.organization.domain.AccountabilityVersion playsRole accountabilityVersionItems {
+	protected module.organization.domain.AccountabilityVersion playsRole accountabilityVersionItems {
 		multiplicity *;
 	}
 }
 
 
-relation PartyParentAccountabilities {
-	module.organization.domain.Party playsRole child;
-	module.organization.domain.Accountability playsRole parentAccountabilities {
+relation PartyAccountabilities {
+	protected module.organization.domain.Party playsRole child;
+	protected module.organization.domain.Accountability playsRole parentAccountabilities {
 		multiplicity *;
 	}
 }
 
 relation PartyChildAccountabilities {
-	module.organization.domain.Party playsRole parent;
-	module.organization.domain.Accountability playsRole childAccountabilities {
+	protected module.organization.domain.Party playsRole parent;
+	protected module.organization.domain.Accountability playsRole childAccountabilities {
 		multiplicity *;
 	}
 }
@@ -283,13 +269,6 @@ relation OrganizationalModelAccountabilityType {
 		multiplicity *;
 	}
 	module.organization.domain.AccountabilityType playsRole accountabilityTypes {
-		multiplicity *;
-	}
-}
-
-relation UserUnconfirmedAccountability {
-	org.fenixedu.bennu.core.domain.User playsRole user;
-	module.organization.domain.UnconfirmedAccountability playsRole unconfirmedAccountabilities {
 		multiplicity *;
 	}
 }

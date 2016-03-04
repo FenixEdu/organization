@@ -33,15 +33,15 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import module.geography.domain.Country;
-import module.geography.domain.CountrySubdivision;
-import module.geography.util.GeographyPropertiesManager;
-import module.organization.domain.Accountability;
-
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import module.geography.domain.Country;
+import module.geography.domain.CountrySubdivision;
+import module.geography.util.GeographyPropertiesManager;
+import module.organization.domain.Accountability;
+import module.organization.domain.AccountabilityType;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -64,8 +64,8 @@ public class PortugueseDistrictImportAuxiliaryServices {
 
     protected int touches = 0;
 
-    private final LocalizedString districtLevelName = new LocalizedString().with(new Locale("pt"), "Distrito").with(
-            Locale.ENGLISH, "District");;
+    private final LocalizedString districtLevelName =
+            new LocalizedString().with(new Locale("pt"), "Distrito").with(Locale.ENGLISH, "District");;
 
     private static PortugueseDistrictImportAuxiliaryServices singletonHolder;
 
@@ -109,7 +109,7 @@ public class PortugueseDistrictImportAuxiliaryServices {
                 }
                 districtsOnFile.add(district);
             } // 'remove' all of the districts in
-              // excess i.e. make their // accountabilities end
+             // excess i.e. make their // accountabilities end
 
             // getting all of the existing districts
             for (CountrySubdivision countrySubdivision : portugal.getChildren()) {
@@ -118,7 +118,7 @@ public class PortugueseDistrictImportAuxiliaryServices {
                     existingDistricts.add(countrySubdivision);
                 }
             } // let's assert
-              // which ones are in excess and remove them
+             // which ones are in excess and remove them
             existingDistricts.removeAll(districtsOnFile);
             for (CountrySubdivision countrySubdivision : existingDistricts) {
                 removeDistrict(countrySubdivision);
@@ -182,14 +182,9 @@ public class PortugueseDistrictImportAuxiliaryServices {
     protected void removeDistrict(CountrySubdivision district) {
         // modify the district by setting the accountability of the last one
         // end before the date of the last review
-        Accountability activeAccountability = null;
-        for (Accountability accountability : district.getUnit().getParentAccountabilities(
-                district.getOrCreateAccountabilityType())) {
-            if (accountability.isActiveNow()) {
-                activeAccountability = accountability;
-            }
-        }
-
+        final AccountabilityType type = district.getOrCreateAccountabilityType();
+        Accountability activeAccountability = district.getUnit().getParentAccountabilityStream()
+                .filter(a -> a.getAccountabilityType() == type && a.isActiveNow()).findAny().orElse(null);
         if (activeAccountability != null) {
             // make the accountability expire a minimal measure of time before
             // of

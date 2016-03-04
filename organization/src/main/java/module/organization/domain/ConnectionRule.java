@@ -75,7 +75,7 @@ abstract public class ConnectionRule extends ConnectionRule_Base {
     }
 
     protected void disconnect() {
-        getAccountabilityTypes().clear();
+        getAccountabilityTypesSet().clear();
         setMyOrg(null);
     }
 
@@ -84,10 +84,5 @@ abstract public class ConnectionRule extends ConnectionRule_Base {
     abstract public boolean isValid(final AccountabilityType accountabilityType, final Party parent, final Party child);
 
     abstract public String getDescription();
-
-    @Deprecated
-    public java.util.Set<module.organization.domain.AccountabilityType> getAccountabilityTypes() {
-        return getAccountabilityTypesSet();
-    }
 
 }

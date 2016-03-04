@@ -24,14 +24,14 @@
  */
 package module.geography.domain;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
-
-import module.organization.domain.Unit;
+import java.util.stream.Collectors;
 
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
+
+import module.organization.domain.Unit;
 
 /**
  * Galaxies. Some are far far away.
@@ -45,7 +45,7 @@ public class Galaxy extends Galaxy_Base {
     public Galaxy(Universe parent, LocalizedString name, String acronym) {
         super();
         setUnit(Unit.create(parent.getUnit(), name, acronym, getPartyType("Galáxia", GALAXY_PARTYTYPE_NAME),
-                getOrCreateAccountabilityType(), new LocalDate(), null));
+                getOrCreateAccountabilityType(), new LocalDate(), null, null));
     }
 
     @Override
@@ -58,21 +58,12 @@ public class Galaxy extends Galaxy_Base {
     }
 
     public Collection<Planet> getChildren() {
-        Collection<Unit> units = getChildUnits();
-        Collection<Planet> children = new ArrayList<Planet>();
-        for (Unit unit : units) {
-            children.add((Planet) unit.getGeographicLocation());
-        }
-        return children;
+        return getChildUnits().map(u -> (Planet) u.getGeographicLocation()).collect(Collectors.toList());
     }
 
     public Planet getChildByAcronym(String acronym) {
-        for (Unit unit : getChildUnits()) {
-            if (unit.getAcronym().equals(acronym)) {
-                return (Planet) unit.getGeographicLocation();
-            }
-        }
-        return null;
+        return getChildUnits().filter(u -> u.getAcronym().equals(acronym)).map(u -> (Planet) u.getGeographicLocation()).findAny()
+                .orElse(null);
     }
 
     public static Galaxy getMilkyWay() {

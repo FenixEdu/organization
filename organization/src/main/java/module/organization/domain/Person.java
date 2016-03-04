@@ -24,13 +24,10 @@
  */
 package module.organization.domain;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.domain.User.UserPresentationStrategy;
 import org.fenixedu.bennu.core.domain.UserProfile;
 import org.fenixedu.commons.StringNormalizer;
 import org.fenixedu.commons.i18n.I18N;
@@ -53,24 +50,6 @@ import pt.ist.fenixframework.Atomic;
  *
  */
 public class Person extends Person_Base {
-
-    static {
-        User.registerUserPresentationStrategy(new UserPresentationStrategy() {
-
-            @Override
-            public String present(User user) {
-                final UserProfile profile = user.getProfile();
-                return profile == null ? user.getUsername() : profile.getFullName() + " (" + user.getUsername() + ")";
-            }
-
-            @Override
-            public String shortPresent(User user) {
-                final UserProfile profile = user.getProfile();
-                return profile == null ? user.getUsername() : profile.getDisplayName() + " (" + user.getUsername() + ")";
-            }
-
-        });
-    }
 
     static public class PersonBean extends PartyBean {
         private static final long serialVersionUID = -7516282978280402225L;
@@ -116,7 +95,7 @@ public class Person extends Person_Base {
 
         @Override
         public void addParent() {
-            getPerson().addParent(getParent(), getAccountabilityType(), getBegin(), getEnd());
+            getPerson().addParent(getParent(), getAccountabilityType(), getBegin(), getEnd(), null);
         }
 
     }
@@ -189,14 +168,6 @@ public class Person extends Person_Base {
         return partyType;
     }
 
-    /**
-     * @deprecated use searchPersonsStream instead
-     */
-    @Deprecated
-    public static List<Person> searchPersons(String value) {
-        return searchPersonStream(value).collect(Collectors.toList());
-    }
-
     public static Stream<Person> searchPersonStream(String value) {
         final String trimmedValue = value.trim();
         final String[] input = trimmedValue.split(" ");
@@ -221,7 +192,12 @@ public class Person extends Person_Base {
 
     @Override
     public String getPresentationName() {
-        return getUser() != null ? getUser().getPresentationName() : getName();
+        final User user = getUser();
+        if (user == null) {
+            return getName();
+        }
+        final UserProfile profile = user.getProfile();
+        return profile.getDisplayName() + "(" + user.getUsername() + ")";
     }
 
 }

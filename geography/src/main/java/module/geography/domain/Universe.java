@@ -24,15 +24,16 @@
  */
 package module.geography.domain;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Set;
-
-import module.organization.domain.Unit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.commons.i18n.LocalizedString;
+
+import module.organization.domain.Unit;
 
 /**
  * Universes. Some claim that these is more than one Universe, and each decision
@@ -48,7 +49,7 @@ public class Universe extends Universe_Base implements GeographicConstants {
 
     public Universe(LocalizedString name, String acronym) {
         super();
-        setUnit(Unit.createRoot(name, acronym, getPartyType("Universo", UNIVERSE_PARTYTYPE_NAME)));
+        setUnit(Unit.createRoot(name, acronym, getPartyType("Universo", UNIVERSE_PARTYTYPE_NAME), null));
     }
 
     @Override
@@ -57,21 +58,13 @@ public class Universe extends Universe_Base implements GeographicConstants {
     }
 
     public Collection<Galaxy> getChildren() {
-        Collection<Unit> units = getChildUnits();
-        Collection<Galaxy> children = new ArrayList<Galaxy>();
-        for (Unit unit : units) {
-            children.add((Galaxy) unit.getGeographicLocation());
-        }
-        return children;
+        Stream<Unit> units = getChildUnits();
+        return units.map(u -> (Galaxy) u.getGeographicLocation()).collect(Collectors.toList());
     }
 
     public Galaxy getChildByAcronym(String acronym) {
-        for (Unit unit : getChildUnits()) {
-            if (unit.getAcronym().equals(acronym)) {
-                return (Galaxy) unit.getGeographicLocation();
-            }
-        }
-        return null;
+        return getChildUnits().filter(u -> u.getAcronym().equals(acronym)).map(u -> (Galaxy) u.getGeographicLocation()).findAny()
+                .orElse(null);
     }
 
     public static Universe getMultiverseZero() {
