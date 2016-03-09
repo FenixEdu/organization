@@ -27,6 +27,7 @@ package module.organization.domain;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.commons.i18n.LocalizedString;
@@ -187,6 +188,10 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     public void associateConnectionRules(final List<ConnectionRule> connectionRules) {
         getConnectionRulesSet().retainAll(connectionRules);
         getConnectionRulesSet().addAll(connectionRules);
+    }
+
+    public Stream<Accountability> getAccountabilityStream() {
+        return super.getAccountabilitiesSet().stream();
     }
 
 }
