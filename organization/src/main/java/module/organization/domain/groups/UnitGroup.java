@@ -6,6 +6,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import module.organization.domain.AccountabilityType;
+import module.organization.domain.Person;
+import module.organization.domain.Unit;
+
 import org.fenixedu.bennu.core.annotation.GroupArgument;
 import org.fenixedu.bennu.core.annotation.GroupOperator;
 import org.fenixedu.bennu.core.domain.User;
@@ -13,10 +17,6 @@ import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.groups.CustomGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.joda.time.DateTime;
-
-import module.organization.domain.AccountabilityType;
-import module.organization.domain.Person;
-import module.organization.domain.Unit;
 
 @GroupOperator("unit")
 public class UnitGroup extends CustomGroup {
@@ -37,7 +37,7 @@ public class UnitGroup extends CustomGroup {
     }
 
     private UnitGroup(Unit unit, Set<AccountabilityType> memberTypes, Set<AccountabilityType> childUnitTypes) {
-        this.unit = unit;
+        this.unit = Objects.requireNonNull(unit);
         this.memberTypes = memberTypes;
         this.childUnitTypes = childUnitTypes;
     }
@@ -93,7 +93,11 @@ public class UnitGroup extends CustomGroup {
 
     @Override
     public boolean isMember(User user, DateTime when) {
-        return isMember(user);
+        if (user != null && user.getPerson() != null) {
+            final Person person = user.getPerson();
+            return person.hasPartyAsAncestor(unit, getAccountabilityTypes(), when.toLocalDate());
+        }
+        return false;
     }
 
     @Override

@@ -307,7 +307,9 @@ relation FunctionDelegationFunctionDelegationLog {
 }
 
 relation UnitGroupUnit {
-	module.organization.domain.Unit playsRole unit;
+	module.organization.domain.Unit playsRole unit {
+	    multiplicity 1..1;
+	}
 	module.organization.domain.groups.PersistentUnitGroup playsRole unitGroup {
 		multiplicity *;
 	}

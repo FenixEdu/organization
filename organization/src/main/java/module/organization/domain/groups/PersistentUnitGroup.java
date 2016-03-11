@@ -24,8 +24,11 @@
  */
 package module.organization.domain.groups;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationDomainException;
@@ -33,11 +36,7 @@ import module.organization.domain.Unit;
 
 import org.fenixedu.bennu.core.groups.Group;
 
-import pt.ist.fenixframework.Atomic;
-
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+import pt.ist.fenixframework.dml.runtime.Relation;
 
 /**
  * 
@@ -53,7 +52,7 @@ public class PersistentUnitGroup extends PersistentUnitGroup_Base {
         if (memberTypes.size() == 0) {
             throw OrganizationDomainException.cannotCreateEmptyUnitGroup();
         }
-        setUnit(unit);
+        setUnit(Objects.requireNonNull(unit));
         for (final AccountabilityType accountabilityType : memberTypes) {
             getMemberAccountabilityTypeSet().add(accountabilityType);
         }
@@ -67,28 +66,20 @@ public class PersistentUnitGroup extends PersistentUnitGroup_Base {
         return UnitGroup.of(getUnit(), getMemberAccountabilityTypeSet(), getChildUnitAccountabilityTypeSet());
     }
 
+    @Override
+    protected Collection<Relation<?, ?>> getContextRelations() {
+        return Stream.of(getRelationUnitGroupUnit(), getRelationUnitGroupMemberAccountabilityTypes(),
+                getRelationUnitGroupChildUnitAccountabilityTypes()).collect(Collectors.toSet());
+    }
+
     static PersistentUnitGroup getInstance(final Unit unit, final Set<AccountabilityType> memberTypes,
             final Set<AccountabilityType> childUnitTypes) {
-        Optional<PersistentUnitGroup> group = select(unit, memberTypes, childUnitTypes);
-        return group.isPresent() ? group.get() : create(unit, memberTypes, childUnitTypes);
+        return singleton(
+                () -> unit
+                        .getUnitGroupSet()
+                        .stream()
+                        .filter(group -> Objects.equals(group.getMemberAccountabilityTypeSet(), memberTypes)
+                                && Objects.equals(group.getChildUnitAccountabilityTypeSet(), childUnitTypes)).findAny(),
+                () -> new PersistentUnitGroup(unit, memberTypes, childUnitTypes));
     }
-
-    @Atomic
-    private static PersistentUnitGroup create(final Unit unit, final Set<AccountabilityType> memberTypes,
-            final Set<AccountabilityType> childUnitTypes) {
-        Optional<PersistentUnitGroup> group = select(unit, memberTypes, childUnitTypes);
-        return group.isPresent() ? group.get() : new PersistentUnitGroup(unit, memberTypes, childUnitTypes);
-    }
-
-    private static Optional<PersistentUnitGroup> select(Unit unit, final Set<AccountabilityType> memberTypes,
-            final Set<AccountabilityType> childUnitTypes) {
-        return FluentIterable.from(unit.getUnitGroupSet()).filter(new Predicate<PersistentUnitGroup>() {
-            @Override
-            public boolean apply(PersistentUnitGroup group) {
-                return Objects.equals(group.getMemberAccountabilityTypeSet(), memberTypes)
-                        && Objects.equals(group.getChildUnitAccountabilityTypeSet(), childUnitTypes);
-            }
-        }).first();
-    }
-
 }
