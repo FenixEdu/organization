@@ -36,6 +36,17 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.organization.domain.Accountability;
+import module.organization.domain.AccountabilityType;
+import module.organization.domain.OrganizationalModel;
+import module.organization.domain.Party;
+import module.organization.domain.Person;
+import module.organization.domain.Unit;
+import module.organization.domain.UnitBean;
+import module.organization.domain.dto.OrganizationalModelBean;
+import module.organization.domain.predicates.PartyPredicate.PartyByAccountabilityType;
+import module.organization.domain.search.PartySearchBean;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -48,16 +59,6 @@ import org.fenixedu.bennu.struts.base.BaseAction;
 import org.fenixedu.bennu.struts.portal.EntryPoint;
 import org.fenixedu.bennu.struts.portal.StrutsApplication;
 
-import module.organization.domain.Accountability;
-import module.organization.domain.AccountabilityType;
-import module.organization.domain.OrganizationalModel;
-import module.organization.domain.Party;
-import module.organization.domain.Person;
-import module.organization.domain.Unit;
-import module.organization.domain.UnitBean;
-import module.organization.domain.dto.OrganizationalModelBean;
-import module.organization.domain.predicates.PartyPredicate.PartyByAccountabilityType;
-import module.organization.domain.search.PartySearchBean;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 
 @StrutsApplication(bundle = "OrganizationResources", path = "organization", titleKey = "label.manage.organization",
@@ -96,26 +97,19 @@ public class OrganizationModelAction extends BaseAction {
         }
 
         public PartyChart(final Set<AccountabilityType> accountabilityTypes, final Party party) {
-            super(party,
-                    sortCollectionByParents(party.getParentAccountabilityStream()
-                            .filter(a -> new PartyByAccountabilityType(accountabilityTypes).eval(a.getChild(), a))
-                            .collect(Collectors.toSet())),
-                    sortCollectionByChildren(party.getChildAccountabilityStream()
-                            .filter(a -> new PartyByAccountabilityType(accountabilityTypes).eval(a.getParent(), a))
-                            .collect(Collectors.toSet())),
-                    2);
+            super(party, sortCollectionByParents(party.getParentAccountabilityStream()
+                    .filter(a -> new PartyByAccountabilityType(accountabilityTypes).eval(a.getChild(), a))
+                    .collect(Collectors.toSet())), sortCollectionByChildren(party.getChildAccountabilityStream()
+                    .filter(a -> new PartyByAccountabilityType(accountabilityTypes).eval(a.getParent(), a))
+                    .collect(Collectors.toSet())), 2);
         }
 
-        public PartyChart(final Set<AccountabilityType> accountabilityTypes, final Party party,
-                final Class<? extends Party> clazz) {
-            super(party,
-                    sortCollectionByParents(party.getParentAccountabilityStream()
-                            .filter(a -> new PartyByAccountabilityType(accountabilityTypes).eval(a.getChild(), a))
-                            .collect(Collectors.toSet())),
-                    sortCollectionByChildren(party.getParentAccountabilityStream()
-                            .filter(a -> new PartyByAccountabilityType(clazz, accountabilityTypes).eval(a.getChild(), a))
-                            .collect(Collectors.toSet())),
-                    2);
+        public PartyChart(final Set<AccountabilityType> accountabilityTypes, final Party party, final Class<? extends Party> clazz) {
+            super(party, sortCollectionByParents(party.getParentAccountabilityStream()
+                    .filter(a -> new PartyByAccountabilityType(accountabilityTypes).eval(a.getChild(), a))
+                    .collect(Collectors.toSet())), sortCollectionByChildren(party.getChildAccountabilityStream()
+                    .filter(a -> new PartyByAccountabilityType(clazz, accountabilityTypes).eval(a.getChild(), a))
+                    .collect(Collectors.toSet())), 2);
         }
 
         public PartyChart(final Accountability accountability) {
@@ -271,8 +265,9 @@ public class OrganizationModelAction extends BaseAction {
         request.setAttribute("partySearchBean", partySearchBean);
 
         if (party == null) {
-            final PartyChart partyChart = party == null ? new PartyChart(organizationalModel.getPartiesSet()) : new PartyChart(
-                    organizationalModel.getAccountabilityTypesSet(), party);
+            final PartyChart partyChart =
+                    party == null ? new PartyChart(organizationalModel.getPartiesSet()) : new PartyChart(
+                            organizationalModel.getAccountabilityTypesSet(), party);
             request.setAttribute("partiesChart", partyChart);
         } else {
             request.setAttribute("party", party);

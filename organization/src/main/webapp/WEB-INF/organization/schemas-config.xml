@@ -269,8 +269,8 @@
     </slot>
 </schema>
 
-<schema name="module.organization.domain.UnconfirmedAccountability" type="module.organization.domain.UnconfirmedAccountability" bundle="ORGANIZATION_RESOURCES">
-	<slot name="unconfirmedAccountabilityType.name" key="label.unconfirmed.accountability.type"/>
+<schema name="module.organization.domain.UnconfirmedAccountability" type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
+	<slot name="accountabilityType.type" key="label.unconfirmed.accountability.type"/>
 	<slot name="beginDate" key="label.begin"/>
 	<slot name="endDate" key="label.end" />
 </schema>
