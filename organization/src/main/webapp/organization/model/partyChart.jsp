@@ -9,7 +9,7 @@
 <%@page import="module.organization.domain.Unit"%>
 <%@page import="module.organization.domain.Accountability"%>
 <%@page import="module.organization.domain.Party"%>
-<%@page import="module.organization.domain.UnconfirmedAccountability"%>
+
 
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/organization/CSS/organization.css" media="screen"/>
 
@@ -83,16 +83,15 @@
 						    if (object instanceof Accountability) {
 								final Accountability accountability = (Accountability) object;
 								party = passedElement ? accountability.getChild() : accountability.getParent();
-								if (object instanceof UnconfirmedAccountability) {
-								    UnconfirmedAccountability unconfirmedAccountability = (UnconfirmedAccountability) accountability;
-								    styleCass = "orgTBox orgTBoxRed";
-								    accountabilityType = unconfirmedAccountability.getUnconfirmedAccountabilityType();
-								    hasUnconfirmed = true;
-								} else {
+
 								    accountabilityType = accountability.getAccountabilityType();
+
+								if (accountabilityType.hasType("UnconfirmedAccountability")){
+								    styleCass = "orgTBox orgTBoxRed";
+								    hasUnconfirmed = true;
 								}
 								title = accountability.getDetailsString();
-								String creationUser = accountability.getCreatorUser() == null ? "" : "&#013;Creation user: " + accountability.getCreatorUser().getPresentationName();
+								String creationUser = accountability.getCreatorUser() == null ? "" : "&#013;Creation user: " + accountability.getCreatorUser().getDisplayName();
 								String justification = accountability.getJustification() == null ? "" : "&#013; Justification: " + accountability.getJustification();
 								title += "&#013;Creation date: " + accountability.getCreationDate() + creationUser + justification;
 								
