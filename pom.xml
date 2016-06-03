@@ -11,7 +11,7 @@
 
     <artifactId>organization-project</artifactId>
     <name>Bennu Organization</name>
-    <version>3.0-SNAPSHOT</version>
+    <version>3.0.0.RC2</version>
     <packaging>pom</packaging>
 
     <scm>
