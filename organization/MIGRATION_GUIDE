@@ -1,0 +1,10 @@
+# Organization Module Upgrade Migration Guide
+
+## v2.x -> v3.x 
+
+Make sure all instances of PersistentPersonGroup have been deleted or converted to some other group.
+The following SQL Statements may be necessary if a previous upgrade did not migrate stuff correctly.
+
+    update FF$DOMAIN_CLASS_INFO set DOMAIN_CLASS_NAME = 'module.organization.domain.groups.PersistentPersonGroup' where DOMAIN_CLASS_NAME='module.organization.domain.groups.PersonGroup';
+    update FF$DOMAIN_CLASS_INFO set DOMAIN_CLASS_NAME = 'module.organization.domain.groups.PersistentUnitGroup' where DOMAIN_CLASS_NAME='module.organization.domain.groups.UnitGroup';
+
