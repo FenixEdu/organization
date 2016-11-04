@@ -27,13 +27,15 @@
 	</p>
 </html:messages>
 
-<bean:define id="actionUrl">/organizationModel.do?organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;<logic:present name="unitBean" property="parent">partyOid=<bean:write name="unitBean" property="parent.externalId" />&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></logic:present></bean:define>
+<bean:define id="actionUrl">/organizationModel.do?organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;<logic:present name="unitBean" property="parent">partyOid=<bean:write name="unitBean" property="parent.externalId" />&amp;viewName=<%= request.getParameter("viewName")%></logic:present></bean:define>
+<bean:define id="schema">organization.UnitBean.add.unit.<%= request.getParameter("viewName")%></bean:define>
+
 <fr:form action="<%= actionUrl %>">
 	<html:hidden property="method" value="addUnit"/>
-	
+
 	<fr:edit id="unitBean" name="unitBean" visible="false" />
 
-	<fr:edit id="unitBean.create.unit" name="unitBean" schema="organization.UnitBean.add.unit" >
+	<fr:edit id="unitBean.create.unit" name="unitBean" schema="<%=schema %>" >
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form" />
 			<fr:property name="columnClasses" value=",,tderror" />

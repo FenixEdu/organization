@@ -106,12 +106,36 @@
 	<slot name="end" key="label.end" />
 </schema>
 
-<schema name="organization.UnitBean.add.unit" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
+<schema name="organization.UnitBean.add.unit.01_viewPeople" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
+	<slot name="child" layout="autoComplete" key="label.party" bundle="ORGANIZATION_RESOURCES" required="true">
+        <property name="labelField" value="partyName.content"/>
+		<property name="format" value="${user.profile.fullName}"/>
+		<property name="minChars" value="3"/>
+		<property name="maxCount" value="20"/>		
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider"/>
+		<property name="size" value="60"/>
+		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+			<property name="message" value="label.pleaseSelectOne.unit"/>
+			<property name="bundle" value="ORGANIZATION_RESOURCES"/>
+			<property name="key" value="true"/>
+		</validator>
+	</slot>
+	<slot name="accountabilityType" layout="menu-select" key="label.unit.accountability.type" required="true">
+		<property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
+		<property name="format" value="${name.content}" />
+		<property name="sortBy" value="name" />
+		<property name="saveOptions" value="true"/>
+	</slot>
+	<slot name="begin" key="label.begin" required="true" />
+	<slot name="end" key="label.end" />
+</schema>
+<schema name="organization.UnitBean.add.unit.00_default" type="module.organization.domain.UnitBean" bundle="ORGANIZATION_RESOURCES">
 	<slot name="child" layout="autoComplete" key="label.party" bundle="ORGANIZATION_RESOURCES" required="true">
         <property name="labelField" value="partyName.content"/>
 		<property name="format" value="${presentationName}"/>
-		<property name="minChars" value="3"/>		
-		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider"/>
+		<property name="minChars" value="3"/>
+		<property name="maxCount" value="20"/>		
+		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.UnitAutoCompleteProvider"/>
 		<property name="size" value="60"/>
 		<validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 			<property name="message" value="label.pleaseSelectOne.unit"/>
@@ -176,6 +200,7 @@
 		<property name="format" value="${partyNameWithSuffixType}" />
 		<property name="labelField" value="partyNameWithSuffixType" />
 		<property name="minChars" value="3" />
+		<property name="maxCount" value="40"/>
 		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider" />
 		<property name="size" value="40"/>
 	</slot>
@@ -216,6 +241,7 @@
 	<slot name="party" layout="autoComplete" key="label.party" bundle="ORGANIZATION_RESOURCES">
         <property name="labelField" value="partyName.content"/>
 		<property name="format" value="${presentationName}"/>
+		<property name="maxCount" value="30"/>
 		<property name="minChars" value="3"/>		
 		<property name="args" value="provider=module.organization.presentationTier.renderers.providers.UnitAutoCompleteProvider"/>
 		<property name="size" value="60"/>

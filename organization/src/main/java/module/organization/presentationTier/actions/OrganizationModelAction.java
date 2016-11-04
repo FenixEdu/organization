@@ -414,6 +414,8 @@ public class OrganizationModelAction extends BaseAction {
         final UnitBean unitBean = new UnitBean();
         unitBean.setParent(party);
         request.setAttribute("unitBean", unitBean);
+        request.setAttribute("viewName",
+                request.getParameter("viewName") == null ? UNIT_CHART_VIEW_NAME : request.getParameter("viewName"));
         return forward("/organization/model/addUnit.jsp");
     }
 
@@ -430,6 +432,7 @@ public class OrganizationModelAction extends BaseAction {
             final Party party = unitBean.getParent();
             request.setAttribute("party", party);
             request.setAttribute("unitBean", unitBean);
+            request.setAttribute("viewName", request.getParameter("viewName"));
             return forward("/organization/model/addUnit.jsp");
         }
     }
