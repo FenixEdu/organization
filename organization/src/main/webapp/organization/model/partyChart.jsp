@@ -29,7 +29,7 @@
 			</html:link>
 			|
 		</logic:present>
-		<bean:define id="url">/organizationModel.do?method=prepareAddUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
+		<bean:define id="url">/organizationModel.do?method=prepareAddUnit&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=<%=  request.getParameter("viewName") %></bean:define>
 		<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.unit.child.add" bundle="ORGANIZATION_RESOURCES"/>
 		</html:link>
