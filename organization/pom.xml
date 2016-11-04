@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>organization</artifactId>
-    <version>3.0-SNAPSHOT</version>
+    <version>DEV-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Organization</name>
 
