@@ -66,17 +66,34 @@ public class CountryCodesImport extends CronTask {
                 String longCode = parts[1];
                 String numericCode = parts[2];
                 String countryNameEn = parts[3];
-                String countryNamePt = parts.length > 5 && Strings.isNullOrEmpty(parts[5]) ? null : parts[5];
-                String nationalityEn = parts.length > 6 && Strings.isNullOrEmpty(parts[6]) ? null : parts[6];
-                String nationalityPt = parts.length > 7 && Strings.isNullOrEmpty(parts[7]) ? null : parts[7];
+                String countryNamePt = null;
+                String nationalityEn = null;
+                String nationalityPt = null;
+
+                if (parts.length > 5) {
+                    countryNamePt = Strings.isNullOrEmpty(parts[5]) ? null : parts[5];
+                }
+
+                if (parts.length > 6) {
+                    nationalityEn = Strings.isNullOrEmpty(parts[6]) ? null : parts[6];
+
+                }
+                if (parts.length > 7) {
+                    nationalityPt = Strings.isNullOrEmpty(parts[7]) ? null : parts[7];
+                }
+
                 Country country = planet.getChildByAcronym(longCode);
                 if (country == null) {
                     country =
                             new Country(planet, shortCode, longCode, Integer.parseInt(numericCode), makeName(countryNamePt,
                                     countryNameEn), makeName(nationalityPt, nationalityEn), AddressPrinter.class);
+                    taskLog(" New country " + shortCode + " " + longCode + " " + numericCode + " " + countryNameEn + " "
+                            + countryNamePt + " " + nationalityEn + " " + nationalityPt);
                 } else {
                     country.update(planet, shortCode, longCode, Integer.parseInt(numericCode),
                             makeName(countryNamePt, countryNameEn), makeName(nationalityPt, nationalityEn), AddressPrinter.class);
+                    taskLog(" Update country " + shortCode + " " + longCode + " " + numericCode + " " + countryNameEn + " "
+                            + countryNamePt + " " + nationalityEn + " " + nationalityPt);
                 }
             }
         } catch (IOException e) {
