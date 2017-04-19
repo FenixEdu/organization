@@ -74,13 +74,9 @@ public class CountryCodesImport extends CronTask {
                     country =
                             new Country(planet, shortCode, longCode, Integer.parseInt(numericCode), makeName(countryNamePt,
                                     countryNameEn), makeName(nationalityPt, nationalityEn), AddressPrinter.class);
-                    taskLog(" New country " + shortCode + " " + longCode + " " + numericCode + " " + countryNameEn + " "
-                            + countryNamePt + " " + nationalityEn + " " + nationalityPt);
                 } else {
                     country.update(planet, shortCode, longCode, Integer.parseInt(numericCode),
                             makeName(countryNamePt, countryNameEn), makeName(nationalityPt, nationalityEn), AddressPrinter.class);
-                    taskLog(" Update country " + shortCode + " " + longCode + " " + numericCode + " " + countryNameEn + " "
-                            + countryNamePt + " " + nationalityEn + " " + nationalityPt);
                 }
             }
         } catch (IOException e) {
