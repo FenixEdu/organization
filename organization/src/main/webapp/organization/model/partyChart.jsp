@@ -40,6 +40,11 @@
 		</html:link>
 		<logic:present role="#managers">
 			|
+			<bean:define id="url">/organizationModel.do?method=prepareManageParentAccountabilities&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
+			<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
+				<bean:message key="label.unit.manage.parent" bundle="ORGANIZATION_RESOURCES"/>
+			</html:link>
+			|
 			<bean:define id="url">/organizationModel.do?method=prepareManageChildAccountabilities&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 			<html:link action="<%= url %>" paramId="partyOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="label.unit.manage.children" bundle="ORGANIZATION_RESOURCES"/>
