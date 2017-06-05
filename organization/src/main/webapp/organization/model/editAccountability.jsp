@@ -26,7 +26,7 @@
 		<span class="error0"> <bean:write name="message" /> </span>
 	</p>
 </html:messages>
-
+<bean:define id="view" name="partyView"/>
 <logic:present name="accountability">
 	<fr:view name="accountability">
 		<fr:schema type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
@@ -37,8 +37,15 @@
 			<fr:property name="classes" value="tstyle2 tdleft thleft"/>
 		</fr:layout>
 	</fr:view>
-
-	<bean:define id="urlEdit">/organizationModel.do?method=prepareManageChildAccountabilities&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
+	
+	<logic:equal value="child" name="view">
+		<bean:define id="method">prepareManageChildAccountabilities</bean:define>
+	</logic:equal>
+	<logic:equal value="parent" name="view">
+		<bean:define id="method">prepareManageParentAccountabilities</bean:define>
+	</logic:equal>
+	
+	<bean:define id="urlEdit">/organizationModel.do?method=<bean:write name="method"/>&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewParty=<bean:write name="view"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 	<fr:edit id="accountability" name="accountability" action="<%= urlEdit %>">
 		<fr:schema type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
 			<fr:slot name="beginDate" key="label.begin" required="true"/>

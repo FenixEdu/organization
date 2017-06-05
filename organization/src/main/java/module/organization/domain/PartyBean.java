@@ -42,6 +42,7 @@ abstract public class PartyBean implements Serializable {
     private AccountabilityType accountabilityType;
     private LocalDate begin;
     private LocalDate end;
+    private Party child;
 
     public Party getParent() {
         return parent;
@@ -49,6 +50,14 @@ abstract public class PartyBean implements Serializable {
 
     public void setParent(Party parent) {
         this.parent = parent;
+    }
+
+    public Party getChild() {
+        return child;
+    }
+
+    public void setChild(Party child) {
+        this.child = child;
     }
 
     public boolean hasParent() {

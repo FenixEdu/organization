@@ -459,6 +459,18 @@ public class OrganizationModelAction extends BaseAction {
         return viewModel(mapping, form, request, response);
     }
 
+    public ActionForward prepareManageParentAccountabilities(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
+        request.setAttribute("organizationalModel", organizationalModel);
+        final Party party = getDomainObject(request, "partyOid");
+        request.setAttribute("party", party);
+        final UnitBean unitBean = new UnitBean();
+        unitBean.setChild(party);
+        request.setAttribute("unitBean", unitBean);
+        return forward("/organization/model/manageParentAccountabilities.jsp");
+    }
+
     public ActionForward prepareManageChildAccountabilities(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
         final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
@@ -473,6 +485,7 @@ public class OrganizationModelAction extends BaseAction {
 
     public ActionForward prepareEditAccountability(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
+        final String partyView = request.getParameter("partyView");
         final OrganizationalModel organizationalModel = getDomainObject(request, "organizationalModelOid");
         request.setAttribute("organizationalModel", organizationalModel);
         final Party party = getDomainObject(request, "partyOid");
@@ -482,6 +495,7 @@ public class OrganizationModelAction extends BaseAction {
         request.setAttribute("unitBean", unitBean);
         final Accountability accountability = getDomainObject(request, "accountabilityOid");
         request.setAttribute("accountability", accountability);
+        request.setAttribute("partyView", partyView);
         return forward("/organization/model/editAccountability.jsp");
     }
 

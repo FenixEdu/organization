@@ -27,18 +27,18 @@
 	</p>
 </html:messages>
 
-<logic:empty name="party" property="childAccountabilitiesSet">
+<logic:empty name="party" property="parentAccountabilitiesSet">
 	<p>
 		<bean:message bundle="ORGANIZATION_RESOURCES" key="label.unit.child.none"/>
 	</p>
 </logic:empty>
 
-<logic:notEmpty name="party" property="childAccountabilitiesSet">
-	<bean:define id="urlEdit">/organizationModel.do?method=prepareEditAccountability&amp;partyView=child&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
+<logic:notEmpty name="party" property="parentAccountabilitiesSet">
+	<bean:define id="urlEdit">/organizationModel.do?method=prepareEditAccountability&amp;partyView=parent&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
 	<bean:define id="urlDelete">/organizationModel.do?method=deleteAccountability&amp;organizationalModelOid=<bean:write name="organizationalModel" property="externalId"/>&amp;partyOid=<bean:write name="party" property="externalId"/>&amp;viewName=<%= module.organization.presentationTier.actions.OrganizationModelAction.UNIT_CHART_VIEW_NAME %></bean:define>
-	<fr:view name="party" property="childAccountabilitiesSet">
+	<fr:view name="party" property="parentAccountabilitiesSet">
 		<fr:schema type="module.organization.domain.Accountability" bundle="ORGANIZATION_RESOURCES">
-			<fr:slot name="child.presentationName" key="label.name"/>
+			<fr:slot name="parent.presentationName" key="label.name"/>
 			<fr:slot name="accountabilityType.type" key="label.type"/>
 			<fr:slot name="beginDate" key="label.begin"/>
 			<fr:slot name="endDate" key="label.end" />
@@ -58,7 +58,7 @@
 			<fr:property name="confirmationBundle(deleteAccountability)" value="ORGANIZATION_RESOURCES"/>
 			<fr:property name="order(deleteAccountability)" value="2"/>
 
-			<fr:property name="sortBy" value="child.presentationName=asc"/>
+			<fr:property name="sortBy" value="parent.presentationName=asc"/>
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
