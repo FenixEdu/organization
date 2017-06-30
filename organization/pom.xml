@@ -16,6 +16,7 @@
 
     <properties>
         <version.org.fenixedu.bennu.core>4.0.1</version.org.fenixedu.bennu.core>
+        <version.org.fenixedu.bennu-spring>1.2.0</version.org.fenixedu.bennu-spring>
         <version.org.fenixedu.bennu.renderers>5.1.1</version.org.fenixedu.bennu.renderers>
         <version.javax.servlet.jsp.api>2.1</version.javax.servlet.jsp.api>
     </properties>
@@ -25,6 +26,11 @@
             <groupId>org.fenixedu</groupId>
             <artifactId>bennu-core</artifactId>
             <version>${version.org.fenixedu.bennu.core}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>bennu-spring</artifactId>
+            <version>${version.org.fenixedu.bennu-spring}</version>
         </dependency>
         <dependency>
             <groupId>org.fenixedu</groupId>

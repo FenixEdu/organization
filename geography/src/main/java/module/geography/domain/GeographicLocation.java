@@ -127,9 +127,9 @@ public abstract class GeographicLocation extends GeographicLocation_Base impleme
         }
         if (geographic == null) {
             geographic =
-                    AccountabilityType.create(new AccountabilityTypeBean(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME,
+                    AccountabilityType.create(GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME,
                             new LocalizedString().with(new Locale("pt"), "Geográfico").with(Locale.ENGLISH,
-                                    GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME)));
+                                    GEOGRAPHIC_ACCOUNTABILITY_TYPE_NAME));
         }
         return geographic;
     }

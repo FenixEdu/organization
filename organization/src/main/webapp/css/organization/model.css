@@ -1,0 +1,22 @@
+.navItem {
+    text-decoration: none;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+
+    position: relative;
+    padding: 6px 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: #586069;
+    border: 1px solid #e1e4e8;
+    
+    position: relative;
+    padding: 6px 14px;
+    font-weight: 600;
+    line-height: 20px;
+    border: 1px solid #e1e4e8;
+}
+
+.nav .active {
+	font-weight: bold;
+}

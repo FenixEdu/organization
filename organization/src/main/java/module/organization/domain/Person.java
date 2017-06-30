@@ -34,7 +34,6 @@ import org.fenixedu.commons.i18n.I18N;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
 
-import module.organization.domain.PartyType.PartyTypeBean;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -158,10 +157,7 @@ public class Person extends Person_Base {
             synchronized (Person.class) {
                 partyType = PartyType.readBy(Person.class.getName());
                 if (partyType == null) {
-                    final PartyTypeBean partyTypeBean = new PartyTypeBean();
-                    partyTypeBean.setType(type);
-                    partyTypeBean.setName(new LocalizedString(I18N.getLocale(), "Pessoa"));
-                    partyType = PartyType.create(partyTypeBean);
+                    partyType = PartyType.create(type, new LocalizedString(I18N.getLocale(), "Pessoa"));
                 }
             }
         }

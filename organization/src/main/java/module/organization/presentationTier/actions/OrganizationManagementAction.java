@@ -39,7 +39,6 @@ import module.organization.domain.ConnectionRule.ConnectionRuleBean;
 import module.organization.domain.Party;
 import module.organization.domain.PartyBean;
 import module.organization.domain.PartyType;
-import module.organization.domain.PartyType.PartyTypeBean;
 import module.organization.domain.Person;
 import module.organization.domain.Person.PersonBean;
 import module.organization.domain.Unit;
@@ -59,7 +58,7 @@ import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 
 import com.google.common.base.Strings;
 
-@Mapping(path = "/organization", functionality = OrganizationModelAction.class)
+//@Mapping(path = "/organization", functionality = OrganizationModelAction.class)
 /**
  * 
  * @author Pedro Santos
@@ -79,45 +78,6 @@ public class OrganizationManagementAction extends BaseAction {
             final HttpServletResponse response) throws Exception {
         request.setAttribute("partyTypes", Bennu.getInstance().getPartyTypesSet());
         return forward("/organization/partyTypes/viewPartyTypes.jsp");
-    }
-
-    public ActionForward prepareCreatePartyType(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        request.setAttribute("partyTypeBean", new PartyTypeBean());
-        return forward("/organization/partyTypes/createPartyType.jsp");
-    }
-
-    public ActionForward createPartyType(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-            final HttpServletResponse response) throws Exception {
-        final PartyTypeBean bean = getRenderedObject("partyTypeBean");
-        try {
-            PartyType.create(bean);
-        } catch (final DomainException e) {
-            addMessage(request, e.getMessage(), e.getArgs());
-            request.setAttribute("partyTypeBean", bean);
-            return forward("/organization/partyTypes/createPartyType.jsp");
-        }
-        return viewPartyTypes(mapping, form, request, response);
-    }
-
-    public ActionForward prepareEditPartyType(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        request.setAttribute("partyTypeBean", new PartyTypeBean((PartyType) getDomainObject(request, "partyTypeOid")));
-        return forward("/organization/partyTypes/editPartyType.jsp");
-    }
-
-    public ActionForward editPartyType(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-            final HttpServletResponse response) throws Exception {
-        final PartyTypeBean bean = getRenderedObject("partyTypeBean");
-        try {
-            bean.edit();
-        } catch (final DomainException e) {
-            addMessage(request, e.getMessage(), e.getArgs());
-            request.setAttribute("partyTypeBean", bean);
-            return forward("/organization/partyTypes/editPartyType.jsp");
-        }
-
-        return viewPartyTypes(mapping, form, request, response);
     }
 
     public ActionForward deletePartyType(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,

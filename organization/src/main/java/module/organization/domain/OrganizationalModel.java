@@ -24,6 +24,7 @@
  */
 package module.organization.domain;
 
+import java.text.Collator;
 import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
@@ -34,7 +35,6 @@ import java.util.stream.Stream;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.commons.i18n.LocalizedString;
 
-import module.organization.domain.dto.OrganizationalModelBean;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -46,7 +46,7 @@ import pt.ist.fenixframework.Atomic;
 public class OrganizationalModel extends OrganizationalModel_Base {
 
     public static final Comparator<OrganizationalModel> COMPARATORY_BY_NAME = (o1, o2) -> {
-        final int c = o1.getName().compareTo(o2.getName());
+        final int c = Collator.getInstance().compare(o1.getName().getContent(), o2.getName().getContent());
         return c == 0 ? o1.hashCode() - o2.hashCode() : c;
     };
 
@@ -68,8 +68,8 @@ public class OrganizationalModel extends OrganizationalModel_Base {
     }
 
     @Atomic
-    public static OrganizationalModel createNewModel(final OrganizationalModelBean organizationalModelBean) {
-        return new OrganizationalModel(organizationalModelBean.getName());
+    public static OrganizationalModel create(final LocalizedString name) {
+        return new OrganizationalModel(name);
     }
 
     @Atomic
@@ -85,13 +85,32 @@ public class OrganizationalModel extends OrganizationalModel_Base {
         deleteDomainObject();
     }
 
-    public void setAccountabilityTypes(final List<AccountabilityType> accountabilityTypes) {
+
+    @Atomic
+    public void configure(final LocalizedString name, final List<AccountabilityType> accountabilityTypes) {
+        setName(name);
         getAccountabilityTypesSet().clear();
         getAccountabilityTypesSet().addAll(accountabilityTypes);
     }
 
+    public Stream<Party> getPartyStream() {
+        return getPartiesSet().stream();
+    }
+
+    public Stream<Unit> getUnitStream() {
+        return getPartyStream().filter(Party::isUnit).map(p -> (Unit) p);
+    }
+
+    public Stream<Person> getPersonStream() {
+        return getPartyStream().filter(Party::isPerson).map(p -> (Person) p);
+    }
+
+    public Stream<AccountabilityType> getAccountabilityTypeStream() {
+        return getAccountabilityTypesSet().stream();
+    }
+
     public Stream<Unit> getAllUnitStream() {
-        return getPartiesSet().stream().filter(p -> p.isUnit()).map(p -> (Unit) p).flatMap(new Function<Unit, Stream<Unit>>() {
+        return getPartyStream().filter(p -> p.isUnit()).map(p -> (Unit) p).flatMap(new Function<Unit, Stream<Unit>>() {
             @Override
             public Stream<Unit> apply(final Unit u) {
                 return Stream.concat(Stream.of(u), u.getDescendentUnitStream());
@@ -106,6 +125,18 @@ public class OrganizationalModel extends OrganizationalModel_Base {
         return party.getParentAccountabilityStream()
                 .filter(a -> a.isActiveNow() && getAccountabilityTypesSet().contains(a.getAccountabilityType()))
                 .map(a -> a.getParent()).anyMatch(p -> containsUnit(p));
+    }
+
+    public static Stream<OrganizationalModel> getModelStream() {
+        return Bennu.getInstance().getOrganizationalModelsSet().stream();
+    }
+
+    public static Stream<PartyType> getAllPartyTypes() {
+        return Bennu.getInstance().getPartyTypesSet().stream();
+    }
+
+    public static Stream<AccountabilityType> getAllAccountabilityTypes() {
+        return Bennu.getInstance().getAccountabilityTypesSet().stream();
     }
 
 }

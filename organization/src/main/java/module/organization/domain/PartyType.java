@@ -25,6 +25,8 @@
 package module.organization.domain;
 
 import java.io.Serializable;
+import java.text.Collator;
+import java.util.Comparator;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.commons.i18n.LocalizedString;
@@ -40,50 +42,10 @@ import pt.ist.fenixframework.Atomic;
  */
 public class PartyType extends PartyType_Base implements Comparable<PartyType> {
 
-    static public class PartyTypeBean implements Serializable {
-
-        private static final long serialVersionUID = -3867902288197067597L;
-        private String type;
-        private LocalizedString name;
-        private PartyType partyType;
-
-        public PartyTypeBean() {
-        }
-
-        public PartyTypeBean(final PartyType partyType) {
-            setType(partyType.getType());
-            setName(partyType.getName());
-            setPartyType(partyType);
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public LocalizedString getName() {
-            return name;
-        }
-
-        public void setName(LocalizedString name) {
-            this.name = name;
-        }
-
-        public PartyType getPartyType() {
-            return partyType;
-        }
-
-        public void setPartyType(final PartyType partyType) {
-            this.partyType = partyType;
-        }
-
-        public void edit() {
-            getPartyType().edit(this);
-        }
-    }
+    public static final Comparator<PartyType> COMPARATORY_BY_NAME = (o1, o2) -> {
+        final int c = Collator.getInstance().compare(o1.getName().getContent(), o2.getName().getContent());
+        return c == 0 ? o1.hashCode() - o2.hashCode() : c;
+    };
 
     private PartyType() {
         super();
@@ -116,10 +78,10 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
     }
 
     @Atomic
-    public void edit(final PartyTypeBean bean) {
-        check(bean.getType());
-        setType(bean.getType());
-        setName(bean.getName());
+    public void edit(final String type, final LocalizedString name) {
+        check(type);
+        setType(type);
+        setName(name);
     }
 
     @Atomic
@@ -145,8 +107,8 @@ public class PartyType extends PartyType_Base implements Comparable<PartyType> {
     }
 
     @Atomic
-    static public PartyType create(final PartyTypeBean bean) {
-        return new PartyType(bean.getType(), bean.getName());
+    public static PartyType create(final String type, final LocalizedString name) {
+        return new PartyType(type, name);
     }
 
     static public PartyType readBy(final String type) {

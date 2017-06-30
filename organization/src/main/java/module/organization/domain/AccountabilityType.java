@@ -94,7 +94,7 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
         }
 
         public AccountabilityType create() {
-            return AccountabilityType.create(this);
+            return AccountabilityType.create(getType(), getName());
         }
 
         public void edit() {
@@ -168,8 +168,8 @@ public class AccountabilityType extends AccountabilityType_Base implements Compa
     }
 
     @Atomic
-    static public AccountabilityType create(final AccountabilityTypeBean bean) {
-        return new AccountabilityType(bean.getType(), bean.getName());
+    public static AccountabilityType create(final String type, final LocalizedString name) {
+        return new AccountabilityType(type, name);
     }
 
     static public AccountabilityType readBy(final String type) {

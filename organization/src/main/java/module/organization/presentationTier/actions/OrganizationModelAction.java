@@ -292,7 +292,7 @@ public class OrganizationModelAction extends BaseAction {
     public ActionForward createModel(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) throws Exception {
         final OrganizationalModelBean organizationalModelBean = getRenderedObject();
-        OrganizationalModel.createNewModel(organizationalModelBean);
+        OrganizationalModel.create(organizationalModelBean.getName());
         return viewModels(mapping, form, request, response);
     }
 
