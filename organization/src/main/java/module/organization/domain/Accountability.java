@@ -109,7 +109,7 @@ public class Accountability extends Accountability_Base {
         check(begin, "error.Accountability.invalid.begin");
         checkDates(parent, begin, end);
 
-        canCreate(parent, child, type);
+        canCreate(parent, child, type, begin, end);
 
         init(parent, child, type);
         editDates(begin, end, justification);
@@ -149,11 +149,11 @@ public class Accountability extends Accountability_Base {
         }
     }
 
-    protected void canCreate(final Party parent, final Party child, final AccountabilityType type) {
+    protected void canCreate(final Party parent, final Party child, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
         if (parent.equals(child)) {
             throw new OrganizationDomainException("error.Accountability.parent.equals.child");
         }
-        if (parent.ancestorsInclude(child, type)) {
+        if (parent.ancestorsInclude(child, type, begin, end)) {
             throw new OrganizationDomainException("error.Accountability.parent.ancestors.include.child.with.type");
         }
         if (!type.isValid(parent, child)) {
