@@ -158,9 +158,10 @@ abstract public class Party extends Party_Base {
         });
     }
 
-    public boolean ancestorsInclude(final Party party, final AccountabilityType type) {
-        return getParentAccountabilityStream().filter(a -> a.hasAccountabilityType(type))
-                .anyMatch(a -> a.getParent().equals(party) || a.getParent().ancestorsInclude(party, type));
+    public boolean ancestorsInclude(final Party party, final AccountabilityType type, final LocalDate begin, final LocalDate end) {
+        return getParentAccountabilityStream()
+                .filter(a -> a.hasAccountabilityType(type) && a.intersects(begin, end))
+                .anyMatch(a -> a.getParent().equals(party) || a.getParent().ancestorsInclude(party, type, begin, end));
     }
 
     public Collection<Party> getDescendents() {
