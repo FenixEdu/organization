@@ -21,6 +21,11 @@
         <tag>HEAD</tag>
     </scm>
 
+    <issueManagement>
+        <system>JIRA</system>
+        <url>https://jira.fenixedu.org/browse/FORG</url>
+    </issueManagement>
+
     <modules>
         <module>jodaplace</module>
         <module>organization</module>
