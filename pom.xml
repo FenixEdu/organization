@@ -15,9 +15,9 @@
     <packaging>pom</packaging>
 
     <scm>
-        <connection>scm:git:git@github.com:ist-dsi/organization.git</connection>
-        <developerConnection>scm:git:git@github.com:ist-dsi/organization.git</developerConnection>
-        <url>http://ist-dsi.github.io/organization</url>
+        <connection>scm:git:git@github.com:fenixedu/organization.git</connection>
+        <developerConnection>scm:git:git@github.com:fenixedu/organization.git</developerConnection>
+        <url>http://fenixedu.org/organization</url>
         <tag>HEAD</tag>
     </scm>
 
