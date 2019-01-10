@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.fenixedu</groupId>
         <artifactId>fenix-framework-project</artifactId>
-        <version>2.2.0</version>
+        <version>2.5.2</version>
         <relativePath />
     </parent>
 
@@ -15,8 +15,8 @@
     <name>Organization</name>
 
     <properties>
-        <version.org.fenixedu.bennu.core>5.0.0</version.org.fenixedu.bennu.core>
-        <version.org.fenixedu.bennu.renderers>5.3.0</version.org.fenixedu.bennu.renderers>
+        <version.org.fenixedu.bennu.core>6.1.0</version.org.fenixedu.bennu.core>
+        <version.org.fenixedu.bennu.renderers>6.0.1</version.org.fenixedu.bennu.renderers>
         <version.javax.servlet.jsp.api>2.1</version.javax.servlet.jsp.api>
     </properties>
 
