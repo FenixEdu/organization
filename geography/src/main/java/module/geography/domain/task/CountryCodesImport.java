@@ -66,9 +66,9 @@ public class CountryCodesImport extends CronTask {
                 String longCode = parts[1];
                 String numericCode = parts[2];
                 String countryNameEn = parts[3];
-                String countryNamePt = (parts.length > 5 && Strings.isNullOrEmpty(parts[5])) ? null : parts[5];
-                String nationalityEn = (parts.length > 6 && Strings.isNullOrEmpty(parts[6])) ? null : parts[6];
-                String nationalityPt = (parts.length > 7 && Strings.isNullOrEmpty(parts[7])) ? null : parts[7];
+                String countryNamePt = (parts.length > 5 && !Strings.isNullOrEmpty(parts[5])) ? parts[5] : null;
+                String nationalityEn = (parts.length > 6 && !Strings.isNullOrEmpty(parts[6])) ? parts[6] : null;
+                String nationalityPt = (parts.length > 7 && !Strings.isNullOrEmpty(parts[7])) ? parts[7] : null;
                 Country country = planet.getChildByAcronym(longCode);
                 if (country == null) {
                     country =
