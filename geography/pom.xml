@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>geography</artifactId>
-    <version>4.1.0-SNAPSHOT</version>
+    <version>DEV-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Geography</name>
 
