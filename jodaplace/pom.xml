@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>jodaplace</artifactId>
-    <version>DEV-SNAPSHOT</version>
+    <version>4.0.2</version>
     <packaging>jar</packaging>
 
     <name>Joda Place</name>

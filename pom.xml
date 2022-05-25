@@ -10,7 +10,7 @@
 
     <artifactId>organization-project</artifactId>
     <name>Bennu Organization</name>
-    <version>DEV-SNAPSHOT</version>
+    <version>4.0.2</version>
     <packaging>pom</packaging>
 
     <scm>
