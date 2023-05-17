@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.fenixedu</groupId>
         <artifactId>fenix-framework-project</artifactId>
-        <version>2.5.2</version>
+        <version>3.0.0-beta1</version>
         <relativePath />
     </parent>
 
@@ -14,7 +14,7 @@
     <name>Geography</name>
 
     <properties>
-        <version.org.fenixedu.bennu>6.1.0</version.org.fenixedu.bennu>
+        <version.org.fenixedu.bennu>7.0.0</version.org.fenixedu.bennu>
         <version.org.apache.commons.commons-lang>3.3.2</version.org.apache.commons.commons-lang>
     </properties>
 
