@@ -10,14 +10,14 @@
 
     <artifactId>organization-project</artifactId>
     <name>Bennu Organization</name>
-    <version>5.0.0</version>
+    <version>DEV-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <scm>
         <connection>scm:git:git@github.com:fenixedu/organization.git</connection>
         <developerConnection>scm:git:git@github.com:fenixedu/organization.git</developerConnection>
         <url>http://fenixedu.org/organization</url>
-        <tag>v5.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
